@@ -27,6 +27,7 @@ set(LEXER_TEST_SOURCES
 # Parser tests
 set(PARSER_TEST_SOURCES
     parser/parser_test.cpp
+    parser/grammar_stream_test.cpp
 )
 
 # AST tests
@@ -53,6 +54,7 @@ set(LEXER_CORE_SOURCES
 
 set(PARSER_CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/core/src/parser/parser.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/parser/GrammarStream.cpp
     ${CMAKE_SOURCE_DIR}/core/src/lexer/lexer.cpp
     ${CMAKE_SOURCE_DIR}/core/src/error/error.cpp
     ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
@@ -75,11 +77,11 @@ set(PREPROCESSOR_CORE_SOURCES
 set(ALL_CORE_SOURCES
     ${LEXER_CORE_SOURCES}
     ${CMAKE_SOURCE_DIR}/core/src/parser/parser.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/parser/GrammarStream.cpp
     ${AST_CORE_SOURCES}
     ${ERROR_CORE_SOURCES}
     ${PREPROCESSOR_CORE_SOURCES}
     ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
-        main.cpp
 )
 
 # ============================================================================
@@ -107,7 +109,7 @@ target_include_directories(udo_tests PRIVATE
 
 # Lexer test executable
 add_executable(lexer_tests
-    lexer/lexer_test.cpp
+    ${LEXER_TEST_SOURCES}
     ${LEXER_CORE_SOURCES}
 )
 target_include_directories(lexer_tests PRIVATE
@@ -118,7 +120,7 @@ target_compile_definitions(lexer_tests PRIVATE LEXER_TEST_STANDALONE)
 
 # Parser test executable
 add_executable(parser_tests
-    parser/parser_test.cpp
+    ${PARSER_TEST_SOURCES}
     ${PARSER_CORE_SOURCES}
 )
 target_include_directories(parser_tests PRIVATE
@@ -129,7 +131,7 @@ target_compile_definitions(parser_tests PRIVATE PARSER_TEST_STANDALONE)
 
 # AST test executable
 add_executable(ast_tests
-    ast/ast_test.cpp
+    ${AST_TEST_SOURCES}
     ${AST_CORE_SOURCES}
 )
 target_include_directories(ast_tests PRIVATE
@@ -140,7 +142,7 @@ target_compile_definitions(ast_tests PRIVATE AST_TEST_STANDALONE)
 
 # Error test executable
 add_executable(error_tests
-    error/error_test.cpp
+    ${ERROR_TEST_SOURCES}
     ${ERROR_CORE_SOURCES}
 )
 target_include_directories(error_tests PRIVATE
@@ -151,7 +153,7 @@ target_compile_definitions(error_tests PRIVATE ERROR_TEST_STANDALONE)
 
 # Preprocessor test executable
 add_executable(preprocessor_tests
-    preprocessor/preprocessor_test.cpp
+    ${PREPROCESSOR_TEST_SOURCES}
     ${PREPROCESSOR_CORE_SOURCES}
 )
 target_include_directories(preprocessor_tests PRIVATE

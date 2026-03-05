@@ -85,7 +85,7 @@ void register_parser_tests(TestRunner& runner) {
 int main(int argc, char* argv[]) {
     using namespace udo::test;
 
-    TestRunner runner;
+    TestRunner& runner = TestRunner::instance();
     bool verbose = false;
 
     for (int i = 1; i < argc; ++i) {

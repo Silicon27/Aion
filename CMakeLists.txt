@@ -63,6 +63,7 @@ add_executable(udo
         core/src/lexer/lexer.cpp
         core/src/preprocessor/preprocessor.cpp
         core/src/parser/parser.cpp
+        core/src/parser/GrammarStream.cpp
         core/src/ast/ast.cpp
         core/src/ast/ASTContext.cpp
         core/src/error/error.cpp

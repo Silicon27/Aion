@@ -27,12 +27,12 @@ This is thereafter easily traversable and recoverable upon parsing fault.
 
 Given some input `this(,)` to our `rule`:
 ```c++
+Recovery r(diag_engine); // pre-defined DiagnosticEngine instance, any errors spotted on recovery and subsequent hints are stored to this engine
 std::vector<Token> toks = {"this", "(", ",", ")"};
 
-rule.parse(toks) // this faults! 
+rule.parse(toks, 0) // this faults! 
 
 if (rule.is_faulty()) {
-    Recovery r(diag_engine);
     r.recover(rule);
 }
 ```

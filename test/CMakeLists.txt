@@ -27,7 +27,6 @@ set(LEXER_TEST_SOURCES
 # Parser tests
 set(PARSER_TEST_SOURCES
     parser/parser_test.cpp
-    parser/grammar_stream_test.cpp
 )
 
 # AST tests
@@ -54,7 +53,6 @@ set(LEXER_CORE_SOURCES
 
 set(PARSER_CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/core/src/parser/parser.cpp
-    ${CMAKE_SOURCE_DIR}/core/src/parser/GrammarStream.cpp
     ${CMAKE_SOURCE_DIR}/core/src/lexer/lexer.cpp
     ${CMAKE_SOURCE_DIR}/core/src/error/error.cpp
     ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
@@ -77,7 +75,6 @@ set(PREPROCESSOR_CORE_SOURCES
 set(ALL_CORE_SOURCES
     ${LEXER_CORE_SOURCES}
     ${CMAKE_SOURCE_DIR}/core/src/parser/parser.cpp
-    ${CMAKE_SOURCE_DIR}/core/src/parser/GrammarStream.cpp
     ${AST_CORE_SOURCES}
     ${ERROR_CORE_SOURCES}
     ${PREPROCESSOR_CORE_SOURCES}

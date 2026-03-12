@@ -36,6 +36,13 @@ namespace udo {
 
         bool isValid() const { return file != 0 || offset != 0; }
         bool isInvalid() const { return !isValid(); }
+
+        bool operator==(const Source_Location& other) const {
+            return file == other.file && offset == other.offset;
+        }
+        bool operator!=(const Source_Location& other) const {
+            return !(*this == other);
+        }
     };
 
     struct Source_Range {

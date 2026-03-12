@@ -28,7 +28,7 @@ namespace udo {
 
     std::pair<Line, Column> Buffer::get_line_column(const Offset offset) {
         if (!computed) compute_line_starts();
-        if (offset >= line_starts.back()) return {line_starts.size(), GET_COLUMN_FOR_BUFFER};
+        if (offset >= data.size()) return {line_starts.size(), (data.empty() ? 1 : (data.size() - line_starts.back() + 1))};
 
         auto it = std::upper_bound(line_starts.begin(), line_starts.end(), offset);
         if (it == line_starts.begin()) return {0, offset};

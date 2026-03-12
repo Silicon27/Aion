@@ -70,14 +70,19 @@ void TextDiagnosticPrinter::HandleDiagnostic(Severity severity, const Diagnostic
         ++num_warnings_;
     }
 
-    // Print location if available
+    // Print location and severity
     printLocation(diag);
-
-    // Print severity
     printSeverity(severity);
 
-    // Print message
-    *os_ << diag.message << "\n";
+    // Print message in bold
+    if (show_colors_) {
+        *os_ << "\033[1m";
+    }
+    *os_ << diag.message;
+    if (show_colors_) {
+        *os_ << "\033[0m";
+    }
+    *os_ << "\n";
 
     // Print source line if we have a source manager
     if (source_mgr_) {
@@ -105,8 +110,6 @@ void TextDiagnosticPrinter::printSeverity(Severity severity) {
                 *os_ << "\033[1;33m";  // Bold yellow
                 break;
             case Severity::Error:
-                *os_ << "\033[1;31m";  // Bold red
-                break;
             case Severity::Fatal:
                 *os_ << "\033[1;31m";  // Bold red
                 break;
@@ -115,11 +118,12 @@ void TextDiagnosticPrinter::printSeverity(Severity severity) {
         }
     }
 
-    *os_ << getSeverityName(severity) << ": ";
+    *os_ << getSeverityName(severity);
 
     if (show_colors_) {
         *os_ << "\033[0m";  // Reset
     }
+    *os_ << ": ";
 }
 
 void TextDiagnosticPrinter::printLocation(const Diagnostic& diag) {
@@ -162,36 +166,121 @@ void TextDiagnosticPrinter::printSourceLine(const Diagnostic& diag) {
         line_text.pop_back();
     }
 
-    *os_ << "    " << line_text << "\n";
+    auto [line_no, col_no] = source_mgr_->getLineColumn(diag.location);
 
-    // Print caret
-    auto [line, col] = source_mgr_->getLineColumn(diag.location);
-    if (col > 0) {
-        *os_ << "    ";
-        for (size_t i = 1; i < col; ++i) {
-            *os_ << ' ';
+    // Determine line number width for alignment
+    int line_num_width = std::to_string(line_no).length();
+    if (line_num_width < 2) line_num_width = 2; // Minimum width
+    std::string padding(line_num_width, ' ');
+
+    // Color codes
+    std::string color_blue = show_colors_ ? "\033[1;34m" : "";
+    std::string color_reset = show_colors_ ? "\033[0m" : "";
+    std::string color_green = show_colors_ ? "\033[1;32m" : "";
+
+    // Header pipe
+    *os_ << color_blue << padding << " |\n" << color_reset;
+
+    // Source line with line number
+    *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset;
+    *os_ << line_text << "\n";
+
+    // Caret/Underline line
+    *os_ << color_blue << padding << " | " << color_reset;
+
+    // Create a buffer for carets and underlines
+    std::string underlines(line_text.length() + 1, ' ');
+
+    // Helper to apply highlights to the buffer
+    auto apply_range = [&](const CharSourceRange& range) {
+        if (!range.isValid()) return;
+        auto [b_line, b_col] = source_mgr_->getLineColumn(range.begin);
+        auto [e_line, e_col] = source_mgr_->getLineColumn(range.end);
+        
+        if (b_line == line_no) {
+            size_t start = b_col - 1;
+            size_t end = (e_line == line_no) ? (e_col - (range.isTokenRange() ? 0 : 1)) : line_text.length();
+            if (start < end) {
+                for (size_t i = start; i < end && i < underlines.length(); ++i) {
+                    if (underlines[i] == ' ') underlines[i] = '~';
+                }
+            } else if (start == end) {
+                if (start < underlines.length() && underlines[start] == ' ') {
+                    underlines[start] = '^';
+                }
+            }
         }
-        if (show_colors_) {
-            *os_ << "\033[1;32m";  // Bold green
-        }
-        *os_ << "^";
-        if (show_colors_) {
-            *os_ << "\033[0m";
-        }
-        *os_ << "\n";
+    };
+
+    // Apply all ranges
+    for (const auto& range : diag.ranges) {
+        apply_range(range);
     }
+
+    // Apply primary caret
+    if (col_no > 0 && col_no <= underlines.length()) {
+        underlines[col_no - 1] = '^';
+    }
+
+    // Apply extra carets
+    for (const auto& loc : diag.extra_locations) {
+        auto [l_line, l_col] = source_mgr_->getLineColumn(loc);
+        if (l_line == line_no && l_col > 0 && l_col <= underlines.length()) {
+            underlines[l_col - 1] = '^';
+        }
+    }
+
+    // Print the underlines with color
+    *os_ << color_green << underlines << color_reset << "\n";
 }
 
 void TextDiagnosticPrinter::printFixItHints(const Diagnostic& diag) {
     for (const auto& fixit : diag.fixits) {
-        if (!fixit.code_to_insert.empty()) {
-            if (show_colors_) {
-                *os_ << "\033[1;32m";  // Bold green
-            }
-            *os_ << "  fix-it: insert \"" << fixit.code_to_insert << "\"\n";
-            if (show_colors_) {
-                *os_ << "\033[0m";
-            }
+        if (fixit.isNull()) continue;
+
+        std::string color_green = show_colors_ ? "\033[1;32m" : "";
+        std::string color_reset = show_colors_ ? "\033[0m" : "";
+        std::string color_blue = show_colors_ ? "\033[1;34m" : "";
+
+        *os_ << color_green << "help: " << color_reset;
+        if (!fixit.code_to_insert.empty() && fixit.remove_range.begin == fixit.remove_range.end) {
+            *os_ << "insert \"" << fixit.code_to_insert << "\"\n";
+        } else if (fixit.code_to_insert.empty()) {
+            *os_ << "remove this\n";
+        } else {
+            *os_ << "replace with \"" << fixit.code_to_insert << "\"\n";
+        }
+
+        // Show the line with the fix applied (Rust-style)
+        if (source_mgr_ && fixit.remove_range.begin.isValid()) {
+             auto [line_no, col_no] = source_mgr_->getLineColumn(fixit.remove_range.begin);
+             std::string line_text = source_mgr_->getLineText(fixit.remove_range.begin);
+             if (!line_text.empty()) {
+                 if (line_text.back() == '\n') line_text.pop_back();
+
+                 int line_num_width = std::to_string(line_no).length();
+                 if (line_num_width < 2) line_num_width = 2;
+                 std::string padding(line_num_width, ' ');
+
+                 *os_ << color_blue << padding << " |\n";
+                 *os_ << std::setw(line_num_width) << line_no << " | " << color_reset;
+
+                 auto [start_line, start_col] = source_mgr_->getLineColumn(fixit.remove_range.begin);
+                 auto [end_line, end_col] = source_mgr_->getLineColumn(fixit.remove_range.end);
+
+                 if (start_line == end_line) {
+                     std::string prefix = line_text.substr(0, start_col - 1);
+                     std::string suffix = (end_col - 1 < line_text.length()) ? line_text.substr(end_col - 1) : "";
+                     
+                     *os_ << prefix << color_green << fixit.code_to_insert << color_reset << suffix << "\n";
+                     
+                     // Show underline for the fix
+                     *os_ << color_blue << padding << " | " << color_green;
+                     for (size_t i = 0; i < prefix.length(); ++i) *os_ << " ";
+                     for (size_t i = 0; i < fixit.code_to_insert.length(); ++i) *os_ << "~";
+                     *os_ << color_reset << "\n";
+                 }
+             }
         }
     }
 }
@@ -207,7 +296,8 @@ DiagnosticBuilder::DiagnosticBuilder(DiagnosticBuilder&& other) noexcept
     , string_args_(std::move(other.string_args_))
     , int_args_(std::move(other.int_args_))
     , ranges_(std::move(other.ranges_))
-    , fixits_(std::move(other.fixits_)) {
+    , fixits_(std::move(other.fixits_))
+    , extra_locations_(std::move(other.extra_locations_)) {
     other.is_active_ = false;
 }
 
@@ -223,6 +313,7 @@ DiagnosticBuilder& DiagnosticBuilder::operator=(DiagnosticBuilder&& other) noexc
         int_args_ = std::move(other.int_args_);
         ranges_ = std::move(other.ranges_);
         fixits_ = std::move(other.fixits_);
+        extra_locations_ = std::move(other.extra_locations_);
         other.is_active_ = false;
     }
     return *this;
@@ -261,6 +352,11 @@ DiagnosticBuilder& DiagnosticBuilder::operator<<(int64_t val) {
 
 DiagnosticBuilder& DiagnosticBuilder::operator<<(CharSourceRange range) {
     ranges_.push_back(range);
+    return *this;
+}
+
+DiagnosticBuilder& DiagnosticBuilder::operator<<(Source_Location loc) {
+    extra_locations_.push_back(loc);
     return *this;
 }
 
@@ -310,14 +406,23 @@ void DiagnosticBuilder::emit() {
 
     is_active_ = false;
 
-    // Build a simple message from arguments
+    // Use formatting if possible, otherwise build a simple message from arguments
     std::string message;
-    for (const auto& arg : string_args_) {
-        if (!message.empty()) message += " ";
-        message += arg;
+    const char* format_str = engine_->getDiagnosticFormatString(diag_id_);
+    if (format_str) {
+        message = formatMessage(format_str);
+    } else {
+        for (const auto& arg : string_args_) {
+            if (!message.empty()) message += " ";
+            message += arg;
+        }
+        for (const auto& arg : int_args_) {
+            if (!message.empty()) message += " ";
+            message += std::to_string(arg);
+        }
     }
 
-    engine_->ProcessDiag(diag_id_, engine_->cur_diag_loc_, message, ranges_, fixits_);
+    engine_->ProcessDiag(diag_id_, engine_->cur_diag_loc_, message, ranges_, fixits_, extra_locations_);
 }
 
 // ============================================================================
@@ -382,6 +487,16 @@ Severity DiagnosticsEngine::getDefaultSeverity(DiagID id) const {
     return Severity::Warning;
 }
 
+const char* DiagnosticsEngine::getDiagnosticFormatString(DiagID id) const {
+    switch (id) {
+        case common::err_unknown_identifier: return "unknown identifier '%0'";
+        case common::warn_unused_variable: return "unused variable '%0'";
+        case parse::err_expected_semicolon: return "expected ';'";
+        case common::err_file_not_found: return "file not found: '%0'";
+        default: return nullptr;
+    }
+}
+
 bool DiagnosticsEngine::hasFatalErrorOccurred() const {
     // In a full implementation, track if any fatal errors occurred
     return false;
@@ -443,7 +558,8 @@ void DiagnosticsEngine::EmitDiagnostic(const Diagnostic& diag) {
 void DiagnosticsEngine::ProcessDiag(DiagID id, Source_Location loc,
                                     const std::string& message,
                                     const std::vector<CharSourceRange>& ranges,
-                                    const std::vector<FixItHint>& fixits) {
+                                    const std::vector<FixItHint>& fixits,
+                                    const std::vector<Source_Location>& extra_locations) {
     Diagnostic diag;
     diag.id = id;
     diag.location = loc;
@@ -451,6 +567,7 @@ void DiagnosticsEngine::ProcessDiag(DiagID id, Source_Location loc,
     diag.message = message;
     diag.ranges = ranges;
     diag.fixits = fixits;
+    diag.extra_locations = extra_locations;
 
     EmitDiagnostic(diag);
 }

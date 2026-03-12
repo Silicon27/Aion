@@ -37,7 +37,7 @@ namespace udo::parse {
         TokenType token;
         diag::DiagID diag_id;
 
-        constexpr MatchToken(TokenType token, diag::DiagID diag_id) : token(token), diag_id(diag_id) {}
+        constexpr MatchToken(const TokenType token, const diag::DiagID diag_id) : token(token), diag_id(diag_id) {}
     };
 
     /// represents a list of tokens, any one of which can be matched, along with the corresponding diagnostic IDs for the tokens

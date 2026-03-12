@@ -95,6 +95,7 @@ public:
 struct Diagnostic {
     DiagID id = 0;                          ///< The diagnostic ID
     Source_Location location;               ///< Primary location
+    std::vector<Source_Location> extra_locations; ///< Additional carets
     Severity severity = Severity::Warning;  ///< Severity level
     std::string message;                    ///< Formatted message
     std::vector<CharSourceRange> ranges;    ///< Source ranges to highlight
@@ -206,9 +207,10 @@ class DiagnosticBuilder {
     std::vector<std::string> string_args_;
     std::vector<int64_t> int_args_;
 
-    // Source ranges and fixits
+    // Source ranges, fixits and extra locations
     std::vector<CharSourceRange> ranges_;
     std::vector<FixItHint> fixits_;
+    std::vector<Source_Location> extra_locations_;
 
 public:
     DiagnosticBuilder(DiagnosticsEngine* engine, DiagID id)
@@ -233,6 +235,9 @@ public:
 
     /// Add a source range to highlight.
     DiagnosticBuilder& operator<<(CharSourceRange range);
+
+    /// Add an extra location for a caret.
+    DiagnosticBuilder& operator<<(Source_Location loc);
 
     /// Add a fix-it hint.
     DiagnosticBuilder& operator<<(FixItHint hint);
@@ -358,10 +363,14 @@ private:
     void ProcessDiag(DiagID id, Source_Location loc,
                      const std::string& message,
                      const std::vector<CharSourceRange>& ranges,
-                     const std::vector<FixItHint>& fixits);
+                     const std::vector<FixItHint>& fixits,
+                     const std::vector<Source_Location>& extra_locations);
 
     /// Get the default severity for a diagnostic ID.
     Severity getDefaultSeverity(DiagID id) const;
+
+    /// Get the format string for a diagnostic ID.
+    const char* getDiagnosticFormatString(DiagID id) const;
 };
 
 // ============================================================================

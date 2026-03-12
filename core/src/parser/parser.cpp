@@ -77,6 +77,8 @@ namespace udo::parse {
         constexpr auto colon = MatchToken(TokenType::COLON, diag::common::err_expected_token);
         constexpr auto equal = MatchToken(TokenType::EQUAL, diag::common::err_expected_token);
 
+        bool deduce_type = false;
+
         // pre-build the grammar with custom template-based PEG style parser combinators
         // helps recovery later on
 
@@ -88,6 +90,11 @@ namespace udo::parse {
         if (colon_or_equal.second == TokenType::MATCHED_NO_TOKENS) {
             // error already reported in match_one_of, attempt recovery now
             return;
+        } else if (colon_or_equal.second == TokenType::COLON) {
+
+        } else if (colon_or_equal.second == TokenType::EQUAL) {
+            deduce_type = true;
+
         }
         
     }

@@ -114,6 +114,7 @@ namespace aion::parse {
         // helps recovery later on
         std::string variable_id;
         Token type_annotation;
+        bool need_auto_type_deduction = false;
 
         match(initial_let);
         variable_id =
@@ -125,13 +126,13 @@ namespace aion::parse {
 
         if (colon.is_active) {
             // explicit typing
-            
+            type_annotation = match_type();
         } else if (equal.is_active) {
             // auto type deduction
-
+            need_auto_type_deduction = true;
+            // fallthrough
         } else {
             // recovery branch
-
         }
     }
 

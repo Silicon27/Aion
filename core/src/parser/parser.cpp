@@ -5,11 +5,36 @@
 #include <optional>
 
 #include <parser/parser.hpp>
-
+#include <support/global_constants.hpp>
 #include <support/iris/src/iris.hpp>
 
 
+
 namespace aion::parse {
+    namespace {
+        bool is_builtin_type_token(const TokenType type) {
+            switch (type) {
+                case TokenType::kw_i4:
+                case TokenType::kw_i8:
+                case TokenType::kw_i16:
+                case TokenType::kw_i32:
+                case TokenType::kw_i64:
+                case TokenType::kw_i128:
+                case TokenType::kw_f4:
+                case TokenType::kw_f8:
+                case TokenType::kw_f16:
+                case TokenType::kw_f32:
+                case TokenType::kw_f64:
+                case TokenType::kw_f128:
+                case TokenType::kw_char:
+                case TokenType::kw_bool:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    }
+
     Token Parser::peek(const int n) const { return tokens[pos + n]; }
     Token Parser::consume(const int n) {
         Token token = tokens[pos];
@@ -39,6 +64,19 @@ namespace aion::parse {
         } else {
             return t;
         }
+    }
+
+    Token Parser::match_type() {
+        // types may either be built in or user-defined
+        // (i.e., of TokenType::identifier or any of the kw_
+        // prefixed type keywords)
+        if (const auto token_type = peek().type;
+            token_type == TokenType::identifier || is_builtin_type_token(token_type)) {
+            return consume();
+        }
+        diagnostics_.Report(diag::parse::err_expected_type)
+                << "expected type";
+        return {TokenType::invalid_token, ""};
     }
 
     bool Parser::is_at_end() const { return pos >= tokens.size() || tokens[pos].type == TokenType::eof; }
@@ -71,12 +109,14 @@ namespace aion::parse {
         auto variable_identifier = MatchToken(TokenType::identifier, diag::common::err_expected_token);
         auto colon = MatchToken(TokenType::colon, diag::common::err_expected_token);
         auto equal  = MatchToken(TokenType::equal, diag::common::err_expected_token);
+        auto semicolon = MatchToken(TokenType::semicolon, diag::common::err_expected_token);
         // pre-build the grammar with custom template-based PEG style parser combinators
         // helps recovery later on
-
+        std::string variable_id;
+        Token type_annotation;
 
         match(initial_let);
-        std::string variable_id =
+        variable_id =
             match(variable_identifier).lexeme;
 
         // attempt to match `=` or `:`
@@ -85,7 +125,7 @@ namespace aion::parse {
 
         if (colon.is_active) {
             // explicit typing
-
+            
         } else if (equal.is_active) {
             // auto type deduction
 

@@ -1,4 +1,4 @@
-# Udo Diagnostics Engine
+# Aion Diagnostics Engine
 
 ## Complete Reference Guide
 
@@ -33,7 +33,7 @@
 
 ## Overview
 
-The Udo Diagnostics Engine is a comprehensive error and warning reporting system modeled after LLVM/Clang's diagnostic infrastructure. It provides:
+The Aion Diagnostics Engine is a comprehensive error and warning reporting system modeled after LLVM/Clang's diagnostic infrastructure. It provides:
 
 - **Structured error reporting** with unique diagnostic IDs
 - **Severity levels** from notes to fatal errors
@@ -548,7 +548,7 @@ TextDiagnosticPrinter(
 #### Output Format
 
 ```
-path/to/file.udo:42:15: error: undeclared identifier 'foo'
+path/to/file.aion:42:15: error: undeclared identifier 'foo'
     let x = foo + bar;
               ^
   fix-it: insert "let foo = 0; "
@@ -705,7 +705,7 @@ void Parser::parseStatement() {
 
 Output:
 ```
-file.udo:10:5: error: expected ';'
+file.aion:10:5: error: expected ';'
     return x
     ^
 ```
@@ -728,10 +728,10 @@ void Sema::checkRedefinition(const std::string& name, Source_Location new_loc) {
 
 Output:
 ```
-file.udo:25:5: error: redefinition of 'x'
+file.aion:25:5: error: redefinition of 'x'
     let x = 10;
         ^
-file.udo:10:5: note: previous declaration of 'x' was here
+file.aion:10:5: note: previous declaration of 'x' was here
     let x = 5;
         ^
 ```
@@ -753,7 +753,7 @@ void Sema::checkUnusedVariable(Variable* var) {
 
 Output:
 ```
-file.udo:5:5: warning: unused variable 'temp'
+file.aion:5:5: warning: unused variable 'temp'
     let temp = 42;
         ^~~~
   fix-it: remove "let temp = 42;"
@@ -784,7 +784,7 @@ void Sema::checkAssignment(Expr* lhs, Expr* rhs) {
 
 Output:
 ```
-file.udo:15:13: error: cannot convert 'float' to 'int'
+file.aion:15:13: error: cannot convert 'float' to 'int'
     let x: int = 3.14;
                  ^~~~
   fix-it: replace with "static_cast<int>(3.14)"
@@ -839,7 +839,7 @@ void Sema::checkBinaryOp(BinaryExpr* expr) {
 
 Output:
 ```
-file.udo:20:10: error: invalid operands to binary expression ('string' and 'int')
+file.aion:20:10: error: invalid operands to binary expression ('string' and 'int')
     let x = "hello" + 5;
             ^~~~~~~   ^
 ```
@@ -1128,7 +1128,7 @@ diag.Report(expr->begin(), diag::sema::err_type_mismatch)
 ### DiagnosticSeverity.hpp
 
 ```c++
-namespace udo::diag {
+namespace aion::diag {
     enum class Severity : uint8_t;
     enum class Flavor : uint8_t;
     bool isErrorOrFatal(Severity S);
@@ -1139,7 +1139,7 @@ namespace udo::diag {
 ### diagid.hpp
 
 ```c++
-namespace udo::diag {
+namespace aion::diag {
     // Types
     using DiagID = unsigned;
     
@@ -1166,7 +1166,7 @@ namespace udo::diag {
 ### error.hpp
 
 ```c++
-namespace udo::diag {
+namespace aion::diag {
     // Source ranges
     struct CharSourceRange;
     
@@ -1196,7 +1196,7 @@ namespace udo::diag {
 
 ## Conclusion
 
-The Udo Diagnostics Engine provides a robust, extensible system for error and warning reporting. By following the patterns established by LLVM/Clang, it offers:
+The Aion Diagnostics Engine provides a robust, extensible system for error and warning reporting. By following the patterns established by LLVM/Clang, it offers:
 
 - **Consistency**: All compiler phases use the same diagnostic infrastructure
 - **Clarity**: Colored output with source snippets helps developers understand issues

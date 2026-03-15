@@ -1,7 +1,7 @@
 //
 // Created by David Yang on 2025-11-13.
 //
-// error.cpp - Udo Diagnostics Engine Implementation
+// error.cpp - Aion Diagnostics Engine Implementation
 //
 
 #include <error/error.hpp>
@@ -10,7 +10,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace udo::diag {
+namespace aion::diag {
 
 // ============================================================================
 // CharSourceRange Implementation
@@ -581,4 +581,4 @@ std::unique_ptr<DiagnosticsEngine> createDiagnosticsEngine(Source_Manager* sm) {
     return std::make_unique<DiagnosticsEngine>(sm, consumer, true);
 }
 
-} // namespace udo::diag
+} // namespace aion::diag

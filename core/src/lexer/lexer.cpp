@@ -1,10 +1,10 @@
 #include <lexer/lexer.hpp>
 
-namespace udo::lexer {
+namespace aion::lexer {
 
 
     Lexer::Lexer(std::istream &input_stream)
-        : input(input_stream), current_pos(0), line_number(1), symbols(udo::lexer::symbols())
+        : input(input_stream), current_pos(0), line_number(1), symbols(aion::lexer::symbols())
     {
     }
 
@@ -271,4 +271,4 @@ namespace udo::lexer {
         });
     }
 
-} // namespace udo::lexer
+} // namespace aion::lexer

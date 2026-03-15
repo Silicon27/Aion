@@ -11,7 +11,7 @@
 
 #include <cstdint>
 
-namespace udo::diag {
+namespace aion::diag {
 
 /// Enum values that allow the client to map diagnostics to different
 /// severity levels. Diagnostics may be promoted or demoted during
@@ -63,6 +63,6 @@ inline const char* getSeverityName(Severity S) {
     return "unknown";
 }
 
-} // namespace udo::diag
+} // namespace aion::diag
 
 #endif // DIAGNOSTIC_SEVERITY_HPP

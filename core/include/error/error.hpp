@@ -1,7 +1,7 @@
 //
 // Created by David Yang on 2025-11-13.
 //
-// error.hpp - Udo Diagnostics Engine
+// error.hpp - Aion Diagnostics Engine
 // Based on clang::DiagnosticsEngine from LLVM/Clang.
 //
 
@@ -19,7 +19,7 @@
 #include "error/diagid.hpp"
 #include "support/source_manager.hpp"
 
-namespace udo::diag {
+namespace aion::diag {
 
 // Forward declarations
 class DiagnosticsEngine;
@@ -380,6 +380,6 @@ private:
 /// Create a diagnostic engine with a text printer to stderr.
 std::unique_ptr<DiagnosticsEngine> createDiagnosticsEngine(Source_Manager* sm = nullptr);
 
-} // namespace udo::diag
+} // namespace aion::diag
 
 #endif // ERROR_HPP

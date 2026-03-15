@@ -3,12 +3,12 @@
 //
 
 //
-// UDO Test Framework - A modern C++20 testing library
-// File: udo_test.hpp
+// AION Test Framework - A modern C++20 testing library
+// File: aion_test.hpp
 //
 
-#ifndef UDO_TEST_HPP
-#define UDO_TEST_HPP
+#ifndef AION_TEST_HPP
+#define AION_TEST_HPP
 
 #include <iostream>
 #include <sstream>
@@ -26,7 +26,7 @@
 
 #include <regex>
 
-namespace udo::test {
+namespace aion::test {
 
 // ============================================================================
 // ANSI Color Codes
@@ -132,9 +132,9 @@ private:
     }
 };
 
-#define UDO_LOG(level, msg) udo::test::Logger::instance().log(udo::test::LogLevel::level, msg, 2)
-#define UDO_INFO(msg) UDO_LOG(INFO, msg)
-#define UDO_DEBUG(msg) UDO_LOG(DEBUG, msg)
+#define AION_LOG(level, msg) aion::test::Logger::instance().log(aion::test::LogLevel::level, msg, 2)
+#define AION_INFO(msg) AION_LOG(INFO, msg)
+#define AION_DEBUG(msg) AION_LOG(DEBUG, msg)
 
 // ============================================================================
 // Test Result
@@ -304,7 +304,7 @@ public:
 
         if (opts.use_color) std::cout << color::YELLOW << color::BOLD;
         std::cout << "╔═══════════════════════════════════════════════════════════════════════════╗\n"
-                  << "║                         UDO TEST FRAMEWORK                                ║\n"
+                  << "║                         AION TEST FRAMEWORK                                ║\n"
                   << "╚═══════════════════════════════════════════════════════════════════════════╝";
         if (opts.use_color) std::cout << color::RESET;
         std::cout << "\n\n";
@@ -382,16 +382,16 @@ private:
 // ============================================================================
 // Assertion Macros
 // ============================================================================
-#define UDO_TEST_SUITE(name) \
-    auto suite_##name = std::make_shared<udo::test::TestSuite>(#name); \
+#define AION_TEST_SUITE(name) \
+    auto suite_##name = std::make_shared<aion::test::TestSuite>(#name); \
     struct SuiteRegistrar_##name { \
         SuiteRegistrar_##name() { \
-            udo::test::TestRunner::instance().add_suite(suite_##name); \
+            aion::test::TestRunner::instance().add_suite(suite_##name); \
         } \
     }; \
     static SuiteRegistrar_##name registrar_##name;
 
-#define UDO_TEST(suite_name, test_name) \
+#define AION_TEST(suite_name, test_name) \
     void test_##suite_name##_##test_name(); \
     struct TestRegistrar_##suite_name##_##test_name { \
         TestRegistrar_##suite_name##_##test_name() { \
@@ -401,7 +401,7 @@ private:
     static TestRegistrar_##suite_name##_##test_name registrar_##suite_name##_##test_name; \
     void test_##suite_name##_##test_name()
 
-#define UDO_SETUP(suite_name) \
+#define AION_SETUP(suite_name) \
     void setup_##suite_name(); \
     struct SetupRegistrar_##suite_name { \
         SetupRegistrar_##suite_name() { \
@@ -411,7 +411,7 @@ private:
     static SetupRegistrar_##suite_name setup_registrar_##suite_name; \
     void setup_##suite_name()
 
-#define UDO_TEARDOWN(suite_name) \
+#define AION_TEARDOWN(suite_name) \
     void teardown_##suite_name(); \
     struct TeardownRegistrar_##suite_name { \
         TeardownRegistrar_##suite_name() { \
@@ -421,7 +421,7 @@ private:
     static TeardownRegistrar_##suite_name teardown_registrar_##suite_name; \
     void teardown_##suite_name()
 
-#define UDO_BEFORE_EACH(suite_name) \
+#define AION_BEFORE_EACH(suite_name) \
     void before_each_##suite_name(); \
     struct BeforeEachRegistrar_##suite_name { \
         BeforeEachRegistrar_##suite_name() { \
@@ -431,7 +431,7 @@ private:
     static BeforeEachRegistrar_##suite_name before_each_registrar_##suite_name; \
     void before_each_##suite_name()
 
-#define UDO_AFTER_EACH(suite_name) \
+#define AION_AFTER_EACH(suite_name) \
     void after_each_##suite_name(); \
     struct AfterEachRegistrar_##suite_name { \
         AfterEachRegistrar_##suite_name() { \
@@ -442,19 +442,19 @@ private:
     void after_each_##suite_name()
 
 // Basic Assertions
-#define UDO_ASSERT(condition) \
+#define AION_ASSERT(condition) \
     do { \
         if (!(condition)) { \
-            throw udo::test::AssertionFailure( \
+            throw aion::test::AssertionFailure( \
                 "Assertion failed: " #condition, __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_TRUE(condition) UDO_ASSERT(condition)
-#define UDO_ASSERT_FALSE(condition) UDO_ASSERT(!(condition))
+#define AION_ASSERT_TRUE(condition) AION_ASSERT(condition)
+#define AION_ASSERT_FALSE(condition) AION_ASSERT(!(condition))
 
 // For comparing enum types or other non-streamable types
-#define UDO_ASSERT_ENUM_EQ(actual, expected) \
+#define AION_ASSERT_ENUM_EQ(actual, expected) \
     do { \
         auto actual_val = (actual); \
         auto expected_val = (expected); \
@@ -462,66 +462,66 @@ private:
             std::ostringstream oss; \
             oss << "Enum mismatch:\n  Actual:   " << static_cast<int>(actual_val) \
                 << "\n  Expected: " << static_cast<int>(expected_val); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_EQ(actual, expected) \
+#define AION_ASSERT_EQ(actual, expected) \
     do { \
         if (!((actual) == (expected))) { \
             std::ostringstream oss; \
             oss << "Expected equality:\n  Actual:   " << (actual) \
                 << "\n  Expected: " << (expected); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_NE(actual, expected) \
+#define AION_ASSERT_NE(actual, expected) \
     do { \
         if ((actual) == (expected)) { \
             std::ostringstream oss; \
             oss << "Expected inequality:\n  Value: " << (actual); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_LT(a, b) \
+#define AION_ASSERT_LT(a, b) \
     do { \
         if (!((a) < (b))) { \
             std::ostringstream oss; \
             oss << "Expected " << (a) << " < " << (b); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_LE(a, b) \
+#define AION_ASSERT_LE(a, b) \
     do { \
         if (!((a) <= (b))) { \
             std::ostringstream oss; \
             oss << "Expected " << (a) << " <= " << (b); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_GT(a, b) \
+#define AION_ASSERT_GT(a, b) \
     do { \
         if (!((a) > (b))) { \
             std::ostringstream oss; \
             oss << "Expected " << (a) << " > " << (b); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_GE(a, b) \
+#define AION_ASSERT_GE(a, b) \
     do { \
         if (!((a) >= (b))) { \
             std::ostringstream oss; \
             oss << "Expected " << (a) << " >= " << (b); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_NEAR(actual, expected, epsilon) \
+#define AION_ASSERT_NEAR(actual, expected, epsilon) \
     do { \
         auto diff = std::abs((actual) - (expected)); \
         if (diff > (epsilon)) { \
@@ -530,27 +530,27 @@ private:
                 << "\n  Expected: " << (expected) \
                 << "\n  Epsilon:  " << (epsilon) \
                 << "\n  Diff:     " << diff; \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_NULL(ptr) \
+#define AION_ASSERT_NULL(ptr) \
     do { \
         if ((ptr) != nullptr) { \
-            throw udo::test::AssertionFailure( \
+            throw aion::test::AssertionFailure( \
                 "Expected null pointer", __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_NOT_NULL(ptr) \
+#define AION_ASSERT_NOT_NULL(ptr) \
     do { \
         if ((ptr) == nullptr) { \
-            throw udo::test::AssertionFailure( \
+            throw aion::test::AssertionFailure( \
                 "Expected non-null pointer", __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_THROWS(statement, exception_type) \
+#define AION_ASSERT_THROWS(statement, exception_type) \
     do { \
         bool caught = false; \
         try { \
@@ -559,23 +559,23 @@ private:
             caught = true; \
         } catch (...) {} \
         if (!caught) { \
-            throw udo::test::AssertionFailure( \
+            throw aion::test::AssertionFailure( \
                 "Expected exception of type " #exception_type " to be thrown", \
                 __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_NO_THROW(statement) \
+#define AION_ASSERT_NO_THROW(statement) \
     do { \
         try { \
             statement; \
         } catch (...) { \
-            throw udo::test::AssertionFailure( \
+            throw aion::test::AssertionFailure( \
                 "Expected no exception to be thrown", __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_IN_RANGE(val, min, max) \
+#define AION_ASSERT_IN_RANGE(val, min, max) \
     do { \
         auto v = (val); \
         auto low = (min); \
@@ -583,26 +583,26 @@ private:
         if (v < low || v > high) { \
             std::ostringstream oss; \
             oss << "Value " << v << " out of range [" << low << ", " << high << "]"; \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_MATCH(str, pattern) \
+#define AION_ASSERT_MATCH(str, pattern) \
     do { \
         std::string s = (str); \
         std::regex re(pattern); \
         if (!std::regex_search(s, re)) { \
             std::ostringstream oss; \
             oss << "String \"" << s << "\" does not match pattern \"" << pattern << "\""; \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_FAIL(message) \
-    throw udo::test::AssertionFailure(message, __FILE__, __LINE__)
+#define AION_FAIL(message) \
+    throw aion::test::AssertionFailure(message, __FILE__, __LINE__)
 
 // String Assertions
-#define UDO_ASSERT_STREQ(actual, expected) \
+#define AION_ASSERT_STREQ(actual, expected) \
     do { \
         std::string a_str = (actual); \
         std::string e_str = (expected); \
@@ -610,57 +610,57 @@ private:
             std::ostringstream oss; \
             oss << "String mismatch:\n  Actual:   \"" << a_str \
                 << "\"\n  Expected: \"" << e_str << "\""; \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_STRNE(actual, expected) \
+#define AION_ASSERT_STRNE(actual, expected) \
     do { \
         std::string a_str = (actual); \
         std::string e_str = (expected); \
         if (a_str == e_str) { \
             std::ostringstream oss; \
             oss << "Strings should not be equal: \"" << a_str << "\""; \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_CONTAINS(string_val, substring_val) \
+#define AION_ASSERT_CONTAINS(string_val, substring_val) \
     do { \
-        std::string UDO_STR_TEMP = (string_val); \
-        std::string UDO_SUBSTR_TEMP = (substring_val); \
-        if (UDO_STR_TEMP.find(UDO_SUBSTR_TEMP) == std::string::npos) { \
-            std::ostringstream UDO_OSS_TEMP; \
-            UDO_OSS_TEMP << "String \"" << UDO_STR_TEMP << "\" does not contain \"" << UDO_SUBSTR_TEMP << "\""; \
-            std::string UDO_MSG_TEMP = UDO_OSS_TEMP.str(); \
-            throw udo::test::AssertionFailure(UDO_MSG_TEMP, __FILE__, __LINE__); \
+        std::string AION_STR_TEMP = (string_val); \
+        std::string AION_SUBSTR_TEMP = (substring_val); \
+        if (AION_STR_TEMP.find(AION_SUBSTR_TEMP) == std::string::npos) { \
+            std::ostringstream AION_OSS_TEMP; \
+            AION_OSS_TEMP << "String \"" << AION_STR_TEMP << "\" does not contain \"" << AION_SUBSTR_TEMP << "\""; \
+            std::string AION_MSG_TEMP = AION_OSS_TEMP.str(); \
+            throw aion::test::AssertionFailure(AION_MSG_TEMP, __FILE__, __LINE__); \
         } \
     } while(0)
 
 // Container Assertions
-#define UDO_ASSERT_EMPTY(container) \
+#define AION_ASSERT_EMPTY(container) \
     do { \
         if (!(container).empty()) { \
             std::ostringstream oss; \
             oss << "Container should be empty, size: " << (container).size(); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
-#define UDO_ASSERT_SIZE(container, expected_size) \
+#define AION_ASSERT_SIZE(container, expected_size) \
     do { \
         if ((container).size() != (expected_size)) { \
             std::ostringstream oss; \
             oss << "Container size mismatch:\n  Actual:   " << (container).size() \
                 << "\n  Expected: " << (expected_size); \
-            throw udo::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
+            throw aion::test::AssertionFailure(oss.str(), __FILE__, __LINE__); \
         } \
     } while(0)
 
 // Run all tests
-#define UDO_RUN_ALL_TESTS(verbose) \
-    udo::test::TestRunner::instance().run_all(verbose)
+#define AION_RUN_ALL_TESTS(verbose) \
+    aion::test::TestRunner::instance().run_all(verbose)
 
-} // namespace udo::test
+} // namespace aion::test
 
-#endif // UDO_TEST_HPP
+#endif // AION_TEST_HPP

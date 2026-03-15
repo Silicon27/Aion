@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <algorithm>
 
-namespace udo::ast {
+namespace aion::ast {
 
 ASTContext::Slab::Slab(const std::size_t size) {
     // ensure the allocated buffer is of a size that is a
@@ -68,4 +68,4 @@ ASTContext::ASTContext(std::size_t initial_slab_size)
     tu_decl = create<TranslationUnitDecl>();
 }
 
-} // namespace udo::ast
+} // namespace aion::ast

@@ -8,9 +8,9 @@
 #include <lexer/lexer.hpp>
 #include <sstream>
 
-namespace udo::test {
+namespace aion::test {
 
-using namespace udo::lexer;
+using namespace aion::lexer;
 
 // Helper function to tokenize a string for parser tests
 static std::vector<Token> tokenize_for_parser(const std::string& input) {
@@ -30,7 +30,7 @@ void register_parser_tests(TestRunner& runner) {
 
     basic_suite->add_test("placeholder_test", []() {
         // TODO: Add actual parser tests
-        UDO_ASSERT_TRUE(true);
+        AION_ASSERT_TRUE(true);
     });
 
     runner.add_suite(std::move(basic_suite));
@@ -43,7 +43,7 @@ void register_parser_tests(TestRunner& runner) {
 
     var_suite->add_test("simple_variable_declaration", []() {
         // TODO: Add actual test when parser is ready
-        UDO_ASSERT_TRUE(true);
+        AION_ASSERT_TRUE(true);
     });
 
     runner.add_suite(std::move(var_suite));
@@ -56,7 +56,7 @@ void register_parser_tests(TestRunner& runner) {
 
     func_suite->add_test("simple_function_declaration", []() {
         // TODO: Add actual test when parser is ready
-        UDO_ASSERT_TRUE(true);
+        AION_ASSERT_TRUE(true);
     });
 
     runner.add_suite(std::move(func_suite));
@@ -69,13 +69,13 @@ void register_parser_tests(TestRunner& runner) {
 
     expr_suite->add_test("arithmetic_expression", []() {
         // TODO: Add actual test when parser is ready
-        UDO_ASSERT_TRUE(true);
+        AION_ASSERT_TRUE(true);
     });
 
     runner.add_suite(std::move(expr_suite));
 }
 
-} // namespace udo::test
+} // namespace aion::test
 
 // ============================================================================
 // Main function for standalone parser test executable
@@ -83,7 +83,7 @@ void register_parser_tests(TestRunner& runner) {
 // ============================================================================
 #ifdef PARSER_TEST_STANDALONE
 int main(int argc, char* argv[]) {
-    using namespace udo::test;
+    using namespace aion::test;
 
     TestRunner& runner = TestRunner::instance();
     bool verbose = false;

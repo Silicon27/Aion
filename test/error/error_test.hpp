@@ -6,9 +6,9 @@
 #ifndef ERROR_TEST_HPP
 #define ERROR_TEST_HPP
 
-#include "udo_test.hpp"
+#include "aion_test.hpp"
 
-namespace udo::test {
+namespace aion::test {
     void register_error_tests(TestRunner& runner);
 }
 

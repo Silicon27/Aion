@@ -13,12 +13,12 @@
 
 #define GET_COLUMN_FOR_BUFFER (data.empty() ? 1 : (data.size() - line_starts.back() + 1))
 
-namespace udo::diag {
+namespace aion::diag {
     struct Diagnostic;
     class DiagnosticsEngine;
 }
 
-namespace udo {
+namespace aion {
 
     using Column = std::size_t;
     using Line = std::size_t;
@@ -93,7 +93,7 @@ namespace udo {
         FileID add_buffer(std::string content, std::string path="");
 
         /// add a buffer from disk
-        FileID add_file_from_disk(const std::string &path, udo::diag::DiagnosticsEngine &diag);
+        FileID add_file_from_disk(const std::string &path, aion::diag::DiagnosticsEngine &diag);
 
         /// Get the buffer for a file ID
         Buffer* getBuffer(FileID id);

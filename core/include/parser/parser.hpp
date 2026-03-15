@@ -16,15 +16,15 @@
 
 #include <support/iris/src/iris.hpp>
 
-namespace udo::parse {
-    using namespace udo::compiler_config;
+namespace aion::parse {
+    using namespace aion::compiler_config;
 
     struct ParserSnapshot;
     struct MatchToken;
     class Parse;
 
-    using namespace udo::ast;
-    using namespace udo::lexer;
+    using namespace aion::ast;
+    using namespace aion::lexer;
 
     struct ParserSnapshot {
         int capped_pos;

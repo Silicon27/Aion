@@ -13,7 +13,7 @@
 #include <ranges>
 #include <support/global_constants.hpp>
 
-namespace udo::lexer {
+namespace aion::lexer {
 
     struct Token {
         TokenType type;
@@ -50,6 +50,6 @@ namespace udo::lexer {
         [[nodiscard]] bool is_symbol_start(char c) const;
     };
 
-} // namespace udo::lexer
+} // namespace aion::lexer
 
 #endif // LEXER_HPP

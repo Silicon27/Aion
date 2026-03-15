@@ -7,7 +7,7 @@
 #include <error/error.hpp>
 #include <sstream>
 
-namespace udo::test {
+namespace aion::test {
 
 // Global flag to enable neat output
 bool g_show_neat_output = false;
@@ -46,32 +46,32 @@ void register_error_tests(TestRunner& runner) {
         Source_Location end(1, 20);
         
         diag::CharSourceRange range = diag::CharSourceRange::getCharRange(start, end);
-        UDO_ASSERT_TRUE(range.isValid());
-        UDO_ASSERT_TRUE(range.isCharRange());
-        UDO_ASSERT_FALSE(range.isTokenRange());
-        UDO_ASSERT_EQ(range.begin.offset, 10);
-        UDO_ASSERT_EQ(range.end.offset, 20);
+        AION_ASSERT_TRUE(range.isValid());
+        AION_ASSERT_TRUE(range.isCharRange());
+        AION_ASSERT_FALSE(range.isTokenRange());
+        AION_ASSERT_EQ(range.begin.offset, 10);
+        AION_ASSERT_EQ(range.end.offset, 20);
 
         diag::CharSourceRange token_range = diag::CharSourceRange::getTokenRange(start, end);
-        UDO_ASSERT_TRUE(token_range.isTokenRange());
-        UDO_ASSERT_FALSE(token_range.isCharRange());
+        AION_ASSERT_TRUE(token_range.isTokenRange());
+        AION_ASSERT_FALSE(token_range.isCharRange());
     });
 
     creation_suite->add_test("FixItHint", []() {
         Source_Location loc(1, 5);
         diag::FixItHint insert = diag::FixItHint::CreateInsertion(loc, "foo");
-        UDO_ASSERT_FALSE(insert.isNull());
-        UDO_ASSERT_STREQ(insert.code_to_insert, "foo");
-        UDO_ASSERT_EQ(insert.remove_range.begin.offset, 5);
+        AION_ASSERT_FALSE(insert.isNull());
+        AION_ASSERT_STREQ(insert.code_to_insert, "foo");
+        AION_ASSERT_EQ(insert.remove_range.begin.offset, 5);
 
         diag::CharSourceRange range = diag::CharSourceRange::getCharRange(Source_Location(1, 5), Source_Location(1, 10));
         diag::FixItHint remove = diag::FixItHint::CreateRemoval(range);
-        UDO_ASSERT_STREQ(remove.code_to_insert, "");
-        UDO_ASSERT_TRUE(remove.remove_range.isValid());
+        AION_ASSERT_STREQ(remove.code_to_insert, "");
+        AION_ASSERT_TRUE(remove.remove_range.isValid());
 
         diag::FixItHint replace = diag::FixItHint::CreateReplacement(range, "bar");
-        UDO_ASSERT_STREQ(replace.code_to_insert, "bar");
-        UDO_ASSERT_TRUE(replace.remove_range.isValid());
+        AION_ASSERT_STREQ(replace.code_to_insert, "bar");
+        AION_ASSERT_TRUE(replace.remove_range.isValid());
     });
 
     runner.add_suite(std::move(creation_suite));
@@ -89,15 +89,15 @@ void register_error_tests(TestRunner& runner) {
         diag::DiagnosticsEngine engine(&sm, printer, true);
         
         engine.Report(diag::common::err_unknown_identifier) << "my_var";
-        UDO_ASSERT_CONTAINS(ss.str(), "error: unknown identifier 'my_var'");
+        AION_ASSERT_CONTAINS(ss.str(), "error: unknown identifier 'my_var'");
         
         ss.str("");
         engine.Report(diag::common::warn_unused_variable) << "unused_val";
-        UDO_ASSERT_CONTAINS(ss.str(), "warning: unused variable 'unused_val'");
+        AION_ASSERT_CONTAINS(ss.str(), "warning: unused variable 'unused_val'");
 
         ss.str("");
         engine.Report(diag::parse::err_expected_semicolon);
-        UDO_ASSERT_CONTAINS(ss.str(), "error: expected ';'");
+        AION_ASSERT_CONTAINS(ss.str(), "error: expected ';'");
     });
 
     runner.add_suite(std::move(format_suite));
@@ -111,13 +111,13 @@ void register_error_tests(TestRunner& runner) {
     engine_suite->add_test("SeverityMapping", []() {
         diag::DiagnosticsEngine engine;
         
-        UDO_ASSERT_ENUM_EQ(engine.getSeverity(diag::common::err_unknown_identifier), diag::Severity::Error);
-        UDO_ASSERT_ENUM_EQ(engine.getSeverity(diag::common::warn_unused_variable), diag::Severity::Warning);
+        AION_ASSERT_ENUM_EQ(engine.getSeverity(diag::common::err_unknown_identifier), diag::Severity::Error);
+        AION_ASSERT_ENUM_EQ(engine.getSeverity(diag::common::warn_unused_variable), diag::Severity::Warning);
         
         engine.setWarningsAsErrors(true);
         // getSeverity doesn't apply warnings_as_errors, EmitDiagnostic does.
         // But we can check if it has the flag.
-        UDO_ASSERT_TRUE(engine.getWarningsAsErrors());
+        AION_ASSERT_TRUE(engine.getWarningsAsErrors());
     });
 
     engine_suite->add_test("ErrorLimit", []() {
@@ -128,16 +128,16 @@ void register_error_tests(TestRunner& runner) {
         
         engine.Report(diag::common::err_unknown_identifier).emit();
         // num_errors becomes 1. 1 > 1 is false. Not suppressed.
-        UDO_ASSERT_EQ(engine.getNumErrors(), 1);
+        AION_ASSERT_EQ(engine.getNumErrors(), 1);
 
         engine.Report(diag::common::err_unknown_identifier).emit();
         // num_errors becomes 2. 2 > 1 is true. 
         // EmitDiagnostic returns early.
-        UDO_ASSERT_EQ(engine.getNumErrors(), 2); 
+        AION_ASSERT_EQ(engine.getNumErrors(), 2);
         
         engine.Report(diag::common::err_unknown_identifier).emit();
         // num_errors becomes 3. 3 > 1 is true.
-        UDO_ASSERT_EQ(engine.getNumErrors(), 3); 
+        AION_ASSERT_EQ(engine.getNumErrors(), 3);
     });
 
     runner.add_suite(std::move(engine_suite));
@@ -161,14 +161,14 @@ void register_error_tests(TestRunner& runner) {
         printer.HandleDiagnostic(diag::Severity::Error, d);
         
         std::string output = capture.get_output();
-        UDO_ASSERT_CONTAINS(output, "error: unknown identifier 'x'");
+        AION_ASSERT_CONTAINS(output, "error: unknown identifier 'x'");
         capture.finish();
     });
 
     printer_suite->add_test("LocationPrinting", []() {
         OutputCapture capture("LocationPrinting");
         Source_Manager sm;
-        FileID fid = sm.add_buffer("int x = y;", "test.udo");
+        FileID fid = sm.add_buffer("int x = y;", "test.aion");
         
         diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
         
@@ -181,16 +181,16 @@ void register_error_tests(TestRunner& runner) {
         printer.HandleDiagnostic(diag::Severity::Error, d);
         
         std::string output = capture.get_output();
-        UDO_ASSERT_CONTAINS(output, "test.udo:1:9: error: use of undeclared identifier 'y'");
-        UDO_ASSERT_CONTAINS(output, " 1 | int x = y;");
-        UDO_ASSERT_CONTAINS(output, "   |         ^");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:9: error: use of undeclared identifier 'y'");
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
+        AION_ASSERT_CONTAINS(output, "   |         ^");
         capture.finish();
     });
 
     printer_suite->add_test("MultiCaretPrinting", []() {
         OutputCapture capture("MultiCaretPrinting");
         Source_Manager sm;
-        FileID fid = sm.add_buffer("int x = y + z;", "test.udo");
+        FileID fid = sm.add_buffer("int x = y + z;", "test.aion");
         
         diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
         
@@ -204,15 +204,15 @@ void register_error_tests(TestRunner& runner) {
         printer.HandleDiagnostic(diag::Severity::Error, d);
         
         std::string output = capture.get_output();
-        UDO_ASSERT_CONTAINS(output, " 1 | int x = y + z;");
-        UDO_ASSERT_CONTAINS(output, "   |         ^   ^");
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y + z;");
+        AION_ASSERT_CONTAINS(output, "   |         ^   ^");
         capture.finish();
     });
 
     printer_suite->add_test("RangePrinting", []() {
         OutputCapture capture("RangePrinting");
         Source_Manager sm;
-        FileID fid = sm.add_buffer("int x = y + z;", "test.udo");
+        FileID fid = sm.add_buffer("int x = y + z;", "test.aion");
         
         diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
         
@@ -228,8 +228,8 @@ void register_error_tests(TestRunner& runner) {
         printer.HandleDiagnostic(diag::Severity::Error, d);
         
         std::string output = capture.get_output();
-        UDO_ASSERT_CONTAINS(output, " 1 | int x = y + z;");
-        UDO_ASSERT_CONTAINS(output, "   |         ~ ^ ~");
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y + z;");
+        AION_ASSERT_CONTAINS(output, "   |         ~ ^ ~");
         capture.finish();
     });
 
@@ -238,7 +238,7 @@ void register_error_tests(TestRunner& runner) {
         Source_Manager sm;
         diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
         
-        FileID fid = sm.add_buffer("int x = y", "test.udo");
+        FileID fid = sm.add_buffer("int x = y", "test.aion");
         diag::Diagnostic d;
         d.id = diag::parse::err_expected_semicolon;
         d.message = "expected ';'";
@@ -249,9 +249,9 @@ void register_error_tests(TestRunner& runner) {
         printer.HandleDiagnostic(diag::Severity::Error, d);
         
         std::string output = capture.get_output();
-        UDO_ASSERT_CONTAINS(output, "help: insert \";\"");
-        UDO_ASSERT_CONTAINS(output, " 1 | int x = y;");
-        UDO_ASSERT_CONTAINS(output, "   |          ~");
+        AION_ASSERT_CONTAINS(output, "help: insert \";\"");
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
+        AION_ASSERT_CONTAINS(output, "   |          ~");
         capture.finish();
     });
 
@@ -269,17 +269,17 @@ void register_error_tests(TestRunner& runner) {
         
         std::string output = capture.get_output();
         // The printer uses \033[1;31merror\033[0m: for Error
-        UDO_ASSERT_CONTAINS(output, "\033[1;31merror\033[0m: ");
-        UDO_ASSERT_CONTAINS(output, "\033[1mcolored error\033[0m");
+        AION_ASSERT_CONTAINS(output, "\033[1;31merror\033[0m: ");
+        AION_ASSERT_CONTAINS(output, "\033[1mcolored error\033[0m");
         
         // Check for caret color too
         capture.get_stream().str("");
-        FileID fid = sm.add_buffer("foo", "test.udo");
+        FileID fid = sm.add_buffer("foo", "test.aion");
         d.location = Source_Location(fid, 0);
         printer.HandleDiagnostic(diag::Severity::Error, d);
         // Green color for caret
-        UDO_ASSERT_CONTAINS(capture.get_output(), "\033[1;32m");
-        UDO_ASSERT_CONTAINS(capture.get_output(), "^");
+        AION_ASSERT_CONTAINS(capture.get_output(), "\033[1;32m");
+        AION_ASSERT_CONTAINS(capture.get_output(), "^");
         
         capture.finish();
     });
@@ -287,7 +287,7 @@ void register_error_tests(TestRunner& runner) {
     printer_suite->add_test("MultilineSourcePrinting", []() {
         OutputCapture capture("MultilineSourcePrinting");
         Source_Manager sm;
-        FileID fid = sm.add_buffer("line 1\nline 2\nline 3", "test.udo");
+        FileID fid = sm.add_buffer("line 1\nline 2\nline 3", "test.aion");
         
         diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
         
@@ -302,16 +302,16 @@ void register_error_tests(TestRunner& runner) {
         printer.HandleDiagnostic(diag::Severity::Error, d);
         
         std::string output = capture.get_output();
-        UDO_ASSERT_CONTAINS(output, "test.udo:2:1: error: error on line 2");
-        UDO_ASSERT_CONTAINS(output, " 2 | line 2");
-        UDO_ASSERT_CONTAINS(output, "   | ^");
+        AION_ASSERT_CONTAINS(output, "test.aion:2:1: error: error on line 2");
+        AION_ASSERT_CONTAINS(output, " 2 | line 2");
+        AION_ASSERT_CONTAINS(output, "   | ^");
         capture.finish();
     });
 
     runner.add_suite(std::move(printer_suite));
 }
 
-} // namespace udo::test
+} // namespace aion::test
 
 // ============================================================================
 // Main function for standalone error test executable
@@ -319,7 +319,7 @@ void register_error_tests(TestRunner& runner) {
 // ============================================================================
 #ifdef ERROR_TEST_STANDALONE
 int main(int argc, char* argv[]) {
-    using namespace udo::test;
+    using namespace aion::test;
 
     TestRunner runner;
     bool verbose = false;

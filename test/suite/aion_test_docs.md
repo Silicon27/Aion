@@ -1,8 +1,8 @@
-# UDO Test Framework Documentation
+# AION Test Framework Documentation
 
 ## Introduction
 
-The UDO Test Framework is a modern C++20 testing library designed to provide a flexible, production-ready environment for verifying codebase integrity. It supports hierarchical test suites, rich assertions, configurable logging levels, and a clean, tree-structured output.
+The AION Test Framework is a modern C++20 testing library designed to provide a flexible, production-ready environment for verifying codebase integrity. It supports hierarchical test suites, rich assertions, configurable logging levels, and a clean, tree-structured output.
 
 ## Core Concepts
 
@@ -26,49 +26,49 @@ The output is displayed in a tree structure, making it easy to see which tests b
 ## Usage
 
 ### Defining a Test Suite
-Use the `UDO_TEST_SUITE(name)` macro to define a new suite. This macro also handles registration with the global `TestRunner`.
+Use the `AION_TEST_SUITE(name)` macro to define a new suite. This macro also handles registration with the global `TestRunner`.
 
 ```cpp
-UDO_TEST_SUITE(MyFeature)
+AION_TEST_SUITE(MyFeature)
 ```
 
 ### Adding Tests
-Use the `UDO_TEST(suite_name, test_name)` macro to add a test case to a suite.
+Use the `AION_TEST(suite_name, test_name)` macro to add a test case to a suite.
 
 ```cpp
-UDO_TEST(MyFeature, BasicBehavior) {
+AION_TEST(MyFeature, BasicBehavior) {
     int value = 42;
-    UDO_ASSERT_EQ(value, 42);
+    AION_ASSERT_EQ(value, 42);
 }
 ```
 
 ### Setup and Teardown
 The framework provides macros for lifecycle management:
-- `UDO_SETUP(suite)`: Runs once before any tests in the suite.
-- `UDO_TEARDOWN(suite)`: Runs once after all tests in the suite have finished.
-- `UDO_BEFORE_EACH(suite)`: Runs before every individual test in the suite.
-- `UDO_AFTER_EACH(suite)`: Runs after every individual test in the suite.
+- `AION_SETUP(suite)`: Runs once before any tests in the suite.
+- `AION_TEARDOWN(suite)`: Runs once after all tests in the suite have finished.
+- `AION_BEFORE_EACH(suite)`: Runs before every individual test in the suite.
+- `AION_AFTER_EACH(suite)`: Runs after every individual test in the suite.
 
 ### Logging within Tests
-You can log custom messages during test execution using `UDO_INFO(msg)` or `UDO_DEBUG(msg)`. These messages will be properly indented under the current test in the output.
+You can log custom messages during test execution using `AION_INFO(msg)` or `AION_DEBUG(msg)`. These messages will be properly indented under the current test in the output.
 
 ## Assertions
 
 The framework provides a wide range of assertions to verify different conditions:
 
-- `UDO_ASSERT(condition)`: Basic boolean check.
-- `UDO_ASSERT_TRUE(condition)` / `UDO_ASSERT_FALSE(condition)`: Semantic boolean checks.
-- `UDO_ASSERT_EQ(actual, expected)`: Checks for equality using `==`.
-- `UDO_ASSERT_NE(actual, expected)`: Checks for inequality using `!=`.
-- `UDO_ASSERT_LT`, `UDO_ASSERT_LE`, `UDO_ASSERT_GT`, `UDO_ASSERT_GE`: Numeric comparisons.
-- `UDO_ASSERT_NEAR(actual, expected, epsilon)`: Floating point comparison within a tolerance.
-- `UDO_ASSERT_NULL(ptr)` / `UDO_ASSERT_NOT_NULL(ptr)`: Pointer checks.
-- `UDO_ASSERT_STREQ(actual, expected)`: String equality.
-- `UDO_ASSERT_CONTAINS(string, substring)`: Verifies that a string contains a specific substring.
-- `UDO_ASSERT_MATCH(string, pattern)`: Verifies that a string matches a regex pattern.
-- `UDO_ASSERT_IN_RANGE(value, min, max)`: Verifies that a value is within the inclusive range [min, max].
-- `UDO_ASSERT_THROWS(statement, exception_type)`: Verifies that a statement throws a specific exception.
-- `UDO_ASSERT_NO_THROW(statement)`: Verifies that a statement does not throw any exceptions.
+- `AION_ASSERT(condition)`: Basic boolean check.
+- `AION_ASSERT_TRUE(condition)` / `AION_ASSERT_FALSE(condition)`: Semantic boolean checks.
+- `AION_ASSERT_EQ(actual, expected)`: Checks for equality using `==`.
+- `AION_ASSERT_NE(actual, expected)`: Checks for inequality using `!=`.
+- `AION_ASSERT_LT`, `AION_ASSERT_LE`, `AION_ASSERT_GT`, `AION_ASSERT_GE`: Numeric comparisons.
+- `AION_ASSERT_NEAR(actual, expected, epsilon)`: Floating point comparison within a tolerance.
+- `AION_ASSERT_NULL(ptr)` / `AION_ASSERT_NOT_NULL(ptr)`: Pointer checks.
+- `AION_ASSERT_STREQ(actual, expected)`: String equality.
+- `AION_ASSERT_CONTAINS(string, substring)`: Verifies that a string contains a specific substring.
+- `AION_ASSERT_MATCH(string, pattern)`: Verifies that a string matches a regex pattern.
+- `AION_ASSERT_IN_RANGE(value, min, max)`: Verifies that a value is within the inclusive range [min, max].
+- `AION_ASSERT_THROWS(statement, exception_type)`: Verifies that a statement throws a specific exception.
+- `AION_ASSERT_NO_THROW(statement)`: Verifies that a statement does not throw any exceptions.
 
 ## Configuration Options
 
@@ -92,7 +92,7 @@ The standard `main.cpp` provided with the project supports several command-line 
 
 ## Production Viability
 
-The UDO Test Framework is designed for production use by:
+The AION Test Framework is designed for production use by:
 1. **Thread Safety**: Using localized contexts for logging (can be extended to full thread-safety with thread-local storage).
 2. **Robustness**: Handling exceptions within tests and lifecycle functions to prevent the runner from crashing.
 3. **Clarity**: Providing a clean, aligned ASCII summary box and hierarchical logs that help identify issues quickly.

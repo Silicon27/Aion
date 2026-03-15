@@ -6,7 +6,7 @@
 #include "preprocessor_test.hpp"
 #include <preprocessor/preprocessor.hpp>
 
-namespace udo::test {
+namespace aion::test {
 
 void register_preprocessor_tests(TestRunner& runner) {
 
@@ -18,7 +18,7 @@ void register_preprocessor_tests(TestRunner& runner) {
 
     directive_suite->add_test("placeholder_test", []() {
         // TODO: Add actual preprocessor directive tests
-        UDO_ASSERT_TRUE(true);
+        AION_ASSERT_TRUE(true);
     });
 
     runner.add_suite(std::move(directive_suite));
@@ -31,7 +31,7 @@ void register_preprocessor_tests(TestRunner& runner) {
 
     include_suite->add_test("placeholder_test", []() {
         // TODO: Add actual include tests
-        UDO_ASSERT_TRUE(true);
+        AION_ASSERT_TRUE(true);
     });
 
     runner.add_suite(std::move(include_suite));
@@ -44,13 +44,13 @@ void register_preprocessor_tests(TestRunner& runner) {
 
     macro_suite->add_test("placeholder_test", []() {
         // TODO: Add actual macro tests
-        UDO_ASSERT_TRUE(true);
+        AION_ASSERT_TRUE(true);
     });
 
     runner.add_suite(std::move(macro_suite));
 }
 
-} // namespace udo::test
+} // namespace aion::test
 
 // ============================================================================
 // Main function for standalone preprocessor test executable
@@ -58,7 +58,7 @@ void register_preprocessor_tests(TestRunner& runner) {
 // ============================================================================
 #ifdef PREPROCESSOR_TEST_STANDALONE
 int main(int argc, char* argv[]) {
-    using namespace udo::test;
+    using namespace aion::test;
 
     TestRunner runner;
     bool verbose = false;

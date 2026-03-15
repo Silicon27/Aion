@@ -7,13 +7,13 @@
 #include <cli/compiler_invocation.hpp>
 #include "error/error.hpp"
 
-/// cudo - Udo Compiler
+/// caion - Aion Compiler
 
 int main(int argc, char* argv[]) {
-    using namespace udo;
+    using namespace aion;
 
     // Create the shared diagnostics engine
-    auto diagnostics_engine = udo::diag::createDiagnosticsEngine();
+    auto diagnostics_engine = aion::diag::createDiagnosticsEngine();
 
     // Parse command line and create compiler invocation
     auto config = compiler_config::parse(argc, argv);

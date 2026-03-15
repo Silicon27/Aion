@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-namespace udo {
+namespace aion {
 
     Buffer::Buffer(const std::string &data, const std::string &path)
         : data(data), path(path) {}
@@ -54,7 +54,7 @@ namespace udo {
         return id;
     }
 
-    FileID Source_Manager::add_file_from_disk(const std::string &path, udo::diag::DiagnosticsEngine &diag) {
+    FileID Source_Manager::add_file_from_disk(const std::string &path, aion::diag::DiagnosticsEngine &diag) {
         std::ifstream file(path, std::ios::binary);
         if (!file.is_open()) {
             diag.Report(Source_Location{}, diag::common::err_file_not_found)

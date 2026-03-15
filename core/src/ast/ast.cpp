@@ -6,7 +6,7 @@
 #include <ast/ASTContext.hpp>
 #include <cstring>
 
-namespace udo::ast {
+namespace aion::ast {
     void DeclContext::add_decl(Decl *decl) {
         if (!first_decl) {
             first_decl = last_decl = decl;

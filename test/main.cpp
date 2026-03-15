@@ -1,11 +1,11 @@
 //
-// UDO Test Suite - Main Entry Point
+// AION Test Suite - Main Entry Point
 // Created by David Yang on 2026-02-03.
 //
 
 #include <string>
 
-#include "suite/udo_test.hpp"
+#include "suite/aion_test.hpp"
 #include "lexer/lexer_test.hpp"
 #include "parser/parser_test.hpp"
 #include "ast/ast_test.hpp"
@@ -13,7 +13,7 @@
 #include "preprocessor/preprocessor_test.hpp"
 
 int main(int argc, char* argv[]) {
-    using namespace udo::test;
+    using namespace aion::test;
 
     TestRunner& runner = TestRunner::instance();
     TestOptions opts;
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
         } else if (arg.starts_with("--filter-test=")) {
             opts.test_filter = arg.substr(14);
         } else if (arg == "-h" || arg == "--help") {
-            std::cout << "UDO Test Suite\n"
+            std::cout << "AION Test Suite\n"
                       << "Usage: " << argv[0] << " [options]\n"
                       << "Options:\n"
                       << "  -v, --verbose               Verbose output\n"

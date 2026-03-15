@@ -1,6 +1,6 @@
 # Bundle
 
-As opposed to traditional methods of member bundling (e.g. structs, classes, etc), Udo uses `bundle`s. 
+As opposed to traditional methods of member bundling (e.g. structs, classes, etc), Aion uses `bundle`s. 
 
 Example:
 ```rust

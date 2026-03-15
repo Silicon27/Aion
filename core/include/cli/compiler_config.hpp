@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace udo::compiler_config {
+namespace aion::compiler_config {
 
     enum class Opt_Level {
         O0, // compiler attempts 1:1 of source code, minimal change in output
@@ -58,6 +58,6 @@ namespace udo::compiler_config {
         bool          link = true;       // whether to invoke the linker / produce final executable
     };
 
-} // namespace udo::compiler_config
+} // namespace aion::compiler_config
 
 #endif //COMPILER_CONFIG_HPP

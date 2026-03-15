@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31)
-project(udo_tests)
+project(aion_tests)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -84,7 +84,7 @@ set(ALL_CORE_SOURCES
 # ============================================================================
 # Unified Test Executable (all tests in one binary)
 # ============================================================================
-add_executable(udo_tests
+add_executable(aion_tests
     main.cpp
     ${LEXER_TEST_SOURCES}
     ${PARSER_TEST_SOURCES}
@@ -94,7 +94,7 @@ add_executable(udo_tests
     ${ALL_CORE_SOURCES}
 )
 
-target_include_directories(udo_tests PRIVATE
+target_include_directories(aion_tests PRIVATE
     ${CMAKE_SOURCE_DIR}/core/src
     ${CMAKE_CURRENT_SOURCE_DIR}/suite
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -164,7 +164,7 @@ target_compile_definitions(preprocessor_tests PRIVATE PREPROCESSOR_TEST_STANDALO
 # ============================================================================
 enable_testing()
 
-add_test(NAME AllTests COMMAND udo_tests)
+add_test(NAME AllTests COMMAND aion_tests)
 add_test(NAME LexerTests COMMAND lexer_tests)
 add_test(NAME ParserTests COMMAND parser_tests)
 add_test(NAME ASTTests COMMAND ast_tests)
@@ -176,7 +176,7 @@ add_test(NAME PreprocessorTests COMMAND preprocessor_tests)
 # ============================================================================
 add_custom_target(run_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure --verbose
-    DEPENDS udo_tests lexer_tests parser_tests ast_tests error_tests preprocessor_tests
+    DEPENDS aion_tests lexer_tests parser_tests ast_tests error_tests preprocessor_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Running all tests..."
 )

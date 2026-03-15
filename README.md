@@ -1,5 +1,5 @@
-# Udo 
-Udo is a compiled and imperative language aimed at provisioning requested memory whilst allowing maximum control.
+# Aion 
+Aion is a compiled and imperative language aimed at provisioning requested memory whilst allowing maximum control.
 
 Memory provisioning is an operation the compiler provides to requested memory 
 
@@ -18,7 +18,7 @@ main() :: void {
 
 
 ### Concepts
-Udo introduces `contracts`, which is a form of allowance or constraint between the programmer and the compiler.
+Aion introduces `contracts`, which is a form of allowance or constraint between the programmer and the compiler.
 
 ```rust
 @use <core/contracts>

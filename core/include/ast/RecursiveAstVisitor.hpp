@@ -2,11 +2,11 @@
 // Created by David Yang on 2026-02-08.
 //
 
-#ifndef UDO_RECURSIVE_AST_VISITOR_HPP
-#define UDO_RECURSIVE_AST_VISITOR_HPP
+#ifndef AION_RECURSIVE_AST_VISITOR_HPP
+#define AION_RECURSIVE_AST_VISITOR_HPP
 
-namespace udo::ast {
+namespace aion::ast {
     class RecursiveAstVisitor;
 }
 
-#endif //UDO_RECURSIVE_AST_VISITOR_HPP
+#endif //AION_RECURSIVE_AST_VISITOR_HPP

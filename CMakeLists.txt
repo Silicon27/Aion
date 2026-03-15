@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31)
-project(udo)
+project(aion)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -24,7 +24,7 @@ else()
     )
 
     # Make your main target depend on this build
-    add_dependencies(udo llvm_project)
+    add_dependencies(aion llvm_project)
 
     # After build, set LLVM_DIR to the install path for includes/libs
     set(LLVM_DIR ${CMAKE_BINARY_DIR}/llvm/install/lib/cmake/llvm)
@@ -57,7 +57,7 @@ set(lld_libs
 )
 
 
-add_executable(udo
+add_executable(aion
         core/src/cli/main.cpp
         core/src/cli/compiler_invocation.cpp
         core/src/lexer/lexer.cpp
@@ -67,10 +67,10 @@ add_executable(udo
         core/src/ast/ASTContext.cpp
         core/src/error/error.cpp
         core/src/support/source_manager.cpp
-        test/suite/udo_test.hpp
+        test/suite/aion_test.hpp
 )
-target_link_libraries(udo PRIVATE ${llvm_libs} ${lld_libs})
-target_include_directories(udo PRIVATE ${LLVM_INCLUDE_DIRS})
+target_link_libraries(aion PRIVATE ${llvm_libs} ${lld_libs})
+target_include_directories(aion PRIVATE ${LLVM_INCLUDE_DIRS})
 add_definitions(${LLVM_DEFINITIONS})
 include_directories(
         SYSTEM

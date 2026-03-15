@@ -36,7 +36,7 @@
 //                  Lexer Types
 // -----------------------------------------------
 
-namespace udo::lexer {
+namespace aion::lexer {
 
     enum class TokenType {
         // Keywords
@@ -204,6 +204,6 @@ namespace udo::lexer {
         return sorted_symbols;
     }
 
-} // namespace udo::lexer
+} // namespace aion::lexer
 
 #endif //GLOBAL_CONSTANTS_HPP

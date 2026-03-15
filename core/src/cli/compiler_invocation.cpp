@@ -6,13 +6,13 @@
 #include <cli/argparse.hpp>
 #include <utility>
 
-#define CUDO_NAME    "cudo"
-#define CUDO_VERSION "0.0.0"
+#define CAION_NAME    "caion"
+#define CAION_VERSION "0.0.0"
 
-using namespace udo;
-using namespace udo::compiler_config;
+using namespace aion;
+using namespace aion::compiler_config;
 
-namespace udo::compiler_config{
+namespace aion::compiler_config{
 
 std::string with_extension(const std::string &path,
                            const std::string &ext) {
@@ -43,7 +43,7 @@ std::string default_output_for_format(const std::string &input,
 // =====================
 // Config parser (CLI)
 // =====================
-namespace udo::compiler_config {
+namespace aion::compiler_config {
 
 Compiler_Config parse(int argc, char *argv[]) {
     std::vector<std::string> sources;
@@ -69,15 +69,15 @@ Compiler_Config parse(int argc, char *argv[]) {
     bool        null_output  = false; // --null
     bool        compile_only = false; // -c
 
-    argparse::ArgumentParser program(CUDO_NAME,
-                                     CUDO_VERSION,
+    argparse::ArgumentParser program(CAION_NAME,
+                                     CAION_VERSION,
                                      argparse::default_arguments::help,
                                      /*exit_on_default_arguments=*/true);
 
     program.add_argument("-V", "--version")
         .help("prints version information and exits")
         .action([&](const auto & /*unused*/) {
-            std::cout << CUDO_VERSION << std::endl;
+            std::cout << CAION_VERSION << std::endl;
             std::exit(0);
         })
         .nargs(0);
@@ -313,7 +313,7 @@ Compiler_Config parse(int argc, char *argv[]) {
             }
         } else {
             // Multiple inputs & non-linking: outputs are per-source and derived
-            // later (e.g. foo.udo -> foo.o). No single resolved_output.
+            // later (e.g. foo.aion -> foo.o). No single resolved_output.
             resolved_output = std::nullopt;
         }
     }
@@ -349,13 +349,13 @@ Compiler_Config parse(int argc, char *argv[]) {
     config.output  = resolved_output;
 
     if (flags.verbose) {
-        std::cerr << "cudo: sources=";
+        std::cerr << "caion: sources=";
         for (auto &s : config.sources) std::cerr << " " << s;
         std::cerr << "\n";
         if (config.output) {
-            std::cerr << "cudo: output=" << *config.output << "\n";
+            std::cerr << "caion: output=" << *config.output << "\n";
         }
-        std::cerr << "cudo: link=" << (config.flags.link ? "true" : "false") << "\n";
+        std::cerr << "caion: link=" << (config.flags.link ? "true" : "false") << "\n";
     }
 
     return config;
@@ -407,7 +407,7 @@ void Linker_Invoke::invoke() const {
 
     // stub: replace with lld or custom linker
     if (param.config.flags.verbose) {
-        std::cerr << "cudo: linking " << param.object_files.size()
+        std::cerr << "caion: linking " << param.object_files.size()
                   << " object file(s)";
         if (param.config.output) {
             std::cerr << " -> " << *param.config.output;
@@ -416,14 +416,14 @@ void Linker_Invoke::invoke() const {
     }
 }
 
-} // namespace udo::compiler_config
+} // namespace aion::compiler_config
 
 // =====================
 // Compiler_Invocation
 // =====================
 
 Compiler_Invocation::Compiler_Invocation(const Compiler_Config& config,
-                                         udo::diag::DiagnosticsEngine& diag)
+                                         aion::diag::DiagnosticsEngine& diag)
     : config(std::move(config)), diag_(diag), context_() {}
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)

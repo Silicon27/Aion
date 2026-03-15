@@ -1,4 +1,4 @@
-# Ownership and lifetime semantics in Udo
+# Ownership and lifetime semantics in Aion
 
 Object lifetimes typically follow a stack-like structure, where objects are created and destroyed in a last-in-first-out (LIFO) manner. When an object is created, it is allocated on the stack, and when it goes out of scope, it is automatically deallocated. This means that the lifetime of an object is determined by its scope in the code.
 

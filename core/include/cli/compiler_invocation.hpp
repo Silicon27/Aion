@@ -14,15 +14,15 @@
 #include "../ast/ASTContext.hpp"
 
 // Forward declaration to avoid circular dependency
-namespace udo::parse {
+namespace aion::parse {
     class Parser;
 }
 
-namespace udo::compiler_config {
+namespace aion::compiler_config {
 
-    using namespace udo;
-    using namespace udo::ast;
-    using namespace udo::lexer;
+    using namespace aion;
+    using namespace aion::ast;
+    using namespace aion::lexer;
 
     /// Necessary arguments
     struct Compiler_Config {
@@ -117,27 +117,27 @@ namespace udo::compiler_config {
         void invoke() const;
     };
 
-} // namespace udo::compiler_config
+} // namespace aion::compiler_config
 
 
 class Compiler_Invocation {
-    udo::compiler_config::Compiler_Config config;
-    udo::diag::DiagnosticsEngine& diag_;
-    udo::ast::ASTContext context_;
+    aion::compiler_config::Compiler_Config config;
+    aion::diag::DiagnosticsEngine& diag_;
+    aion::ast::ASTContext context_;
 
 public:
-    explicit Compiler_Invocation(const udo::compiler_config::Compiler_Config& config,
-                                 udo::diag::DiagnosticsEngine& diag);
+    explicit Compiler_Invocation(const aion::compiler_config::Compiler_Config& config,
+                                 aion::diag::DiagnosticsEngine& diag);
 
     /// Run the entire pipeline (preprocess, lex, parse, sema, codegen, link).
     /// Currently, codegen is not wired here; focus is on CC as orchestration.
     int run();
 
     /// Get the diagnostics engine
-    udo::diag::DiagnosticsEngine& getDiagnostics() { return diag_; }
+    aion::diag::DiagnosticsEngine& getDiagnostics() { return diag_; }
 
     /// Get the AST context
-    udo::ast::ASTContext& getASTContext() { return context_; }
+    aion::ast::ASTContext& getASTContext() { return context_; }
 };
 
 #endif //COMPILER_INVOCATION_HPP

@@ -8,7 +8,7 @@
 #include <support/source_manager.hpp>
 #include <type_traits>
 
-namespace udo::ast {
+namespace aion::ast {
     class Type;
     class QualType;
     class Decl;
@@ -101,7 +101,7 @@ namespace udo::ast {
 
         Decl* next = nullptr;
 
-        udo::Source_Range source_range;
+        aion::Source_Range source_range;
     };
     static_assert(std::is_trivially_destructible_v<Decl>);
 

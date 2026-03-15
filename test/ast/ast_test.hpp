@@ -6,9 +6,9 @@
 #ifndef AST_TEST_HPP
 #define AST_TEST_HPP
 
-#include "udo_test.hpp"
+#include "aion_test.hpp"
 
-namespace udo::test {
+namespace aion::test {
     void register_ast_tests(TestRunner& runner);
 }
 

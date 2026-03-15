@@ -2,8 +2,8 @@
 // Created by David Yang on 2026-02-08.
 //
 
-#ifndef UDO_AST_CONTEXT_HPP
-#define UDO_AST_CONTEXT_HPP
+#ifndef AION_AST_CONTEXT_HPP
+#define AION_AST_CONTEXT_HPP
 
 #include <vector>
 #include <deque>
@@ -12,7 +12,7 @@
 #include <string_view>
 #include <ast/ast.hpp>
 
-namespace udo::ast {
+namespace aion::ast {
 
 class ASTContext {
     struct Slab {
@@ -98,10 +98,10 @@ public:
     }
 };
 
-} // namespace udo::ast
+} // namespace aion::ast
 
 // Template implementation for BumpPtrAllocator
-namespace udo::ast {
+namespace aion::ast {
 
 template <typename VecAlloc>
 ASTContext::BumpPtrAllocator<VecAlloc>::BumpPtrAllocator(const std::size_t initial_slab_size)
@@ -174,6 +174,6 @@ std::size_t ASTContext::BumpPtrAllocator<VecAlloc>::num_allocated_bytes_used() c
     return total;
 }
 
-} // namespace udo::ast
+} // namespace aion::ast
 
-#endif //UDO_AST_CONTEXT_HPP
+#endif //AION_AST_CONTEXT_HPP

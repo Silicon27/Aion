@@ -13,7 +13,7 @@
 
 #include "error/DiagnosticSeverity.hpp"
 
-namespace udo::diag {
+namespace aion::diag {
 
 // ============================================================================
 // Diagnostic Category Sizes
@@ -188,7 +188,7 @@ public:
     void setNoErrorAsFatal(bool val) { no_error_as_fatal_ = val; }
 };
 
-} // namespace udo::diag
+} // namespace aion::diag
 
 namespace diag {
     struct SimpleErrorMessagePack {

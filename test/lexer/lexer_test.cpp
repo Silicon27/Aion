@@ -7,9 +7,9 @@
 #include <lexer/lexer.hpp>
 #include <sstream>
 
-namespace udo::test {
+namespace aion::test {
 
-using namespace udo::lexer;
+using namespace aion::lexer;
 
 // Helper function to tokenize a string
 static std::vector<Token> tokenize_string(const std::string& input) {
@@ -73,24 +73,24 @@ void register_lexer_tests(TestRunner& runner) {
 
     basic_suite->add_test("empty_input_produces_eof", []() {
         auto tokens = tokenize_string("");
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::eof));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::eof));
     });
 
     basic_suite->add_test("single_newline", []() {
         auto tokens = tokenize_string("\n");
-        UDO_ASSERT_GE(tokens.size(), 1u);
+        AION_ASSERT_GE(tokens.size(), 1u);
         bool has_newline = false;
         for (const auto& t : tokens) {
             if (t.type == TokenType::newline) has_newline = true;
         }
-        UDO_ASSERT_TRUE(has_newline);
+        AION_ASSERT_TRUE(has_newline);
     });
 
     basic_suite->add_test("whitespace_only", []() {
         auto tokens = tokenize_string("   \t  ");
         auto meaningful = get_meaningful_tokens(tokens);
-        UDO_ASSERT_EQ(meaningful.size(), 0u);
+        AION_ASSERT_EQ(meaningful.size(), 0u);
     });
 
     runner.add_suite(std::move(basic_suite));
@@ -103,38 +103,38 @@ void register_lexer_tests(TestRunner& runner) {
 
     ident_suite->add_test("simple_identifier", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("foo"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "foo");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "foo");
     });
 
     ident_suite->add_test("identifier_with_underscore", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("foo_bar"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "foo_bar");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "foo_bar");
     });
 
     ident_suite->add_test("identifier_with_numbers", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("foo123"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "foo123");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "foo123");
     });
 
     ident_suite->add_test("underscore_prefix", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("_private"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "_private");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "_private");
     });
 
     ident_suite->add_test("multiple_identifiers", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("foo bar baz"));
-        UDO_ASSERT_EQ(tokens.size(), 3u);
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "foo");
-        UDO_ASSERT_STREQ(tokens[1].lexeme, "bar");
-        UDO_ASSERT_STREQ(tokens[2].lexeme, "baz");
+        AION_ASSERT_EQ(tokens.size(), 3u);
+        AION_ASSERT_STREQ(tokens[0].lexeme, "foo");
+        AION_ASSERT_STREQ(tokens[1].lexeme, "bar");
+        AION_ASSERT_STREQ(tokens[2].lexeme, "baz");
     });
 
     runner.add_suite(std::move(ident_suite));
@@ -147,42 +147,42 @@ void register_lexer_tests(TestRunner& runner) {
 
     keyword_suite->add_test("functor_keyword", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("functor"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_functor));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "functor");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_functor));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "functor");
     });
 
     keyword_suite->add_test("let_keyword", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("let"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_let));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_let));
     });
 
     keyword_suite->add_test("if_else_keywords", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("if else"));
-        UDO_ASSERT_EQ(tokens.size(), 2u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_if));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::kw_else));
+        AION_ASSERT_EQ(tokens.size(), 2u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_if));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::kw_else));
     });
 
     keyword_suite->add_test("return_keyword", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("return"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_return));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_return));
     });
 
     keyword_suite->add_test("type_keywords", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("i32 i64 i128"));
-        UDO_ASSERT_EQ(tokens.size(), 3u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_i32));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::kw_i64));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::kw_i128));
+        AION_ASSERT_EQ(tokens.size(), 3u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_i32));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::kw_i64));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::kw_i128));
     });
 
     keyword_suite->add_test("as_keyword", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("as"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_as));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_as));
     });
 
     runner.add_suite(std::move(keyword_suite));
@@ -195,53 +195,53 @@ void register_lexer_tests(TestRunner& runner) {
 
     int_suite->add_test("simple_integer", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("42"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "42");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "42");
     });
 
     int_suite->add_test("zero", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("0"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
     });
 
     int_suite->add_test("hex_integer", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("0xFF"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "0xFF");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "0xFF");
     });
 
     int_suite->add_test("binary_integer", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("0b1010"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "0b1010");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "0b1010");
     });
 
     int_suite->add_test("octal_integer", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("0o755"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
     });
 
     int_suite->add_test("integer_with_underscore_separator", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("1_000_000"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
     });
 
     int_suite->add_test("integer_with_suffix_u", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("42u"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
     });
 
     int_suite->add_test("integer_with_suffix_ll", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("42ll"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
     });
 
     runner.add_suite(std::move(int_suite));
@@ -254,39 +254,39 @@ void register_lexer_tests(TestRunner& runner) {
 
     float_suite->add_test("simple_float", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("3.14"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
-        UDO_ASSERT_STREQ(tokens[0].lexeme, "3.14");
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "3.14");
     });
 
     float_suite->add_test("float_with_exponent", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("1e10"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
     });
 
     float_suite->add_test("float_with_negative_exponent", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("1e-10"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
     });
 
     float_suite->add_test("float_with_dot_and_exponent", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("3.14e2"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
     });
 
     float_suite->add_test("trailing_dot_float", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("123."));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
     });
 
     float_suite->add_test("float_with_f_suffix", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("3.14f"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
     });
 
     runner.add_suite(std::move(float_suite));
@@ -299,77 +299,77 @@ void register_lexer_tests(TestRunner& runner) {
 
     symbol_suite->add_test("equals_sign", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("="));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::equal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::equal));
     });
 
     symbol_suite->add_test("double_equals", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("=="));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::equal_equal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::equal_equal));
     });
 
     symbol_suite->add_test("not_equals", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("!="));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::bang_equal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::bang_equal));
     });
 
     symbol_suite->add_test("comparison_operators", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("< <= > >="));
-        UDO_ASSERT_EQ(tokens.size(), 4u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::less));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::less_equal));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::greater));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::greater_equal));
+        AION_ASSERT_EQ(tokens.size(), 4u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::less));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::less_equal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::greater));
+        AION_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::greater_equal));
     });
 
     symbol_suite->add_test("arithmetic_operators", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("+ - * /"));
-        UDO_ASSERT_EQ(tokens.size(), 4u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::plus));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::minus));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::star));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::slash));
+        AION_ASSERT_EQ(tokens.size(), 4u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::plus));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::minus));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::star));
+        AION_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::slash));
     });
 
     symbol_suite->add_test("brackets", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("()[]{}"));
-        UDO_ASSERT_EQ(tokens.size(), 6u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::lparen));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::rparen));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::lbracket));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::rbracket));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[4].type), static_cast<int>(TokenType::lbrace));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[5].type), static_cast<int>(TokenType::rbrace));
+        AION_ASSERT_EQ(tokens.size(), 6u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::lparen));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::rparen));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::lbracket));
+        AION_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::rbracket));
+        AION_ASSERT_EQ(static_cast<int>(tokens[4].type), static_cast<int>(TokenType::lbrace));
+        AION_ASSERT_EQ(static_cast<int>(tokens[5].type), static_cast<int>(TokenType::rbrace));
     });
 
     symbol_suite->add_test("semicolon_and_comma", []() {
         auto tokens = get_meaningful_tokens(tokenize_string(";,"));
-        UDO_ASSERT_EQ(tokens.size(), 2u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::semicolon));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::comma));
+        AION_ASSERT_EQ(tokens.size(), 2u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::semicolon));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::comma));
     });
 
     symbol_suite->add_test("colon_and_double_colon", []() {
         auto tokens = get_meaningful_tokens(tokenize_string(": ::"));
-        UDO_ASSERT_EQ(tokens.size(), 2u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::colon));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_colon));
+        AION_ASSERT_EQ(tokens.size(), 2u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::colon));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_colon));
     });
 
     symbol_suite->add_test("dot_operators", []() {
         auto tokens = get_meaningful_tokens(tokenize_string(". .. ..."));
-        UDO_ASSERT_EQ(tokens.size(), 3u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::dot));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_dot));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::triple_dot));
+        AION_ASSERT_EQ(tokens.size(), 3u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::dot));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_dot));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::triple_dot));
     });
 
     symbol_suite->add_test("bang_operator", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("!"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::bang));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::bang));
     });
 
     runner.add_suite(std::move(symbol_suite));
@@ -382,41 +382,41 @@ void register_lexer_tests(TestRunner& runner) {
 
     expr_suite->add_test("variable_declaration", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("let x = 42;"));
-        UDO_ASSERT_EQ(tokens.size(), 5u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_let)); // let
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::identifier)); // x
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::equal)); // =
-        UDO_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::int_literal)); // 42
-        UDO_ASSERT_EQ(static_cast<int>(tokens[4].type), static_cast<int>(TokenType::semicolon)); // ;
+        AION_ASSERT_EQ(tokens.size(), 5u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_let)); // let
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::identifier)); // x
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::equal)); // =
+        AION_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::int_literal)); // 42
+        AION_ASSERT_EQ(static_cast<int>(tokens[4].type), static_cast<int>(TokenType::semicolon)); // ;
     });
 
     expr_suite->add_test("function_declaration", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("functor add(a: i32, b: i32)"));
-        UDO_ASSERT_GE(tokens.size(), 10u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_functor)); // functor
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::identifier)); // add
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::lparen)); // (
+        AION_ASSERT_GE(tokens.size(), 10u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_functor)); // functor
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::identifier)); // add
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::lparen)); // (
     });
 
     expr_suite->add_test("arithmetic_expression", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("a + b * c - d / e"));
-        UDO_ASSERT_EQ(tokens.size(), 9u);
+        AION_ASSERT_EQ(tokens.size(), 9u);
     });
 
     expr_suite->add_test("range_expression", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("0..10"));
-        UDO_ASSERT_EQ(tokens.size(), 3u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_dot));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(tokens.size(), 3u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_dot));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::int_literal));
     });
 
     expr_suite->add_test("namespace_access", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("std::vector"));
-        UDO_ASSERT_EQ(tokens.size(), 3u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_colon));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_EQ(tokens.size(), 3u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_colon));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::identifier));
     });
 
     runner.add_suite(std::move(expr_suite));
@@ -429,15 +429,15 @@ void register_lexer_tests(TestRunner& runner) {
 
     position_suite->add_test("first_token_column", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("foo"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(tokens[0].column, 1);
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(tokens[0].column, 1);
     });
 
     position_suite->add_test("second_token_column", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("foo bar"));
-        UDO_ASSERT_EQ(tokens.size(), 2u);
-        UDO_ASSERT_EQ(tokens[0].column, 1);
-        UDO_ASSERT_EQ(tokens[1].column, 5);
+        AION_ASSERT_EQ(tokens.size(), 2u);
+        AION_ASSERT_EQ(tokens[0].column, 1);
+        AION_ASSERT_EQ(tokens[1].column, 5);
     });
 
     position_suite->add_test("multiline_line_numbers", []() {
@@ -448,9 +448,9 @@ void register_lexer_tests(TestRunner& runner) {
             if (t.lexeme == "bar") bar_line = t.line;
             if (t.lexeme == "baz") baz_line = t.line;
         }
-        UDO_ASSERT_EQ(foo_line, 1);
-        UDO_ASSERT_EQ(bar_line, 2);
-        UDO_ASSERT_EQ(baz_line, 3);
+        AION_ASSERT_EQ(foo_line, 1);
+        AION_ASSERT_EQ(bar_line, 2);
+        AION_ASSERT_EQ(baz_line, 3);
     });
 
     runner.add_suite(std::move(position_suite));
@@ -463,42 +463,42 @@ void register_lexer_tests(TestRunner& runner) {
 
     edge_suite->add_test("consecutive_operators", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("++--"));
-        UDO_ASSERT_EQ(tokens.size(), 4u);
+        AION_ASSERT_EQ(tokens.size(), 4u);
     });
 
     edge_suite->add_test("number_followed_by_dot_dot", []() {
         // 123..456 should be INT_LITERAL followed by DOUBLE_DOT followed by INT_LITERAL
         auto tokens = get_meaningful_tokens(tokenize_string("123..456"));
-        UDO_ASSERT_EQ(tokens.size(), 3u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_dot));
-        UDO_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(tokens.size(), 3u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::double_dot));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::int_literal));
     });
 
     edge_suite->add_test("hex_float_with_exponent", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("0x1.5p10"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::float_literal));
     });
 
     edge_suite->add_test("long_identifier", []() {
         std::string long_ident = "a_very_long_identifier_name_that_should_still_work_correctly";
         auto tokens = get_meaningful_tokens(tokenize_string(long_ident));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_STREQ(tokens[0].lexeme, long_ident);
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_STREQ(tokens[0].lexeme, long_ident);
     });
 
     edge_suite->add_test("mixed_case_keywords_are_identifiers", []() {
         // Keywords are case-sensitive, so "Fn" should be identifier
         auto tokens = get_meaningful_tokens(tokenize_string("Fn"));
-        UDO_ASSERT_EQ(tokens.size(), 1u);
-        UDO_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::identifier));
     });
 
     runner.add_suite(std::move(edge_suite));
 }
 
-} // namespace udo::test
+} // namespace aion::test
 
 // ============================================================================
 // Main function for standalone lexer test executable
@@ -506,7 +506,7 @@ void register_lexer_tests(TestRunner& runner) {
 // ============================================================================
 #ifdef LEXER_TEST_STANDALONE
 int main(int argc, char* argv[]) {
-    using namespace udo::test;
+    using namespace aion::test;
 
     TestRunner runner;
     bool verbose = false;

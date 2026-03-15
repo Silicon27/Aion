@@ -331,7 +331,7 @@ DiagnosticBuilder& DiagnosticBuilder::operator<<(const std::string& str) {
 }
 
 DiagnosticBuilder& DiagnosticBuilder::operator<<(const char* str) {
-    string_args_.push_back(str ? str : "(null)");
+    string_args_.emplace_back(str ? str : "(null)");
     return *this;
 }
 

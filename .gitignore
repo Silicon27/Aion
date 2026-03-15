@@ -15,3 +15,4 @@ build/
 *.dylib
 *.vscode/
 .cache
+.DS_Store

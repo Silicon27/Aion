@@ -69,13 +69,17 @@ namespace udo::parse {
         Token consume_and_expect(TokenType exp, const Token& curr, const diag::DiagID err);
         /// alias for consume_and_expect with current token
         Token match(const TokenType exp, diag::DiagID err);
-
-        /// attempt to match some MatchToken, if successful, set `active` member in `token` to true
+        /// attempt to match some MatchToken, if successful, set `is_active` member in `token` to true
         ///@returns the matched token, aka previous(), after `pos` increment
         Token match(MatchToken& token);
-
         /// alias for match(MatchToken&)
         Token attempt(MatchToken& token) { return match(token); }
+        Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
+        Token match_type();
+        Token skip_until(std::string lexeme);
+        Token skip_until(TokenType type);
+        Token skip_until(TokenType type, std::string lexeme);
+        Token skip_until(Source_Location loc);
 
         // EOF/token stream check
         bool is_at_end() const;

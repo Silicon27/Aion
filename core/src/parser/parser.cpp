@@ -70,7 +70,7 @@ namespace udo::parse {
         auto initial_let = MatchToken(TokenType::kw_let, diag::common::err_expected_token); // should not error if not matched, if error it could mean memory corruption during program runtime
         auto variable_identifier = MatchToken(TokenType::identifier, diag::common::err_expected_token);
         auto colon = MatchToken(TokenType::colon, diag::common::err_expected_token);
-
+        auto equal  = MatchToken(TokenType::equal, diag::common::err_expected_token);
         // pre-build the grammar with custom template-based PEG style parser combinators
         // helps recovery later on
 
@@ -78,10 +78,21 @@ namespace udo::parse {
         match(initial_let);
         std::string variable_id =
             match(variable_identifier).lexeme;
-        (void)variable_id;
 
         // attempt to match `=` or `:`
         attempt(colon);
+        attempt(equal);
+
+        if (colon.is_active) {
+            // explicit typing
+
+        } else if (equal.is_active) {
+            // auto type deduction
+
+        } else {
+            // recovery branch
+
+        }
     }
 
     Parser::Parser(const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)

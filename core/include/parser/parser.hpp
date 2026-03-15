@@ -60,11 +60,11 @@ namespace aion::parse {
 
     public:
         // peek at the current token without consuming it, n=0 means current token, n=1 means next token, etc.
-        Token peek(int n = 0) const;
+        inline Token peek(int n = 0) const;
         // previous, peek(-1) alias
         Token previous() const { return peek(-1); }
         /// blind consumation of tokens, no checking, just move the pointer forward and return the token at the original position
-        Token consume(int n = 1);
+        inline Token consume(int n = 1);
         /// consume the current token and check if it matches the expected type, if it does, return true, otherwise report an error and return false
         Token consume_and_expect(TokenType exp, const Token& curr, const diag::DiagID err);
         /// alias for consume_and_expect with current token
@@ -76,10 +76,13 @@ namespace aion::parse {
         Token attempt(MatchToken& token) { return match(token); }
         Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
         Token match_type();
+        /// skip_until overload
+        /// @returns the matched token (the token it should've skipped to),
+        /// aka previous(), after `pos` increment
         Token skip_until(std::string lexeme);
         Token skip_until(TokenType type);
+        /// skip_until overload that skips until it either finds a matching lexeme or type
         Token skip_until(TokenType type, std::string lexeme);
-        Token skip_until(Source_Location loc);
 
         // EOF/token stream check
         bool is_at_end() const;

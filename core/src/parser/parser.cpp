@@ -35,8 +35,8 @@ namespace aion::parse {
         }
     }
 
-    Token Parser::peek(const int n) const { return tokens[pos + n]; }
-    Token Parser::consume(const int n) {
+    inline Token Parser::peek(const int n) const { return tokens[pos + n]; }
+    inline Token Parser::consume(const int n) {
         Token token = tokens[pos];
         pos += n;
         return token;
@@ -80,23 +80,24 @@ namespace aion::parse {
     }
 
     Token Parser::skip_until(std::string lexeme) {
-        auto org = peek();
         while (peek().lexeme != lexeme) {
             consume();
         }
-        return org;
+        return previous();
     }
 
     Token Parser::skip_until(TokenType type) {
-
+        while (peek().type != type) {
+            consume();
+        }
+        return previous();
     }
 
     Token Parser::skip_until(TokenType type, std::string lexeme) {
-
-    }
-
-    Token Parser::skip_until(Source_Location loc) {
-
+        while (peek().type != type || peek().lexeme != lexeme) {
+            consume();
+        }
+        return previous();
     }
 
     bool Parser::is_at_end() const { return pos >= tokens.size() || tokens[pos].type == TokenType::eof; }

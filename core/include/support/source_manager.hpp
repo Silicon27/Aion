@@ -67,8 +67,6 @@ namespace aion {
         return loc.offset;
     }
 
-    inline Offset pos_col_to_offset(FileId file, Line line, Column col) {}
-
     // Backward-compatible aliases for legacy call sites.
     using FileID = FileId;
     using Source_Location = SourceLocation;

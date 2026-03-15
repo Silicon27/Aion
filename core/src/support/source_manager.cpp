@@ -46,18 +46,18 @@ namespace aion {
         return data.substr(start, end - start + 1);
     }
 
-    FileID Source_Manager::add_buffer(std::string content, std::string path) {
+    FileId SourceManager::add_buffer(std::string content, std::string path) {
         Buffer b(std::move(content), std::move(path));
         b.compute_line_starts();
-        FileID id = next_file_id_++;
+        FileId id = next_file_id_++;
         buffers[id] = std::move(b);
         return id;
     }
 
-    FileID Source_Manager::add_file_from_disk(const std::string &path, aion::diag::DiagnosticsEngine &diag) {
+    FileId SourceManager::add_file_from_disk(const std::string &path, aion::diag::DiagnosticsEngine &diag) {
         std::ifstream file(path, std::ios::binary);
         if (!file.is_open()) {
-            diag.Report(Source_Location{}, diag::common::err_file_not_found)
+            diag.Report(SourceLocation{}, diag::common::err_file_not_found)
                 << path;
             return SOURCE_MANAGER_INVALID_FILE_ID;
         }
@@ -69,7 +69,7 @@ namespace aion {
         return add_buffer(std::move(content), path);
     }
 
-    Buffer* Source_Manager::getBuffer(FileID id) {
+    Buffer* SourceManager::get_buffer(FileId id) {
         auto it = buffers.find(id);
         if (it != buffers.end()) {
             return &it->second;
@@ -77,7 +77,7 @@ namespace aion {
         return nullptr;
     }
 
-    const Buffer* Source_Manager::getBuffer(FileID id) const {
+    const Buffer* SourceManager::get_buffer(FileId id) const {
         auto it = buffers.find(id);
         if (it != buffers.end()) {
             return &it->second;
@@ -85,8 +85,8 @@ namespace aion {
         return nullptr;
     }
 
-    std::pair<Line, Column> Source_Manager::getLineColumn(Source_Location loc) const {
-        const Buffer* buf = getBuffer(loc.file);
+    std::pair<Line, Column> SourceManager::get_line_column(SourceLocation loc) const {
+        const Buffer* buf = get_buffer(loc.file);
         if (!buf) {
             return {0, 0};
         }
@@ -94,8 +94,8 @@ namespace aion {
         return const_cast<Buffer*>(buf)->get_line_column(loc.offset);
     }
 
-    std::string Source_Manager::getLineText(Source_Location loc) const {
-        const Buffer* buf = getBuffer(loc.file);
+    std::string SourceManager::get_line_text(SourceLocation loc) const {
+        const Buffer* buf = get_buffer(loc.file);
         if (!buf) {
             return "";
         }
@@ -103,8 +103,8 @@ namespace aion {
         return const_cast<Buffer*>(buf)->get_line_text(line);
     }
 
-    std::string Source_Manager::getFilePath(Source_Location loc) const {
-        const Buffer* buf = getBuffer(loc.file);
+    std::string SourceManager::get_file_path(SourceLocation loc) const {
+        const Buffer* buf = get_buffer(loc.file);
         if (!buf) {
             return "";
         }

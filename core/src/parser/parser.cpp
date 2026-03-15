@@ -79,6 +79,26 @@ namespace aion::parse {
         return {TokenType::invalid_token, ""};
     }
 
+    Token Parser::skip_until(std::string lexeme) {
+        auto org = peek();
+        while (peek().lexeme != lexeme) {
+            consume();
+        }
+        return org;
+    }
+
+    Token Parser::skip_until(TokenType type) {
+
+    }
+
+    Token Parser::skip_until(TokenType type, std::string lexeme) {
+
+    }
+
+    Token Parser::skip_until(Source_Location loc) {
+
+    }
+
     bool Parser::is_at_end() const { return pos >= tokens.size() || tokens[pos].type == TokenType::eof; }
 
     void Parser::parse() {

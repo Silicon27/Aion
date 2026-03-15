@@ -17,19 +17,25 @@
 
 // get the cache line size for the current platform, used for ASTContext slab allocation
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386) || defined(_M_IX86)
-    #define CACHE_LINE_SIZE 64
+inline constexpr std::size_t cache_line_size = 64;
 #elif defined(__aarch64__)
-    #define CACHE_LINE_SIZE 128
+inline constexpr std::size_t cache_line_size = 128;
 #else
-    #define CACHE_LINE_SIZE 64 // default to 64 if unknown platform
+inline constexpr std::size_t cache_line_size = 64; // default to 64 if unknown platform
+#endif
+
+#ifndef CACHE_LINE_SIZE
+#define CACHE_LINE_SIZE cache_line_size
 #endif
 
 // -----------------------------------------------
 //                  Source_Manager
 // -----------------------------------------------
 
+inline constexpr int source_manager_invalid_file_id = -300;
+
 #ifndef SOURCE_MANAGER_INVALID_FILE_ID
-#define SOURCE_MANAGER_INVALID_FILE_ID -300
+#define SOURCE_MANAGER_INVALID_FILE_ID source_manager_invalid_file_id
 #endif
 
 // -----------------------------------------------

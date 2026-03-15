@@ -83,6 +83,8 @@ namespace aion::parse {
         Token skip_until(TokenType type);
         /// skip_until overload that skips until it either finds a matching lexeme or type
         Token skip_until(TokenType type, std::string lexeme);
+        /// the error would have to be first emitted before we attempt to end the parsing function (the caller to this function);
+        /// return is to be written explicitly in the branch calling this function (that is, it is the caller's responsibility to write return after calling this function)
         Token attempt_to_skip_until_familiar();
 
         // EOF/token stream check

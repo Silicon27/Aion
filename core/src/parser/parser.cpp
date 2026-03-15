@@ -154,6 +154,7 @@ namespace aion::parse {
             // fallthrough
         } else {
             // recovery branch
+            // we either skip until we reach a familiar keyword, until eof, or until some specified lexeme
         }
     }
 

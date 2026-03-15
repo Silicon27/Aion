@@ -83,6 +83,7 @@ namespace aion::parse {
         Token skip_until(TokenType type);
         /// skip_until overload that skips until it either finds a matching lexeme or type
         Token skip_until(TokenType type, std::string lexeme);
+        Token attempt_to_skip_until_familiar();
 
         // EOF/token stream check
         bool is_at_end() const;

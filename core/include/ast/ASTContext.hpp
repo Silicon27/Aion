@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <string_view>
 #include <ast/ast.hpp>
+#include <error/error.hpp>
 
 namespace aion::ast {
 
@@ -133,13 +134,20 @@ void* ASTContext::BumpPtrAllocator<VecAlloc>::allocate(const std::size_t size, c
         partially_used_slabs.push_back(current_slab_idx);
     }
 
-    const std::size_t new_slab_size = size_of_new_slab > 0 ? size_of_new_slab : slab_size;
-    if (new_slab_size <= size) {
-        return nullptr;
+    // Handle large allocations by creating a dedicated slab.
+    if (size_of_new_slab == 0 && size >= slab_size) {
+        slabs.emplace_back(size + alignment);
+        return slabs.back().allocate(size, alignment);
     }
 
+    const std::size_t new_slab_size = size_of_new_slab > 0 ? size_of_new_slab : slab_size;
     slabs.emplace_back(new_slab_size);
     current_slab_idx = slabs.size() - 1;
+
+    // Implement geometric growth: double the default slab size for future allocations, up to 128MB.
+    if (size_of_new_slab == 0 && slab_size < 128 * 1024 * 1024) {
+        slab_size *= 2;
+    }
 
     return slabs[current_slab_idx].allocate(size, alignment);
 }

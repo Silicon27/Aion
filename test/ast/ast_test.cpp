@@ -170,6 +170,38 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_EQ(allocator.num_slabs(), 3); // No new slab needed.
     });
 
+    context_suite->add_test("large_allocation_handling", [] {
+        using namespace aion::ast;
+        ASTContext::BumpPtrAllocator allocator(64);
+
+        // Allocate more than slab_size
+        void* p = allocator.allocate(128);
+        AION_ASSERT_NOT_NULL(p);
+        // Should have allocated a dedicated slab (total 2 slabs)
+        AION_ASSERT_EQ(allocator.num_slabs(), 2);
+        
+        // Ensure it's correctly aligned
+        AION_ASSERT_EQ(reinterpret_cast<std::uintptr_t>(p) % alignof(std::max_align_t), 0);
+    });
+
+    context_suite->add_test("geometric_growth", [] {
+        using namespace aion::ast;
+        ASTContext::BumpPtrAllocator allocator(64);
+
+        AION_ASSERT_EQ(allocator.slab_sizes(), 64);
+        
+        // Trigger first new slab allocation
+        allocator.allocate(60); // Slab 0 (64)
+        allocator.allocate(60); // Slab 1 (64)
+        
+        // After Slab 1 is created, slab_size should double for the NEXT allocation
+        AION_ASSERT_EQ(allocator.slab_sizes(), 128);
+        
+        // Trigger second new slab allocation
+        allocator.allocate(120); // Slab 2 (128)
+        AION_ASSERT_EQ(allocator.slab_sizes(), 256);
+    });
+
     runner.add_suite(std::move(context_suite));
 
     // ========================================================================

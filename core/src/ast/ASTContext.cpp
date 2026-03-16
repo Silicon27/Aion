@@ -3,13 +3,20 @@
 #include <memory>
 #include <cstdint>
 #include <algorithm>
+#include <iostream>
+#include <cstdlib>
 
 namespace aion::ast {
 
 ASTContext::Slab::Slab(const std::size_t size) {
     // ensure the allocated buffer is of a size that is a
     // multiple of the cache line size for better cache locality
-    buffer = new char[(size + CACHE_LINE_SIZE - 1) & ~(CACHE_LINE_SIZE - 1)];
+    const std::size_t alloc_size = (size + CACHE_LINE_SIZE - 1) & ~(CACHE_LINE_SIZE - 1);
+    buffer = new (std::nothrow) char[alloc_size];
+    if (!buffer) {
+        std::cerr << "ASTContext: Fatal error: out of memory during slab allocation.\n";
+        std::abort();
+    }
     current = buffer;
     capacity = size;
 }

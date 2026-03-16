@@ -304,7 +304,7 @@ public:
 
         if (opts.use_color) std::cout << color::YELLOW << color::BOLD;
         std::cout << "╔═══════════════════════════════════════════════════════════════════════════╗\n"
-                  << "║                         AION TEST FRAMEWORK                                ║\n"
+                  << "║                         AION TEST FRAMEWORK                               ║\n"
                   << "╚═══════════════════════════════════════════════════════════════════════════╝";
         if (opts.use_color) std::cout << color::RESET;
         std::cout << "\n\n";

@@ -66,6 +66,14 @@ namespace aion::parse {
         }
     }
 
+    bool Parser::silent_probe(const TokenType exp, const Token &curr) {
+        return curr.type == exp;
+    }
+
+    bool Parser::silent_probe(const MatchToken &token) {
+        return silent_probe(token.token, peek());
+    }
+
     Token Parser::match_type() {
         // types may either be built in or user-defined
         // (i.e., of TokenType::identifier or any of the kw_

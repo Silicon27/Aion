@@ -74,9 +74,10 @@ namespace aion::parse {
         ///@returns the matched token, aka previous(), after `pos` increment
         Token match(MatchToken& token);
         // -------- non-throwing -----------
-        /// would silently probe, that is, would progress only if curr == exp
-        Token silent_probe(TokenType exp, const Token& curr);
-        Token silent_probe(MatchToken& token);
+        /// would silently probe, this is, would return whether the curr == exp
+        bool silent_probe(TokenType exp, const Token& curr);
+        /// alias for silent_probe(TokenType, const Token&)
+        bool silent_probe(const MatchToken& token);
 
         /// would either progress or hold, does not throw
         Token silent_consume(TokenType exp, const Token& curr);

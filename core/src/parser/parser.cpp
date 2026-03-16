@@ -36,7 +36,7 @@ namespace aion::parse {
     }
 
     inline Token Parser::peek(const int n) const { return tokens[pos + n]; }
-    inline Token Parser::consume(const int n) {
+    inline Token Parser::blind_consume(const int n) {
         Token token = tokens[pos];
         pos += n;
         return token;
@@ -74,13 +74,30 @@ namespace aion::parse {
         return silent_probe(token.token, peek());
     }
 
+    Token Parser::silent_consume(const TokenType exp, const Token &curr) {
+        if (silent_probe(exp, curr)) {
+            pos++;
+            return previous();
+        }
+        return {TokenType::invalid_token, ""};
+    }
+
+    Token Parser::silent_consume(MatchToken &token) {
+        if (silent_probe(token)) {
+            pos++;
+            token.is_active = true;
+            return previous();
+        }
+        return {TokenType::invalid_token, ""};
+    }
+
     Token Parser::match_type() {
         // types may either be built in or user-defined
         // (i.e., of TokenType::identifier or any of the kw_
         // prefixed type keywords)
         if (const auto token_type = peek().type;
             token_type == TokenType::identifier || is_builtin_type_token(token_type)) {
-            return consume();
+            return blind_consume();
         }
         diagnostics_.Report(diag::parse::err_expected_type)
                 << "expected type";
@@ -89,21 +106,21 @@ namespace aion::parse {
 
     Token Parser::skip_until(std::string lexeme) {
         while (peek().lexeme != lexeme) {
-            consume();
+            blind_consume();
         }
         return previous();
     }
 
     Token Parser::skip_until(TokenType type) {
         while (peek().type != type) {
-            consume();
+            blind_consume();
         }
         return previous();
     }
 
     Token Parser::skip_until(TokenType type, std::string lexeme) {
         while (peek().type != type || peek().lexeme != lexeme) {
-            consume();
+            blind_consume();
         }
         return previous();
     }
@@ -122,7 +139,7 @@ namespace aion::parse {
                 parse_variable_decl();
                 break;
             default:
-                consume(); // skip unknown token
+                blind_consume(); // skip unknown token
                 break;
         }
     }

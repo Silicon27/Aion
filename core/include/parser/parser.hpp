@@ -59,13 +59,17 @@ namespace aion::parse {
         int pos = 0;
 
     public:
-        // peek at the current token without consuming it, n=0 means current token, n=1 means next token, etc.
+        // ----------- Token checking --------------
+        /// peek at the current token without consuming it, n=0 means current token, n=1 means next token, etc.
         inline Token peek(int n = 0) const;
-        // previous, peek(-1) alias
+        /// alias for peek(-1)
         Token previous() const { return peek(-1); }
         /// blind consumation of tokens, no checking, just move the pointer forward and return the token at the original position
-        inline Token consume(int n = 1);
-        // -------- error throwing ---------
+        inline Token blind_consume(int n = 1);
+
+        // ------------ Throwing --------------
+        // NOTE dangerous functions, use only if either it is guaranteed to be non-throwing or assumed to be required
+        // NOTE even so, it is still NOT RECOMMENDED to use these functions. Use at self discretion.
         /// consume the current token and check if it matches the expected type, if it does, return true, otherwise report an error and return false
         Token consume_and_expect(TokenType exp, const Token& curr, const diag::DiagID err);
         /// alias for consume_and_expect with current token
@@ -73,7 +77,11 @@ namespace aion::parse {
         /// attempt to match some MatchToken, if successful, set `is_active` member in `token` to true
         ///@returns the matched token, aka previous(), after `pos` increment
         Token match(MatchToken& token);
-        // -------- non-throwing -----------
+
+        Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
+        Token match_type();
+
+        // ---------- Non-throwing --------------
         /// would silently probe, this is, would return whether the curr == exp
         bool silent_probe(TokenType exp, const Token& curr);
         /// alias for silent_probe(TokenType, const Token&)
@@ -81,14 +89,13 @@ namespace aion::parse {
 
         /// would either progress or hold, does not throw
         Token silent_consume(TokenType exp, const Token& curr);
+        /// alias for silent_consume(TokenType, const Token&), also sets `token`'s is_active field to true upon progression
         Token silent_consume(MatchToken& token);
 
         /// alias for silent_consume(MatchToken&)
         Token attempt(MatchToken& token) { return silent_consume(token); }
-        // ---------------------------------
 
-        Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
-        Token match_type();
+        // ---------- Recovery functions ----------
         /// skip_until overload
         /// @returns the matched token (the token it should've skipped to),
         /// aka previous(), after `pos` increment
@@ -99,6 +106,7 @@ namespace aion::parse {
         /// the error would have to be first emitted before we attempt to end the parsing function (the caller to this function);
         /// return is to be written explicitly in the branch calling this function (that is, it is the caller's responsibility to write return after calling this function)
         Token attempt_to_skip_until_familiar();
+        // ----------------------------------------
 
         // EOF/token stream check
         bool is_at_end() const;

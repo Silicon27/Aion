@@ -158,13 +158,14 @@ namespace aion::parse {
         auto semicolon = MatchToken(TokenType::semicolon, diag::common::err_expected_token);
         // pre-build the grammar with custom template-based PEG style parser combinators
         // helps recovery later on
-        std::string variable_id;
+        Token variable_id_token;
         Token type_annotation;
         bool need_auto_type_deduction = false;
 
-        match(initial_let);
-        variable_id =
-            match(variable_identifier).lexeme;
+        // should always progress - if this faults, it indicates memory corruption during program runtime
+        match(initial_let); // fix-me: make an instant program termination match function which terminates the program on failure
+
+        variable_id_token = silent_consume(variable_identifier);
 
         // attempt to match `=` or `:`
         attempt(colon);

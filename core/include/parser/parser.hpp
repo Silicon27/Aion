@@ -67,9 +67,10 @@ namespace aion::parse {
         /// blind consumation of tokens, no checking, just move the pointer forward and return the token at the original position
         inline Token blind_consume(int n = 1);
 
-        // ------------ Throwing --------------
-        // NOTE dangerous functions, use only if either it is guaranteed to be non-throwing or assumed to be required
+        // ------------ Reporting --------------
+        // NOTE dangerous functions, use only if the grammar is either guaranteed to be constant or assumed to be required - at highly strict levels
         // NOTE even so, it is still NOT RECOMMENDED to use these functions. Use at self discretion.
+        // NOTE generates extremely shallow diagnostics, non-optimal for pedantic errors
         /// consume the current token and check if it matches the expected type, if it does, return true, otherwise report an error and return false
         Token consume_and_expect(TokenType exp, const Token& curr, const diag::DiagID err);
         /// alias for consume_and_expect with current token
@@ -81,7 +82,7 @@ namespace aion::parse {
         Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
         Token match_type();
 
-        // ---------- Non-throwing --------------
+        // ---------- Non-reporting --------------
         /// would silently probe, this is, would return whether the curr == exp
         bool silent_probe(TokenType exp, const Token& curr);
         /// alias for silent_probe(TokenType, const Token&)

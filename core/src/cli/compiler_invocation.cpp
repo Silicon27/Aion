@@ -6,8 +6,8 @@
 #include <cli/argparse.hpp>
 #include <utility>
 
-#define CAION_NAME    "caion"
-#define CAION_VERSION "0.0.0"
+#define KAION_NAME    "kaion"
+#define KAION_VERSION "0.0.0"
 
 using namespace aion;
 using namespace aion::compiler_config;
@@ -70,15 +70,15 @@ Compiler_Config parse(int argc, char *argv[]) {
     bool        null_output  = false; // --null
     bool        compile_only = false; // -c
 
-    argparse::ArgumentParser program(CAION_NAME,
-                                     CAION_VERSION,
+    argparse::ArgumentParser program(KAION_NAME,
+                                     KAION_VERSION,
                                      argparse::default_arguments::help,
                                      /*exit_on_default_arguments=*/true);
 
     program.add_argument("-V", "--version")
         .help("prints version information and exits")
         .action([&](const auto & /*unused*/) {
-            std::cout << CAION_VERSION << std::endl;
+            std::cout << KAION_VERSION << std::endl;
             std::exit(0);
         })
         .nargs(0);

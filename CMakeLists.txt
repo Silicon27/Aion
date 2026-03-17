@@ -64,6 +64,7 @@ add_executable(aion
         core/src/preprocessor/preprocessor.cpp
         core/src/parser/parser.cpp
         core/src/ast/ast.cpp
+        core/src/ast/decl.cpp
         core/src/ast/ASTContext.cpp
         core/src/error/error.cpp
         core/src/support/source_manager.cpp

@@ -9,12 +9,20 @@
 #include <type_traits>
 
 namespace aion::ast {
+    class IdentifierInfo;
     class Type;
     class QualType;
     class Decl;
     class Stmt;
     class Expr;
     class ASTContext;
+
+    class IdentifierInfo {
+        const char* name;
+    public:
+        explicit IdentifierInfo(const char* name) : name(name) {}
+        const char* getName() const { return name; }
+    };
 
     class Type {
         friend class ASTContext;

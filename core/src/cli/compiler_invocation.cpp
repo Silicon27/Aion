@@ -66,6 +66,7 @@ Compiler_Config parse(int argc, char *argv[]) {
     std::string L_output;          // -L/-ll [file]
     std::string W_output;          // -W [file]
     std::string T_output;          // -T [file]
+    std::string log_output;        // --log-output
     bool        null_output  = false; // --null
     bool        compile_only = false; // -c
 
@@ -155,6 +156,11 @@ Compiler_Config parse(int argc, char *argv[]) {
         .flag().store_into(opt_Os);
     program.add_argument("-Oz").help("Optimize for speed")
         .flag().store_into(opt_Oz);
+
+    program.add_argument("--log-output")
+        .help("Specify a file to write logs to (instead of stderr)")
+        .nargs(1, 1)
+        .store_into(log_output);
 
     try {
         program.parse_args(argc, argv);

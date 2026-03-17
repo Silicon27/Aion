@@ -71,6 +71,8 @@ namespace aion::parse {
             return t;
         } else {
             // log the message, the behaviour of the log (and thereafter output destination) should be flag controlled
+            // create custom logging library for this purpose, for now just use std::cerr (library should exist in si)
+            std::cerr << sigabrt_message << std::endl;
             std::abort();
         }
     }
@@ -165,14 +167,13 @@ namespace aion::parse {
         auto colon = MatchToken(TokenType::colon, diag::common::err_expected_token);
         auto equal  = MatchToken(TokenType::equal, diag::common::err_expected_token);
         auto semicolon = MatchToken(TokenType::semicolon, diag::common::err_expected_token);
-        // pre-build the grammar with custom template-based PEG style parser combinators
-        // helps recovery later on
+
         Token variable_id_token;
         Token type_annotation;
         bool need_auto_type_deduction = false;
 
         // should always progress - if this faults, it indicates memory corruption during program runtime
-        diffuse_match(initial_let, "expected 'let' keyword - memory corruption possible"); // fix-me: make an instant program termination match function which terminates the program on failure
+        diffuse_match(initial_let.token, peek().type, "expected 'let' keyword - memory corruption possible"); // fix-me: make an instant program termination match function which terminates the program on failure
 
         variable_id_token = silent_consume(variable_identifier);
 

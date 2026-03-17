@@ -75,6 +75,8 @@ add_definitions(${LLVM_DEFINITIONS})
 include_directories(
         SYSTEM
         core/include
+        core/include/support/si/include
+        core/include/support
 )
 
 

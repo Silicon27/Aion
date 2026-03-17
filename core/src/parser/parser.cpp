@@ -6,7 +6,8 @@
 
 #include <parser/parser.hpp>
 #include <support/global_constants.hpp>
-#include <support/iris/src/iris.hpp>
+#include <iris/src/iris.hpp>
+#include <si/log.hpp>
 
 
 
@@ -48,7 +49,7 @@ namespace aion::parse {
             return previous();
         }
 
-        diagnostics_.Report(err)
+        diagnostics.Report(err)
                 << "expected token";
         return {TokenType::invalid_token, ""};
     }
@@ -66,12 +67,11 @@ namespace aion::parse {
         }
     }
 
-    Token Parser::diffuse_match(const TokenType exp, const TokenType curr, const std::string sigabrt_message) {
+    Token Parser::diffuse_match(const TokenType exp, const TokenType curr, const std::string& sigabrt_message) {
         if (const auto t = silent_consume(exp, peek()); t.type != TokenType::invalid_token) {
             return t;
         } else {
-            // log the message, the behaviour of the log (and thereafter output destination) should be flag controlled
-            // create custom logging library for this purpose, for now just use std::cerr (library should exist in si)
+            si::fatal(sigabrt_message.c_str());
             std::cerr << sigabrt_message << std::endl;
             std::abort();
         }
@@ -110,7 +110,7 @@ namespace aion::parse {
             token_type == TokenType::identifier || is_builtin_type_token(token_type)) {
             return blind_consume();
         }
-        diagnostics_.Report(diag::parse::err_expected_type)
+        diagnostics.Report(diag::parse::err_expected_type)
                 << "expected type";
         return {TokenType::invalid_token, ""};
     }
@@ -184,6 +184,10 @@ namespace aion::parse {
         if (colon.is_active) {
             // explicit typing
             type_annotation = match_type();
+            if (silent_probe(semicolon)) {
+                blind_consume();
+                // begin ast construction
+            }
         } else if (equal.is_active) {
             // auto type deduction
             need_auto_type_deduction = true;
@@ -195,7 +199,7 @@ namespace aion::parse {
     }
 
     Parser::Parser(const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)
-        : diagnostics_(diag), context_(context), tokens(tokens), flags(std::move(flag)), parser_context(ParserContext::top_level) {
+        : diagnostics(diag), context(context), tokens(tokens), flags(std::move(flag)), parser_context(ParserContext::top_level) {
     }
 
 

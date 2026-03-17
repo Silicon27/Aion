@@ -51,8 +51,8 @@ namespace aion::parse {
 
 
     private:
-        diag::DiagnosticsEngine& diagnostics_;
-        ASTContext& context_;
+        diag::DiagnosticsEngine& diagnostics;
+        ASTContext& context;
         std::vector<Token> tokens;
         Flags flags;
         ParserContext parser_context;
@@ -84,7 +84,7 @@ namespace aion::parse {
 
         /// NOTE most non-tolerating function, it would instantly terminate the program if the match fails
         /// usage examples would be tokens that if not matched, would indicate memory corruption during program runtime
-        Token diffuse_match(const TokenType exp, const TokenType curr, const std::string sigabrt_message);
+        Token diffuse_match(const TokenType exp, const TokenType curr, const std::string& sigabrt_message);
 
         // ---------- Non-reporting --------------
         /// would silently probe, this is, would return whether the curr == exp

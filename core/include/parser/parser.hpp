@@ -82,6 +82,10 @@ namespace aion::parse {
         Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
         Token match_type();
 
+        /// NOTE most non-tolerating function, it would instantly terminate the program if the match fails
+        /// usage examples would be tokens that if not matched, would indicate memory corruption during program runtime
+        Token diffuse_match(const TokenType exp, const TokenType curr, const std::string sigabrt_message);
+
         // ---------- Non-reporting --------------
         /// would silently probe, this is, would return whether the curr == exp
         bool silent_probe(TokenType exp, const Token& curr);

@@ -66,6 +66,15 @@ namespace aion::parse {
         }
     }
 
+    Token Parser::diffuse_match(const TokenType exp, const TokenType curr, const std::string sigabrt_message) {
+        if (const auto t = silent_consume(exp, peek()); t.type != TokenType::invalid_token) {
+            return t;
+        } else {
+            // log the message, the behaviour of the log (and thereafter output destination) should be flag controlled
+            std::abort();
+        }
+    }
+
     bool Parser::silent_probe(const TokenType exp, const Token &curr) {
         return curr.type == exp;
     }
@@ -163,7 +172,7 @@ namespace aion::parse {
         bool need_auto_type_deduction = false;
 
         // should always progress - if this faults, it indicates memory corruption during program runtime
-        match(initial_let); // fix-me: make an instant program termination match function which terminates the program on failure
+        diffuse_match(initial_let, "expected 'let' keyword - memory corruption possible"); // fix-me: make an instant program termination match function which terminates the program on failure
 
         variable_id_token = silent_consume(variable_identifier);
 

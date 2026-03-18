@@ -21,7 +21,7 @@ add_executable(aion
 option(AION_BUILD_LLVM "Build LLVM from source" OFF)
 
 if(NOT AION_BUILD_LLVM)
-    find_package(LLVM 16 REQUIRED CONFIG)
+    find_package(LLVM REQUIRED CONFIG)
     message(STATUS "Found system LLVM: ${LLVM_DIR}")
 else()
     message(STATUS "LLVM not found or AION_BUILD_LLVM=ON, fetching/building...")

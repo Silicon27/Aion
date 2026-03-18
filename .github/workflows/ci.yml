@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up LLVM (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y llvm-16-dev lld-16 libclang-16-dev
+
+    - name: Set up LLVM (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install llvm@16
+        echo "LLVM_DIR=$(brew --prefix llvm@16)/lib/cmake/llvm" >> $GITHUB_ENV
+
+    - name: Set up LLVM (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        choco install llvm --version=16.0.0
+        echo "C:\Program Files\LLVM\bin" >> $GITHUB_PATH
+
+    - name: Configure CMake
+      run: cmake -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Run Tests
+      run: |
+        cd build
+        ctest -C Release --output-on-failure

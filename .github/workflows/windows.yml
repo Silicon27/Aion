@@ -46,12 +46,23 @@ jobs:
     - name: Set LLVM Environment
       shell: bash
       run: |
-        # Keep LLVM bin out of PATH to prioritize MSVC cl.exe
-        echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
+        # Locate LLVMConfig.cmake dynamically
+        SEARCH_PATH="C:/Program Files/LLVM"
+        CONF_PATH=$(find "$SEARCH_PATH" -name LLVMConfig.cmake -print -quit)
+        if [ -n "$CONF_PATH" ]; then
+          LLVM_DIR=$(dirname "$CONF_PATH")
+          # Convert to Windows style path with forward slashes for CMake
+          LLVM_DIR=$(cygpath -m "$LLVM_DIR")
+          echo "LLVM_DIR=$LLVM_DIR" >> $GITHUB_ENV
+          echo "Found LLVM config at $LLVM_DIR"
+        else
+          echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
+          echo "LLVM config not found, defaulting to C:/Program Files/LLVM/lib/cmake/llvm"
+        fi
 
     - name: Configure CMake
       shell: bash
-      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm" -D CMAKE_C_COMPILER=cl -D CMAKE_CXX_COMPILER=cl
+      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="${{ env.LLVM_DIR }}" -D CMAKE_C_COMPILER=cl -D CMAKE_CXX_COMPILER=cl
 
     - name: Build
       shell: bash

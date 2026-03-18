@@ -3,8 +3,18 @@ name: Linux CI
 on:
   push:
     branches: [ "**" ]
+    paths:
+      - 'core/**'
+      - 'test/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/linux.yml'
   pull_request:
     branches: [ "**" ]
+    paths:
+      - 'core/**'
+      - 'test/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/linux.yml'
 
 jobs:
   build-and-test:
@@ -17,21 +27,30 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ccache
+
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ runner.os }}-ccache
+
     - name: Set up LLVM (Ubuntu)
       shell: bash
       run: |
-        sudo apt-get update
         sudo apt-get install -y llvm-16-dev lld-16 liblld-16-dev libclang-16-dev libedit-dev libcurl4-openssl-dev
         echo "LLVM_DIR=/usr/lib/llvm-16/lib/cmake/llvm" >> $GITHUB_ENV
         echo "/usr/lib/llvm-16/bin" >> $GITHUB_PATH
 
     - name: Configure CMake
       shell: bash
-      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="/usr/lib/llvm-16/lib/cmake/llvm"
+      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="/usr/lib/llvm-16/lib/cmake/llvm" -D CMAKE_CXX_COMPILER_LAUNCHER=ccache -D CMAKE_C_COMPILER_LAUNCHER=ccache
 
     - name: Build
       shell: bash
-      run: cmake --build build --config Release
+      run: cmake --build build --config Release -v
 
     - name: Run Tests
       shell: bash

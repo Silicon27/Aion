@@ -88,6 +88,7 @@ include_directories(
 # ============================================================================
 # Testing
 # ============================================================================
+enable_testing()
 option(BUILD_TESTS "Build the test suite" ON)
 if(BUILD_TESTS)
     add_subdirectory(test)

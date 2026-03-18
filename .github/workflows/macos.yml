@@ -1,0 +1,38 @@
+name: macOS CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build-and-test:
+    name: macOS
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set up LLVM (macOS)
+      shell: bash
+      run: |
+        brew install llvm@16
+        echo "LLVM_DIR=$(brew --prefix llvm@16)/lib/cmake/llvm" >> $GITHUB_ENV
+
+    - name: Configure CMake
+      shell: bash
+      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      shell: bash
+      run: cmake --build build --config Release
+
+    - name: Run Tests
+      shell: bash
+      run: |
+        cd build
+        ctest -C Release --output-on-failure

@@ -162,7 +162,6 @@ target_compile_definitions(preprocessor_tests PRIVATE PREPROCESSOR_TEST_STANDALO
 # ============================================================================
 # CTest Integration
 # ============================================================================
-enable_testing()
 
 add_test(NAME AllTests COMMAND aion_tests)
 add_test(NAME LexerTests COMMAND lexer_tests)

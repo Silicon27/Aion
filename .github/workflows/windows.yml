@@ -48,7 +48,7 @@ jobs:
       shell: bash
       run: |
         echo "Starting LLVM search..."
-        SEARCH_ROOTS=("/c/Program Files/LLVM" "/c/Program Files (x86)/LLVM" "/c/tools/llvm")
+        SEARCH_ROOTS=("/c/Program Files/LLVM" "/c/Program Files (x86)/LLVM" "/c/tools/llvm" "/c/Program Files" "/c/Program Files (x86)")
         for ROOT in "${SEARCH_ROOTS[@]}"; do
           if [ -d "$ROOT" ]; then
             echo "Searching in $ROOT..."

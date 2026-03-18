@@ -35,7 +35,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: C:/Program Files/LLVM
-        key: llvm-16.0.0-windows
+        key: llvm-16.0.0-windows-v2
 
     - name: Set up LLVM (Windows)
       if: steps.cache-llvm.outputs.cache-hit != 'true'
@@ -46,19 +46,30 @@ jobs:
     - name: Set LLVM Environment
       shell: bash
       run: |
-        # Locate LLVMConfig.cmake dynamically
-        SEARCH_PATH="C:/Program Files/LLVM"
-        CONF_PATH=$(find "$SEARCH_PATH" -name LLVMConfig.cmake -print -quit)
-        if [ -n "$CONF_PATH" ]; then
-          LLVM_DIR=$(dirname "$CONF_PATH")
-          # Convert to Windows style path with forward slashes for CMake
+        # Use llvm-config if available to find the CMake directory
+        if [ -f "C:/Program Files/LLVM/bin/llvm-config.exe" ]; then
+          LLVM_DIR=$("C:/Program Files/LLVM/bin/llvm-config.exe" --cmakedir)
           LLVM_DIR=$(cygpath -m "$LLVM_DIR")
-          echo "LLVM_DIR=$LLVM_DIR" >> $GITHUB_ENV
-          echo "Found LLVM config at $LLVM_DIR"
+          echo "Found LLVM CMake dir via llvm-config: $LLVM_DIR"
         else
-          echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
-          echo "LLVM config not found, defaulting to C:/Program Files/LLVM/lib/cmake/llvm"
+          # Locate LLVMConfig.cmake dynamically as fallback
+          SEARCH_PATH="C:/Program Files/LLVM"
+          if [ -d "$SEARCH_PATH" ]; then
+            CONF_PATH=$(find "$SEARCH_PATH" -name LLVMConfig.cmake -print -quit)
+            if [ -n "$CONF_PATH" ]; then
+              LLVM_DIR=$(dirname "$CONF_PATH")
+              LLVM_DIR=$(cygpath -m "$LLVM_DIR")
+              echo "Found LLVM CMake dir via search: $LLVM_DIR"
+            else
+              LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm"
+              echo "LLVM config not found, defaulting to $LLVM_DIR"
+            fi
+          else
+            LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm"
+            echo "LLVM search path not found, defaulting to $LLVM_DIR"
+          fi
         fi
+        echo "LLVM_DIR=$LLVM_DIR" >> $GITHUB_ENV
 
     - name: Configure CMake
       shell: bash

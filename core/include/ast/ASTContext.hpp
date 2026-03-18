@@ -9,18 +9,30 @@
 #include <deque>
 #include <memory>
 #include <algorithm>
-#include <map>
+#include <cstddef>
+#include <limits>
+#include <type_traits>
 #include <string_view>
 #include <ast/ast.hpp>
 #include <error/error.hpp>
 #include <support/xxhash.h>
+#include <new>
 
 namespace aion::ast {
+    template <typename T>
+    constexpr T next_power_of_two(T x) {
+        static_assert(std::is_unsigned_v<T>, "T must be unsigned");
 
-    template<typename T>
-    concept Hashable = requires(const T& value) {
-            { std::hash<T>{}(value) } -> std::convertible_to<std::size_t>;
-    };
+        if (x <= 1) return 1;
+
+        --x; // critical to handle exact powers of two
+
+        for (std::size_t i = 1; i < std::numeric_limits<T>::digits; i <<= 1) {
+            x |= x >> i;
+        }
+
+        return x + 1;
+    }
 
 class ASTContext {
     struct Slab {
@@ -82,14 +94,13 @@ public:
 
     /// Open addressing
     template <typename Value>
-    requires Hashable<Value>
     class StringMap {
         class Slot {
             std::size_t hash;
             std::string_view key;
             Value value;
             bool occupied;
-
+        public:
             Slot(const std::string_view key, Value value, const std::size_t hash, const bool occupied)
             : hash(hash), key(key), value(value), occupied(occupied) {}
         };
@@ -99,6 +110,7 @@ public:
         std::size_t bytes_used;     // num of bytes used
         ASTContext& ctx;
         Slot* slots;
+        const float max_load_factor = 0.75f;
 
     public:
         using value_type = Value;
@@ -111,23 +123,46 @@ public:
         using const_pointer = const Value*;
         using size_type = std::size_t;
 
-        explicit StringMap(ASTContext& ctx, std::size_t initial_capacity = 64) : capacity(initial_capacity), size(0), bytes_used(0), ctx(ctx) {
+        explicit StringMap(ASTContext& ctx, std::size_t initial_capacity = 64) : size(0), bytes_used(0), ctx(ctx) {
+            // round capacity to power of 2
+            capacity = next_power_of_two(initial_capacity);
             std::size_t bytes = initial_capacity * sizeof(Slot);
             slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
         }
 
         void rehash(size_type new_cap) {
+            if (new_cap <= capacity) return;
+            new_cap = next_power_of_two(new_cap);
+            std::size_t bytes = new_cap * sizeof(Slot);
+            Slot* new_slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
+            capacity = new_cap;
+            std::size_t old_size = size;
 
+            // reset private
+            size = 0;
+            bytes_used = 0;
+            
+            for (std::size_t i = 0; i < old_size; ++i) {
+                if (slots[i].occupied) {
+                    insert(std::make_pair(slots[i].key, slots[i].value));
+                }
+            }
+            ctx.allocate(bytes, alignof(Slot));
         }
 
         bool is_full() const {
-            return size == capacity;
+            return capacity*max_load_factor >= size;
         }
 
-        void push_back(std::pair<key_type, value_type>) {
-            if (is_full()) {
-
+        void insert(std::pair<const std::string_view, Value> const& value) {
+            if (is_full()) rehash(capacity*2);
+            std::size_t h = XXH3_64bits(value.first.data(), value.first.size(), 0);
+            std::size_t idx = h & (capacity - 1);
+            while (slots[idx].occupied) {
+                idx = (idx + 1) & (capacity - 1);
             }
+            slots[idx] = Slot(value.first, value.second, h, true);
+            ++size;
         }
 
     private:

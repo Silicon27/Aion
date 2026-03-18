@@ -13,10 +13,11 @@
 #include <limits>
 #include <type_traits>
 #include <string_view>
+#include <new>
 #include <ast/ast.hpp>
 #include <error/error.hpp>
+#define XXH_INLINE_ALL
 #include <support/xxhash.h>
-#include <new>
 
 namespace aion::ast {
     template <typename T>
@@ -95,14 +96,15 @@ public:
     /// Open addressing
     template <typename Value>
     class StringMap {
-        class Slot {
+        struct Slot {
             std::size_t hash;
             std::string_view key;
             Value value;
-            bool occupied;
-        public:
+            bool occupied = false; Slot() : hash(0), key(), value(), occupied(false) {} Slot(std::string_view k, Value v, std::size_t h, bool o) : hash(h), key(k), value(v), occupied(o) {}
+
+            Slot() : hash(0), key(), value(), occupied(false) {}
             Slot(const std::string_view key, Value value, const std::size_t hash, const bool occupied)
-            : hash(hash), key(key), value(value), occupied(occupied) {}
+                : hash(hash), key(key), value(value), occupied(occupied) {}
         };
 
         std::size_t capacity;       // num of allocated slots
@@ -124,48 +126,76 @@ public:
         using size_type = std::size_t;
 
         explicit StringMap(ASTContext& ctx, std::size_t initial_capacity = 64) : size(0), bytes_used(0), ctx(ctx) {
-            // round capacity to power of 2
             capacity = next_power_of_two(initial_capacity);
-            std::size_t bytes = initial_capacity * sizeof(Slot);
+            std::size_t bytes = capacity * sizeof(Slot);
             slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
+            for (std::size_t i = 0; i < capacity; ++i) {
+                new (&slots[i]) Slot();
+            }
         }
 
         void rehash(size_type new_cap) {
-            if (new_cap <= capacity) return;
             new_cap = next_power_of_two(new_cap);
-            std::size_t bytes = new_cap * sizeof(Slot);
-            Slot* new_slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
-            capacity = new_cap;
-            std::size_t old_size = size;
+            if (new_cap <= capacity) return;
 
-            // reset private
+            Slot* old_slots = slots;
+            std::size_t old_cap = capacity;
+
+            std::size_t bytes = new_cap * sizeof(Slot);
+            slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
+            capacity = new_cap;
+
+            for (std::size_t i = 0; i < capacity; ++i) {
+                new (&slots[i]) Slot();
+            }
+
             size = 0;
-            bytes_used = 0;
-            
-            for (std::size_t i = 0; i < old_size; ++i) {
-                if (slots[i].occupied) {
-                    insert(std::make_pair(slots[i].key, slots[i].value));
+            for (std::size_t i = 0; i < old_cap; ++i) {
+                if (old_slots[i].occupied) {
+                    insert_with_hash(old_slots[i].key, old_slots[i].value, old_slots[i].hash);
                 }
             }
-            ctx.allocate(bytes, alignof(Slot));
         }
 
         bool is_full() const {
-            return capacity*max_load_factor >= size;
+            return size >= static_cast<std::size_t>(static_cast<float>(capacity) * max_load_factor);
         }
 
         void insert(std::pair<const std::string_view, Value> const& value) {
-            if (is_full()) rehash(capacity*2);
-            std::size_t h = XXH3_64bits(value.first.data(), value.first.size(), 0);
+            std::size_t h = XXH3_64bits(value.first.data(), value.first.size());
+            insert_with_hash(value.first, value.second, h);
+        }
+
+        Value* find(std::string_view key) {
+            if (capacity == 0) return nullptr;
+            std::size_t h = XXH3_64bits(key.data(), key.size());
             std::size_t idx = h & (capacity - 1);
+            std::size_t start_idx = idx;
             while (slots[idx].occupied) {
+                if (slots[idx].hash == h && slots[idx].key == key) {
+                    return &slots[idx].value;
+                }
                 idx = (idx + 1) & (capacity - 1);
+                if (idx == start_idx) break;
             }
-            slots[idx] = Slot(value.first, value.second, h, true);
-            ++size;
+            return nullptr;
         }
 
     private:
+        void insert_with_hash(std::string_view key, Value value, std::size_t h) {
+            if (is_full()) rehash(capacity * 2);
+
+            std::size_t idx = h & (capacity - 1);
+            while (slots[idx].occupied) {
+                if (slots[idx].hash == h && slots[idx].key == key) {
+                    slots[idx].value = value;
+                    return;
+                }
+                idx = (idx + 1) & (capacity - 1);
+            }
+            slots[idx] = Slot(key, value, h, true);
+            ++size;
+        }
     };
 
 private:

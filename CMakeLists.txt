@@ -3,6 +3,20 @@ project(aion)
 
 set(CMAKE_CXX_STANDARD 20)
 
+add_executable(aion
+        core/src/cli/main.cpp
+        core/src/cli/compiler_invocation.cpp
+        core/src/lexer/lexer.cpp
+        core/src/preprocessor/preprocessor.cpp
+        core/src/parser/parser.cpp
+        core/src/ast/ast.cpp
+        core/src/ast/decl.cpp
+        core/src/ast/ASTContext.cpp
+        core/src/error/error.cpp
+        core/src/support/source_manager.cpp
+        test/suite/aion_test.hpp
+)
+
 # Try to find system LLVM first
 find_package(LLVM CONFIG)
 
@@ -28,51 +42,40 @@ else()
 
     # After build, set LLVM_DIR to the install path for includes/libs
     set(LLVM_DIR ${CMAKE_BINARY_DIR}/llvm/install/lib/cmake/llvm)
-    find_package(LLVM REQUIRED CONFIG PATHS ${LLVM_DIR})
+    # find_package(LLVM REQUIRED CONFIG PATHS ${LLVM_DIR})
 endif()
 
 # Map components and link
-llvm_map_components_to_libnames(llvm_libs
-        core
-        support
-        mc
-        mcjit
-        mcparser
-        option
-        bitwriter
-        passes
-)
-find_library(LLD_COMMON lldCommon HINTS ${LLVM_LIBRARY_DIRS})
-find_library(LLD_ELF lldELF HINTS ${LLVM_LIBRARY_DIRS})
-find_library(LLD_COFF lldCOFF HINTS ${LLVM_LIBRARY_DIRS})
-find_library(LLD_MACHO lldMachO HINTS ${LLVM_LIBRARY_DIRS})
-find_library(LLD_WASM lldWasm HINTS ${LLVM_LIBRARY_DIRS})
+if(LLVM_FOUND)
+    llvm_map_components_to_libnames(llvm_libs
+            core
+            support
+            mc
+            mcjit
+            mcparser
+            option
+            bitwriter
+            passes
+    )
+    find_library(LLD_COMMON lldCommon HINTS ${LLVM_LIBRARY_DIRS})
+    find_library(LLD_ELF lldELF HINTS ${LLVM_LIBRARY_DIRS})
+    find_library(LLD_COFF lldCOFF HINTS ${LLVM_LIBRARY_DIRS})
+    find_library(LLD_MACHO lldMachO HINTS ${LLVM_LIBRARY_DIRS})
+    find_library(LLD_WASM lldWasm HINTS ${LLVM_LIBRARY_DIRS})
 
-set(lld_libs
-        ${LLD_COMMON}
-        ${LLD_ELF}
-        ${LLD_COFF}
-        ${LLD_MACHO}
-        ${LLD_WASM}
-)
+    set(lld_libs
+            ${LLD_COMMON}
+            ${LLD_ELF}
+            ${LLD_COFF}
+            ${LLD_MACHO}
+            ${LLD_WASM}
+    )
 
+    target_link_libraries(aion PRIVATE ${llvm_libs} ${lld_libs})
+    target_include_directories(aion PRIVATE ${LLVM_INCLUDE_DIRS})
+    add_definitions(${LLVM_DEFINITIONS})
+endif()
 
-add_executable(aion
-        core/src/cli/main.cpp
-        core/src/cli/compiler_invocation.cpp
-        core/src/lexer/lexer.cpp
-        core/src/preprocessor/preprocessor.cpp
-        core/src/parser/parser.cpp
-        core/src/ast/ast.cpp
-        core/src/ast/decl.cpp
-        core/src/ast/ASTContext.cpp
-        core/src/error/error.cpp
-        core/src/support/source_manager.cpp
-        test/suite/aion_test.hpp
-)
-target_link_libraries(aion PRIVATE ${llvm_libs} ${lld_libs})
-target_include_directories(aion PRIVATE ${LLVM_INCLUDE_DIRS})
-add_definitions(${LLVM_DEFINITIONS})
 include_directories(
         SYSTEM
         core/include

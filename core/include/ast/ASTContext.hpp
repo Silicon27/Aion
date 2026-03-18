@@ -157,7 +157,7 @@ public:
             }
         }
 
-        bool is_full() const {
+        bool is_full() const { return size >= static_cast<std::size_t>(static_cast<float>(capacity) * max_load_factor); } bool _old_is_full() const {
             return size >= static_cast<std::size_t>(static_cast<float>(capacity) * max_load_factor);
         }
 

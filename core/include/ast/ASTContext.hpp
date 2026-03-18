@@ -96,16 +96,7 @@ public:
     /// Open addressing
     template <typename Value>
     class StringMap {
-        struct Slot {
-            std::size_t hash;
-            std::string_view key;
-            Value value;
-            bool occupied = false; Slot() : hash(0), key(), value(), occupied(false) {} Slot(std::string_view k, Value v, std::size_t h, bool o) : hash(h), key(k), value(v), occupied(o) {}
-
-            Slot() : hash(0), key(), value(), occupied(false) {}
-            Slot(const std::string_view key, Value value, const std::size_t hash, const bool occupied)
-                : hash(hash), key(key), value(value), occupied(occupied) {}
-        };
+        struct Slot { std::size_t hash; std::string_view key; Value value; bool occupied; Slot() : hash(0), key(), value(), occupied(false) {} Slot(std::string_view k, Value v, std::size_t h, bool o) : hash(h), key(k), value(v), occupied(o) {} };
 
         std::size_t capacity;       // num of allocated slots
         std::size_t size;           // num of occupied slots
@@ -157,7 +148,7 @@ public:
             }
         }
 
-        bool is_full() const { return size >= static_cast<std::size_t>(static_cast<float>(capacity) * max_load_factor); } bool _old_is_full() const {
+        bool is_full() const {
             return size >= static_cast<std::size_t>(static_cast<float>(capacity) * max_load_factor);
         }
 
@@ -194,8 +185,7 @@ public:
                 idx = (idx + 1) & (capacity - 1);
             }
             slots[idx] = Slot(key, value, h, true);
-            ++size;
-        }
+            ++size; bytes_used += key.size(); }
     };
 
 private:

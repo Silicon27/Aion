@@ -17,16 +17,19 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Set up MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+
     - name: Set up LLVM (Windows)
       shell: bash
       run: |
         choco install llvm --version=16.0.0 --allow-downgrade --force
-        echo "C:/Program Files/LLVM/bin" >> $GITHUB_PATH
+        # Keep LLVM bin out of PATH to prioritize MSVC cl.exe
         echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
 
     - name: Configure CMake
       shell: bash
-      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm"
+      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm" -D CMAKE_C_COMPILER=cl -D CMAKE_CXX_COMPILER=cl
 
     - name: Build
       shell: bash

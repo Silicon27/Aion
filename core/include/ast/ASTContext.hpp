@@ -109,13 +109,15 @@ public:
         using const_reference = const Value&;
         using pointer = Value*;
         using const_pointer = const Value*;
-        using iterator = typename std::map<key_type, Value, std::less<>>::iterator;
-        using const_iterator = typename std::map<key_type, Value, std::less<>>::const_iterator;
+        using size_type = std::size_t;
 
         explicit StringMap(ASTContext& ctx, std::size_t initial_capacity = 64) : capacity(initial_capacity), size(0), bytes_used(0), ctx(ctx) {
             std::size_t bytes = initial_capacity * sizeof(Slot);
-            auto slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
-            this->slots = slots;
+            slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
+        }
+
+        void rehash(size_type new_cap) {
+
         }
 
         bool is_full() const {

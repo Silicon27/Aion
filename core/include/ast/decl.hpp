@@ -8,8 +8,6 @@
 #include "ast.hpp"
 
 namespace aion::ast {
-
-
     class NamedDecl : public Decl {
 
 

@@ -121,6 +121,49 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_EQ(allocator.num_slabs(), 2);
     });
 
+    context_suite->add_test("string_map_rehash", [] {
+        using namespace aion::ast;
+        ASTContext context;
+
+        // Use a small initial capacity to trigger rehash early
+        ASTContext::StringMap<int> map(context, 4);
+        
+        map.insert({"a", 1});
+        map.insert({"b", 2});
+        map.insert({"c", 3});
+        map.insert({"d", 4}); // Should trigger rehash to 8
+
+        AION_ASSERT_NOT_NULL(map.find("a"));
+        AION_ASSERT_EQ(*map.find("a"), 1);
+        AION_ASSERT_NOT_NULL(map.find("b"));
+        AION_ASSERT_EQ(*map.find("b"), 2);
+        AION_ASSERT_NOT_NULL(map.find("c"));
+        AION_ASSERT_EQ(*map.find("c"), 3);
+        AION_ASSERT_NOT_NULL(map.find("d"));
+        AION_ASSERT_EQ(*map.find("d"), 4);
+        
+        AION_ASSERT_NULL(map.find("e"));
+    });
+
+    context_suite->add_test("string_map_many_insertions", [] {
+        using namespace aion::ast;
+        ASTContext context;
+
+        ASTContext::StringMap<int> map(context, 4);
+        
+        for (int i = 0; i < 100; ++i) {
+            std::string key = "key" + std::to_string(i);
+            char* key_ptr = context.allocate_string(key);
+            map.insert({std::string_view(key_ptr, key.size()), i});
+        }
+
+        for (int i = 0; i < 100; ++i) {
+            std::string key = "key" + std::to_string(i);
+            AION_ASSERT_NOT_NULL(map.find(key));
+            AION_ASSERT_EQ(*map.find(key), i);
+        }
+    });
+
     context_suite->add_test("reset_slab_reorders_partially_used", [] {
         using namespace aion::ast;
         ASTContext::BumpPtrAllocator allocator(64);

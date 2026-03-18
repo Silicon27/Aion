@@ -1,0 +1,40 @@
+name: Linux CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build-and-test:
+    name: Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set up LLVM (Ubuntu)
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y llvm-16-dev lld-16 liblld-16-dev libclang-16-dev libedit-dev libcurl4-openssl-dev
+        echo "LLVM_DIR=/usr/lib/llvm-16/lib/cmake/llvm" >> $GITHUB_ENV
+        echo "/usr/lib/llvm-16/bin" >> $GITHUB_PATH
+
+    - name: Configure CMake
+      shell: bash
+      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      shell: bash
+      run: cmake --build build --config Release
+
+    - name: Run Tests
+      shell: bash
+      run: |
+        cd build
+        ctest -C Release --output-on-failure

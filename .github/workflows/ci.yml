@@ -40,7 +40,7 @@ jobs:
         echo "C:\Program Files\LLVM\bin" >> $GITHUB_PATH
 
     - name: Configure CMake
-      run: cmake -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release
+      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release
 
     - name: Build
       run: cmake --build build --config Release

@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ============================================================================
 
 # Include the main source directory for access to core modules
-include_directories(${CMAKE_SOURCE_DIR}/src/core)
+include_directories(${CMAKE_SOURCE_DIR}/core/src)
 
 # Include the test framework and test directory
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/suite)

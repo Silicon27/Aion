@@ -3,8 +3,18 @@ name: Windows CI
 on:
   push:
     branches: [ "**" ]
+    paths:
+      - 'core/**'
+      - 'test/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/windows.yml'
   pull_request:
     branches: [ "**" ]
+    paths:
+      - 'core/**'
+      - 'test/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/windows.yml'
 
 jobs:
   build-and-test:
@@ -20,10 +30,22 @@ jobs:
     - name: Set up MSVC
       uses: ilammy/msvc-dev-cmd@v1
 
+    - name: Cache LLVM
+      id: cache-llvm
+      uses: actions/cache@v4
+      with:
+        path: C:/Program Files/LLVM
+        key: llvm-16.0.0-windows
+
     - name: Set up LLVM (Windows)
+      if: steps.cache-llvm.outputs.cache-hit != 'true'
       shell: bash
       run: |
         choco install llvm --version=16.0.0 --allow-downgrade --force
+
+    - name: Set LLVM Environment
+      shell: bash
+      run: |
         # Keep LLVM bin out of PATH to prioritize MSVC cl.exe
         echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
 
@@ -33,7 +55,7 @@ jobs:
 
     - name: Build
       shell: bash
-      run: cmake --build build --config Release
+      run: cmake --build build --config Release -v
 
     - name: Run Tests
       shell: bash

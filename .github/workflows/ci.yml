@@ -25,7 +25,9 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y llvm-16-dev lld-16 libclang-16-dev
+        sudo apt-get install -y llvm-16-dev lld-16 liblld-16-dev libclang-16-dev
+        echo "LLVM_DIR=/usr/lib/llvm-16/lib/cmake/llvm" >> $GITHUB_ENV
+        echo "/usr/lib/llvm-16/bin" >> $GITHUB_PATH
 
     - name: Set up LLVM (macOS)
       if: runner.os == 'macOS'

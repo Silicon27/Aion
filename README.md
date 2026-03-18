@@ -1,6 +1,8 @@
 # Aion
 
-[![Tests Status](https://github.com/Silicon27/Aion/actions/workflows/ci.yml/badge.svg)](https://github.com/Silicon27/Aion/actions/workflows/ci.yml)
+[![Linux CI](https://github.com/Silicon27/Aion/actions/workflows/linux.yml/badge.svg)](https://github.com/Silicon27/Aion/actions/workflows/linux.yml)
+[![macOS CI](https://github.com/Silicon27/Aion/actions/workflows/macos.yml/badge.svg)](https://github.com/Silicon27/Aion/actions/workflows/macos.yml)
+[![Windows CI](https://github.com/Silicon27/Aion/actions/workflows/windows.yml/badge.svg)](https://github.com/Silicon27/Aion/actions/workflows/windows.yml)
 
 Aion (pronounced "*ai - on*") exists as a language developed purely off *free will*. Justification for the application of this language is nonexistent, acting as a mere superfluous cog in a world filled with what could only be described as **selfsame compatriots**.
 

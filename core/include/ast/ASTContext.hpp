@@ -13,6 +13,7 @@
 #include <string_view>
 #include <ast/ast.hpp>
 #include <error/error.hpp>
+#include <support/xxhash.h>
 
 namespace aion::ast {
 
@@ -80,7 +81,7 @@ public:
     };
 
     /// Open addressing
-    template <typename Value, typename StrMap = BumpPtrAllocator<>>
+    template <typename Value>
     requires Hashable<Value>
     class StringMap {
         class Slot {
@@ -93,9 +94,15 @@ public:
             : hash(hash), key(key), value(value), occupied(occupied) {}
         };
 
+        std::size_t capacity;       // num of allocated slots
+        std::size_t size;           // num of occupied slots
+        std::size_t bytes_used;     // num of bytes used
+        ASTContext& ctx;
+        Slot* slots;
+
     public:
         using value_type = Value;
-        using allocator_type = StrMap;
+        using allocator_type = BumpPtrAllocator<>;
         using key_type = std::string_view;
         using mapped_type = Value;
         using reference = Value&;
@@ -104,6 +111,16 @@ public:
         using const_pointer = const Value*;
         using iterator = typename std::map<key_type, Value, std::less<>>::iterator;
         using const_iterator = typename std::map<key_type, Value, std::less<>>::const_iterator;
+
+        explicit StringMap(ASTContext& ctx, std::size_t initial_capacity = 64) : capacity(initial_capacity), size(0), bytes_used(0), ctx(ctx) {
+            std::size_t bytes = initial_capacity * sizeof(Slot);
+            auto slots = static_cast<Slot*>(ctx.allocate(bytes, alignof(Slot)));
+            this->slots = slots;
+        }
+
+        void push_back(std::pair<key_type, value_type>) {
+
+        }
 
     private:
     };

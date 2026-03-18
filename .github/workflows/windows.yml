@@ -43,6 +43,7 @@ jobs:
       run: |
         choco uninstall llvm -y --all-versions || true
         choco install llvm --version=16.0.0 -y --allow-downgrade --force
+        echo "C:/Program Files/LLVM/bin" >> $GITHUB_PATH
 
     - name: Set LLVM Environment
       shell: bash

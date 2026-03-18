@@ -98,7 +98,7 @@ The diagnostics engine follows several key principles:
 The diagnostics system is split across multiple files to avoid circular dependencies:
 
 ```
-src/core/error/
+core/src/error/
 ├── DiagnosticSeverity.hpp   # Severity enum (standalone, no dependencies)
 ├── diagid.hpp               # Diagnostic IDs, categories, and mappings
 ├── error.hpp                # Main classes: Engine, Builder, Consumer

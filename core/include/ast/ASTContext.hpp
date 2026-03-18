@@ -118,8 +118,14 @@ public:
             this->slots = slots;
         }
 
-        void push_back(std::pair<key_type, value_type>) {
+        bool is_full() const {
+            return size == capacity;
+        }
 
+        void push_back(std::pair<key_type, value_type>) {
+            if (is_full()) {
+
+            }
         }
 
     private:

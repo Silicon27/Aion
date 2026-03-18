@@ -9,11 +9,17 @@
 #include <deque>
 #include <memory>
 #include <algorithm>
+#include <map>
 #include <string_view>
 #include <ast/ast.hpp>
 #include <error/error.hpp>
 
 namespace aion::ast {
+
+    template<typename T>
+    concept Hashable = requires(const T& value) {
+            { std::hash<T>{}(value) } -> std::convertible_to<std::size_t>;
+    };
 
 class ASTContext {
     struct Slab {
@@ -44,6 +50,7 @@ public:
         std::size_t current_slab_idx{};
         std::size_t slab_size;
 
+
     public:
         explicit BumpPtrAllocator(std::size_t initial_slab_size = 1024 * 1024);
 
@@ -61,6 +68,8 @@ public:
 
         void reset_slab(std::size_t idx);
 
+        // ----------- getters --------------
+
         [[nodiscard]] int current_slab_index() const { return current_slab_idx; }
         [[nodiscard]] std::size_t num_slabs() const { return slabs.size(); }
         [[nodiscard]] std::size_t num_partially_used_slabs() const { return partially_used_slabs.size(); }
@@ -68,6 +77,35 @@ public:
         [[nodiscard]] std::size_t num_allocated_bytes() const;
         [[nodiscard]] std::size_t num_allocated_bytes_used() const;
         [[nodiscard]] std::size_t slab_sizes() const { return slab_size; }
+    };
+
+    /// Open addressing
+    template <typename Value, typename StrMap = BumpPtrAllocator<>>
+    requires Hashable<Value>
+    class StringMap {
+        class Slot {
+            std::size_t hash;
+            std::string_view key;
+            Value value;
+            bool occupied;
+
+            Slot(const std::string_view key, Value value, const std::size_t hash, const bool occupied)
+            : hash(hash), key(key), value(value), occupied(occupied) {}
+        };
+
+    public:
+        using value_type = Value;
+        using allocator_type = StrMap;
+        using key_type = std::string_view;
+        using mapped_type = Value;
+        using reference = Value&;
+        using const_reference = const Value&;
+        using pointer = Value*;
+        using const_pointer = const Value*;
+        using iterator = typename std::map<key_type, Value, std::less<>>::iterator;
+        using const_iterator = typename std::map<key_type, Value, std::less<>>::const_iterator;
+
+    private:
     };
 
 private:

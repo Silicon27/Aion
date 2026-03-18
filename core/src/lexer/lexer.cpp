@@ -1,4 +1,5 @@
 #include <lexer/lexer.hpp>
+#include <string_view>
 
 namespace aion::lexer {
 
@@ -207,7 +208,7 @@ namespace aion::lexer {
                 }
             } else {
                 // Integer suffixes: u, l, ul, lu, ll, ull, llu, z, uz, zu
-                constexpr std::string validSuffixes[] = {
+                static constexpr std::string_view validSuffixes[] = {
                     "u", "l", "ul", "lu", "ll", "ull", "llu", "z", "uz", "zu"
                 };
                 bool is_valid = false;

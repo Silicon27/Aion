@@ -21,7 +21,20 @@ add_executable(aion
 option(AION_BUILD_LLVM "Build LLVM from source" OFF)
 
 if(NOT AION_BUILD_LLVM)
-    find_package(LLVM REQUIRED CONFIG)
+    find_package(LLVM CONFIG)
+    if(NOT LLVM_FOUND)
+        find_program(LLVM_CONFIG_EXE NAMES llvm-config llvm-config.exe)
+        if(LLVM_CONFIG_EXE)
+            execute_process(COMMAND ${LLVM_CONFIG_EXE} --cmakedir
+                            OUTPUT_VARIABLE LLVM_DIR_INTERNAL
+                            OUTPUT_STRIP_TRAILING_WHITESPACE)
+            file(TO_CMAKE_PATH "${LLVM_DIR_INTERNAL}" LLVM_DIR_INTERNAL)
+            set(LLVM_DIR "${LLVM_DIR_INTERNAL}" CACHE PATH "Path to LLVM CMake modules" FORCE)
+            find_package(LLVM REQUIRED CONFIG)
+        else()
+            find_package(LLVM REQUIRED CONFIG) # Re-run to get standard error message
+        endif()
+    endif()
     message(STATUS "Found system LLVM: ${LLVM_DIR}")
 else()
     message(STATUS "LLVM not found or AION_BUILD_LLVM=ON, fetching/building...")

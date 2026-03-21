@@ -174,8 +174,12 @@ public:
 
         void insert(std::pair<const std::string_view, Value> const& value) {
             std::size_t h = XXH3_64bits(value.first.data(), value.first.size());
-            auto storage = ctx.allocate_string(value.first);
-            insert_with_hash(value.first, value.second, h);
+            if (Value* v = find_with_hash(value.first, h)) {
+                *v = value.second;
+                return;
+            }
+            const char* storage = ctx.allocate_string(value.first);
+            insert_with_hash(storage, value.second, h);
         }
 
         mapped_type& operator[](std::string_view key) {
@@ -235,6 +239,7 @@ public:
 private:
     BumpPtrAllocator<> allocator;
     TranslationUnitDecl* tu_decl;
+    StringMap<IdentifierInfo> string_map;
 
 public:
     explicit ASTContext(std::size_t initial_slab_size = 1024 * 1024);

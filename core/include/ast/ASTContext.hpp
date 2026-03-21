@@ -195,6 +195,18 @@ public:
             insert_with_hash(std::string_view(storage, k.size()), Value(std::forward<Args>(args)...), h);
         }
 
+        template <typename... Args>
+        mapped_type& emplace_or_get(key_type k, Args&&... args)
+        requires std::is_constructible_v<Value, Args...>
+        {
+            const std::size_t h = XXH3_64bits(k.data(), k.size());
+            if (Value* v = find_with_hash(k, h)) {
+                return *v;
+            }
+            char* storage = ctx.allocate_string(k);
+            return *insert_with_hash(std::string_view(storage, k.size()), Value(std::forward<Args>(args)...), h);
+        }
+
         mapped_type& operator[](std::string_view key)
         requires std::is_default_constructible_v<mapped_type>
         {
@@ -203,7 +215,7 @@ public:
                 return *v;
             }
             char* storage = ctx.allocate_string(key);
-            return insert_with_hash(std::string_view(storage, key.size()), Value(), h);
+            return *insert_with_hash(std::string_view(storage, key.size()), Value(), h);
         }
 
         Value* find(std::string_view key) const {

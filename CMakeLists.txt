@@ -64,13 +64,12 @@ if(LLVM_FOUND)
     find_library(LLD_MACHO lldMachO HINTS ${LLVM_LIBRARY_DIRS})
     find_library(LLD_WASM lldWasm HINTS ${LLVM_LIBRARY_DIRS})
 
-    set(lld_libs
-            ${LLD_COMMON}
-            ${LLD_ELF}
-            ${LLD_COFF}
-            ${LLD_MACHO}
-            ${LLD_WASM}
-    )
+    set(lld_libs "")
+    foreach(lib_var LLD_COMMON LLD_ELF LLD_COFF LLD_MACHO LLD_WASM)
+        if(${lib_var})
+            list(APPEND lld_libs ${${lib_var}})
+        endif()
+    endforeach()
 
     target_link_libraries(aion PRIVATE ${llvm_libs} ${lld_libs})
     target_include_directories(aion PRIVATE ${LLVM_INCLUDE_DIRS})

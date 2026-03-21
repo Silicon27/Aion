@@ -179,16 +179,18 @@ public:
                 return;
             }
             const char* storage = ctx.allocate_string(value.first);
-            insert_with_hash(storage, value.second, h);
+            insert_with_hash(std::string_view(storage, value.first.size()), value.second, h);
         }
 
-        mapped_type& operator[](std::string_view key) {
+        mapped_type& operator[](std::string_view key)
+        requires std::is_default_constructible_v<mapped_type>
+        {
             std::size_t h = XXH3_64bits(key.data(), key.size());
             if (Value* v = find_with_hash(key, h)) {
                 return *v;
             }
             char* storage = ctx.allocate_string(key);
-            return *insert_with_hash(std::string_view(storage, key.size()), Value(), h);
+            return insert_with_hash(std::string_view(storage, key.size()), Value(), h);
         }
 
         Value* find(std::string_view key) const {
@@ -239,7 +241,6 @@ public:
 private:
     BumpPtrAllocator<> allocator;
     TranslationUnitDecl* tu_decl;
-    StringMap<IdentifierInfo> string_map;
 
 public:
     explicit ASTContext(std::size_t initial_slab_size = 1024 * 1024);

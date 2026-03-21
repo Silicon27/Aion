@@ -20,6 +20,7 @@ namespace aion::ast {
     class IdentifierInfo {
         const char* name;
     public:
+        IdentifierInfo() : name(nullptr) {}
         explicit IdentifierInfo(const char* name) : name(name) {}
         const char* getName() const { return name; }
     };

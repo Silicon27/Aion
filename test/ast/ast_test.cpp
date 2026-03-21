@@ -245,6 +245,47 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_EQ(allocator.slab_sizes(), 256);
     });
 
+    context_suite->add_test("string_map_comprehensive", [] {
+        using namespace aion::ast;
+        ASTContext context;
+        ASTContext::StringMap<int> map(context, 4);
+
+        // Test insertion and retrieval
+        map["hello"] = 42;
+        AION_ASSERT_EQ(map["hello"], 42);
+        AION_ASSERT_EQ(map.get_size(), 1);
+        AION_ASSERT_EQ(map.get_bytes_used(), 5);
+
+        // Test overwrite via operator[]
+        map["hello"] = 43;
+        AION_ASSERT_EQ(map["hello"], 43);
+        AION_ASSERT_EQ(map.get_size(), 1);
+        AION_ASSERT_EQ(map.get_bytes_used(), 5);
+
+        // Test multiple elements
+        map["world"] = 100;
+        AION_ASSERT_EQ(map["world"], 100);
+        AION_ASSERT_EQ(map.get_size(), 2);
+        AION_ASSERT_EQ(map.get_bytes_used(), 10);
+
+        // Test rehash (cap 4 -> 8 when size reaches 3)
+        // size is 2, cap is 4. Next insertion (3rd) won't trigger rehash yet.
+        map["test"] = 7; // size becomes 3.
+        AION_ASSERT_EQ(map.get_size(), 3);
+        AION_ASSERT_EQ(map.get_capacity(), 4);
+
+        // Now size is 3, 3*4 >= 4*3 is True. Next insertion triggers rehash.
+        map["rehash"] = 123;
+        AION_ASSERT_EQ(map.get_size(), 4);
+        AION_ASSERT_EQ(map.get_capacity(), 8);
+        AION_ASSERT_EQ(map.get_bytes_used(), 20); // hello(5), world(5), test(4), rehash(6) = 20
+
+        AION_ASSERT_EQ(map["hello"], 43);
+        AION_ASSERT_EQ(map["world"], 100);
+        AION_ASSERT_EQ(map["test"], 7);
+        AION_ASSERT_EQ(map["rehash"], 123);
+    });
+
     runner.add_suite(std::move(context_suite));
 
     // ========================================================================

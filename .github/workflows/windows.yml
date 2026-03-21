@@ -48,11 +48,6 @@ jobs:
         shell: bash
         run: echo "C:/Program Files/LLVM/bin" >> $GITHUB_PATH
 
-      # ---------- FIX: Set LLVM_DIR so CMake can find LLVMConfig.cmake ----------
-      - name: Set LLVM_DIR
-        shell: bash
-        run: echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
-
       - name: Configure CMake
         shell: bash
         run: |
@@ -60,10 +55,8 @@ jobs:
             -D BUILD_TESTS=ON \
             -D CMAKE_BUILD_TYPE=Release \
             -D CMAKE_C_COMPILER=cl \
-            -D CMAKE_CXX_COMPILER=cl
-          # The LLVM_DIR is automatically picked up from the environment,
-          # but you can also pass it directly:
-          # -D LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm"
+            -D CMAKE_CXX_COMPILER=cl \
+            -D LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm"
 
       - name: Build
         shell: bash

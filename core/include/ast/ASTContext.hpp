@@ -112,7 +112,7 @@ public:
         std::size_t bytes_used;     // num of bytes used
         ASTContext& ctx;
         Slot* slots;
-        const float max_load_factor = 0.75f;
+        double max_load_factor = 0.75f;
 
     public:
         using value_type = Value;
@@ -129,6 +129,9 @@ public:
         [[nodiscard]] std::size_t get_bytes_used() const { return bytes_used; }
         [[nodiscard]] std::size_t get_capacity() const { return capacity; }
         [[nodiscard]] bool empty() const { return size == 0; }
+        [[nodiscard]] float load_factor() const { return capacity == 0 ? 0.0f : static_cast<float>(size + 1) / static_cast<float>(capacity); }
+        [[nodiscard]] float get_max_load_factor() const { return max_load_factor; }
+        void set_max_load_factor(const float factor) { max_load_factor = factor; }
 
         explicit StringMap(ASTContext& ctx, std::size_t initial_capacity = 64) : size(0), bytes_used(0), ctx(ctx) {
             capacity = next_power_of_two(std::max<std::size_t>(initial_capacity, 4));
@@ -166,7 +169,7 @@ public:
 
         bool is_full() const {
             if (capacity == 0) return true;
-            return size * 4 >= capacity * 3;
+            return (static_cast<double>(size) + 1) > static_cast<double>(capacity) * max_load_factor;
         }
 
         void insert(std::pair<const std::string_view, Value> const& value) {

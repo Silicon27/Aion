@@ -164,6 +164,63 @@ void register_ast_tests(TestRunner& runner) {
         }
     });
 
+    context_suite->add_test("string_map_member_functions", [] {
+        using namespace aion::ast;
+        ASTContext context;
+
+        ASTContext::StringMap<int> map(context, 3);
+
+        AION_ASSERT_EQ(map.get_capacity(), 4);
+
+        map.insert({"a", 1});
+        map.insert({"b", 2});
+        map.insert({"c", 3});
+        AION_ASSERT_EQ(map.get_capacity(), 4);
+        AION_ASSERT_EQ(map.get_size(), 3);
+        map.insert({"d", 4});
+
+        AION_ASSERT_EQ(map.get_size(), 4);
+        AION_ASSERT_EQ(map.get_capacity(), 8);
+        AION_ASSERT_EQ(map.get_bytes_used(), 4);
+
+        // test out rehashing
+
+        map.insert({"e", 5});
+
+        AION_ASSERT_EQ(map.get_capacity(), 8);
+
+        AION_ASSERT_EQ(map["a"], 1);
+
+        map.insert({"a", 6});
+
+        AION_ASSERT_EQ(map["a"], 6);
+    });
+
+    context_suite->add_test("string_map_custom_load_factor", [] {
+        using namespace aion::ast;
+        ASTContext context;
+
+        ASTContext::StringMap<int> map(context, 4);
+        map.set_max_load_factor(0.5f);
+
+        AION_ASSERT_EQ(map.get_capacity(), 4);
+        AION_ASSERT_EQ(map.get_max_load_factor(), 0.5f);
+
+        map.insert({"a", 1});
+        AION_ASSERT_EQ(map.get_capacity(), 4);
+
+        map.insert({"b", 2});
+        // At this point size = 1.
+        // is_full() check when inserting "b": size=1, capacity=4. 1 >= 4 * 0.5 (2) is false.
+        
+        // After inserting "b", size = 2.
+        // is_full() check when inserting "c": size=2, capacity=4. 2 >= 4 * 0.5 (2) is true.
+        // So inserting "c" should trigger rehash.
+        
+        map.insert({"c", 3});
+        AION_ASSERT_EQ(map.get_capacity(), 8);
+    });
+
     context_suite->add_test("reset_slab_reorders_partially_used", [] {
         using namespace aion::ast;
         ASTContext::BumpPtrAllocator allocator(64);

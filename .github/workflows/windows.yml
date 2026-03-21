@@ -45,38 +45,11 @@ jobs:
         choco install llvm --version=16.0.0 -y --allow-downgrade --force
         echo "C:/Program Files/LLVM/bin" >> $GITHUB_PATH
 
-    - name: Set LLVM Environment
-      shell: bash
-      run: |
-        echo "Starting LLVM search..."
-        SEARCH_ROOTS=("/c/Program Files/LLVM" "/c/Program Files (x86)/LLVM" "/c/tools/llvm" "/c/Program Files" "/c/Program Files (x86)")
-        for ROOT in "${SEARCH_ROOTS[@]}"; do
-          if [ -d "$ROOT" ]; then
-            echo "Searching in $ROOT..."
-            CONF_FILE=$(find "$ROOT" -name LLVMConfig.cmake -print -quit 2>/dev/null)
-            if [ -n "$CONF_FILE" ]; then
-              LLVM_DIR=$(dirname "$CONF_FILE")
-              LLVM_DIR=$(cygpath -m "$LLVM_DIR")
-              echo "Found LLVMConfig.cmake at: $LLVM_DIR"
-              echo "LLVM_DIR=$LLVM_DIR" >> $GITHUB_ENV
-              exit 0
-            fi
-            CONFIG_EXE=$(find "$ROOT" -name llvm-config.exe -print -quit 2>/dev/null)
-            if [ -n "$CONFIG_EXE" ]; then
-              echo "Found llvm-config.exe at $CONFIG_EXE"
-              LLVM_DIR=$("$CONFIG_EXE" --cmakedir)
-              LLVM_DIR=$(cygpath -m "$LLVM_DIR")
-              echo "LLVM_DIR=$LLVM_DIR" >> $GITHUB_ENV
-              exit 0
-            fi
-          fi
-        done
-        echo "LLVM search failed, defaulting to standard path."
-        echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
-
     - name: Configure CMake
       shell: bash
-      run: cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="${{ env.LLVM_DIR }}" -D CMAKE_PREFIX_PATH="${{ env.LLVM_DIR }}" -D CMAKE_C_COMPILER=cl -D CMAKE_CXX_COMPILER=cl
+      run: |
+        LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm"
+        cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="$LLVM_DIR" -D CMAKE_PREFIX_PATH="$LLVM_DIR" -D CMAKE_C_COMPILER=cl -D CMAKE_CXX_COMPILER=cl
 
     - name: Build
       shell: bash

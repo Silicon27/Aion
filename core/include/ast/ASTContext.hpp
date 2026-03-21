@@ -173,7 +173,7 @@ public:
         }
 
         void insert(std::pair<const std::string_view, Value> const& value) {
-            std::size_t h = XXH3_64bits(value.first.data(), value.first.size());
+            const std::size_t h = XXH3_64bits(value.first.data(), value.first.size());
             if (Value* v = find_with_hash(value.first, h)) {
                 *v = value.second;
                 return;
@@ -182,10 +182,23 @@ public:
             insert_with_hash(std::string_view(storage, value.first.size()), value.second, h);
         }
 
+        template <typename... Args>
+        void emplace(key_type k, Args&&... args)
+        requires std::is_constructible_v<Value, Args...>
+        {
+            const std::size_t h = XXH3_64bits(k.data(), k.size());
+            if (Value* v = find_with_hash(k, h)) {
+                *v = Value(std::forward<Args>(args)...);
+                return;
+            }
+            char* storage = ctx.allocate_string(k);
+            insert_with_hash(std::string_view(storage, k.size()), Value(std::forward<Args>(args)...), h);
+        }
+
         mapped_type& operator[](std::string_view key)
         requires std::is_default_constructible_v<mapped_type>
         {
-            std::size_t h = XXH3_64bits(key.data(), key.size());
+            const std::size_t h = XXH3_64bits(key.data(), key.size());
             if (Value* v = find_with_hash(key, h)) {
                 return *v;
             }
@@ -195,13 +208,13 @@ public:
 
         Value* find(std::string_view key) const {
             if (capacity == 0) return nullptr;
-            std::size_t h = XXH3_64bits(key.data(), key.size());
+            const std::size_t h = XXH3_64bits(key.data(), key.size());
             return find_with_hash(key, h);
         }
 
         Value* at(std::string_view key) const {
             if (capacity == 0) return nullptr;
-            std::size_t h = XXH3_64bits(key.data(), key.size());
+            const std::size_t h = XXH3_64bits(key.data(), key.size());
             return find_with_hash(key, h);
         }
 

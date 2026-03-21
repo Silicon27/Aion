@@ -182,6 +182,16 @@ public:
             insert_with_hash(std::string_view(storage, value.first.size()), value.second, h);
         }
 
+        void insert(std::string_view key, Value value) {
+            const std::size_t h = XXH3_64bits(key.data(), key.size());
+            if (Value* v = find_with_hash(key, h)) {
+                *v = value;
+                return;
+            }
+            const char* storage = ctx.allocate_string(key);
+            insert_with_hash(std::string_view(storage, key.size()), value, h);
+        }
+
         template <typename... Args>
         void emplace(key_type k, Args&&... args)
         requires std::is_constructible_v<Value, Args...>
@@ -218,13 +228,25 @@ public:
             return *insert_with_hash(std::string_view(storage, key.size()), Value(), h);
         }
 
-        Value* find(std::string_view key) const {
+        const Value* find(std::string_view key) const {
             if (capacity == 0) return nullptr;
             const std::size_t h = XXH3_64bits(key.data(), key.size());
             return find_with_hash(key, h);
         }
 
-        Value* at(std::string_view key) const {
+        Value* find(std::string_view key) {
+            if (capacity == 0) return nullptr;
+            const std::size_t h = XXH3_64bits(key.data(), key.size());
+            return find_with_hash(key, h);
+        }
+
+        const Value* at(std::string_view key) const {
+            if (capacity == 0) return nullptr;
+            const std::size_t h = XXH3_64bits(key.data(), key.size());
+            return find_with_hash(key, h);
+        }
+
+        Value* at(std::string_view key) {
             if (capacity == 0) return nullptr;
             const std::size_t h = XXH3_64bits(key.data(), key.size());
             return find_with_hash(key, h);
@@ -266,11 +288,15 @@ public:
 private:
     BumpPtrAllocator<> allocator;
     TranslationUnitDecl* tu_decl;
-
+    StringMap<IdentifierInfo*> identifiers;
 public:
     explicit ASTContext(std::size_t initial_slab_size = 1024 * 1024);
 
     [[nodiscard]] TranslationUnitDecl* get_translation_unit_decl() const { return tu_decl; }
+    [[nodiscard]] StringMap<IdentifierInfo*> get_identifiers() const { return identifiers; }
+    [[nodiscard]] IdentifierInfo* get_identifier(const std::string_view name) {
+        return identifiers[name];
+    }
 
     void* allocate(std::size_t size, std::size_t alignment = alignof(std::max_align_t)) {
         return allocator.allocate(size, alignment);

@@ -51,7 +51,7 @@ jobs:
     - name: Configure CMake
       shell: bash
       run: |
-        cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm" -D CMAKE_PREFIX_PATH="C:/Program Files/LLVM/lib/cmake/llvm"
+        cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=cl -D CMAKE_CXX_COMPILER=cl
 
     - name: Build
       shell: bash

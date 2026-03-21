@@ -71,7 +71,7 @@ void ASTContext::Slab::reset() {
 }
 
 ASTContext::ASTContext(std::size_t initial_slab_size)
-    : allocator(initial_slab_size) {
+    : allocator(initial_slab_size), identifiers(*this) {
     tu_decl = create<TranslationUnitDecl>();
 }
 

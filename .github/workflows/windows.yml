@@ -22,43 +22,55 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-    - name: Set up MSVC
-      uses: ilammy/msvc-dev-cmd@v1
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Cache LLVM
-      id: cache-llvm
-      uses: actions/cache@v4
-      with:
-        path: C:/Program Files/LLVM
-        key: llvm-16.0.0-windows-v5
+      - name: Cache LLVM
+        id: cache-llvm
+        uses: actions/cache@v4
+        with:
+          path: C:/Program Files/LLVM
+          key: llvm-16.0.0-windows-v5
 
-    - name: Set up LLVM (Windows)
-      if: steps.cache-llvm.outputs.cache-hit != 'true'
-      shell: bash
-      run: |
-        choco uninstall llvm -y --all-versions || true
-        choco install llvm --version=16.0.0 -y --allow-downgrade --force
+      - name: Set up LLVM (Windows)
+        if: steps.cache-llvm.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          choco uninstall llvm -y --all-versions || true
+          choco install llvm --version=16.0.0 -y --allow-downgrade --force
 
-    - name: Add LLVM to path
-      shell: bash
-      run: echo "C:/Program Files/LLVM/bin" >> $GITHUB_PATH
+      - name: Add LLVM to path
+        shell: bash
+        run: echo "C:/Program Files/LLVM/bin" >> $GITHUB_PATH
 
-    - name: Configure CMake
-      shell: bash
-      run: |
-        cmake -G Ninja -B build -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=cl -D CMAKE_CXX_COMPILER=cl
+      # ---------- FIX: Set LLVM_DIR so CMake can find LLVMConfig.cmake ----------
+      - name: Set LLVM_DIR
+        shell: bash
+        run: echo "LLVM_DIR=C:/Program Files/LLVM/lib/cmake/llvm" >> $GITHUB_ENV
 
-    - name: Build
-      shell: bash
-      run: cmake --build build --config Release -v
+      - name: Configure CMake
+        shell: bash
+        run: |
+          cmake -G Ninja -B build \
+            -D BUILD_TESTS=ON \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_C_COMPILER=cl \
+            -D CMAKE_CXX_COMPILER=cl
+          # The LLVM_DIR is automatically picked up from the environment,
+          # but you can also pass it directly:
+          # -D LLVM_DIR="C:/Program Files/LLVM/lib/cmake/llvm"
 
-    - name: Run Tests
-      shell: bash
-      run: |
-        cd build
-        ctest -C Release --output-on-failure
+      - name: Build
+        shell: bash
+        run: cmake --build build --config Release -v
+
+      - name: Run Tests
+        shell: bash
+        run: |
+          cd build
+          ctest -C Release --output-on-failure

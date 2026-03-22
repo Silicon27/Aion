@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     using namespace aion;
 
     // Create the shared diagnostics engine
-    auto diagnostics_engine = aion::diag::createDiagnosticsEngine();
+    auto diagnostics_engine = aion::diag::create_diagnostics_engine();
 
     // Parse command line and create compiler invocation
     auto config = compiler_config::parse(argc, argv);

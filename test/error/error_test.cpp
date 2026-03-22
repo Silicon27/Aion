@@ -45,33 +45,33 @@ void register_error_tests(TestRunner& runner) {
         Source_Location start(1, 10);
         Source_Location end(1, 20);
         
-        diag::CharSourceRange range = diag::CharSourceRange::getCharRange(start, end);
-        AION_ASSERT_TRUE(range.isValid());
-        AION_ASSERT_TRUE(range.isCharRange());
-        AION_ASSERT_FALSE(range.isTokenRange());
+        diag::CharSourceRange range = diag::CharSourceRange::get_char_range(start, end);
+        AION_ASSERT_TRUE(range.is_valid());
+        AION_ASSERT_TRUE(range.is_char_range());
+        AION_ASSERT_FALSE(range.is_token_range());
         AION_ASSERT_EQ(range.begin.offset, 10);
         AION_ASSERT_EQ(range.end.offset, 20);
 
-        diag::CharSourceRange token_range = diag::CharSourceRange::getTokenRange(start, end);
-        AION_ASSERT_TRUE(token_range.isTokenRange());
-        AION_ASSERT_FALSE(token_range.isCharRange());
+        diag::CharSourceRange token_range = diag::CharSourceRange::get_token_range(start, end);
+        AION_ASSERT_TRUE(token_range.is_token_range());
+        AION_ASSERT_FALSE(token_range.is_char_range());
     });
 
     creation_suite->add_test("FixItHint", []() {
         Source_Location loc(1, 5);
-        diag::FixItHint insert = diag::FixItHint::CreateInsertion(loc, "foo");
-        AION_ASSERT_FALSE(insert.isNull());
+        diag::FixItHint insert = diag::FixItHint::create_insertion(loc, "foo");
+        AION_ASSERT_FALSE(insert.is_null());
         AION_ASSERT_STREQ(insert.code_to_insert, "foo");
         AION_ASSERT_EQ(insert.remove_range.begin.offset, 5);
 
-        diag::CharSourceRange range = diag::CharSourceRange::getCharRange(Source_Location(1, 5), Source_Location(1, 10));
-        diag::FixItHint remove = diag::FixItHint::CreateRemoval(range);
+        diag::CharSourceRange range = diag::CharSourceRange::get_char_range(Source_Location(1, 5), Source_Location(1, 10));
+        diag::FixItHint remove = diag::FixItHint::create_removal(range);
         AION_ASSERT_STREQ(remove.code_to_insert, "");
-        AION_ASSERT_TRUE(remove.remove_range.isValid());
+        AION_ASSERT_TRUE(remove.remove_range.is_valid());
 
-        diag::FixItHint replace = diag::FixItHint::CreateReplacement(range, "bar");
+        diag::FixItHint replace = diag::FixItHint::create_replacement(range, "bar");
         AION_ASSERT_STREQ(replace.code_to_insert, "bar");
-        AION_ASSERT_TRUE(replace.remove_range.isValid());
+        AION_ASSERT_TRUE(replace.remove_range.is_valid());
     });
 
     runner.add_suite(std::move(creation_suite));
@@ -88,15 +88,15 @@ void register_error_tests(TestRunner& runner) {
         diag::TextDiagnosticPrinter* printer = new diag::TextDiagnosticPrinter(ss, &sm, false);
         diag::DiagnosticsEngine engine(&sm, printer, true);
         
-        engine.Report(diag::common::err_unknown_identifier) << "my_var";
+        engine.report(diag::common::err_unknown_identifier) << "my_var";
         AION_ASSERT_CONTAINS(ss.str(), "error: unknown identifier 'my_var'");
         
         ss.str("");
-        engine.Report(diag::common::warn_unused_variable) << "unused_val";
+        engine.report(diag::common::warn_unused_variable) << "unused_val";
         AION_ASSERT_CONTAINS(ss.str(), "warning: unused variable 'unused_val'");
 
         ss.str("");
-        engine.Report(diag::parse::err_expected_semicolon);
+        engine.report(diag::parse::err_expected_semicolon);
         AION_ASSERT_CONTAINS(ss.str(), "error: expected ';'");
     });
 
@@ -111,33 +111,33 @@ void register_error_tests(TestRunner& runner) {
     engine_suite->add_test("SeverityMapping", []() {
         diag::DiagnosticsEngine engine;
         
-        AION_ASSERT_ENUM_EQ(engine.getSeverity(diag::common::err_unknown_identifier), diag::Severity::Error);
-        AION_ASSERT_ENUM_EQ(engine.getSeverity(diag::common::warn_unused_variable), diag::Severity::Warning);
+        AION_ASSERT_ENUM_EQ(engine.get_severity(diag::common::err_unknown_identifier), diag::Severity::error);
+        AION_ASSERT_ENUM_EQ(engine.get_severity(diag::common::warn_unused_variable), diag::Severity::warning);
         
-        engine.setWarningsAsErrors(true);
+        engine.set_warnings_as_errors(true);
         // getSeverity doesn't apply warnings_as_errors, EmitDiagnostic does.
         // But we can check if it has the flag.
-        AION_ASSERT_TRUE(engine.getWarningsAsErrors());
+        AION_ASSERT_TRUE(engine.get_warnings_as_errors());
     });
 
     engine_suite->add_test("ErrorLimit", []() {
         diag::DiagnosticsEngine engine;
-        engine.setErrorLimit(1);
+        engine.set_error_limit(1);
         
         // num_errors starts at 0. error_limit is 1.
         
-        engine.Report(diag::common::err_unknown_identifier).emit();
+        engine.report(diag::common::err_unknown_identifier).emit();
         // num_errors becomes 1. 1 > 1 is false. Not suppressed.
-        AION_ASSERT_EQ(engine.getNumErrors(), 1);
+        AION_ASSERT_EQ(engine.get_num_errors(), 1);
 
-        engine.Report(diag::common::err_unknown_identifier).emit();
+        engine.report(diag::common::err_unknown_identifier).emit();
         // num_errors becomes 2. 2 > 1 is true. 
         // EmitDiagnostic returns early.
-        AION_ASSERT_EQ(engine.getNumErrors(), 2);
+        AION_ASSERT_EQ(engine.get_num_errors(), 2);
         
-        engine.Report(diag::common::err_unknown_identifier).emit();
+        engine.report(diag::common::err_unknown_identifier).emit();
         // num_errors becomes 3. 3 > 1 is true.
-        AION_ASSERT_EQ(engine.getNumErrors(), 3);
+        AION_ASSERT_EQ(engine.get_num_errors(), 3);
     });
 
     runner.add_suite(std::move(engine_suite));
@@ -156,9 +156,9 @@ void register_error_tests(TestRunner& runner) {
         diag::Diagnostic d;
         d.id = diag::common::err_unknown_identifier;
         d.message = "unknown identifier 'x'";
-        d.severity = diag::Severity::Error;
+        d.severity = diag::Severity::error;
         
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "error: unknown identifier 'x'");
@@ -175,10 +175,10 @@ void register_error_tests(TestRunner& runner) {
         diag::Diagnostic d;
         d.id = diag::common::err_unknown_identifier;
         d.message = "use of undeclared identifier 'y'";
-        d.severity = diag::Severity::Error;
+        d.severity = diag::Severity::error;
         d.location = Source_Location(fid, 8); 
         
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "test.aion:1:9: error: use of undeclared identifier 'y'");
@@ -197,11 +197,11 @@ void register_error_tests(TestRunner& runner) {
         diag::Diagnostic d;
         d.id = diag::common::err_unknown_identifier;
         d.message = "unknown identifiers 'y' and 'z'";
-        d.severity = diag::Severity::Error;
+        d.severity = diag::Severity::error;
         d.location = Source_Location(fid, 8); // 'y'
         d.extra_locations.push_back(Source_Location(fid, 12)); // 'z'
         
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, " 1 | int x = y + z;");
@@ -219,13 +219,13 @@ void register_error_tests(TestRunner& runner) {
         diag::Diagnostic d;
         d.id = diag::common::err_unknown_identifier;
         d.message = "highlighted expression";
-        d.severity = diag::Severity::Error;
+        d.severity = diag::Severity::error;
         d.location = Source_Location(fid, 10); // '+'
         // Highlight 'y' and 'z'
-        d.ranges.push_back(diag::CharSourceRange::getCharRange(Source_Location(fid, 8), Source_Location(fid, 9)));
-        d.ranges.push_back(diag::CharSourceRange::getCharRange(Source_Location(fid, 12), Source_Location(fid, 13)));
+        d.ranges.push_back(diag::CharSourceRange::get_char_range(Source_Location(fid, 8), Source_Location(fid, 9)));
+        d.ranges.push_back(diag::CharSourceRange::get_char_range(Source_Location(fid, 12), Source_Location(fid, 13)));
         
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, " 1 | int x = y + z;");
@@ -242,11 +242,11 @@ void register_error_tests(TestRunner& runner) {
         diag::Diagnostic d;
         d.id = diag::parse::err_expected_semicolon;
         d.message = "expected ';'";
-        d.severity = diag::Severity::Error;
+        d.severity = diag::Severity::error;
         d.location = Source_Location(fid, 9);
-        d.fixits.push_back(diag::FixItHint::CreateInsertion(Source_Location(fid, 9), ";"));
+        d.fixits.push_back(diag::FixItHint::create_insertion(Source_Location(fid, 9), ";"));
         
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "help: insert \";\"");
@@ -263,9 +263,9 @@ void register_error_tests(TestRunner& runner) {
         diag::Diagnostic d;
         d.id = diag::common::err_unknown_identifier;
         d.message = "colored error";
-        d.severity = diag::Severity::Error;
+        d.severity = diag::Severity::error;
         
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
         // The printer uses \033[1;31merror\033[0m: for Error
@@ -276,7 +276,7 @@ void register_error_tests(TestRunner& runner) {
         capture.get_stream().str("");
         FileID fid = sm.add_buffer("foo", "test.aion");
         d.location = Source_Location(fid, 0);
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         // Green color for caret
         AION_ASSERT_CONTAINS(capture.get_output(), "\033[1;32m");
         AION_ASSERT_CONTAINS(capture.get_output(), "^");
@@ -294,12 +294,12 @@ void register_error_tests(TestRunner& runner) {
         diag::Diagnostic d;
         d.id = diag::common::err_unknown_identifier;
         d.message = "error on line 2";
-        d.severity = diag::Severity::Error;
+        d.severity = diag::Severity::error;
         // Offset for "line 2"
         // line 1\n = 7 chars
         d.location = Source_Location(fid, 7); 
         
-        printer.HandleDiagnostic(diag::Severity::Error, d);
+        printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "test.aion:2:1: error: error on line 2");

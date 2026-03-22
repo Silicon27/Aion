@@ -51,8 +51,8 @@ enum DiagnosticStart : unsigned {
 using DiagID = unsigned;
 
 /// Check if a diagnostic ID is a custom (user-defined) diagnostic.
-inline bool isCustomDiag(DiagID ID) {
-    return ID >= DIAG_UPPER_LIMIT;
+inline bool is_custom_diag(DiagID id) {
+    return id >= DIAG_UPPER_LIMIT;
 }
 
 // ============================================================================
@@ -61,12 +61,12 @@ inline bool isCustomDiag(DiagID ID) {
 // The class of a diagnostic determines its default behavior.
 
 enum class DiagClass : uint8_t {
-    Invalid   = 0x00,
-    Note      = 0x01,
-    Remark    = 0x02,
-    Warning   = 0x03,
-    Extension = 0x04,
-    Error     = 0x05,
+    invalid   = 0x00,
+    note      = 0x01,
+    remark    = 0x02,
+    warning   = 0x03,
+    extension = 0x04,
+    error     = 0x05,
 };
 
 // ============================================================================
@@ -175,17 +175,17 @@ public:
         return result;
     }
 
-    Severity getSeverity() const { return severity_; }
-    void setSeverity(Severity sev) { severity_ = sev; }
+    Severity get_severity() const { return severity_; }
+    void set_severity(Severity sev) { severity_ = sev; }
 
-    bool isUser() const { return is_user_; }
-    bool isPragma() const { return is_pragma_; }
+    bool is_user() const { return is_user_; }
+    bool is_pragma() const { return is_pragma_; }
 
-    bool hasNoWarningAsError() const { return no_warning_as_error_; }
-    void setNoWarningAsError(bool val) { no_warning_as_error_ = val; }
+    bool has_no_warning_as_error() const { return no_warning_as_error_; }
+    void set_no_warning_as_error(bool val) { no_warning_as_error_ = val; }
 
-    bool hasNoErrorAsFatal() const { return no_error_as_fatal_; }
-    void setNoErrorAsFatal(bool val) { no_error_as_fatal_ = val; }
+    bool has_no_error_as_fatal() const { return no_error_as_fatal_; }
+    void set_no_error_as_fatal(bool val) { no_error_as_fatal_ = val; }
 };
 
 } // namespace aion::diag

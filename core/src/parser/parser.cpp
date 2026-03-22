@@ -49,7 +49,7 @@ namespace aion::parse {
             return previous();
         }
 
-        diagnostics.Report(err)
+        diagnostics.report(err)
                 << "expected token";
         return {TokenType::invalid_token, ""};
     }
@@ -110,7 +110,7 @@ namespace aion::parse {
             token_type == TokenType::identifier || is_builtin_type_token(token_type)) {
             return blind_consume();
         }
-        diagnostics.Report(diag::parse::err_expected_type)
+        diagnostics.report(diag::parse::err_expected_type)
                 << "expected type";
         return {TokenType::invalid_token, ""};
     }

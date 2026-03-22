@@ -16,31 +16,31 @@ namespace aion::diag {
 // CharSourceRange Implementation
 // ============================================================================
 
-bool CharSourceRange::isValid() const {
+bool CharSourceRange::is_valid() const {
     // A range is valid if both begin and end have valid file IDs
-    return begin.isValid() || end.isValid();
+    return begin.is_valid() || end.is_valid();
 }
 
 // ============================================================================
 // FixItHint Implementation
 // ============================================================================
 
-FixItHint FixItHint::CreateInsertion(Source_Location loc, const std::string& code,
+FixItHint FixItHint::create_insertion(Source_Location loc, const std::string& code,
                                      bool before_previous) {
     FixItHint hint;
-    hint.remove_range = CharSourceRange::getCharRange(loc, loc);
+    hint.remove_range = CharSourceRange::get_char_range(loc, loc);
     hint.code_to_insert = code;
     hint.before_previous_insertions = before_previous;
     return hint;
 }
 
-FixItHint FixItHint::CreateRemoval(CharSourceRange range) {
+FixItHint FixItHint::create_removal(CharSourceRange range) {
     FixItHint hint;
     hint.remove_range = range;
     return hint;
 }
 
-FixItHint FixItHint::CreateReplacement(CharSourceRange range, const std::string& code) {
+FixItHint FixItHint::create_replacement(CharSourceRange range, const std::string& code) {
     FixItHint hint;
     hint.remove_range = range;
     hint.code_to_insert = code;
@@ -62,17 +62,17 @@ StoredDiagnostic::StoredDiagnostic(Severity sev, const Diagnostic& diag)
 // TextDiagnosticPrinter Implementation
 // ============================================================================
 
-void TextDiagnosticPrinter::HandleDiagnostic(Severity severity, const Diagnostic& diag) {
+void TextDiagnosticPrinter::handle_diagnostic(Severity severity, const Diagnostic& diag) {
     // Update counts
-    if (severity == Severity::Error || severity == Severity::Fatal) {
+    if (severity == Severity::error || severity == Severity::fatal) {
         ++num_errors_;
-    } else if (severity == Severity::Warning) {
+    } else if (severity == Severity::warning) {
         ++num_warnings_;
     }
 
     // Print location and severity
-    printLocation(diag);
-    printSeverity(severity);
+    print_location(diag);
+    print_severity(severity);
 
     // Print message in bold
     if (show_colors_) {
@@ -86,31 +86,31 @@ void TextDiagnosticPrinter::HandleDiagnostic(Severity severity, const Diagnostic
 
     // Print source line if we have a source manager
     if (source_mgr_) {
-        printSourceLine(diag);
+        print_source_line(diag);
     }
 
     // Print fix-it hints
     if (!diag.fixits.empty()) {
-        printFixItHints(diag);
+        print_fixit_hints(diag);
     }
 
     os_->flush();
 }
 
-void TextDiagnosticPrinter::printSeverity(Severity severity) {
+void TextDiagnosticPrinter::print_severity(Severity severity) {
     if (show_colors_) {
         switch (severity) {
-            case Severity::Note:
+            case Severity::note:
                 *os_ << "\033[1;36m";  // Bold cyan
                 break;
-            case Severity::Remark:
+            case Severity::remark:
                 *os_ << "\033[1;35m";  // Bold magenta
                 break;
-            case Severity::Warning:
+            case Severity::warning:
                 *os_ << "\033[1;33m";  // Bold yellow
                 break;
-            case Severity::Error:
-            case Severity::Fatal:
+            case Severity::error:
+            case Severity::fatal:
                 *os_ << "\033[1;31m";  // Bold red
                 break;
             default:
@@ -118,7 +118,7 @@ void TextDiagnosticPrinter::printSeverity(Severity severity) {
         }
     }
 
-    *os_ << getSeverityName(severity);
+    *os_ << get_severity_name(severity);
 
     if (show_colors_) {
         *os_ << "\033[0m";  // Reset
@@ -126,15 +126,15 @@ void TextDiagnosticPrinter::printSeverity(Severity severity) {
     *os_ << ": ";
 }
 
-void TextDiagnosticPrinter::printLocation(const Diagnostic& diag) {
+void TextDiagnosticPrinter::print_location(const Diagnostic& diag) {
     if (!source_mgr_) {
         return;
     }
 
     // Get file and location info
-    if (diag.location.isValid()) {
-        std::string path = source_mgr_->getFilePath(diag.location);
-        auto [line, col] = source_mgr_->getLineColumn(diag.location);
+    if (diag.location.is_valid()) {
+        std::string path = source_mgr_->get_file_path(diag.location);
+        auto [line, col] = source_mgr_->get_line_column(diag.location);
 
         if (show_colors_) {
             *os_ << "\033[1m";  // Bold
@@ -151,12 +151,12 @@ void TextDiagnosticPrinter::printLocation(const Diagnostic& diag) {
     }
 }
 
-void TextDiagnosticPrinter::printSourceLine(const Diagnostic& diag) {
-    if (!diag.location.isValid()) {
+void TextDiagnosticPrinter::print_source_line(const Diagnostic& diag) {
+    if (!diag.location.is_valid()) {
         return;
     }
 
-    std::string line_text = source_mgr_->getLineText(diag.location);
+    std::string line_text = source_mgr_->get_line_text(diag.location);
     if (line_text.empty()) {
         return;
     }
@@ -166,7 +166,7 @@ void TextDiagnosticPrinter::printSourceLine(const Diagnostic& diag) {
         line_text.pop_back();
     }
 
-    auto [line_no, col_no] = source_mgr_->getLineColumn(diag.location);
+    auto [line_no, col_no] = source_mgr_->get_line_column(diag.location);
 
     // Determine line number width for alignment
     int line_num_width = std::to_string(line_no).length();
@@ -193,13 +193,13 @@ void TextDiagnosticPrinter::printSourceLine(const Diagnostic& diag) {
 
     // Helper to apply highlights to the buffer
     auto apply_range = [&](const CharSourceRange& range) {
-        if (!range.isValid()) return;
-        auto [b_line, b_col] = source_mgr_->getLineColumn(range.begin);
-        auto [e_line, e_col] = source_mgr_->getLineColumn(range.end);
+        if (!range.is_valid()) return;
+        auto [b_line, b_col] = source_mgr_->get_line_column(range.begin);
+        auto [e_line, e_col] = source_mgr_->get_line_column(range.end);
         
         if (b_line == line_no) {
             size_t start = b_col - 1;
-            size_t end = (e_line == line_no) ? (e_col - (range.isTokenRange() ? 0 : 1)) : line_text.length();
+            size_t end = (e_line == line_no) ? (e_col - (range.is_token_range() ? 0 : 1)) : line_text.length();
             if (start < end) {
                 for (size_t i = start; i < end && i < underlines.length(); ++i) {
                     if (underlines[i] == ' ') underlines[i] = '~';
@@ -224,7 +224,7 @@ void TextDiagnosticPrinter::printSourceLine(const Diagnostic& diag) {
 
     // Apply extra carets
     for (const auto& loc : diag.extra_locations) {
-        auto [l_line, l_col] = source_mgr_->getLineColumn(loc);
+        auto [l_line, l_col] = source_mgr_->get_line_column(loc);
         if (l_line == line_no && l_col > 0 && l_col <= underlines.length()) {
             underlines[l_col - 1] = '^';
         }
@@ -234,9 +234,9 @@ void TextDiagnosticPrinter::printSourceLine(const Diagnostic& diag) {
     *os_ << color_green << underlines << color_reset << "\n";
 }
 
-void TextDiagnosticPrinter::printFixItHints(const Diagnostic& diag) {
+void TextDiagnosticPrinter::print_fixit_hints(const Diagnostic& diag) {
     for (const auto& fixit : diag.fixits) {
-        if (fixit.isNull()) continue;
+        if (fixit.is_null()) continue;
 
         std::string color_green = show_colors_ ? "\033[1;32m" : "";
         std::string color_reset = show_colors_ ? "\033[0m" : "";
@@ -252,9 +252,9 @@ void TextDiagnosticPrinter::printFixItHints(const Diagnostic& diag) {
         }
 
         // Show the line with the fix applied (Rust-style)
-        if (source_mgr_ && fixit.remove_range.begin.isValid()) {
-             auto [line_no, col_no] = source_mgr_->getLineColumn(fixit.remove_range.begin);
-             std::string line_text = source_mgr_->getLineText(fixit.remove_range.begin);
+        if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
+             auto [line_no, col_no] = source_mgr_->get_line_column(fixit.remove_range.begin);
+             std::string line_text = source_mgr_->get_line_text(fixit.remove_range.begin);
              if (!line_text.empty()) {
                  if (line_text.back() == '\n') line_text.pop_back();
 
@@ -265,8 +265,8 @@ void TextDiagnosticPrinter::printFixItHints(const Diagnostic& diag) {
                  *os_ << color_blue << padding << " |\n";
                  *os_ << std::setw(line_num_width) << line_no << " | " << color_reset;
 
-                 auto [start_line, start_col] = source_mgr_->getLineColumn(fixit.remove_range.begin);
-                 auto [end_line, end_col] = source_mgr_->getLineColumn(fixit.remove_range.end);
+                 auto [start_line, start_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                 auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
 
                  if (start_line == end_line) {
                      std::string prefix = line_text.substr(0, start_col - 1);
@@ -408,7 +408,7 @@ void DiagnosticBuilder::emit() {
 
     // Use formatting if possible, otherwise build a simple message from arguments
     std::string message;
-    const char* format_str = engine_->getDiagnosticFormatString(diag_id_);
+    const char* format_str = engine_->get_diagnostic_format_string(diag_id_);
     if (format_str) {
         message = formatMessage(format_str);
     } else {
@@ -422,7 +422,7 @@ void DiagnosticBuilder::emit() {
         }
     }
 
-    engine_->ProcessDiag(diag_id_, engine_->cur_diag_loc_, message, ranges_, fixits_, extra_locations_);
+    engine_->process_diag(diag_id_, engine_->cur_diag_loc_, message, ranges_, fixits_, extra_locations_);
 }
 
 // ============================================================================
@@ -442,7 +442,7 @@ DiagnosticsEngine::~DiagnosticsEngine() {
     }
 }
 
-void DiagnosticsEngine::setClient(DiagnosticConsumer* client, bool owns) {
+void DiagnosticsEngine::set_client(DiagnosticConsumer* client, bool owns) {
     if (owns_consumer_) {
         delete consumer_;
     }
@@ -450,19 +450,19 @@ void DiagnosticsEngine::setClient(DiagnosticConsumer* client, bool owns) {
     owns_consumer_ = owns;
 }
 
-void DiagnosticsEngine::setSeverity(DiagID id, Severity sev, bool is_pragma) {
+void DiagnosticsEngine::set_severity(DiagID id, Severity sev, bool is_pragma) {
     diag_mappings_[id] = DiagnosticMapping::make(sev, !is_pragma, is_pragma);
 }
 
-Severity DiagnosticsEngine::getSeverity(DiagID id) const {
+Severity DiagnosticsEngine::get_severity(DiagID id) const {
     auto it = diag_mappings_.find(id);
     if (it != diag_mappings_.end()) {
-        return it->second.getSeverity();
+        return it->second.get_severity();
     }
-    return getDefaultSeverity(id);
+    return get_default_severity(id);
 }
 
-Severity DiagnosticsEngine::getDefaultSeverity(DiagID id) const {
+Severity DiagnosticsEngine::get_default_severity(DiagID id) const {
     // Determine default severity based on diagnostic ID ranges
     // IDs starting with err_ are errors, warn_ are warnings, note_ are notes
     // For now, use a simple heuristic based on ranges
@@ -470,24 +470,24 @@ Severity DiagnosticsEngine::getDefaultSeverity(DiagID id) const {
     if (id >= DIAG_START_COMMON && id < DIAG_START_LEXER) {
         // Common diagnostics - check specific ranges
         if (id >= common::warn_unused_variable) {
-            return Severity::Warning;
+            return Severity::warning;
         }
-        return Severity::Error;
+        return Severity::error;
     }
     if (id >= DIAG_START_LEXER && id < DIAG_START_PARSER) {
-        return Severity::Error;  // Lexer errors are usually errors
+        return Severity::error;  // Lexer errors are usually errors
     }
     if (id >= DIAG_START_PARSER && id < DIAG_START_SEMA) {
-        return Severity::Error;  // Parser errors are usually errors
+        return Severity::error;  // Parser errors are usually errors
     }
     if (id >= DIAG_START_SEMA && id < DIAG_START_CODEGEN) {
-        return Severity::Error;  // Sema errors are usually errors
+        return Severity::error;  // Sema errors are usually errors
     }
 
-    return Severity::Warning;
+    return Severity::warning;
 }
 
-const char* DiagnosticsEngine::getDiagnosticFormatString(DiagID id) const {
+const char* DiagnosticsEngine::get_diagnostic_format_string(DiagID id) const {
     switch (id) {
         case common::err_unknown_identifier: return "unknown identifier '%0'";
         case common::warn_unused_variable: return "unused variable '%0'";
@@ -497,7 +497,7 @@ const char* DiagnosticsEngine::getDiagnosticFormatString(DiagID id) const {
     }
 }
 
-bool DiagnosticsEngine::hasFatalErrorOccurred() const {
+bool DiagnosticsEngine::has_fatal_error_occurred() const {
     // In a full implementation, track if any fatal errors occurred
     return false;
 }
@@ -511,18 +511,18 @@ void DiagnosticsEngine::reset() {
     }
 }
 
-DiagnosticBuilder DiagnosticsEngine::Report(Source_Location loc, DiagID id) {
+DiagnosticBuilder DiagnosticsEngine::report(Source_Location loc, DiagID id) {
     cur_diag_loc_ = loc;
     cur_diag_id_ = id;
     return DiagnosticBuilder(this, id);
 }
 
-DiagnosticBuilder DiagnosticsEngine::Report(DiagID id) {
+DiagnosticBuilder DiagnosticsEngine::report(DiagID id) {
     cur_diag_id_ = id;
     return DiagnosticBuilder(this, id);
 }
 
-void DiagnosticsEngine::EmitDiagnostic(const Diagnostic& diag) {
+void DiagnosticsEngine::emit_diagnostic(const Diagnostic& diag) {
     if (suppress_all_diagnostics_) {
         return;
     }
@@ -530,17 +530,17 @@ void DiagnosticsEngine::EmitDiagnostic(const Diagnostic& diag) {
     Severity sev = diag.severity;
 
     // Apply severity mappings
-    if (warnings_as_errors_ && sev == Severity::Warning) {
-        sev = Severity::Error;
+    if (warnings_as_errors_ && sev == Severity::warning) {
+        sev = Severity::error;
     }
-    if (errors_as_fatal_ && sev == Severity::Error) {
-        sev = Severity::Fatal;
+    if (errors_as_fatal_ && sev == Severity::error) {
+        sev = Severity::fatal;
     }
 
     // Update counts
-    if (sev == Severity::Error || sev == Severity::Fatal) {
+    if (sev == Severity::error || sev == Severity::fatal) {
         ++num_errors_;
-    } else if (sev == Severity::Warning) {
+    } else if (sev == Severity::warning) {
         ++num_warnings_;
     }
 
@@ -551,11 +551,11 @@ void DiagnosticsEngine::EmitDiagnostic(const Diagnostic& diag) {
 
     // Forward to consumer
     if (consumer_) {
-        consumer_->HandleDiagnostic(sev, diag);
+        consumer_->handle_diagnostic(sev, diag);
     }
 }
 
-void DiagnosticsEngine::ProcessDiag(DiagID id, Source_Location loc,
+void DiagnosticsEngine::process_diag(DiagID id, Source_Location loc,
                                     const std::string& message,
                                     const std::vector<CharSourceRange>& ranges,
                                     const std::vector<FixItHint>& fixits,
@@ -563,20 +563,20 @@ void DiagnosticsEngine::ProcessDiag(DiagID id, Source_Location loc,
     Diagnostic diag;
     diag.id = id;
     diag.location = loc;
-    diag.severity = getSeverity(id);
+    diag.severity = get_severity(id);
     diag.message = message;
     diag.ranges = ranges;
     diag.fixits = fixits;
     diag.extra_locations = extra_locations;
 
-    EmitDiagnostic(diag);
+    emit_diagnostic(diag);
 }
 
 // ============================================================================
 // Convenience Functions
 // ============================================================================
 
-std::unique_ptr<DiagnosticsEngine> createDiagnosticsEngine(Source_Manager* sm) {
+std::unique_ptr<DiagnosticsEngine> create_diagnostics_engine(Source_Manager* sm) {
     auto consumer = new TextDiagnosticPrinter(std::cerr, sm);
     return std::make_unique<DiagnosticsEngine>(sm, consumer, true);
 }

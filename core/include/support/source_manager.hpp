@@ -34,8 +34,8 @@ namespace aion {
         SourceLocation() = default;
         SourceLocation(FileId f, Offset o) : file(f), offset(o) {}
 
-        bool isValid() const { return file != 0 || offset != 0; }
-        bool isInvalid() const { return !isValid(); }
+        bool is_valid() const { return file != 0 || offset != 0; }
+        bool is_invalid() const { return !is_valid(); }
 
         bool operator==(const SourceLocation& other) const {
             return file == other.file && offset == other.offset;
@@ -52,7 +52,7 @@ namespace aion {
         SourceRange() = default;
         SourceRange(SourceLocation b, SourceLocation e) : begin(b), end(e) {}
 
-        bool isValid() const { return begin.isValid() && end.isValid(); }
+        bool is_valid() const { return begin.is_valid() && end.is_valid(); }
     };
 
     inline SourceLocation make_source_loc(FileId file, Offset offset) {

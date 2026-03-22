@@ -33,21 +33,21 @@ class DiagnosticConsumer;
 struct CharSourceRange {
     Source_Location begin;
     Source_Location end;
-    bool is_token_range = true;  // true = token range, false = char range
+    bool is_token_range_ = true;  // true = token range, false = char range
 
     CharSourceRange() = default;
     CharSourceRange(Source_Location b, Source_Location e, bool token = true)
-        : begin(b), end(e), is_token_range(token) {}
+        : begin(b), end(e), is_token_range_(token) {}
 
-    bool isValid() const;
-    bool isTokenRange() const { return is_token_range; }
-    bool isCharRange() const { return !is_token_range; }
+    bool is_valid() const;
+    bool is_token_range() const { return is_token_range_; }
+    bool is_char_range() const { return !is_token_range_; }
 
-    static CharSourceRange getTokenRange(Source_Location b, Source_Location e) {
+    static CharSourceRange get_token_range(Source_Location b, Source_Location e) {
         return CharSourceRange(b, e, true);
     }
 
-    static CharSourceRange getCharRange(Source_Location b, Source_Location e) {
+    static CharSourceRange get_char_range(Source_Location b, Source_Location e) {
         return CharSourceRange(b, e, false);
     }
 };
@@ -74,17 +74,17 @@ public:
 
     FixItHint() = default;
 
-    bool isNull() const { return !remove_range.isValid(); }
+    bool is_null() const { return !remove_range.is_valid(); }
 
     /// Create a code modification hint that inserts the given code at a location.
-    static FixItHint CreateInsertion(Source_Location loc, const std::string& code,
+    static FixItHint create_insertion(Source_Location loc, const std::string& code,
                                      bool before_previous = false);
 
     /// Create a code modification hint that removes the given source range.
-    static FixItHint CreateRemoval(CharSourceRange range);
+    static FixItHint create_removal(CharSourceRange range);
 
     /// Create a code modification hint that replaces the given source range.
-    static FixItHint CreateReplacement(CharSourceRange range, const std::string& code);
+    static FixItHint create_replacement(CharSourceRange range, const std::string& code);
 };
 
 // ============================================================================
@@ -96,7 +96,7 @@ struct Diagnostic {
     DiagID id = 0;                          ///< The diagnostic ID
     Source_Location location;               ///< Primary location
     std::vector<Source_Location> extra_locations; ///< Additional carets
-    Severity severity = Severity::Warning;  ///< Severity level
+    Severity severity = Severity::warning;  ///< Severity level
     std::string message;                    ///< Formatted message
     std::vector<CharSourceRange> ranges;    ///< Source ranges to highlight
     std::vector<FixItHint> fixits;          ///< Fix-it hints
@@ -113,7 +113,7 @@ struct Diagnostic {
 
 class StoredDiagnostic {
     DiagID id_ = 0;
-    Severity severity_ = Severity::Warning;
+    Severity severity_ = Severity::warning;
     std::string message_;
     // Full location info would be stored here
     std::vector<CharSourceRange> ranges_;
@@ -123,9 +123,9 @@ public:
     StoredDiagnostic() = default;
     StoredDiagnostic(Severity sev, const Diagnostic& diag);
 
-    DiagID getID() const { return id_; }
-    Severity getSeverity() const { return severity_; }
-    const std::string& getMessage() const { return message_; }
+    DiagID get_id() const { return id_; }
+    Severity get_severity() const { return severity_; }
+    const std::string& get_message() const { return message_; }
 
     using range_iterator = std::vector<CharSourceRange>::const_iterator;
     range_iterator range_begin() const { return ranges_.begin(); }
@@ -148,19 +148,19 @@ public:
     virtual ~DiagnosticConsumer() = default;
 
     /// Called at the beginning of processing a source file.
-    virtual void BeginSourceFile() {}
+    virtual void begin_source_file() {}
 
     /// Called at the end of processing a source file.
-    virtual void EndSourceFile() {}
+    virtual void end_source_file() {}
 
     /// Callback for when a diagnostic is emitted.
-    virtual void HandleDiagnostic(Severity severity, const Diagnostic& diag) = 0;
+    virtual void handle_diagnostic(Severity severity, const Diagnostic& diag) = 0;
 
     /// Returns the number of errors emitted.
-    unsigned getNumErrors() const { return num_errors_; }
+    unsigned get_num_errors() const { return num_errors_; }
 
     /// Returns the number of warnings emitted.
-    unsigned getNumWarnings() const { return num_warnings_; }
+    unsigned get_num_warnings() const { return num_warnings_; }
 
     /// Reset the error/warning counts.
     virtual void clear() { num_errors_ = 0; num_warnings_ = 0; }
@@ -184,13 +184,13 @@ public:
     TextDiagnosticPrinter(std::ostream& os, Source_Manager* sm = nullptr, bool colors = true)
         : os_(&os), source_mgr_(sm), show_colors_(colors) {}
 
-    void HandleDiagnostic(Severity severity, const Diagnostic& diag) override;
+    void handle_diagnostic(Severity severity, const Diagnostic& diag) override;
 
 private:
-    void printSeverity(Severity severity);
-    void printLocation(const Diagnostic& diag);
-    void printSourceLine(const Diagnostic& diag);
-    void printFixItHints(const Diagnostic& diag);
+    void print_severity(Severity severity);
+    void print_location(const Diagnostic& diag);
+    void print_source_line(const Diagnostic& diag);
+    void print_fixit_hints(const Diagnostic& diag);
 };
 
 // ============================================================================
@@ -246,7 +246,7 @@ public:
     void emit();
 
     /// Check if this builder is still active.
-    bool isActive() const { return is_active_; }
+    bool is_active() const { return is_active_; }
 
     /// Abandon this diagnostic without emitting.
     void clear() { is_active_ = false; }
@@ -265,12 +265,12 @@ class DiagnosticsEngine {
 public:
     /// The level of a diagnostic after mapping.
     enum Level {
-        Ignored = static_cast<int>(Severity::Ignored),
-        Note = static_cast<int>(Severity::Note),
-        Remark = static_cast<int>(Severity::Remark),
-        Warning = static_cast<int>(Severity::Warning),
-        Error = static_cast<int>(Severity::Error),
-        Fatal = static_cast<int>(Severity::Fatal)
+        ignored = static_cast<int>(Severity::ignored),
+        note = static_cast<int>(Severity::note),
+        remark = static_cast<int>(Severity::remark),
+        warning = static_cast<int>(Severity::warning),
+        error = static_cast<int>(Severity::error),
+        fatal = static_cast<int>(Severity::fatal)
     };
 
 private:
@@ -306,71 +306,71 @@ public:
 
     // ---- Configuration ----
 
-    void setSourceManager(Source_Manager* sm) { source_mgr_ = sm; }
-    Source_Manager* getSourceManager() const { return source_mgr_; }
+    void set_source_manager(Source_Manager* sm) { source_mgr_ = sm; }
+    Source_Manager* get_source_manager() const { return source_mgr_; }
 
-    void setClient(DiagnosticConsumer* client, bool owns = false);
-    DiagnosticConsumer* getClient() const { return consumer_; }
+    void set_client(DiagnosticConsumer* client, bool owns = false);
+    DiagnosticConsumer* get_client() const { return consumer_; }
 
-    void setWarningsAsErrors(bool val) { warnings_as_errors_ = val; }
-    bool getWarningsAsErrors() const { return warnings_as_errors_; }
+    void set_warnings_as_errors(bool val) { warnings_as_errors_ = val; }
+    bool get_warnings_as_errors() const { return warnings_as_errors_; }
 
-    void setErrorsAsFatal(bool val) { errors_as_fatal_ = val; }
-    bool getErrorsAsFatal() const { return errors_as_fatal_; }
+    void set_errors_as_fatal(bool val) { errors_as_fatal_ = val; }
+    bool get_errors_as_fatal() const { return errors_as_fatal_; }
 
-    void setSuppressAllDiagnostics(bool val) { suppress_all_diagnostics_ = val; }
-    bool getSuppressAllDiagnostics() const { return suppress_all_diagnostics_; }
+    void set_suppress_all_diagnostics(bool val) { suppress_all_diagnostics_ = val; }
+    bool get_suppress_all_diagnostics() const { return suppress_all_diagnostics_; }
 
-    void setShowColors(bool val) { show_colors_ = val; }
-    bool getShowColors() const { return show_colors_; }
+    void set_show_colors(bool val) { show_colors_ = val; }
+    bool get_show_colors() const { return show_colors_; }
 
-    void setErrorLimit(unsigned limit) { error_limit_ = limit; }
-    unsigned getErrorLimit() const { return error_limit_; }
+    void set_error_limit(unsigned limit) { error_limit_ = limit; }
+    unsigned get_error_limit() const { return error_limit_; }
 
     // ---- Diagnostic Mapping ----
 
     /// Set the severity for a specific diagnostic.
-    void setSeverity(DiagID id, Severity sev, bool is_pragma = false);
+    void set_severity(DiagID id, Severity sev, bool is_pragma = false);
 
     /// Get the current severity for a diagnostic.
-    Severity getSeverity(DiagID id) const;
+    Severity get_severity(DiagID id) const;
 
     // ---- Diagnostic Counts ----
 
-    unsigned getNumErrors() const { return num_errors_; }
-    unsigned getNumWarnings() const { return num_warnings_; }
+    unsigned get_num_errors() const { return num_errors_; }
+    unsigned get_num_warnings() const { return num_warnings_; }
 
-    bool hasErrorOccurred() const { return num_errors_ > 0; }
-    bool hasFatalErrorOccurred() const;
+    bool has_error_occurred() const { return num_errors_ > 0; }
+    bool has_fatal_error_occurred() const;
 
     void reset();
 
     // ---- Diagnostic Emission ----
 
     /// Report a diagnostic at the given location.
-    DiagnosticBuilder Report(Source_Location loc, DiagID id);
+    DiagnosticBuilder report(Source_Location loc, DiagID id);
 
     /// Report a diagnostic at the current location.
-    DiagnosticBuilder Report(DiagID id);
+    DiagnosticBuilder report(DiagID id);
 
     /// Emit a fully-formed diagnostic.
-    void EmitDiagnostic(const Diagnostic& diag);
+    void emit_diagnostic(const Diagnostic& diag);
 
 private:
     friend class DiagnosticBuilder;
 
     /// Process and emit the current diagnostic.
-    void ProcessDiag(DiagID id, Source_Location loc,
+    void process_diag(DiagID id, Source_Location loc,
                      const std::string& message,
                      const std::vector<CharSourceRange>& ranges,
                      const std::vector<FixItHint>& fixits,
                      const std::vector<Source_Location>& extra_locations);
 
     /// Get the default severity for a diagnostic ID.
-    Severity getDefaultSeverity(DiagID id) const;
+    Severity get_default_severity(DiagID id) const;
 
     /// Get the format string for a diagnostic ID.
-    const char* getDiagnosticFormatString(DiagID id) const;
+    const char* get_diagnostic_format_string(DiagID id) const;
 };
 
 // ============================================================================
@@ -378,7 +378,7 @@ private:
 // ============================================================================
 
 /// Create a diagnostic engine with a text printer to stderr.
-std::unique_ptr<DiagnosticsEngine> createDiagnosticsEngine(Source_Manager* sm = nullptr);
+std::unique_ptr<DiagnosticsEngine> create_diagnostics_engine(Source_Manager* sm = nullptr);
 
 } // namespace aion::diag
 

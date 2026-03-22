@@ -327,38 +327,38 @@ TextDiagnosticPrinter printer(std::cerr, &sm);
 DiagnosticsEngine diag(&sm, &printer, false);  // false = doesn't own consumer
 
 // Using the convenience factory function
-auto diag = createDiagnosticsEngine(&sm);  // Creates with TextDiagnosticPrinter
+auto diag = create_diagnostics_engine(&sm);  // Creates with TextDiagnosticPrinter
 ```
 
 #### Configuration Methods
 
 ```c++
 // Source Manager
-void setSourceManager(Source_Manager* sm);
-Source_Manager* getSourceManager() const;
+void set_source_manager(Source_Manager* sm);
+Source_Manager* get_source_manager() const;
 
 // Diagnostic Consumer
-void setClient(DiagnosticConsumer* client, bool owns = false);
-DiagnosticConsumer* getClient() const;
+void set_client(DiagnosticConsumer* client, bool owns = false);
+DiagnosticConsumer* get_client() const;
 
 // Warning/Error Promotion
-void setWarningsAsErrors(bool val);   // -Werror
-bool getWarningsAsErrors() const;
+void set_warnings_as_errors(bool val);   // -Werror
+bool get_warnings_as_errors() const;
 
-void setErrorsAsFatal(bool val);      // Stop on first error
-bool getErrorsAsFatal() const;
+void set_errors_as_fatal(bool val);      // Stop on first error
+bool get_errors_as_fatal() const;
 
 // Suppression
-void setSuppressAllDiagnostics(bool val);  // Silence everything
-bool getSuppressAllDiagnostics() const;
+void set_suppress_all_diagnostics(bool val);  // Silence everything
+bool get_suppress_all_diagnostics() const;
 
 // Display Options
-void setShowColors(bool val);
-bool getShowColors() const;
+void set_show_colors(bool val);
+bool get_show_colors() const;
 
 // Error Limiting
-void setErrorLimit(unsigned limit);   // 0 = no limit
-unsigned getErrorLimit() const;
+void set_error_limit(unsigned limit);   // 0 = no limit
+unsigned get_error_limit() const;
 ```
 
 #### Severity Mapping
@@ -367,26 +367,26 @@ You can override the default severity for any diagnostic:
 
 ```c++
 // Make a specific warning an error
-diag.setSeverity(diag::common::warn_unused_variable, Severity::Error);
+diag.set_severity(diag::common::warn_unused_variable, Severity::error);
 
 // Make a specific error a warning (useful for gradual migration)
-diag.setSeverity(diag::sema::err_type_mismatch, Severity::Warning);
+diag.set_severity(diag::sema::err_type_mismatch, Severity::warning);
 
 // Suppress a specific diagnostic entirely
-diag.setSeverity(diag::parse::warn_empty_statement, Severity::Ignored);
+diag.set_severity(diag::parse::warn_empty_statement, Severity::ignored);
 
 // Query current severity
-Severity sev = diag.getSeverity(diag::common::warn_unused_variable);
+Severity sev = diag.get_severity(diag::common::warn_unused_variable);
 ```
 
 #### Error Counting
 
 ```c++
-unsigned getNumErrors() const;      // Total errors emitted
-unsigned getNumWarnings() const;    // Total warnings emitted
+unsigned get_num_errors() const;      // Total errors emitted
+unsigned get_num_warnings() const;    // Total warnings emitted
 
-bool hasErrorOccurred() const;      // Any errors?
-bool hasFatalErrorOccurred() const; // Any fatal errors?
+bool has_error_occurred() const;      // Any errors?
+bool has_fatal_error_occurred() const; // Any fatal errors?
 
 void reset();  // Clear all counts and state
 ```
@@ -395,10 +395,10 @@ void reset();  // Clear all counts and state
 
 ```c++
 // Report at a specific location
-DiagnosticBuilder Report(Source_Location loc, DiagID id);
+DiagnosticBuilder report(Source_Location loc, DiagID id);
 
 // Report without location (uses current position)
-DiagnosticBuilder Report(DiagID id);
+DiagnosticBuilder report(DiagID id);
 ```
 
 ---
@@ -411,15 +411,15 @@ The `DiagnosticBuilder` provides a fluent interface for constructing diagnostics
 
 ```c++
 // Simple diagnostic
-diag.Report(loc, diag::sema::err_undeclared_identifier)
+diag.report(loc, diag::sema::err_undeclared_identifier)
     << "variableName";
 
 // With multiple arguments
-diag.Report(loc, diag::parse::err_expected_token)
+diag.report(loc, diag::parse::err_expected_token)
     << ";" << "got 'return'";
 
 // With integer argument
-diag.Report(loc, diag::sema::err_too_many_arguments)
+diag.report(loc, diag::sema::err_too_many_arguments)
     << 3 << 5;  // "expected 3 arguments, got 5"
 ```
 
@@ -447,17 +447,17 @@ DiagnosticBuilder& operator<<(FixItHint hint);
 #### Chaining Example
 
 ```c++
-diag.Report(location, diag::sema::err_type_mismatch)
+diag.report(location, diag::sema::err_type_mismatch)
     << "int"                          // Expected type
     << "float"                        // Got type
-    << CharSourceRange::getTokenRange(expr_begin, expr_end)  // Highlight
-    << FixItHint::CreateReplacement(range, "static_cast<int>(x)");
+    << CharSourceRange::get_token_range(expr_begin, expr_end)  // Highlight
+    << FixItHint::create_replacement(range, "static_cast<int>(x)");
 ```
 
 #### Manual Control
 
 ```c++
-auto builder = diag.Report(loc, diag::parse::err_expected_semicolon);
+auto builder = diag.report(loc, diag::parse::err_expected_semicolon);
 builder << ";";
 
 // Abandon without emitting
@@ -519,8 +519,8 @@ public:
         
         diagnostics_.push_back(j);
         
-        if (isErrorOrFatal(severity)) ++num_errors_;
-        else if (severity == Severity::Warning) ++num_warnings_;
+        if (is_error_or_fatal(severity)) ++num_errors_;
+        else if (severity == Severity::warning) ++num_warnings_;
     }
     
     std::string toJSON() const {
@@ -889,13 +889,13 @@ void configureFromFlags(DiagnosticsEngine& diag, const CompilerFlags& flags) {
 
 ```c++
 // Enable a normally-disabled warning
-diag.setSeverity(diag::sema::warn_implicit_conversion, Severity::Warning);
+diag.set_severity(diag::sema::warn_implicit_conversion, Severity::warning);
 
 // Make specific warning an error
-diag.setSeverity(diag::common::warn_unused_variable, Severity::Error);
+diag.set_severity(diag::common::warn_unused_variable, Severity::error);
 
 // Downgrade an error to warning (for gradual migration)
-diag.setSeverity(diag::sema::err_type_mismatch, Severity::Warning);
+diag.set_severity(diag::sema::err_type_mismatch, Severity::warning);
 ```
 
 ---
@@ -934,17 +934,17 @@ enum : DiagID {
 2. **Update severity mapping in `error.c++`**:
 
 ```c++
-Severity DiagnosticsEngine::getDefaultSeverity(DiagID id) const {
+Severity DiagnosticsEngine::get_default_severity(DiagID id) const {
     // ... existing code ...
     
     if (id >= DIAG_START_LINKER && id < DIAG_UPPER_LIMIT) {
         if (id >= linker::warn_unused_library) {
-            return Severity::Warning;
+            return Severity::warning;
         }
-        return Severity::Error;
+        return Severity::error;
     }
     
-    return Severity::Warning;
+    return Severity::warning;
 }
 ```
 
@@ -967,9 +967,9 @@ public:
     explicit IDEDiagnosticConsumer(std::function<void(const DiagnosticInfo&)> cb)
         : callback_(std::move(cb)) {}
     
-    void HandleDiagnostic(Severity severity, const Diagnostic& diag) override {
+    void handle_diagnostic(Severity severity, const Diagnostic& diag) override {
         DiagnosticInfo info;
-        info.severity = getSeverityName(severity);
+        info.severity = get_severity_name(severity);
         info.message = diag.message;
         
         // Extract location info...
@@ -980,8 +980,8 @@ public:
         
         callback_(info);
         
-        if (isErrorOrFatal(severity)) ++num_errors_;
-        else if (severity == Severity::Warning) ++num_warnings_;
+        if (is_error_or_fatal(severity)) ++num_errors_;
+        else if (severity == Severity::warning) ++num_warnings_;
     }
 };
 
@@ -990,7 +990,7 @@ IDEDiagnosticConsumer consumer([](const auto& info) {
     // Send to IDE via LSP, IPC, etc.
     sendToIDE(info);
 });
-diag.setClient(&consumer);
+diag.set_client(&consumer);
 ```
 
 ### Diagnostic Multiplexer
@@ -1002,28 +1002,28 @@ class MultiplexConsumer : public DiagnosticConsumer {
     std::vector<DiagnosticConsumer*> consumers_;
     
 public:
-    void addConsumer(DiagnosticConsumer* c) {
+    void add_consumer(DiagnosticConsumer* c) {
         consumers_.push_back(c);
     }
     
-    void HandleDiagnostic(Severity severity, const Diagnostic& diag) override {
+    void handle_diagnostic(Severity severity, const Diagnostic& diag) override {
         for (auto* consumer : consumers_) {
-            consumer->HandleDiagnostic(severity, diag);
+            consumer->handle_diagnostic(severity, diag);
         }
         
-        if (isErrorOrFatal(severity)) ++num_errors_;
-        else if (severity == Severity::Warning) ++num_warnings_;
+        if (is_error_or_fatal(severity)) ++num_errors_;
+        else if (severity == Severity::warning) ++num_warnings_;
     }
     
-    void BeginSourceFile() override {
+    void begin_source_file() override {
         for (auto* consumer : consumers_) {
-            consumer->BeginSourceFile();
+            consumer->begin_source_file();
         }
     }
     
-    void EndSourceFile() override {
+    void end_source_file() override {
         for (auto* consumer : consumers_) {
-            consumer->EndSourceFile();
+            consumer->end_source_file();
         }
     }
 };

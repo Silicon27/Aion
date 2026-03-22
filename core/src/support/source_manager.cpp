@@ -57,7 +57,7 @@ namespace aion {
     FileId SourceManager::add_file_from_disk(const std::string &path, aion::diag::DiagnosticsEngine &diag) {
         std::ifstream file(path, std::ios::binary);
         if (!file.is_open()) {
-            diag.Report(SourceLocation{}, diag::common::err_file_not_found)
+            diag.report(SourceLocation{}, diag::common::err_file_not_found)
                 << path;
             return SOURCE_MANAGER_INVALID_FILE_ID;
         }

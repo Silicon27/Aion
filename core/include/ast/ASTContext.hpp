@@ -307,7 +307,7 @@ namespace aion::ast {
         explicit ASTContext(std::size_t initial_slab_size = 1024 * 1024);
 
         [[nodiscard]] TranslationUnitDecl *get_translation_unit_decl() const { return tu_decl; }
-        [[nodiscard]] StringMap<IdentifierInfo *> get_identifiers() const { return identifiers; }
+        [[nodiscard]] const StringMap<IdentifierInfo *>& get_identifiers() const { return identifiers; }
 
         [[nodiscard]] IdentifierInfo *get_identifier(const std::string_view name) {
             return *identifiers.find(name);

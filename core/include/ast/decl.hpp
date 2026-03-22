@@ -49,8 +49,9 @@ namespace aion::ast {
         SourceRange id_range;
 
     public:
-        VarDecl(IdentifierInfo* name, const MutableType &type, Expr* init,
-            StorageClass storage_class, const SourceRange &range)
+        VarDecl(IdentifierInfo* name, const MutableType &type,
+            StorageClass storage_class, const SourceRange &range,
+            Expr* init = nullptr)
             : ValueDecl(Kind::variable, name, type), init(init),
         storage_class(storage_class), id_range(range) {}
 

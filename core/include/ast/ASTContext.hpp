@@ -141,7 +141,7 @@ namespace aion::ast {
             [[nodiscard]] bool empty() const { return size == 0; }
 
             [[nodiscard]] float load_factor() const {
-                return capacity == 0 ? 0.0f : static_cast<float>(size + 1) / static_cast<float>(capacity);
+                return capacity == 0 ? 0.0f : static_cast<float>(size) / static_cast<float>(capacity);
             }
 
             [[nodiscard]] float get_max_load_factor() const { return max_load_factor; }
@@ -187,7 +187,7 @@ namespace aion::ast {
             }
 
             void insert(std::pair<const std::string_view, Value> const &value) {
-                const std::size_t h = XXH3_64bits(value.first.data(), value.first.size());
+                const std::size_t h = hash_key(value.first);
                 if (Value *v = find_with_hash(value.first, h)) {
                     *v = value.second;
                     return;
@@ -197,7 +197,7 @@ namespace aion::ast {
             }
 
             void insert(std::string_view key, Value value) {
-                const std::size_t h = XXH3_64bits(key.data(), key.size());
+                const std::size_t h = hash_key(key);
                 if (Value *v = find_with_hash(key, h)) {
                     *v = value;
                     return;
@@ -209,7 +209,7 @@ namespace aion::ast {
             template<typename... Args>
             void emplace(key_type k, Args &&... args)
                 requires std::is_constructible_v<Value, Args...> {
-                const std::size_t h = XXH3_64bits(k.data(), k.size());
+                const std::size_t h = hash_key(k);
                 if (Value *v = find_with_hash(k, h)) {
                     *v = Value(std::forward<Args>(args)...);
                     return;
@@ -221,7 +221,7 @@ namespace aion::ast {
             template<typename... Args>
             mapped_type &emplace_or_get(key_type k, Args &&... args)
                 requires std::is_constructible_v<Value, Args...> {
-                const std::size_t h = XXH3_64bits(k.data(), k.size());
+                const std::size_t h = hash_key(k);
                 if (Value *v = find_with_hash(k, h)) {
                     return *v;
                 }
@@ -231,7 +231,7 @@ namespace aion::ast {
 
             mapped_type &operator[](std::string_view key)
                 requires std::is_default_constructible_v<mapped_type> {
-                const std::size_t h = XXH3_64bits(key.data(), key.size());
+                const std::size_t h = hash_key(key);
                 if (Value *v = find_with_hash(key, h)) {
                     return *v;
                 }
@@ -241,29 +241,31 @@ namespace aion::ast {
 
             const Value *find(std::string_view key) const {
                 if (capacity == 0) return nullptr;
-                const std::size_t h = XXH3_64bits(key.data(), key.size());
+                const std::size_t h = hash_key(key);
                 return find_with_hash(key, h);
             }
 
             Value *find(std::string_view key) {
                 if (capacity == 0) return nullptr;
-                const std::size_t h = XXH3_64bits(key.data(), key.size());
+                const std::size_t h = hash_key(key);
                 return find_with_hash(key, h);
             }
 
             const Value *at(std::string_view key) const {
                 if (capacity == 0) return nullptr;
-                const std::size_t h = XXH3_64bits(key.data(), key.size());
+                const std::size_t h = hash_key(key);
                 return find_with_hash(key, h);
             }
 
             Value *at(std::string_view key) {
                 if (capacity == 0) return nullptr;
-                const std::size_t h = XXH3_64bits(key.data(), key.size());
+                const std::size_t h = hash_key(key);
                 return find_with_hash(key, h);
             }
 
         private:
+            static size_t hash_key(std::string_view s) { return XXH3_64bits(s.data(), s.size()); }
+
             Value *find_with_hash(std::string_view key, std::size_t h) const {
                 if (capacity == 0) return nullptr;
                 std::size_t idx = h & (capacity - 1);

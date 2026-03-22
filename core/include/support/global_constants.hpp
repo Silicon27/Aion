@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <ranges>
 #include <utility>
+#include <cstdint>
 
 // -----------------------------------------------
 //               OS Specific Constants

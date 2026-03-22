@@ -12,6 +12,7 @@ namespace aion::ast {
     class MutableType;
 
     class BuiltinType : public Type {
+        friend class ASTContext;
     public:
         enum class Kind {
             i4,
@@ -29,10 +30,11 @@ namespace aion::ast {
             char_,
             bool_,
         };
-    protected:
+
         explicit BuiltinType(const Kind BK)
             : Type(Type::Kind::builtin), builtin_kind(BK) {}
 
+    protected:
         [[nodiscard]] Kind get_builtin_kind() const { return builtin_kind; }
     private:
         Kind builtin_kind;

@@ -8,6 +8,7 @@
 #include <ast/decl.hpp>
 #include <ast/stmt.hpp>
 #include <ast/ASTContext.hpp>
+#include <global_constants.hpp>
 
 namespace aion::test {
 
@@ -63,6 +64,21 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_EQ(tu->get_last_decl(), d2);
         AION_ASSERT_EQ(d1->next, d2);
         AION_ASSERT_NULL(d2->next);
+    });
+
+    node_suite->add_test("vardecl_and_identifier_info_test", []() {
+        using namespace aion::ast;
+        ASTContext context;
+        FileId fid = 42;
+        Offset offset = 1337;
+        
+        BuiltinType* bt = context.create<BuiltinType>(BuiltinType::Kind::i32);
+        MutableType* type = context.create<MutableType>(Type::Kind::builtin, bt);
+        VarDecl* vd = context.create<VarDecl>(context.get_identifier("x"), *type,
+            StorageClass::stack, SourceRange(SourceLocation(fid, offset), SourceLocation(fid, offset + 4)));
+
+        AION_ASSERT_EQ(vd->get_identifier(), "x");
+        AION_ASSERT_EQ(static_cast<int>(vd->get_storage_class()), static_cast<int>(StorageClass::stack));
     });
 
     runner.add_suite(std::move(node_suite));

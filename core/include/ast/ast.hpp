@@ -36,7 +36,7 @@ namespace aion::ast {
             user_defined,
         };
 
-    protected:
+    public:
         explicit Type(const Kind K) : type_kind(K) {}
         [[nodiscard]] Kind get_kind() const { return type_kind; }
     private:
@@ -49,7 +49,7 @@ namespace aion::ast {
         Decl* first_decl = nullptr;
         Decl* last_decl = nullptr;
 
-    protected:
+    public:
         DeclContext() = default;
 
     public:
@@ -77,7 +77,7 @@ namespace aion::ast {
     private:
         Kind decl_kind;
 
-    protected:
+    public:
         explicit Decl(const Kind K) : decl_kind(K) {}
 
     public:
@@ -106,7 +106,7 @@ namespace aion::ast {
     private:
         Kind stmt_kind;
 
-    protected:
+    public:
         explicit Stmt(const Kind K) : stmt_kind(K) {}
 
     public:
@@ -117,8 +117,10 @@ namespace aion::ast {
 
     /// Base class for all expressions, which are also statements.
     class Expr : public Stmt {
-    protected:
+    public:
         explicit Expr(const Kind K) : Stmt(K) {}
+    public:
+        ~Expr() = default;
     };
     static_assert(std::is_trivially_destructible_v<Expr>);
 }

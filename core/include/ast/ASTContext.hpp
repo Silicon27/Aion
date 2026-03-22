@@ -310,7 +310,11 @@ namespace aion::ast {
         [[nodiscard]] const StringMap<IdentifierInfo *>& get_identifiers() const { return identifiers; }
 
         [[nodiscard]] IdentifierInfo *get_identifier(const std::string_view name) {
-            return *identifiers.find(name);
+            auto &info = identifiers.emplace_or_get(name, nullptr);
+            if (!info) {
+                info = create<IdentifierInfo>(allocate_string(name));
+            }
+            return info;
         }
 
         void *allocate(std::size_t size, std::size_t alignment = alignof(std::max_align_t)) {
@@ -318,7 +322,8 @@ namespace aion::ast {
         }
 
         template<typename T, typename... Args>
-            requires std::is_trivially_destructible_v<T>
+            requires (std::is_trivially_destructible_v<T> 
+                && std::is_constructible_v<T, Args...>)
         T *create(Args &&... args) {
             void *storage = allocate(sizeof(T), alignof(T));
             return new(storage) T(std::forward<Args>(args)...);

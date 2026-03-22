@@ -1,5 +1,6 @@
 #include <support/global_constants.hpp>
 #include <ast/ASTContext.hpp>
+#include <ast/decl.hpp>
 #include <memory>
 #include <cstdint>
 #include <algorithm>

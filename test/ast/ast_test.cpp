@@ -5,6 +5,8 @@
 
 #include "ast_test.hpp"
 #include <ast/ast.hpp>
+#include <ast/decl.hpp>
+#include <ast/stmt.hpp>
 #include <ast/ASTContext.hpp>
 
 namespace aion::test {
@@ -26,8 +28,8 @@ void register_ast_tests(TestRunner& runner) {
         using namespace aion::ast;
         ASTContext context;
 
-        Stmt* s1 = context.create<Stmt>(Stmt::Kind::ExprStmt);
-        Stmt* s2 = context.create<Stmt>(Stmt::Kind::ReturnStmt);
+        Stmt* s1 = context.create<Stmt>(Stmt::Kind::expr_stmt);
+        Stmt* s2 = context.create<Stmt>(Stmt::Kind::return_stmt);
 
         Stmt* stmts[] = {s1, s2};
         CompoundStmt* cs = CompoundStmt::create(context, stmts, 2);
@@ -51,8 +53,8 @@ void register_ast_tests(TestRunner& runner) {
         ASTContext context;
         TranslationUnitDecl* tu = context.get_translation_unit_decl();
 
-        Decl* d1 = context.create<Decl>(Decl::Kind::Variable);
-        Decl* d2 = context.create<Decl>(Decl::Kind::Function);
+        Decl* d1 = context.create<Decl>(Decl::Kind::variable);
+        Decl* d2 = context.create<Decl>(Decl::Kind::function);
 
         tu->add_decl(d1);
         tu->add_decl(d2);

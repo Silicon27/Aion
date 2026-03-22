@@ -3,6 +3,7 @@
 //
 
 #include <ast/ast.hpp>
+#include <ast/stmt.hpp>
 #include <ast/ASTContext.hpp>
 #include <cstring>
 

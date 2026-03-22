@@ -8,6 +8,8 @@
 #include "ast.hpp"
 
 namespace aion::ast {
+    class CompoundStmt;
+
     /// For statement chaining
     class CompoundStmt final : public Stmt {
         std::uint32_t num_stmts = 0;

@@ -82,6 +82,7 @@ namespace aion::lexer {
         newline,
         eof,
         comment,
+        doc_comment,
 
         // Operators and Punctuation
         equal,

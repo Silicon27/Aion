@@ -8,6 +8,9 @@
 #include "ast.hpp"
 
 namespace aion::ast {
+    class BuiltinType;
+    class MutableType;
+
     class BuiltinType : public Type {
     public:
         enum class Kind {
@@ -35,6 +38,19 @@ namespace aion::ast {
         Kind builtin_kind;
     };
     static_assert(std::is_trivially_destructible_v<BuiltinType>);
+
+    class MutableType : public Type {
+        Type* base_type;
+        bool is_mut = false;
+    public:
+        explicit MutableType(const Kind kind, Type* base_type)
+            : Type(kind), base_type(base_type) {}
+
+        [[nodiscard]] Type* get_base_type() const { return base_type; }
+        bool is_mutable() const { return is_mut; }
+        void set_mutable(bool is_mut) { this->is_mut = is_mut; }
+
+    };
 }
 
 #endif //AION_TYPE_HPP

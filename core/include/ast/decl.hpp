@@ -6,8 +6,13 @@
 #define AION_DECL_HPP
 #include <string_view>
 #include "ast.hpp"
+#include "type.hpp"
 
 namespace aion::ast {
+    class TranslationUnitDecl;
+    class NamedDecl;
+    class ValueDecl;
+
     /// The top-level declaration that represents the entire translation unit.
     class TranslationUnitDecl : public Decl, public DeclContext {
     public:
@@ -25,6 +30,16 @@ namespace aion::ast {
         [[nodiscard]] IdentifierInfo* get_name() const { return name; }
         [[nodiscard]] std::string_view get_identifier() const { return name->get_name(); }
         void set_name(IdentifierInfo* new_name) { name = new_name; }
+    };
+
+    class ValueDecl : public NamedDecl {
+        MutableType type;
+    public:
+        ValueDecl(const Kind declaration_kind, IdentifierInfo* name, MutableType type)
+        : NamedDecl(declaration_kind, name), type(type) {}
+
+        [[nodiscard]] MutableType get_type() const { return type; }
+        void set_type(const MutableType& new_type) { type = new_type; }
     };
 
 

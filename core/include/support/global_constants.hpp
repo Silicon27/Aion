@@ -213,4 +213,12 @@ namespace aion::lexer {
 
 } // namespace aion::lexer
 
+namespace aion::ast {
+    enum class StorageClass {
+        stack,
+        heap,
+        persistent,
+    };
+}
+
 #endif //GLOBAL_CONSTANTS_HPP

@@ -10,6 +10,7 @@
 #include <vector>
 #include <algorithm>
 #include <ranges>
+#include <utility>
 
 // -----------------------------------------------
 //               OS Specific Constants
@@ -44,7 +45,9 @@ inline constexpr int source_manager_invalid_file_id = -300;
 
 namespace aion::lexer {
 
-    enum class TokenType {
+    using TokenType_t = uint16_t;
+
+    enum class TokenType : TokenType_t {
         // Keywords
         kw_let,
         kw_as,
@@ -114,6 +117,12 @@ namespace aion::lexer {
         // misc
         invalid_token,
     };
+
+    // in declaration order in TokenType
+    inline constexpr TokenType first_builtin_type = TokenType::kw_i4;
+    inline constexpr TokenType last_builtin_type = TokenType::kw_bool;
+
+    inline constexpr std::pair<TokenType_t, TokenType_t> builtin_types_range = {static_cast<TokenType_t>(first_builtin_type), static_cast<TokenType_t>(last_builtin_type)};
 
     // Keyword set for fast lookup
     inline const std::unordered_set<std::string> keywords = {

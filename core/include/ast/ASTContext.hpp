@@ -15,6 +15,7 @@
 #include <string_view>
 #include <new>
 #include <ast/ast.hpp>
+#include <ast/decl.hpp>
 #include <error/error.hpp>
 #define XXH_INLINE_ALL
 #include <support/xxhash.h>

@@ -8,6 +8,7 @@
 #include <support/global_constants.hpp>
 #include <iris/src/iris.hpp>
 #include <si/log.hpp>
+#include <ast/type.hpp>
 
 
 
@@ -102,17 +103,14 @@ namespace aion::parse {
         return {TokenType::invalid_token, ""};
     }
 
-    Token Parser::match_type() {
-        // types may either be built in or user-defined
-        // (i.e., of TokenType::identifier or any of the kw_
-        // prefixed type keywords)
-        if (const auto token_type = peek().type;
-            token_type == TokenType::identifier || is_builtin_type_token(token_type)) {
-            return blind_consume();
+    Type Parser::match_type() {
+        if (silent_probe(TokenType::identifier, peek())) {
+            return Type(Type::Kind::user_defined);
         }
-        diagnostics.report(diag::parse::err_expected_type)
-                << "expected type";
-        return {TokenType::invalid_token, ""};
+        if (is_builtin_type_token(peek().type)) {
+            return Type(Type::Kind::builtin);
+        }
+        return {};
     }
 
     Token Parser::skip_until(std::string lexeme) {
@@ -169,11 +167,12 @@ namespace aion::parse {
         auto semicolon = MatchToken(TokenType::semicolon, diag::common::err_expected_token);
 
         Token variable_id_token;
-        Token type_annotation;
+        MutableType type_annotation{};
         bool need_auto_type_deduction = false;
 
         // should always progress - if this faults, it indicates memory corruption during program runtime
         diffuse_match(initial_let.token, peek().type, "expected 'let' keyword - memory corruption possible"); // fix-me: make an instant program termination match function which terminates the program on failure
+        // TODO do a stack dump (this should be off by default and toggleable via flags
 
         variable_id_token = silent_consume(variable_identifier);
 

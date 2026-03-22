@@ -10,15 +10,10 @@
 
 namespace aion::ast {
     class IdentifierInfo;
-    class Type;
-    class BuiltinType;
-    class QualType;
     class Decl;
-    class TranslationUnitDecl;
     class Stmt;
-    class CompoundStmt;
     class Expr;
-    class ASTContext;
+    class DeclContext;
 
     class IdentifierInfo {
         const char* name;
@@ -38,6 +33,7 @@ namespace aion::ast {
 
     public:
         explicit Type(const Kind K) : type_kind(K) {}
+        Type() : type_kind(Kind::builtin) {}
         [[nodiscard]] Kind get_kind() const { return type_kind; }
     private:
         Kind type_kind;
@@ -81,7 +77,6 @@ namespace aion::ast {
         explicit Decl(const Kind K) : decl_kind(K) {}
 
     public:
-        ~Decl() = default;
         [[nodiscard]] Kind get_kind() const { return decl_kind; }
 
         Decl* next = nullptr;
@@ -110,7 +105,6 @@ namespace aion::ast {
         explicit Stmt(const Kind K) : stmt_kind(K) {}
 
     public:
-        ~Stmt() = default;
         [[nodiscard]] Kind get_kind() const { return stmt_kind; }
     };
     static_assert(std::is_trivially_destructible_v<Stmt>);
@@ -119,8 +113,6 @@ namespace aion::ast {
     class Expr : public Stmt {
     public:
         explicit Expr(const Kind K) : Stmt(K) {}
-    public:
-        ~Expr() = default;
     };
     static_assert(std::is_trivially_destructible_v<Expr>);
 }

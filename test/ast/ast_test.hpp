@@ -6,7 +6,7 @@
 #ifndef AST_TEST_HPP
 #define AST_TEST_HPP
 
-#include "aion_test.hpp"
+#include "../suite/aion_test.hpp"
 
 namespace aion::test {
     void register_ast_tests(TestRunner& runner);

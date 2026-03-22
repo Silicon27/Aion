@@ -48,9 +48,17 @@ namespace aion::ast {
         explicit MutableType(const Kind kind, Type* base_type)
             : Type(kind), base_type(base_type) {}
 
+        MutableType() : base_type(nullptr) {}
+
+        MutableType& operator=(Type parent) {
+            base_type = &parent;
+            return *this;
+        }
+
         [[nodiscard]] Type* get_base_type() const { return base_type; }
+        void set_base_type(Type* new_base_type) { base_type = new_base_type; }
         bool is_mutable() const { return is_mut; }
-        void set_mutable(bool is_mut) { this->is_mut = is_mut; }
+        void set_mutable(const bool is_mutable) { is_mut = is_mutable; }
 
     };
 }

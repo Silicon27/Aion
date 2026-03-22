@@ -5,7 +5,8 @@
 #ifndef AION_STMT_HPP
 #define AION_STMT_HPP
 
-#include "ast.hpp"
+#include <ast/ast.hpp>
+#include <ast/ASTContext.hpp>
 
 namespace aion::ast {
     class CompoundStmt;

@@ -11,9 +11,12 @@
 namespace aion::ast {
     class IdentifierInfo;
     class Type;
+    class BuiltinType;
     class QualType;
     class Decl;
+    class TranslationUnitDecl;
     class Stmt;
+    class CompoundStmt;
     class Expr;
     class ASTContext;
 
@@ -22,15 +25,15 @@ namespace aion::ast {
     public:
         IdentifierInfo() : name(nullptr) {}
         explicit IdentifierInfo(const char* name) : name(name) {}
-        const char* getName() const { return name; }
+        const char* get_name() const { return name; }
     };
 
     class Type {
         friend class ASTContext;
     public:
         enum class Kind {
-            Builtin,
-            UserDefined,
+            builtin,
+            user_defined,
         };
 
     protected:
@@ -40,34 +43,6 @@ namespace aion::ast {
         Kind type_kind;
     };
     static_assert(std::is_trivially_destructible_v<Type>);
-
-    class BuiltinType : public Type {
-    public:
-        enum class BuiltinKind {
-            I4,
-            I8,
-            I16,
-            I32,
-            I64,
-            I128,
-            F4,
-            F8,
-            F16,
-            F32,
-            F64,
-            F128,
-            Char,
-            Bool,
-        };
-    protected:
-        explicit BuiltinType(const BuiltinKind BK)
-            : Type(Kind::Builtin), builtin_kind(BK) {}
-
-        [[nodiscard]] BuiltinKind get_builtin_kind() const { return builtin_kind; }
-    private:
-        BuiltinKind builtin_kind;
-    };
-    static_assert(std::is_trivially_destructible_v<BuiltinType>);
 
     /// A base class for any declaration that can contain other declarations.
     class DeclContext {
@@ -90,12 +65,13 @@ namespace aion::ast {
         friend class ASTContext;
     public:
         enum class Kind : std::uint8_t {
-            TranslationUnit,
-            Variable,
-            Function,
-            Struct,
-            Enum,
-            Module,
+            translation_unit,
+            named_decl,
+            variable,
+            function,
+            struct_,
+            enum_,
+            module,
         };
 
     private:
@@ -114,25 +90,17 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<Decl>);
 
-    /// The top-level declaration that represents the entire translation unit.
-    class TranslationUnitDecl : public Decl, public DeclContext {
-    public:
-        TranslationUnitDecl()
-            : Decl(Kind::TranslationUnit) {}
-    };
-    static_assert(std::is_trivially_destructible_v<TranslationUnitDecl>);
-
     /// Base class for all statements.
     class Stmt {
         friend class ASTContext;
     public:
         enum class Kind : std::uint8_t {
-            CompoundStmt,
-            IfStmt,
-            WhileStmt,
-            ForStmt,
-            ReturnStmt,
-            ExprStmt,
+            compound_stmt,
+            if_stmt,
+            while_stmt,
+            for_stmt,
+            return_stmt,
+            expr_stmt,
         };
 
     private:
@@ -146,31 +114,6 @@ namespace aion::ast {
         [[nodiscard]] Kind get_kind() const { return stmt_kind; }
     };
     static_assert(std::is_trivially_destructible_v<Stmt>);
-
-    /// For statement chaining
-    class CompoundStmt final : public Stmt {
-        std::uint32_t num_stmts = 0;
-
-        explicit CompoundStmt(std::uint32_t num_stmts)
-            : Stmt(Kind::CompoundStmt), num_stmts(num_stmts) {}
-
-    public:
-        static CompoundStmt* create(ASTContext& context, Stmt** stmts, std::uint32_t num_stmts);
-
-        using iterator = Stmt**;
-        using const_iterator = Stmt* const*;
-
-        [[nodiscard]] std::uint32_t size() const { return num_stmts; }
-        [[nodiscard]] Stmt** get_stmts() { return reinterpret_cast<Stmt**>(this + 1); }
-        [[nodiscard]] Stmt* const* get_stmts() const { return reinterpret_cast<Stmt* const*>(this + 1); }
-
-        [[nodiscard]] iterator begin() { return get_stmts(); }
-        [[nodiscard]] iterator end() { return get_stmts() + num_stmts; }
-
-        [[nodiscard]] const_iterator begin() const { return get_stmts(); }
-        [[nodiscard]] const_iterator end() const { return get_stmts() + num_stmts; }
-    };
-    static_assert(std::is_trivially_destructible_v<CompoundStmt>);
 
     /// Base class for all expressions, which are also statements.
     class Expr : public Stmt {

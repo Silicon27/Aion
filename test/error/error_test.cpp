@@ -254,6 +254,23 @@ void register_error_tests(TestRunner& runner) {
         AION_ASSERT_CONTAINS(output, "   |          ~");
         capture.finish();
     });
+    
+    printer_suite->add_test("FixItPrinting_streams", [] {
+        OutputCapture capture("FixItPrinting_streams");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
+        
+        FileID fid = sm.add_buffer("int x = y", "test.aion");
+        diag::DiagnosticsEngine d(&sm, &printer, false);
+        d.report(Source_Location(fid, 9), diag::parse::err_expected_semicolon) 
+        << diag::FixItHint::create_insertion(Source_Location(fid, 9), ";");
+        
+        std::string output = capture.get_output();
+        AION_ASSERT_CONTAINS(output, "help: insert \";\"");
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
+        AION_ASSERT_CONTAINS(output, "   |          ~");
+        capture.finish();
+    });
 
     printer_suite->add_test("ColorPrinting", []() {
         OutputCapture capture("ColorPrinting");

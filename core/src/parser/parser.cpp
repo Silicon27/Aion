@@ -185,9 +185,17 @@ namespace aion::parse {
         // TODO do a stack dump (this should be off by default and toggleable via flags
 
         if (silent_probe(variable_identifier)) {
-
+            variable_id_token = blind_consume();
         } else {
             // recovery branch
+            SourceLocation loc; // FIXME: Get current source location from tokens
+            auto fixit_hint = diag::FixItHint::create_insertion(loc, "__fixme_id");
+
+            diagnostics.report(diag::parse::err_expected_identifier)
+                << "expected identifier for variable declaration, none provided"
+                << fixit_hint;
+
+            skip_until(TokenType::semicolon);
         }
     }
 

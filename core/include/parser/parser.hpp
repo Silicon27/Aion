@@ -64,7 +64,7 @@ namespace aion::parse {
         inline Token peek(int n = 0) const;
         /// alias for peek(-1)
         Token previous() const { return peek(-1); }
-        /// blind consumation of tokens, no checking, just move the pointer forward and return the token at the original position
+        /// blind consumation of tokens, no checking, move the pointer n steps and return the Token at the original position
         inline Token blind_consume(int n = 1);
 
         // ------------ Reporting --------------

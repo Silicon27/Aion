@@ -10,7 +10,16 @@
 #include <si/log.hpp>
 #include <ast/type.hpp>
 
-
+// TODO
+// Critical: null dereference on malformed typed decl — in core/src/parser/parser.cpp:187-188, Type* t = match_type(); can return nullptr (e.g. let x: = 1;), then t->get_kind() dereferences null.
+// High: identifier is not enforced — variable_id_token = silent_consume(variable_identifier); at core/src/parser/parser.cpp:179 fails silently; no diagnostic, and parse continues from a bad state if identifier is missing.
+// High: : / = handling is structurally wrong for common grammar — sequential attempt(colon); attempt(equal); at core/src/parser/parser.cpp:182-183 only checks one immediate token after identifier. It doesn’t properly support let x: i32 = expr; flow; typed decl branch (colon.is_active) only looks for ; at core/src/parser/parser.cpp:189-192.
+// High: missing semicolon enforcement and consumption in = branch — in core/src/parser/parser.cpp:193-197, you set need_auto_type_deduction = true but don’t parse initializer expression or require ;, so statement completion is not guaranteed.
+// Medium: builtin type parsing is semantically wrong — match_type() always creates BuiltinType::Kind::i32 for any builtin token (core/src/parser/parser.cpp:111-114), so i8/f64/bool/... are all mis-typed.
+// Medium: no recovery implemented — recovery branch is empty (core/src/parser/parser.cpp:197-200), so malformed declarations produce weak/no diagnostics and leave sync to outer top-level token skipping.
+// Medium: potential bounds hazards in parser primitives — peek() is unchecked (core/src/parser/parser.cpp:40), and skip_until(...) loops lack EOF checks (core/src/parser/parser.cpp:118-137), which can read out-of-range on malformed streams without guaranteed EOF sentinel behavior.
+// Low: dead/unused state indicates incomplete logic — variable_id_token, type_annotation, need_auto_type_deduction are assigned but unused (core/src/parser/parser.cpp:171-173 etc.), matching the warning pattern you were seeing.
+// lexer doc comment (///) and comment (//) handling, the former is to be rendered in and the latter is to be ignored
 
 namespace aion::parse {
     namespace {

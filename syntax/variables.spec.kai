@@ -1,0 +1,6 @@
+// grammar
+
+let x;              // TODO
+let x = expr;       // Type-inferred initialization
+let x: T;           // Declaration, not initialization, does not "contain" anything as it is simply a declaration
+let x: T = expr;    // Explicitly-typed initialization

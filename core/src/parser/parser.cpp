@@ -48,9 +48,8 @@ namespace aion::parse {
 
     inline Token Parser::peek(const int n) const { return tokens[pos + n]; }
     inline Token Parser::blind_consume(const int n) {
-        Token token = tokens[pos];
         pos += n;
-        return token;
+        return peek(-n); // returns the original value
     }
 
     Token Parser::consume_and_expect(const TokenType exp, const Token& curr, const diag::DiagID err) {
@@ -185,30 +184,10 @@ namespace aion::parse {
         diffuse_match(initial_let.token, peek().type, "expected 'let' keyword - memory corruption possible"); // fix-me: make an instant program termination match function which terminates the program on failure
         // TODO do a stack dump (this should be off by default and toggleable via flags
 
-        variable_id_token = silent_consume(variable_identifier);
+        if (silent_probe(variable_identifier)) {
 
-        // attempt to match `=` or `:`
-        attempt(colon);
-        attempt(equal);
-
-        if (colon.is_active) {
-            // explicit typing
-            Type* t = match_type();
-            if (!t) {
-                // recovery branch
-            }
-            type_annotation = context.create<MutableType>(t->get_kind(), t);
-            if (silent_probe(semicolon)) {
-                blind_consume();
-                // begin ast construction
-            }
-        } else if (equal.is_active) {
-            // auto type deduction
-            need_auto_type_deduction = true;
-            // fallthrough
         } else {
             // recovery branch
-            // we either skip until we reach a familiar keyword, until eof, or until some specified lexeme
         }
     }
 

@@ -33,7 +33,6 @@ namespace aion::ast {
 
     public:
         explicit Type(const Kind K) : type_kind(K) {}
-        Type() : type_kind(Kind::builtin) {}
         [[nodiscard]] Kind get_kind() const { return type_kind; }
     private:
         Kind type_kind;

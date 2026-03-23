@@ -103,31 +103,33 @@ namespace aion::parse {
         return {TokenType::invalid_token, ""};
     }
 
-    Type Parser::match_type() {
+    Type* Parser::match_type() {
         if (silent_probe(TokenType::identifier, peek())) {
-            return Type(Type::Kind::user_defined);
+            pos++;
+            return context.create<Type>(Type::Kind::user_defined);
         }
         if (is_builtin_type_token(peek().type)) {
-            return Type(Type::Kind::builtin);
+            pos++;
+            return context.create<BuiltinType>(static_cast<BuiltinType::Kind>(static_cast<int>(previous().type) - 6));
         }
-        return {};
+        return nullptr;
     }
 
-    Token Parser::skip_until(std::string lexeme) {
+    Token Parser::skip_until(const std::string& lexeme) {
         while (peek().lexeme != lexeme) {
             blind_consume();
         }
         return previous();
     }
 
-    Token Parser::skip_until(TokenType type) {
+    Token Parser::skip_until(const TokenType type) {
         while (peek().type != type) {
             blind_consume();
         }
         return previous();
     }
 
-    Token Parser::skip_until(TokenType type, std::string lexeme) {
+    Token Parser::skip_until(const TokenType type, const std::string& lexeme) {
         while (peek().type != type || peek().lexeme != lexeme) {
             blind_consume();
         }
@@ -167,7 +169,7 @@ namespace aion::parse {
         auto semicolon = MatchToken(TokenType::semicolon, diag::common::err_expected_token);
 
         Token variable_id_token;
-        MutableType type_annotation{};
+        MutableType* type_annotation;
         bool need_auto_type_deduction = false;
 
         // should always progress - if this faults, it indicates memory corruption during program runtime
@@ -182,7 +184,11 @@ namespace aion::parse {
 
         if (colon.is_active) {
             // explicit typing
-            type_annotation = match_type();
+            Type* t = match_type();
+            if (!t) {
+                // recovery branch
+            }
+            type_annotation = context.create<MutableType>(t->get_kind(), t);
             if (silent_probe(semicolon)) {
                 blind_consume();
                 // begin ast construction

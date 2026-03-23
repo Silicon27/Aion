@@ -80,7 +80,7 @@ namespace aion::parse {
         Token match(MatchToken& token);
 
         Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
-        Type match_type();
+        Type* match_type();
 
         /// NOTE most non-tolerating function, it would instantly terminate the program if the match fails
         /// usage examples would be tokens that if not matched, would indicate memory corruption during program runtime
@@ -104,10 +104,10 @@ namespace aion::parse {
         /// skip_until overload
         /// @returns the matched token (the token it should've skipped to),
         /// aka previous(), after `pos` increment
-        Token skip_until(std::string lexeme);
+        Token skip_until(const std::string& lexeme);
         Token skip_until(TokenType type);
         /// skip_until overload that skips until it either finds a matching lexeme or type
-        Token skip_until(TokenType type, std::string lexeme);
+        Token skip_until(TokenType type, const std::string& lexeme);
         /// the error would have to be first emitted before we attempt to end the parsing function (the caller to this function);
         /// return is to be written explicitly in the branch calling this function (that is, it is the caller's responsibility to write return after calling this function)
         Token attempt_to_skip_until_familiar();

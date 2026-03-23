@@ -48,8 +48,6 @@ namespace aion::ast {
         explicit MutableType(const Kind kind, Type* base_type)
             : Type(kind), base_type(base_type) {}
 
-        MutableType() : base_type(nullptr) {}
-
         MutableType& operator=(Type parent) {
             base_type = &parent;
             return *this;

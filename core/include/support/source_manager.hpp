@@ -18,6 +18,10 @@ namespace aion::diag {
     class DiagnosticsEngine;
 }
 
+namespace aion::lexer {
+    struct Token;
+}
+
 namespace aion {
 
     using Column = std::size_t;
@@ -85,6 +89,7 @@ namespace aion {
 
         void compute_line_starts();
 
+        Offset get_offset(Line line, Column column);
         std::pair<Line, Column> get_line_column(Offset offset);
         std::string get_line_text(Line line_no);
     };
@@ -108,6 +113,12 @@ namespace aion {
 
         /// Get line and column for a source location
         std::pair<Line, Column> get_line_column(SourceLocation loc) const;
+
+        /// Get a source location from file, line, and column
+        SourceLocation get_location(FileId file, Line line, Column column) const;
+
+        /// Get a source location from a token
+        SourceLocation get_location(FileId file, const lexer::Token& token) const;
 
         /// Get the text of a line
         std::string get_line_text(SourceLocation loc) const;

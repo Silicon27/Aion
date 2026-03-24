@@ -394,7 +394,7 @@ Parser_Invoke::Parser_Invoke(const Param& param) : param(param) {}
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::unique_ptr<parse::Parser> Parser_Invoke::invoke() const {
     // Minimal construction; real usage left to you.
-    return std::make_unique<parse::Parser>(param.tokens, param.flags, param.context, param.diag);
+    return std::make_unique<parse::Parser>(param.file_id, param.tokens, param.flags, param.context, param.diag);
 }
 
 Sema_Invoke::Sema_Invoke(Param param) : param(param) {}

@@ -5,6 +5,7 @@
 
 #include "error_test.hpp"
 #include <error/error.hpp>
+#include <lexer/lexer.hpp>
 #include <sstream>
 
 namespace aion::test {
@@ -141,6 +142,36 @@ void register_error_tests(TestRunner& runner) {
     });
 
     runner.add_suite(std::move(engine_suite));
+
+    // ========================================================================
+    // SourceManager Tests
+    // ========================================================================
+
+    auto sm_suite = std::make_unique<TestSuite>("Error::SourceManager");
+
+    sm_suite->add_test("TokenToLocation", []() {
+        Source_Manager sm;
+        FileID fid = sm.add_buffer("line 1\nline 2\nline 3", "test.aion");
+
+        // "line 2" starts at offset 7
+        // 'l' is line 2, column 1
+        lexer::Token tok;
+        tok.line = 2;
+        tok.column = 1;
+        tok.lexeme = "line";
+
+        Source_Location loc = sm.get_location(fid, tok);
+        AION_ASSERT_EQ(loc.file, fid);
+        AION_ASSERT_EQ(loc.offset, 7);
+
+        // '2' in "line 2" is line 2, column 6
+        tok.column = 6;
+        tok.lexeme = "2";
+        loc = sm.get_location(fid, tok);
+        AION_ASSERT_EQ(loc.offset, 12);
+    });
+
+    runner.add_suite(std::move(sm_suite));
 
     // ========================================================================
     // Text Printer Tests (Extensive)

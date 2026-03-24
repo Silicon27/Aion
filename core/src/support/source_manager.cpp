@@ -3,6 +3,7 @@
 //
 
 #include <support/source_manager.hpp>
+#include <lexer/lexer.hpp>
 #include <error/error.hpp>
 #include <support/global_constants.hpp>
 
@@ -24,6 +25,14 @@ namespace aion {
             }
         }
         computed = true;
+    }
+
+    Offset Buffer::get_offset(const Line line, const Column column) {
+        if (!computed) compute_line_starts();
+        if (line == 0 || line > line_starts.size()) return 0;
+        const Offset line_start = line_starts[line - 1];
+        // column is 1-based
+        return line_start + (column > 0 ? column - 1 : 0);
     }
 
     std::pair<Line, Column> Buffer::get_line_column(const Offset offset) {
@@ -92,6 +101,18 @@ namespace aion {
         }
         // Need a non-const version for get_line_column
         return const_cast<Buffer*>(buf)->get_line_column(loc.offset);
+    }
+
+    SourceLocation SourceManager::get_location(const FileId file, const Line line, const Column column) const {
+        const Buffer* buf = get_buffer(file);
+        if (!buf) {
+            return SourceLocation();
+        }
+        return SourceLocation(file, const_cast<Buffer*>(buf)->get_offset(line, column));
+    }
+
+    SourceLocation SourceManager::get_location(const FileId file, const lexer::Token& token) const {
+        return get_location(file, static_cast<Line>(token.get_line()), static_cast<Column>(token.get_column()));
     }
 
     std::string SourceManager::get_line_text(SourceLocation loc) const {

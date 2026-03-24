@@ -73,6 +73,7 @@ namespace aion::compiler_config {
     /// @brief Individual invocation of Parser and it's objects
     struct Parser_Invoke {
         struct Param {
+            FileId file_id;
             diag::DiagnosticsEngine& diag;
             ASTContext& context;
             std::vector<Token> tokens;

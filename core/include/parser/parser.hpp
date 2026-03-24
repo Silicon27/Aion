@@ -56,6 +56,7 @@ namespace aion::parse {
         std::vector<Token> tokens;
         Flags flags;
         ParserContext parser_context;
+        FileId file_id;
         int pos = 0;
 
     public:
@@ -133,7 +134,7 @@ namespace aion::parse {
         void parse_variable_decl();
 
 
-        explicit Parser(const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag);
+        explicit Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag);
         ~Parser() = default;
     };
 }

@@ -178,7 +178,7 @@ namespace aion::parse {
         auto semicolon = MatchToken(TokenType::semicolon, diag::common::err_expected_token);
 
         Token variable_id_token;
-        MutableType* type_annotation;
+        MutableType* type_annotation = nullptr;
         bool need_auto_type_deduction = false;
 
         // should always progress - if this faults, it indicates memory corruption during program runtime
@@ -189,19 +189,26 @@ namespace aion::parse {
             variable_id_token = blind_consume();
         } else {
             // recovery branch
-            SourceLocation loc; // FIXME: Get current source location from tokens
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
             auto fixit_hint = diag::FixItHint::create_insertion(loc, "<identifier>");
 
-            diagnostics.report(diag::parse::err_expected_identifier)
+            diagnostics.report(loc, diag::parse::err_expected_identifier)
                 << "expected identifier for variable declaration, none provided"
                 << fixit_hint;
 
-            skip_until(TokenType::semicolon);
+            skip_until(TokenType::semicolon); // TODO integrate more advanced recovery functions, such as attempt_to_skip_until_familiar
+        }
+
+        if (silent_probe(colon)) {
+            Type* t = match_type();
+
+        } else if (silent_probe(equal)) {
+            need_auto_type_deduction = true;
         }
     }
 
-    Parser::Parser(const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)
-        : diagnostics(diag), context(context), tokens(tokens), flags(std::move(flag)), parser_context(ParserContext::top_level) {
+    Parser::Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)
+        : diagnostics(diag), context(context), tokens(tokens), flags(std::move(flag)), parser_context(ParserContext::top_level), file_id(file_id) {
     }
 
 

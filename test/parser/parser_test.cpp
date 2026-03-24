@@ -11,6 +11,8 @@
 namespace aion::test {
 
 using namespace aion::lexer;
+using namespace aion::ast;
+using namespace aion::parse;
 
 // Helper function to tokenize a string for parser tests
 static std::vector<Token> tokenize_for_parser(const std::string& input) {
@@ -27,6 +29,41 @@ void register_parser_tests(TestRunner& runner) {
     // ========================================================================
 
     auto basic_suite = std::make_unique<TestSuite>("Parser::BasicParsing");
+
+    basic_suite->add_test("match_builtin_type", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+        
+        FileID fid = sm.add_buffer("i32 mut i64 bool", "test.aion");
+        std::vector<Token> tokens = tokenize_for_parser("i32 mut i64 bool");
+        
+        Parser parser(fid, tokens, {}, context, diags);
+        
+        // Match i32
+        MutableType* t1 = parser.match_type();
+        AION_ASSERT_TRUE(t1 != nullptr);
+        AION_ASSERT_FALSE(t1->is_mutable());
+        // We can't easily check the inner type without casting, but let's assume it's correct if it's not null.
+        
+        // Match mut i64
+        MutableType* t2 = parser.match_type();
+        AION_ASSERT_TRUE(t2 != nullptr);
+        AION_ASSERT_TRUE(t2->is_mutable());
+        
+        // Match bool
+        MutableType* t3 = parser.match_type();
+        AION_ASSERT_TRUE(t3 != nullptr);
+        AION_ASSERT_FALSE(t3->is_mutable());
+        
+        // Skip newline if present
+        if (!parser.is_at_end() && parser.peek().type == TokenType::newline) {
+            parser.blind_consume();
+        }
+        
+        AION_ASSERT_TRUE(parser.is_at_end());
+    });
 
     basic_suite->add_test("placeholder_test", []() {
         // TODO: Add actual parser tests

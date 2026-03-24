@@ -15,7 +15,6 @@
 // High: identifier is not enforced — variable_id_token = silent_consume(variable_identifier); at core/src/parser/parser.cpp:179 fails silently; no diagnostic, and parse continues from a bad state if identifier is missing.
 // High: : / = handling is structurally wrong for common grammar — sequential attempt(colon); attempt(equal); at core/src/parser/parser.cpp:182-183 only checks one immediate token after identifier. It doesn’t properly support let x: i32 = expr; flow; typed decl branch (colon.is_active) only looks for ; at core/src/parser/parser.cpp:189-192.
 // High: missing semicolon enforcement and consumption in = branch — in core/src/parser/parser.cpp:193-197, you set need_auto_type_deduction = true but don’t parse initializer expression or require ;, so statement completion is not guaranteed.
-// Medium: builtin type parsing is semantically wrong — match_type() always creates BuiltinType::Kind::i32 for any builtin token (core/src/parser/parser.cpp:111-114), so i8/f64/bool/... are all mis-typed.
 // Medium: no recovery implemented — recovery branch is empty (core/src/parser/parser.cpp:197-200), so malformed declarations produce weak/no diagnostics and leave sync to outer top-level token skipping.
 // Medium: potential bounds hazards in parser primitives — peek() is unchecked (core/src/parser/parser.cpp:40), and skip_until(...) loops lack EOF checks (core/src/parser/parser.cpp:118-137), which can read out-of-range on malformed streams without guaranteed EOF sentinel behavior.
 // Low: dead/unused state indicates incomplete logic — variable_id_token, type_annotation, need_auto_type_deduction are assigned but unused (core/src/parser/parser.cpp:171-173 etc.), matching the warning pattern you were seeing.
@@ -112,9 +111,20 @@ namespace aion::parse {
         return {TokenType::invalid_token, ""};
     }
 
-    MutableType* Parser::match_type() {
-        bool is_builtin = false;
-        bool is_mutable = false;
+    MutableType* Parser::match_type(const bool is_mut) {
+        if (is_builtin_type_token(peek().type)) {
+            Token type_token = blind_consume();
+            auto* t = context.create<BuiltinType>(BuiltinType::get_kind(type_token.type));
+            return context.create<MutableType>(t, is_mut);
+        }
+        if (peek().type == TokenType::identifier) {
+            Token type_token = blind_consume();
+            std::string_view name(context.allocate_string(type_token.lexeme), type_token.lexeme.size());
+            auto* t = context.create<UserDefinedType>(name);
+            return context.create<MutableType>(t, is_mut);
+        }
+
+        return nullptr;
     }
 
     Token Parser::skip_until(const std::string& lexeme) {
@@ -165,6 +175,8 @@ namespace aion::parse {
         // TODO: improve grammar-driven recovery around optional type annotation and initializer.
 
         auto initial_let = MatchToken(TokenType::kw_let, diag::common::err_expected_token); // should not error if not matched, if error it could mean memory corruption during program runtime
+        auto mut = MatchToken(TokenType::kw_mut, diag::common::err_expected_token);
+        auto comp = MatchToken(TokenType::kw_comp, diag::common::err_expected_token);
         auto variable_identifier = MatchToken(TokenType::identifier, diag::common::err_expected_token);
         auto colon = MatchToken(TokenType::colon, diag::common::err_expected_token);
         auto equal  = MatchToken(TokenType::equal, diag::common::err_expected_token);
@@ -173,10 +185,21 @@ namespace aion::parse {
         Token variable_id_token;
         MutableType* type_annotation = nullptr;
         bool need_auto_type_deduction = false;
+        bool is_mut = false;
+        bool is_comp = false;
 
         // should always progress - if this faults, it indicates memory corruption during program runtime
         diffuse_match(initial_let.token, peek().type, "expected 'let' keyword - memory corruption possible"); // fix-me: make an instant program termination match function which terminates the program on failure
         // TODO do a stack dump (this should be off by default and toggleable via flags
+
+        // check for attributes
+        if (silent_probe(mut)) {
+            is_mut = true;
+            blind_consume();
+        } else if (silent_probe(comp)) {
+            is_comp = true;
+            blind_consume();
+        }
 
         if (silent_probe(variable_identifier)) {
             variable_id_token = blind_consume();
@@ -186,14 +209,21 @@ namespace aion::parse {
             auto fixit_hint = diag::FixItHint::create_insertion(loc, "<identifier>");
 
             diagnostics.report(loc, diag::parse::err_expected_identifier)
-                << "expected identifier for variable declaration, none provided"
+                << "expected identifier for variable declaration, none provided."
                 << fixit_hint;
 
             skip_until(TokenType::semicolon); // TODO integrate more advanced recovery functions, such as attempt_to_skip_until_familiar
+            return;
         }
 
         if (silent_probe(colon)) {
+            blind_consume();
+            type_annotation = match_type(is_mut);
+            if (!type_annotation) {
 
+            } else {
+
+            }
 
         } else if (silent_probe(equal)) {
             need_auto_type_deduction = true;

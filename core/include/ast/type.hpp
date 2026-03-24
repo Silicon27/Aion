@@ -6,10 +6,12 @@
 #define AION_TYPE_HPP
 
 #include "ast.hpp"
+#include <support/global_constants.hpp>
 
 namespace aion::ast {
     class BuiltinType;
     class MutableType;
+    class UserDefinedType;
 
     class BuiltinType : public Type {
         friend class ASTContext;
@@ -31,6 +33,28 @@ namespace aion::ast {
             bool_,
         };
 
+        static Kind get_kind(const lexer::TokenType type) {
+            switch (type) {
+                case lexer::TokenType::kw_i4: return Kind::i4;
+                case lexer::TokenType::kw_i8: return Kind::i8;
+                case lexer::TokenType::kw_i16: return Kind::i16;
+                case lexer::TokenType::kw_i32: return Kind::i32;
+                case lexer::TokenType::kw_i64: return Kind::i64;
+                case lexer::TokenType::kw_i128: return Kind::i128;
+                case lexer::TokenType::kw_f4: return Kind::f4;
+                case lexer::TokenType::kw_f8: return Kind::f8;
+                case lexer::TokenType::kw_f16: return Kind::f16;
+                case lexer::TokenType::kw_f32: return Kind::f32;
+                case lexer::TokenType::kw_f64: return Kind::f64;
+                case lexer::TokenType::kw_f128: return Kind::f128;
+                case lexer::TokenType::kw_char: return Kind::char_;
+                case lexer::TokenType::kw_bool: return Kind::bool_;
+                default:
+                    // This should not happen if is_builtin_type_token(type) is true
+                    return Kind::i32;
+            }
+        }
+
         explicit BuiltinType(const Kind BK)
             : Type(Type::Kind::builtin), builtin_kind(BK) {}
 
@@ -40,6 +64,7 @@ namespace aion::ast {
         Kind builtin_kind;
     };
     static_assert(std::is_trivially_destructible_v<BuiltinType>);
+
 
     class MutableType {
         Type* base;
@@ -54,6 +79,15 @@ namespace aion::ast {
         void set_base(Type* new_base) { base = new_base; } // needed for casting
     };
     static_assert(std::is_trivially_destructible_v<MutableType>);
+
+    class UserDefinedType : public Type{
+        std::string_view name;
+    public:
+        explicit UserDefinedType(std::string_view name)
+            : Type(Kind::user_defined), name(name) {}
+
+        std::string_view get_name() const { return name; }
+    };
 }
 
 #endif //AION_TYPE_HPP

@@ -73,7 +73,7 @@ void register_ast_tests(TestRunner& runner) {
         Offset offset = 1337;
         
         BuiltinType* bt = context.create<BuiltinType>(BuiltinType::Kind::i32);
-        MutableType* type = context.create<MutableType>(Type::Kind::builtin, bt);
+        MutableType* type = context.create<MutableType>(bt, false);
         IdentifierInfo* ii = context.get_identifier("x");
         VarDecl* vd = context.create<VarDecl>(ii, *type,
             StorageClass::stack,

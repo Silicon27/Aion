@@ -81,7 +81,7 @@ namespace aion::parse {
         Token match(MatchToken& token);
 
         Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
-        Type* match_type();
+        MutableType* match_type();
 
         /// NOTE most non-tolerating function, it would instantly terminate the program if the match fails
         /// usage examples would be tokens that if not matched, would indicate memory corruption during program runtime

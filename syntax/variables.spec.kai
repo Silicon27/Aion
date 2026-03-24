@@ -1,6 +1,19 @@
 // grammar
 
-let x;              // TODO
 let x = expr;       // Type-inferred initialization
+
+// registered as a variable, contains nothing
 let x: T;           // Declaration, not initialization, does not "contain" anything as it is simply a declaration
 let x: T = expr;    // Explicitly-typed initialization
+
+let mut x = expr; // Type-inferred mutable initialization
+let mut x: T; // Mutable declaration, uninitialized
+let mut x: T = expr; // Explicitly-typed mutable initialization
+
+let comp x = expr; // compile time constant
+let comp x: T = expr; // compile time typed-constant
+
+// an identifier is defined as any symbol that is assignable and is declared in persistent storage
+alias x = identifier; // immutable alias
+alias x mut = identifier; // mutable alias, changes on the alias would reflect on the owner
+

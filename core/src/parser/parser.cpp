@@ -112,16 +112,9 @@ namespace aion::parse {
         return {TokenType::invalid_token, ""};
     }
 
-    Type* Parser::match_type() {
-        if (silent_probe(TokenType::identifier, peek())) {
-            pos++;
-            return context.create<Type>(Type::Kind::user_defined);
-        }
-        if (is_builtin_type_token(peek().type)) {
-            pos++;
-            return context.create<BuiltinType>(static_cast<BuiltinType::Kind>(static_cast<int>(previous().type) - 6));
-        }
-        return nullptr;
+    MutableType* Parser::match_type() {
+        bool is_builtin = false;
+        bool is_mutable = false;
     }
 
     Token Parser::skip_until(const std::string& lexeme) {
@@ -200,7 +193,7 @@ namespace aion::parse {
         }
 
         if (silent_probe(colon)) {
-            Type* t = match_type();
+
 
         } else if (silent_probe(equal)) {
             need_auto_type_deduction = true;

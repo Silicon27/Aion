@@ -32,10 +32,10 @@ namespace aion::ast {
             user_defined,
         };
 
-    public:
         explicit Type(const Kind K) : type_kind(K) {}
         [[nodiscard]] Kind get_kind() const { return type_kind; }
-    private:
+        void set_kind(const Kind K) { type_kind = K; }
+    protected:
         Kind type_kind;
     };
     static_assert(std::is_trivially_destructible_v<Type>);

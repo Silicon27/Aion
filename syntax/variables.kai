@@ -1,7 +1,7 @@
 let x: i32 = 5; // immutable by default
-let mut x_mut: i32 = 5; // mutability must be explicitly typed
+let x_mut: i32 = 5; // mutability must be explicitly typed
 let y = 5; // type inference
-let mut y = 5;
+let y_mut = 5;
 
 // to default initialize:
 let z = i32{}; // i32s are default initialized to 0

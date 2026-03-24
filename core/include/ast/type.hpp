@@ -41,23 +41,17 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<BuiltinType>);
 
-    class MutableType : public Type {
-        Type* base_type;
+    class MutableType {
+        Type* base;
         bool is_mut = false;
     public:
-        explicit MutableType(const Kind kind, Type* base_type)
-            : Type(kind), base_type(base_type) {}
+        explicit MutableType(Type* base, const bool is_mutable)
+            : base(base), is_mut(is_mutable) {}
 
-        MutableType& operator=(Type parent) {
-            base_type = &parent;
-            return *this;
-        }
-
-        [[nodiscard]] Type* get_base_type() const { return base_type; }
-        void set_base_type(Type* new_base_type) { base_type = new_base_type; }
         bool is_mutable() const { return is_mut; }
         void set_mutable(const bool is_mutable) { is_mut = is_mutable; }
-
+        Type* get_base() const { return base; }
+        void set_base(Type* new_base) { base = new_base; } // needed for casting
     };
     static_assert(std::is_trivially_destructible_v<MutableType>);
 }

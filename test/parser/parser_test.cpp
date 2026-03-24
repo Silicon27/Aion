@@ -35,35 +35,36 @@ void register_parser_tests(TestRunner& runner) {
         Source_Manager sm;
         diag::TextDiagnosticPrinter printer(std::cerr, &sm);
         diag::DiagnosticsEngine diags(&sm, &printer);
-        
-        FileID fid = sm.add_buffer("i32 mut i64 bool", "test.aion");
-        std::vector<Token> tokens = tokenize_for_parser("i32 mut i64 bool");
-        
+
+        // match_type(bool) parses only the type token; mutability now comes from the param
+        FileID fid = sm.add_buffer("i32 i64 bool", "test.aion");
+        std::vector<Token> tokens = tokenize_for_parser("i32 i64 bool");
+
         Parser parser(fid, tokens, {}, context, diags);
-        
-        // Match i32
-        MutableType* t1 = parser.match_type();
+
+        // Match i32 (immutable)
+        MutableType* t1 = parser.match_type(false);
         AION_ASSERT_TRUE(t1 != nullptr);
         AION_ASSERT_FALSE(t1->is_mutable());
-        // We can't easily check the inner type without casting, but let's assume it's correct if it's not null.
-        
-        // Match mut i64
-        MutableType* t2 = parser.match_type();
+
+        // Match i64 (mutable, via API param)
+        MutableType* t2 = parser.match_type(true);
         AION_ASSERT_TRUE(t2 != nullptr);
         AION_ASSERT_TRUE(t2->is_mutable());
-        
-        // Match bool
-        MutableType* t3 = parser.match_type();
+
+        // Match bool (immutable)
+        MutableType* t3 = parser.match_type(false);
         AION_ASSERT_TRUE(t3 != nullptr);
         AION_ASSERT_FALSE(t3->is_mutable());
-        
+
         // Skip newline if present
         if (!parser.is_at_end() && parser.peek().type == TokenType::newline) {
             parser.blind_consume();
         }
-        
+
         AION_ASSERT_TRUE(parser.is_at_end());
     });
+
 
     basic_suite->add_test("placeholder_test", []() {
         // TODO: Add actual parser tests

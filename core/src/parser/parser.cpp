@@ -20,6 +20,7 @@
 // Medium: potential bounds hazards in parser primitives — peek() is unchecked (core/src/parser/parser.cpp:40), and skip_until(...) loops lack EOF checks (core/src/parser/parser.cpp:118-137), which can read out-of-range on malformed streams without guaranteed EOF sentinel behavior.
 // Low: dead/unused state indicates incomplete logic — variable_id_token, type_annotation, need_auto_type_deduction are assigned but unused (core/src/parser/parser.cpp:171-173 etc.), matching the warning pattern you were seeing.
 // lexer doc comment (///) and comment (//) handling, the former is to be rendered in and the latter is to be ignored
+// add return types for parsing functions, such that they can return with a state in the case of erroneous parsing
 
 namespace aion::parse {
     namespace {
@@ -189,7 +190,7 @@ namespace aion::parse {
         } else {
             // recovery branch
             SourceLocation loc; // FIXME: Get current source location from tokens
-            auto fixit_hint = diag::FixItHint::create_insertion(loc, "__fixme_id");
+            auto fixit_hint = diag::FixItHint::create_insertion(loc, "<identifier>");
 
             diagnostics.report(diag::parse::err_expected_identifier)
                 << "expected identifier for variable declaration, none provided"

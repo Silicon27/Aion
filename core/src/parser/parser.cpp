@@ -219,15 +219,20 @@ namespace aion::parse {
         if (silent_probe(colon)) {
             blind_consume();
             type_annotation = match_type(is_mut);
+
             if (!type_annotation) {
-
-            } else {
-
+                SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+                auto fixit_hint = diag::FixItHint::create_insertion(loc, "<type>");
+                diagnostics.report(loc, diag::parse::err_expected_type)
+                    << "expected type for variable declaration, none provided."
+                    << fixit_hint;
+                skip_until(TokenType::semicolon);
+                return;
             }
 
-        } else if (silent_probe(equal)) {
-            need_auto_type_deduction = true;
         }
+
+
     }
 
     Parser::Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)

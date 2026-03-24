@@ -74,6 +74,8 @@ namespace aion::lexer {
         kw_mod,
         kw_export,
         kw_bind,
+        kw_mut,
+        kw_comp,
 
         // Identifiers and Literals
         identifier,
@@ -132,7 +134,7 @@ namespace aion::lexer {
         "i8", "i16", "i32", "i64", "i128",
         "f4", "f8", "f16", "f32", "f64", "f128",
         "char", "bool", "import", "mod", "export",
-        "bind"
+        "bind", "mut", "comp",
     };
 
     // Check if a string is a keyword
@@ -166,6 +168,8 @@ namespace aion::lexer {
         if (str == "mod") return TokenType::kw_mod;
         if (str == "export") return TokenType::kw_export;
         if (str == "bind") return TokenType::kw_bind;
+        if (str == "mut") return TokenType::kw_mut;
+        if (str == "comp") return TokenType::kw_comp;
         return TokenType::identifier; // fallback
     }
 

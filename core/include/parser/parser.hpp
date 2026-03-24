@@ -62,11 +62,11 @@ namespace aion::parse {
     public:
         // ----------- Token checking --------------
         /// peek at the current token without consuming it, n=0 means current token, n=1 means next token, etc.
-        inline Token peek(int n = 0) const;
+        Token peek(int n = 0) const;
         /// alias for peek(-1)
         Token previous() const { return peek(-1); }
         /// blind consumation of tokens, no checking, move the pointer n steps and return the Token at the original position
-        inline Token blind_consume(int n = 1);
+        Token blind_consume(int n = 1);
 
         // ------------ Reporting --------------
         // NOTE dangerous functions, use only if the grammar is either guaranteed to be constant or assumed to be required - at highly strict levels

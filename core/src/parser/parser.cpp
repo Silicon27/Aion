@@ -47,8 +47,8 @@ namespace aion::parse {
         }
     }
 
-    inline Token Parser::peek(const int n) const { return tokens[pos + n]; }
-    inline Token Parser::blind_consume(const int n) {
+    Token Parser::peek(const int n) const { return tokens[pos + n]; }
+    Token Parser::blind_consume(const int n) {
         pos += n;
         return peek(-n); // returns the original value
     }

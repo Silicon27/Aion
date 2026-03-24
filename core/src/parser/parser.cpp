@@ -20,6 +20,7 @@
 // Low: dead/unused state indicates incomplete logic — variable_id_token, type_annotation, need_auto_type_deduction are assigned but unused (core/src/parser/parser.cpp:171-173 etc.), matching the warning pattern you were seeing.
 // lexer doc comment (///) and comment (//) handling, the former is to be rendered in and the latter is to be ignored
 // add return types for parsing functions, such that they can return with a state in the case of erroneous parsing
+// allow diagnostics.report to accept SourceRanges and multi-caret diagnostics based of the range
 
 namespace aion::parse {
     namespace {
@@ -232,7 +233,12 @@ namespace aion::parse {
 
         }
 
-
+        if (silent_probe(semicolon)) {
+            // not allowed; untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value.
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            diagnostics.report(loc, diag::parse::err_untyped_uninitialized_variable_declaration)
+                << "untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value.";
+        }
     }
 
     Parser::Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)

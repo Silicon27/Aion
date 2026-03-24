@@ -22,6 +22,7 @@ namespace aion::ast {
         explicit IdentifierInfo(const char* name) : name(name) {}
         const char* get_name() const { return name; }
     };
+    static_assert(std::is_trivially_destructible_v<IdentifierInfo>);
 
     class Type {
         friend class ASTContext;

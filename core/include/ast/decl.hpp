@@ -32,6 +32,7 @@ namespace aion::ast {
         [[nodiscard]] std::string_view get_identifier() const { return name->get_name(); }
         void set_name(IdentifierInfo* new_name) { name = new_name; }
     };
+    static_assert(std::is_trivially_destructible_v<NamedDecl>);
 
     class ValueDecl : public NamedDecl {
         MutableType type;
@@ -42,6 +43,7 @@ namespace aion::ast {
         [[nodiscard]] MutableType get_type() const { return type; }
         void set_type(const MutableType& new_type) { type = new_type; }
     };
+    static_assert(std::is_trivially_destructible_v<ValueDecl>);
 
     class VarDecl : public ValueDecl {
         Expr* init;
@@ -63,6 +65,7 @@ namespace aion::ast {
 
         SourceRange get_id_loc() const { return id_range; }
     };
+    static_assert(std::is_trivially_destructible_v<VarDecl>);
 }
 
 #endif //AION_DECL_HPP

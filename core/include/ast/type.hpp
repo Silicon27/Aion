@@ -59,6 +59,7 @@ namespace aion::ast {
         void set_mutable(const bool is_mutable) { is_mut = is_mutable; }
 
     };
+    static_assert(std::is_trivially_destructible_v<MutableType>);
 }
 
 #endif //AION_TYPE_HPP

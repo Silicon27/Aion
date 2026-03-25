@@ -20,7 +20,9 @@
 // Low: dead/unused state indicates incomplete logic — variable_id_token, type_annotation, need_auto_type_deduction are assigned but unused (core/src/parser/parser.cpp:171-173 etc.), matching the warning pattern you were seeing.
 // lexer doc comment (///) and comment (//) handling, the former is to be rendered in and the latter is to be ignored
 // add return types for parsing functions, such that they can return with a state in the case of erroneous parsing
-// make an diagnostics.report overload that accepts SourceRanges and the consumer (Printer thingy) gives multi-caret diagnostics based of the range
+// make an diagnostics.report overload that accepts SourceRanges and the consumer (Printer thingy) gives multi-caret (use ~ for errors and multi line ranged hints should use ^) diagnostics based of the range
+// make overloads for FixItHint methods such as create removal and insertion that accepts a source range as well, such as create_removal and create_insertion, and all of them, the consumer that prints should support it (~ for errors, ^ for normal caret)
+// make color printing in the printer consumer on by default (blue for hints, red for errors, yellow for warnings, and you can decide the color for note, remark and all the others.
 
 namespace aion::parse {
     namespace {
@@ -56,11 +58,11 @@ namespace aion::parse {
     Token Parser::diffuse_match(const TokenType exp, const TokenType curr, const std::string& sigabrt_message) {
         if (const auto t = silent_consume(exp, peek()); t.type != TokenType::invalid_token) {
             return t;
-        } else {
-            si::fatal(sigabrt_message.c_str());
-            std::cerr << sigabrt_message << std::endl;
-            std::abort();
         }
+
+        si::fatal(sigabrt_message.c_str());
+        std::cerr << sigabrt_message << std::endl;
+        std::abort();
     }
 
     bool Parser::silent_probe(const TokenType exp, const Token &curr) {
@@ -150,12 +152,12 @@ namespace aion::parse {
     void Parser::parse_variable_decl() {
         // TODO: improve grammar-driven recovery around optional type annotation and initializer.
 
-        auto initial_let = MatchToken(TokenType::kw_let); // should not error if not matched, if error it could mean memory corruption during program runtime
-        auto mut = MatchToken(TokenType::kw_mut);
-        auto comp = MatchToken(TokenType::kw_comp);
-        auto variable_identifier = MatchToken(TokenType::identifier);
-        auto colon = MatchToken(TokenType::colon);
-        auto equal  = MatchToken(TokenType::equal);
+        static auto initial_let = MatchToken(TokenType::kw_let); // should not error if not matched, if error it could mean memory corruption during program runtime
+        static auto mut = MatchToken(TokenType::kw_mut);
+        static auto comp = MatchToken(TokenType::kw_comp);
+        static auto variable_identifier = MatchToken(TokenType::identifier);
+        static auto colon = MatchToken(TokenType::colon);
+        static auto equal  = MatchToken(TokenType::equal);
         auto semicolon = MatchToken(TokenType::semicolon);
 
         Token variable_id_token;
@@ -177,6 +179,7 @@ namespace aion::parse {
             blind_consume();
         }
 
+        // get the identifier
         if (silent_probe(variable_identifier)) {
             variable_id_token = blind_consume();
         } else {
@@ -192,6 +195,21 @@ namespace aion::parse {
             return;
         }
 
+        // check for early semicolons placed before types are specified
+        if (silent_probe(semicolon)) {
+            // not allowed; untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value.
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            diagnostics.report(loc, diag::parse::err_untyped_uninitialized_variable_declaration)
+                << "untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value.";
+        }
+
+        if (silent_probe(equal)) {
+            need_auto_type_deduction = true;
+
+            goto expression_matching;
+        }
+
+        // type matching
         if (silent_probe(colon)) {
             blind_consume();
             type_annotation = match_type(is_mut);
@@ -205,15 +223,29 @@ namespace aion::parse {
                 skip_until(TokenType::semicolon);
                 return;
             }
-
         }
 
         if (silent_probe(semicolon)) {
-            // not allowed; untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value.
-            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
-            diagnostics.report(loc, diag::parse::err_untyped_uninitialized_variable_declaration)
-                << "untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value.";
+            blind_consume();
+            if (is_comp) {
+                // not initialized but is declared a comp -> constants cannot be uninitialized
+                SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+                auto fixit_hint = diag::FixItHint::create_insertion(loc, "<initializer or expression>");
+                diagnostics.report(loc, diag::parse::err_expected_initialization)
+                    << "expected initializer for variable attributed with comp, none provided."
+                    << fixit_hint;
+                skip_until(TokenType::semicolon);
+                return;
+            }
+            goto ast_construction;
+
         }
+
+        expression_matching:
+
+
+
+        ast_construction:
     }
 
     Parser::Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)

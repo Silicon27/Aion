@@ -117,6 +117,7 @@ enum : DiagID {
     err_unexpected_token,
     err_mismatched_brackets,
     err_untyped_uninitialized_variable_declaration,
+    err_expected_initialization,
     warn_empty_statement,
 };
 } // namespace parse

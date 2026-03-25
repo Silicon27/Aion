@@ -116,9 +116,11 @@ namespace aion::parse {
 
         // statement parsers
 
-        // expression parsers
+        // declaration parsers
         void parse_variable_decl();
 
+        // expression parsers
+        Expr* parse_expression();
 
         explicit Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag);
         ~Parser() = default;

@@ -247,6 +247,8 @@ namespace aion::parse {
             goto expression_matching;
         }
 
+        Expr* expression;
+
         expression_matching:
 
 

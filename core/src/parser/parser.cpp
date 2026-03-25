@@ -204,6 +204,7 @@ namespace aion::parse {
         }
 
         if (silent_probe(equal)) {
+            blind_consume();
             need_auto_type_deduction = true;
 
             goto expression_matching;
@@ -241,11 +242,22 @@ namespace aion::parse {
 
         }
 
+        if (silent_probe(equal)) {
+            blind_consume();
+            goto expression_matching;
+        }
+
         expression_matching:
 
 
 
         ast_construction:
+
+        if (silent_probe(semicolon)) {
+
+        } else {
+
+        }
     }
 
     Parser::Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag)

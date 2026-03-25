@@ -34,10 +34,8 @@ namespace aion::parse {
     /// bundles useful information regarding the token being matched
     struct MatchToken {
         TokenType token;
-        diag::DiagID diag_id;
-        bool is_active = false;
 
-        constexpr MatchToken(const TokenType token, const diag::DiagID diag_id) : token(token), diag_id(diag_id) {}
+        constexpr MatchToken(const TokenType token) : token(token) {}
     };
     
     class Parser {
@@ -69,21 +67,9 @@ namespace aion::parse {
         Token blind_consume(int n = 1);
 
         // ------------ Reporting --------------
-        // NOTE dangerous functions, use only if the grammar is either guaranteed to be constant or assumed to be required - at highly strict levels
-        // NOTE even so, it is still NOT RECOMMENDED to use these functions. Use at self discretion.
-        // NOTE generates extremely shallow diagnostics, non-optimal for pedantic errors
-        /// consume the current token and check if it matches the expected type, if it does, return true, otherwise report an error and return false
-        Token consume_and_expect(TokenType exp, const Token& curr, const diag::DiagID err);
-        /// alias for consume_and_expect with current token
-        Token match(const TokenType exp, diag::DiagID err);
-        /// attempt to match some MatchToken, if successful, set `is_active` member in `token` to true
-        ///@returns the matched token, aka previous(), after `pos` increment
-        Token match(MatchToken& token);
-
-        Token match_identifier() { return match(TokenType::identifier, diag::parse::err_expected_identifier); }
         MutableType* match_type(bool is_mut);
 
-        /// NOTE most non-tolerating function, it would instantly terminate the program if the match fails
+        // NOTE most non-tolerating function, it would instantly terminate the program if the match fails
         /// usage examples would be tokens that if not matched, would indicate memory corruption during program runtime
         Token diffuse_match(const TokenType exp, const TokenType curr, const std::string& sigabrt_message);
 
@@ -95,11 +81,11 @@ namespace aion::parse {
 
         /// would either progress or hold, does not throw
         Token silent_consume(TokenType exp, const Token& curr);
-        /// alias for silent_consume(TokenType, const Token&), also sets `token`'s is_active field to true upon progression
-        Token silent_consume(MatchToken& token);
+        /// alias for silent_consume(TokenType, const Token&)
+        Token silent_consume(const MatchToken& token);
 
-        /// alias for silent_consume(MatchToken&)
-        Token attempt(MatchToken& token) { return silent_consume(token); }
+        /// alias for silent_consume(const MatchToken&)
+        Token attempt(const MatchToken& token) { return silent_consume(token); }
 
         // ---------- Recovery functions ----------
         /// skip_until overload

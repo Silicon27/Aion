@@ -12,15 +12,15 @@
 
 // TODO
 // Critical: null dereference on malformed typed decl — in core/src/parser/parser.cpp:187-188, Type* t = match_type(); can return nullptr (e.g. let x: = 1;), then t->get_kind() dereferences null.
-// High: identifier is not enforced — variable_id_token = silent_consume(variable_identifier); at core/src/parser/parser.cpp:179 fails silently; no diagnostic, and parse continues from a bad state if identifier is missing.
-// High: : / = handling is structurally wrong for common grammar — sequential attempt(colon); attempt(equal); at core/src/parser/parser.cpp:182-183 only checks one immediate token after identifier. It doesn’t properly support let x: i32 = expr; flow; typed decl branch (colon.is_active) only looks for ; at core/src/parser/parser.cpp:189-192.
+// High: identifier is not enforced — variable_id_token = silent_consume(variable_identifier); fails silently; no diagnostic, and parse continues from a bad state if identifier is missing.
+// High: : / = handling is structurally wrong for common grammar — sequential attempt(colon); attempt(equal); only checks one immediate token after identifier. It doesn’t properly support let x: i32 = expr; flow; typed decl branch only looks for ;.
 // High: missing semicolon enforcement and consumption in = branch — in core/src/parser/parser.cpp:193-197, you set need_auto_type_deduction = true but don’t parse initializer expression or require ;, so statement completion is not guaranteed.
 // Medium: no recovery implemented — recovery branch is empty (core/src/parser/parser.cpp:197-200), so malformed declarations produce weak/no diagnostics and leave sync to outer top-level token skipping.
 // Medium: potential bounds hazards in parser primitives — peek() is unchecked (core/src/parser/parser.cpp:40), and skip_until(...) loops lack EOF checks (core/src/parser/parser.cpp:118-137), which can read out-of-range on malformed streams without guaranteed EOF sentinel behavior.
 // Low: dead/unused state indicates incomplete logic — variable_id_token, type_annotation, need_auto_type_deduction are assigned but unused (core/src/parser/parser.cpp:171-173 etc.), matching the warning pattern you were seeing.
 // lexer doc comment (///) and comment (//) handling, the former is to be rendered in and the latter is to be ignored
 // add return types for parsing functions, such that they can return with a state in the case of erroneous parsing
-// allow diagnostics.report to accept SourceRanges and multi-caret diagnostics based of the range
+// make an diagnostics.report overload that accepts SourceRanges and the consumer (Printer thingy) gives multi-caret diagnostics based of the range
 
 namespace aion::parse {
     namespace {
@@ -53,30 +53,6 @@ namespace aion::parse {
         return peek(-n); // returns the original value
     }
 
-    Token Parser::consume_and_expect(const TokenType exp, const Token& curr, const diag::DiagID err) {
-        if (curr.type == exp) {
-            pos++;
-            return previous();
-        }
-
-        diagnostics.report(err)
-                << "expected token";
-        return {TokenType::invalid_token, ""};
-    }
-
-    Token Parser::match(const TokenType exp, const diag::DiagID err) {
-        return consume_and_expect(exp, peek(), err);
-    }
-
-    Token Parser::match(MatchToken& token) {
-        if (const auto t = consume_and_expect(token.token, peek(), token.diag_id); t.type != TokenType::invalid_token) {
-            token.is_active = true;
-            return t;
-        } else {
-            return t;
-        }
-    }
-
     Token Parser::diffuse_match(const TokenType exp, const TokenType curr, const std::string& sigabrt_message) {
         if (const auto t = silent_consume(exp, peek()); t.type != TokenType::invalid_token) {
             return t;
@@ -103,10 +79,9 @@ namespace aion::parse {
         return {TokenType::invalid_token, ""};
     }
 
-    Token Parser::silent_consume(MatchToken &token) {
+    Token Parser::silent_consume(const MatchToken &token) {
         if (silent_probe(token)) {
             pos++;
-            token.is_active = true;
             return previous();
         }
         return {TokenType::invalid_token, ""};
@@ -175,13 +150,13 @@ namespace aion::parse {
     void Parser::parse_variable_decl() {
         // TODO: improve grammar-driven recovery around optional type annotation and initializer.
 
-        auto initial_let = MatchToken(TokenType::kw_let, diag::common::err_expected_token); // should not error if not matched, if error it could mean memory corruption during program runtime
-        auto mut = MatchToken(TokenType::kw_mut, diag::common::err_expected_token);
-        auto comp = MatchToken(TokenType::kw_comp, diag::common::err_expected_token);
-        auto variable_identifier = MatchToken(TokenType::identifier, diag::common::err_expected_token);
-        auto colon = MatchToken(TokenType::colon, diag::common::err_expected_token);
-        auto equal  = MatchToken(TokenType::equal, diag::common::err_expected_token);
-        auto semicolon = MatchToken(TokenType::semicolon, diag::common::err_expected_token);
+        auto initial_let = MatchToken(TokenType::kw_let); // should not error if not matched, if error it could mean memory corruption during program runtime
+        auto mut = MatchToken(TokenType::kw_mut);
+        auto comp = MatchToken(TokenType::kw_comp);
+        auto variable_identifier = MatchToken(TokenType::identifier);
+        auto colon = MatchToken(TokenType::colon);
+        auto equal  = MatchToken(TokenType::equal);
+        auto semicolon = MatchToken(TokenType::semicolon);
 
         Token variable_id_token;
         MutableType* type_annotation = nullptr;

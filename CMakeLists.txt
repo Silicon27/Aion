@@ -9,6 +9,7 @@ add_executable(aion
         core/src/lexer/lexer.cpp
         core/src/preprocessor/preprocessor.cpp
         core/src/parser/parser.cpp
+        core/src/parser/parser_decl.cpp
         core/src/parser/parser_expression.cpp
         core/src/ast/ast.cpp
         core/src/ast/decl.cpp

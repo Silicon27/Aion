@@ -53,6 +53,7 @@ set(LEXER_CORE_SOURCES
 
 set(PARSER_CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/core/src/parser/parser.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/parser/parser_expression.cpp
     ${CMAKE_SOURCE_DIR}/core/src/lexer/lexer.cpp
     ${CMAKE_SOURCE_DIR}/core/src/error/error.cpp
     ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
@@ -76,6 +77,7 @@ set(PREPROCESSOR_CORE_SOURCES
 set(ALL_CORE_SOURCES
     ${LEXER_CORE_SOURCES}
     ${CMAKE_SOURCE_DIR}/core/src/parser/parser.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/parser/parser_expression.cpp
     ${AST_CORE_SOURCES}
     ${ERROR_CORE_SOURCES}
     ${PREPROCESSOR_CORE_SOURCES}

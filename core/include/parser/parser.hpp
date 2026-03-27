@@ -120,7 +120,9 @@ namespace aion::parse {
         void parse_variable_decl();
 
         // expression parsers
-        Expr* parse_expression();
+        Expr* parse_expression(Token delim);
+
+        int precedence_of(TokenType token);
 
         explicit Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag);
         ~Parser() = default;

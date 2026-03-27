@@ -149,6 +149,14 @@ namespace aion::parse {
         return false;
     }
 
+    Expr* Parser::parse_expression(Token delim) {
+
+    }
+
+    int Parser::precedence_of(TokenType token) {
+
+    }
+
     void Parser::parse_variable_decl() {
         // TODO: improve grammar-driven recovery around optional type annotation and initializer.
 

@@ -119,13 +119,30 @@ namespace aion::parse {
         // declaration parsers
         void parse_variable_decl();
 
-        // expression parsers
-        Expr* parse_expression(Token delim);
-
-        int precedence_of(TokenType token);
-
         explicit Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag);
         ~Parser() = default;
+
+    private:
+        /// entry point for expression parsing
+        Expr* parse_expression(Token delim);
+        // right associative
+        Expr* parse_assignment_expression();
+        // the precedence climbing engine
+        Expr* parse_binary_rhs_expression(int min_prec, Expr* lhs);
+        // handles -x, !a, *ptr, &x
+        Expr* parse_unary_expression();
+        // Handles f(x), a[i], obj.method()
+        Expr* parse_postfix_expression(Expr* lhs);
+        /// Handles atomic units (identifiers, literals, (expr))
+        Expr* parse_primary_expression();
+
+        int precedence_of(TokenType token);
+        bool is_right_associative(TokenType token);
+        bool is_left_associative(TokenType token);
+        bool is_unary_operator(TokenType token);
+        bool is_binary_operator(TokenType token);
+    public:
+
     };
 }
 

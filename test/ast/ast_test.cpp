@@ -29,7 +29,7 @@ void register_ast_tests(TestRunner& runner) {
         using namespace aion::ast;
         ASTContext context;
 
-        Stmt* s1 = context.create<Stmt>(Stmt::Kind::expr_stmt);
+        Stmt* s1 = context.create<Stmt>(Stmt::Kind::if_stmt);
         Stmt* s2 = context.create<Stmt>(Stmt::Kind::return_stmt);
 
         Stmt* stmts[] = {s1, s2};

@@ -5,11 +5,12 @@
 #ifndef AION_EXPR_HPP
 #define AION_EXPR_HPP
 #include "ast.hpp"
+#include "type.hpp"
 
 namespace aion::ast {
     class BinaryExpr : public Expr {
     public:
-        enum class Op {
+        enum class Op : std::uint8_t {
             add,
             sub,
             mul,
@@ -22,16 +23,17 @@ namespace aion::ast {
             greater_equal,
             logical_and,
             logical_or,
-
-            as,
         };
 
-        BinaryExpr(Expr* lhs, Expr* rhs, Op op)
-            : Expr(Kind::binary_expr), lhs(lhs), rhs(rhs), op(op) {}
+        BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type )
+            : Expr(Kind::binary_expr, v), lhs(lhs), rhs(rhs), op(op), type(type) {
+        }
+
     private:
         Expr* lhs;
         Expr* rhs;
         Op op;
+        MutableType* type;
     };
 }
 

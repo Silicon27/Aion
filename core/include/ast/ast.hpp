@@ -8,6 +8,8 @@
 #include <support/source_manager.hpp>
 #include <type_traits>
 
+#include "global_constants.hpp"
+
 namespace aion::ast {
     class IdentifierInfo;
     class Decl;
@@ -118,9 +120,10 @@ namespace aion::ast {
             suffix_expr,
         };
 
-        explicit Expr(const Kind k) : expr_kind(k) {}
+        explicit Expr(const Kind k, const ValueCategory v) : expr_kind(k), category(v) {}
     private:
         Kind expr_kind;
+        ValueCategory category;
     };
     static_assert(std::is_trivially_destructible_v<Expr>);
 }

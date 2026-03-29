@@ -228,10 +228,15 @@ namespace aion::lexer {
 } // namespace aion::lexer
 
 namespace aion::ast {
-    enum class StorageClass {
+    enum class StorageClass : std::uint8_t {
         stack,
         heap,
         persistent, // static storage duration, access is still enforced at compile time, but lives for the duration of the program
+    };
+
+    enum class ValueCategory : std::uint8_t {
+        named,
+        unnamed,
     };
 }
 

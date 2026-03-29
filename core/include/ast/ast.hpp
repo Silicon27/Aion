@@ -95,7 +95,6 @@ namespace aion::ast {
             while_stmt,
             for_stmt,
             return_stmt,
-            expr_stmt,
         };
 
     private:
@@ -109,10 +108,19 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<Stmt>);
 
-    /// Base class for all expressions, which are also statements.
-    class Expr : public Stmt {
+    /// Base class for all expressions
+    class Expr  {
     public:
-        explicit Expr(const Kind K) : Stmt(K) {}
+        enum class Kind : std::uint8_t {
+            binary_expr,
+            unary_expr,
+            prefix_expr,
+            suffix_expr,
+        };
+
+        explicit Expr(const Kind k) : expr_kind(k) {}
+    private:
+        Kind expr_kind;
     };
     static_assert(std::is_trivially_destructible_v<Expr>);
 }

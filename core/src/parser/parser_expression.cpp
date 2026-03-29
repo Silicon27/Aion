@@ -6,9 +6,7 @@
 
 namespace aion::parse {
     Expr* Parser::parse_expression(const Token delim) {
-        (void)delim;
-
-        return nullptr;
+        return parse_assignment_expression();
     }
 
     int Parser::precedence_of(const TokenType token) {

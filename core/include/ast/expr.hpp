@@ -27,7 +27,7 @@ namespace aion::ast {
         };
 
         BinaryExpr(Expr* lhs, Expr* rhs, Op op)
-            : Expr(Kind::expr_stmt), lhs(lhs), rhs(rhs), op(op) {}
+            : Expr(Kind::binary_expr), lhs(lhs), rhs(rhs), op(op) {}
     private:
         Expr* lhs;
         Expr* rhs;

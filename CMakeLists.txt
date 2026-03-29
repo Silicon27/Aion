@@ -14,6 +14,7 @@ add_executable(aion
         core/src/ast/ast.cpp
         core/src/ast/decl.cpp
         core/src/ast/stmt.cpp
+        core/src/ast/expr.cpp
         core/src/ast/type.cpp
         core/src/ast/ASTContext.cpp
         core/src/error/error.cpp

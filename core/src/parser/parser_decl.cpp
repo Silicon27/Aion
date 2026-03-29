@@ -31,11 +31,14 @@ namespace aion::parse {
         static auto equal = MatchToken(TokenType::equal);
         auto semicolon = MatchToken(TokenType::semicolon);
 
+        SourceLocation decl_start_location = diagnostics.get_source_manager()->get_location(file_id, peek());
         Token variable_id_token;
         MutableType* type_annotation = nullptr;
+        StorageClass storage_class;
         bool need_auto_type_deduction = false;
         bool is_mut = false;
         bool is_comp = false;
+        Expr* expression = nullptr;
 
         // should always progress - if this faults, it indicates memory corruption during program runtime
         diffuse_match(initial_let.token, peek().type, "expected 'let' keyword - memory corruption possible");
@@ -113,13 +116,16 @@ namespace aion::parse {
             goto expression_matching;
         }
 
-        Expr* expression;
-
         expression_matching:
 
 
 
         ast_construction:
+
+        // auto allocated_name = context.create<IdentifierInfo>(variable_id_token.lexeme.c_str());
+        // auto allocated_storage_class = context.create<StorageClass>(storage_class);
+        // auto allocated_range = context.create<SourceRange>(decl_start_location, SourceLocation(diagnostics.get_source_manager()->get_location(file_id, peek())));
+        // auto variable = context.create<VarDecl>(allocated_name, *type_annotation, allocated_storage_class, allocated_range, expression);
 
         if (silent_probe(semicolon)) {
 
@@ -128,4 +134,3 @@ namespace aion::parse {
         }
     }
 }
-

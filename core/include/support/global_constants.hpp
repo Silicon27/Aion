@@ -231,7 +231,7 @@ namespace aion::ast {
     enum class StorageClass {
         stack,
         heap,
-        persistent,
+        persistent, // static storage duration, access is still enforced at compile time, but lives for the duration of the program
     };
 }
 

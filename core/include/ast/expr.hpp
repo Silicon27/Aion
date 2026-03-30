@@ -25,8 +25,9 @@ namespace aion::ast {
             logical_or,
         };
 
-        BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type )
-            : Expr(Kind::binary_expr, v, type), lhs(lhs), rhs(rhs), op(op) {}           
+        BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type,
+                   const SourceRange sr = {})
+            : Expr(Kind::binary_expr, v, type, sr), lhs(lhs), rhs(rhs), op(op) {}
 
     private:
         Expr* lhs;

@@ -16,6 +16,7 @@ namespace aion::ast {
     class Stmt;
     class Expr;
     class DeclContext;
+    class MutableType;
 
     class IdentifierInfo {
         const char* name;

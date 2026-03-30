@@ -26,14 +26,12 @@ namespace aion::ast {
         };
 
         BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type )
-            : Expr(Kind::binary_expr, v), lhs(lhs), rhs(rhs), op(op), type(type) {
-        }
+            : Expr(Kind::binary_expr, v, type), lhs(lhs), rhs(rhs), op(op) {}           
 
     private:
         Expr* lhs;
         Expr* rhs;
         Op op;
-        MutableType* type;
     };
 }
 

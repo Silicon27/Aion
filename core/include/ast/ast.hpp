@@ -120,10 +120,18 @@ namespace aion::ast {
             suffix_expr,
         };
 
-        explicit Expr(const Kind k, const ValueCategory v) : expr_kind(k), category(v) {}
+        explicit Expr(const Kind k, const ValueCategory v, MutableType* t, const SourceRange sr) 
+            : expr_kind(k), category(v), type(t), source_range(sr) {}
     private:
         Kind expr_kind;
         ValueCategory category;
+        
+        MutableType* type;
+
+        // source info
+        SourceRange source_range;
+
+        // add bitmask for is_comp, is_const and other qualifiers if needed
     };
     static_assert(std::is_trivially_destructible_v<Expr>);
 }

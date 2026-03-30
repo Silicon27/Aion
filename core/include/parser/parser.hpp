@@ -121,22 +121,48 @@ namespace aion::parse {
 
         /// entry point for expression parsing
         Expr* parse_expression(Token delim);
-        // right associative
-        Expr* parse_assignment_expression();
-        // the precedence climbing engine
-        Expr* parse_binary_rhs_expression(int min_prec, Expr* lhs);
-        // handles -x, !a, *ptr, &x
-        Expr* parse_unary_expression();
-        // Handles f(x), a[i], obj.method()
-        Expr* parse_postfix_expression(Expr* lhs);
-        /// Handles atomic units (identifiers, literals, (expr))
-        Expr* parse_primary_expression();
+        // null denotation: what to do when this token appears with no left context (prefix position)
+        Expr* nud(Token tok);
+        // left denotation: what to do when this token appears with the left expression already parsed (infix/suffix position)
+        Expr* led(Token op, Expr* left);
 
-        static int precedence_of(TokenType token);
-        static bool is_right_associative(TokenType token);
-        static bool is_left_associative(TokenType token);
-        static bool is_unary_operator(TokenType token);
-        static bool is_binary_operator(TokenType token);
+        // left binding power: how strongly this token binds to whatever is to its left.
+        static int lbp(const TokenType token) {
+            switch (token) {
+                case TokenType::equal:
+                    return 10; // assignment
+
+                case TokenType::double_dot:
+                case TokenType::triple_dot:
+                    return 20; // ranges
+
+                case TokenType::equal_equal:
+                case TokenType::bang_equal:
+                    return 30; // equality
+
+                case TokenType::less:
+                case TokenType::less_equal:
+                case TokenType::greater:
+                case TokenType::greater_equal:
+                    return 40; // comparisons
+
+                case TokenType::plus:
+                case TokenType::minus:
+                    return 50; // additive
+
+                case TokenType::star:
+                case TokenType::slash:
+                    return 60; // multiplicative
+
+
+                case TokenType::dot:
+                case TokenType::double_colon:
+                    return 80; // member/scope access
+
+                default:
+                    return 0; // not an infix operator (Pratt: no binding power)
+            }
+        }
 
         explicit Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag);
         ~Parser() = default;

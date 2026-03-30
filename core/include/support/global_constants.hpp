@@ -105,6 +105,7 @@ namespace aion::lexer {
         plus,
         minus,
         star,
+        double_star,
         slash,
         bang,
         bang_equal,

@@ -33,7 +33,25 @@ namespace aion::ast {
         Expr* lhs;
         Expr* rhs;
         Op op;
+        MutableType* type;
+
+        bool is_comp = false;
     };
+
+    // class IdentifierExprUnit : public Expr {
+    // public:
+    //     enum class Kind : std::uint8_t {
+    //         variable,
+    //         function,
+    //     };
+    //
+    //     IdentifierExprUnit(IdentifierInfo id, Kind k)
+    //         : id(id), kind(k) {}
+    //
+    // private:
+    //     Kind kind;
+    //     IdentifierInfo id;
+    // };
 }
 
 #endif //AION_EXPR_HPP

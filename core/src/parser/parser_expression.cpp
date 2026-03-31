@@ -9,6 +9,14 @@ namespace aion::parse {
         Token tok = blind_consume();
         // Expr* left = nud(tok);
     }
+
+    // Expr* Parser::nud(Token tok) {
+    //     switch (tok.get_type()) {
+    //         case TokenType::identifier: {
+    //             auto* n =
+    //         }
+    //     }
+    // }
 }
 
 

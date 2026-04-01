@@ -82,6 +82,10 @@ namespace aion::lexer {
         int_literal,
         float_literal,
         number,
+        fstring,
+        string, // has length encoded into the allocated storage for the string
+        raw_string,
+        byte_string,
 
         // Special
         unknown,
@@ -121,12 +125,6 @@ namespace aion::lexer {
         // misc
         invalid_token,
     };
-
-    // in declaration order in TokenType
-    inline constexpr TokenType first_builtin_type = TokenType::kw_i4;
-    inline constexpr TokenType last_builtin_type = TokenType::kw_bool;
-
-    inline constexpr std::pair<TokenType_t, TokenType_t> builtin_types_range = {static_cast<TokenType_t>(first_builtin_type), static_cast<TokenType_t>(last_builtin_type)};
 
     // Keyword set for fast lookup
     inline const std::unordered_set<std::string> keywords = {

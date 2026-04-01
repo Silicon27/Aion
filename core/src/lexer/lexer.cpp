@@ -87,6 +87,12 @@ namespace aion::lexer {
         return true;
     }
 
+    bool Lexer::try_consume_special_string(std::span<Token> tokens) {
+        /// Internally aion supports length encoded strings, format strings, byte strings, raw strings, and C strings
+        /// all of which are denoted with the syntax "...", f"...", b"...", r"...", and c"..."
+        /// the tags can be combined, that is: fbrc"..." (a, format byte raw C string)
+    }
+
     Token Lexer::tokenize_number() {
         int column = static_cast<int>(current_pos) + 1;
         std::string lexeme;

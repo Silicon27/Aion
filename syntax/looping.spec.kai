@@ -1,0 +1,6 @@
+for (variable declaration; cond; expr) { ... }
+for (;;) { ... }
+for identifier integer..integer { ... }
+for identifier integer_type integer..integer { ... } // range
+for identifier in iterable { ... } // for each loop
+

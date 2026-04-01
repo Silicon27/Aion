@@ -38,7 +38,10 @@ namespace aion::ast {
         bool is_comp = false;
     };
 
-    class DeclRefExpr : public Expr {
+    /// Represents any resolved identifier at parse time that is part of an expression
+    ///
+    /// said node would represent variables, functions, and enums by which are resolved at parse time.
+    class ResolvedIdentifierExpr : public Expr {
     public:
         enum class IdentifierKind : std::uint8_t {
             variable,
@@ -46,7 +49,7 @@ namespace aion::ast {
             enum_,
         };
 
-        DeclRefExpr(IdentifierInfo* name, const ValueCategory v, MutableType* type, const IdentifierKind k, const SourceRange& sr = {})
+        ResolvedIdentifierExpr(IdentifierInfo* name, const ValueCategory v, MutableType* type, const IdentifierKind k, const SourceRange& sr = {})
             : Expr(Kind::prefix_expr, v, type, sr), source_range(sr), name(name), type(type), kind(k) {
         }
 

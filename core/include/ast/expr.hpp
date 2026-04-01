@@ -38,20 +38,29 @@ namespace aion::ast {
         bool is_comp = false;
     };
 
-    // class IdentifierExprUnit : public Expr {
-    // public:
-    //     enum class Kind : std::uint8_t {
-    //         variable,
-    //         function,
-    //     };
-    //
-    //     IdentifierExprUnit(IdentifierInfo id, Kind k)
-    //         : id(id), kind(k) {}
-    //
-    // private:
-    //     Kind kind;
-    //     IdentifierInfo id;
-    // };
+    class DeclRefExpr : public Expr {
+    public:
+        enum class IdentifierKind : std::uint8_t {
+            variable,
+            function,
+            enum_,
+        };
+
+        DeclRefExpr(IdentifierInfo* name, const ValueCategory v, MutableType* type, const IdentifierKind k, const SourceRange& sr = {})
+            : Expr(Kind::prefix_expr, v, type, sr), source_range(sr), name(name), type(type), kind(k) {
+        }
+
+        IdentifierInfo* get_name() const { return name; }
+        IdentifierKind get_kind() const { return kind; }
+        MutableType* get_type() const { return type; }
+        SourceRange get_source_range() const { return source_range; }
+        void set_type(MutableType* new_type) { type = new_type; }
+    private:
+        SourceRange source_range;
+        IdentifierInfo* name;
+        MutableType* type;
+        IdentifierKind kind;
+    };
 }
 
 #endif //AION_EXPR_HPP

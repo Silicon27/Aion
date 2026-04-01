@@ -8,7 +8,32 @@
 #include "type.hpp"
 
 namespace aion::ast {
-    class BinaryExpr : public Expr {
+    class ValueExpr;
+    class BinaryExpr;
+    class ResolvedIdentifierExpr;
+
+    class TypedExpr : public Expr {
+    public:
+        enum class TypeKind : std::uint8_t {
+            /// any type that is not an inferred "common type" made from the combination of other types
+            atom_type,
+            /// any type that is inferred from the combination of other types
+            /// (ex. binary expressions where the 2 types are related but not equal. you thereby infer a common type)
+            common_type,
+        };
+
+        TypedExpr(TypeKind tk, MutableType* type, const ValueCategory category, const SourceRange &sr)
+            : Expr(ExprKind::typed_expr, category, sr), tk(tk), type(type) {}
+
+        [[nodiscard]] TypeKind get_type_kind() const { return tk; }
+        [[nodiscard]] MutableType* get_type() const { return type; }
+        void set_type(MutableType* new_type) { type = new_type; }
+    private:
+        TypeKind tk;
+        MutableType* type;
+    };
+
+    class BinaryExpr : public TypedExpr {
     public:
         enum class Op : std::uint8_t {
             add,
@@ -26,14 +51,14 @@ namespace aion::ast {
         };
 
         BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type,
-                   const SourceRange sr = {})
-            : Expr(Kind::binary_expr, v, type, sr), lhs(lhs), rhs(rhs), op(op) {}
+                   const SourceRange &sr = {})
+            : TypedExpr(TypeKind::common_type, type, v, sr), lhs(lhs), rhs(rhs), op(op) {
+        }
 
     private:
         Expr* lhs;
         Expr* rhs;
         Op op;
-        MutableType* type;
 
         bool is_comp = false;
     };
@@ -41,7 +66,7 @@ namespace aion::ast {
     /// Represents any resolved identifier at parse time that is part of an expression
     ///
     /// said node would represent variables, functions, and enums by which are resolved at parse time.
-    class ResolvedIdentifierExpr : public Expr {
+    class ResolvedIdentifierExpr : public TypedExpr {
     public:
         enum class IdentifierKind : std::uint8_t {
             variable,
@@ -50,18 +75,11 @@ namespace aion::ast {
         };
 
         ResolvedIdentifierExpr(IdentifierInfo* name, const ValueCategory v, MutableType* type, const IdentifierKind k, const SourceRange& sr = {})
-            : Expr(Kind::prefix_expr, v, type, sr), source_range(sr), name(name), type(type), kind(k) {
+            : TypedExpr(TypeKind::atom_type, type, v, sr), name(name), kind(k) {
         }
 
-        IdentifierInfo* get_name() const { return name; }
-        IdentifierKind get_kind() const { return kind; }
-        MutableType* get_type() const { return type; }
-        SourceRange get_source_range() const { return source_range; }
-        void set_type(MutableType* new_type) { type = new_type; }
     private:
-        SourceRange source_range;
         IdentifierInfo* name;
-        MutableType* type;
         IdentifierKind kind;
     };
 }

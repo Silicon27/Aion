@@ -114,20 +114,20 @@ namespace aion::ast {
     /// Base class for all expressions
     class Expr  {
     public:
-        enum class Kind : std::uint8_t {
-            binary_expr,
-            unary_expr,
-            prefix_expr,
-            suffix_expr,
+        enum class ExprKind : std::uint8_t {
+            typed_expr,
         };
 
-        explicit Expr(const Kind k, const ValueCategory v, MutableType* t, const SourceRange sr) 
-            : expr_kind(k), category(v), type(t), source_range(sr) {}
+        explicit Expr(const ExprKind k, const ValueCategory v, const SourceRange sr)
+            : expr_kind(k), category(v), source_range(sr) {}
+
+        [[nodiscard]] ExprKind get_kind() const { return expr_kind; }
+        [[nodiscard]] ValueCategory get_category() const { return category; }
+        [[nodiscard]] SourceRange get_source_range() const { return source_range; }
+        void set_source_range(const SourceRange& sr) { source_range = sr; }
     private:
-        Kind expr_kind;
+        ExprKind expr_kind;
         ValueCategory category;
-        
-        MutableType* type;
 
         // source info
         SourceRange source_range;

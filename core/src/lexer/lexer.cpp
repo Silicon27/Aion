@@ -38,22 +38,7 @@ namespace aion::lexer {
                 }
 
                 if (is_symbol_start(current_char)) {
-                    // check if it is a comment
-                    if (current_char == '/' && current_pos + 1 < current_line.size() && current_line[current_pos + 1] == '/') {
-                        const int column = static_cast<int>(current_pos) + 1;
-                        const bool is_doc_comment = current_pos + 2 < current_line.size() &&
-                            current_line[current_pos + 2] == '/';
-
-                        const std::string comment = current_line.substr(current_pos);
-                        current_pos = current_line.size();
-
-                        if (is_doc_comment) {
-                            // Keep doc comments as a single token so consumers can preserve full text.
-                            tokens.push_back({TokenType::doc_comment, comment, line_number, column});
-                            unfiltered_tokens.push_back({TokenType::doc_comment, spaces + comment, line_number, column});
-                            spaces.clear();
-                        }
-
+                    if (try_consume_line_comment(tokens)) {
                         continue;
                     }
 
@@ -77,6 +62,29 @@ namespace aion::lexer {
         tokens.push_back({TokenType::eof, "", line_number, 0});
         unfiltered_tokens.push_back({TokenType::eof, "", line_number, 0});
         return {tokens, unfiltered_tokens, unfiltered_lines};
+    }
+
+    bool Lexer::try_consume_line_comment(std::vector<Token> &tokens) {
+        if (current_line[current_pos] != '/' || current_pos + 1 >= current_line.size() ||
+            current_line[current_pos + 1] != '/') {
+            return false;
+        }
+
+        const int column = static_cast<int>(current_pos) + 1;
+        const bool is_doc_comment = current_pos + 2 < current_line.size() &&
+            current_line[current_pos + 2] == '/';
+
+        const std::string comment = current_line.substr(current_pos);
+        current_pos = current_line.size();
+
+        if (is_doc_comment) {
+            // Keep doc comments as a single token so consumers can preserve full text.
+            tokens.push_back({TokenType::doc_comment, comment, line_number, column});
+            unfiltered_tokens.push_back({TokenType::doc_comment, spaces + comment, line_number, column});
+            spaces.clear();
+        }
+
+        return true;
     }
 
     Token Lexer::tokenize_number() {

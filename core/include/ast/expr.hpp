@@ -82,6 +82,14 @@ namespace aion::ast {
         IdentifierInfo* name;
         IdentifierKind kind;
     };
+
+    class UnnamedExpr : public TypedExpr {
+    public:
+        enum class UnnamedKind : std::uint8_t {
+            Number,
+            String,
+        };
+    };
 }
 
 #endif //AION_EXPR_HPP

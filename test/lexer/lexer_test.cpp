@@ -372,6 +372,18 @@ void register_lexer_tests(TestRunner& runner) {
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::bang));
     });
 
+    symbol_suite->add_test("normal_comment_filtering", [] {
+        auto tokens = tokenize_string("// this is a comment that is going to be filtered\n"
+                                                    "let x = 5; // not filtered, but this comment is!");
+
+        AION_ASSERT_EQ(tokens.size(), 5u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_let));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::equal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[4].type), static_cast<int>(TokenType::semicolon));
+    });
+
     runner.add_suite(std::move(symbol_suite));
 
     // ========================================================================

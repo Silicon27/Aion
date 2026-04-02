@@ -38,8 +38,11 @@ namespace aion::lexer {
                 }
 
                 if (is_symbol_start(current_char)) {
-                    if (auto comment_token = try_consume_line_comment()) {
-                        tokens.push_back(*comment_token);
+                    std::optional<Token> comment_token;
+                    if (try_consume_line_comment(comment_token)) {
+                        if (comment_token) {
+                            tokens.push_back(*comment_token);
+                        }
                         continue;
                     }
 
@@ -65,10 +68,13 @@ namespace aion::lexer {
         return {tokens, unfiltered_tokens, unfiltered_lines};
     }
 
-    std::optional<Token> Lexer::try_consume_line_comment() {
-        if (current_line[current_pos] != '/' || current_pos + 1 >= current_line.size() ||
+    bool Lexer::try_consume_line_comment(std::optional<Token> &out_token) {
+        out_token.reset();
+        if (current_pos >= current_line.size() ||
+            current_line[current_pos] != '/' ||
+            current_pos + 1 >= current_line.size() ||
             current_line[current_pos + 1] != '/') {
-            return std::nullopt;
+            return false;
         }
 
         const int column = static_cast<int>(current_pos) + 1;
@@ -78,11 +84,16 @@ namespace aion::lexer {
         const std::string comment = current_line.substr(current_pos);
         current_pos = current_line.size();
 
-        const TokenType comment_type = is_doc_comment ? TokenType::doc_comment : TokenType::comment;
-        unfiltered_tokens.push_back({comment_type, spaces + comment, line_number, column});
-        spaces.clear();
+        if (!is_doc_comment) {
+            unfiltered_tokens.push_back({TokenType::comment, spaces + comment, line_number, column});
+            spaces.clear();
+            return true;
+        }
 
-        return Token{comment_type, comment, line_number, column};
+        unfiltered_tokens.push_back({TokenType::doc_comment, spaces + comment, line_number, column});
+        spaces.clear();
+        out_token = Token{TokenType::doc_comment, comment, line_number, column};
+        return true;
     }
 
     bool Lexer::try_consume_special_string(std::span<Token> tokens) {
@@ -304,3 +315,4 @@ namespace aion::lexer {
     }
 
 } // namespace aion::lexer
+

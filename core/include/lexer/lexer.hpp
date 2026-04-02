@@ -48,7 +48,8 @@ namespace aion::lexer {
         Token tokenize_number();
         Token tokenize_identifier();
         Token tokenize_symbol();
-        std::optional<Token> try_consume_line_comment();
+        bool try_consume_line_comment(std::optional<Token> &out_token);
+        bool try_consume_special_string(std::span<Token> tokens);
         [[nodiscard]] bool is_symbol_start(char c) const;
     };
 

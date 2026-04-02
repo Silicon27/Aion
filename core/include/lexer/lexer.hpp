@@ -11,6 +11,7 @@
 #include <map>
 #include <tuple>
 #include <ranges>
+#include <optional>
 #include <support/global_constants.hpp>
 
 namespace aion::lexer {
@@ -47,8 +48,7 @@ namespace aion::lexer {
         Token tokenize_number();
         Token tokenize_identifier();
         Token tokenize_symbol();
-        bool try_consume_line_comment(std::vector<Token> &tokens);
-        bool try_consume_special_string(std::span<Token> tokens);
+        std::optional<Token> try_consume_line_comment();
         [[nodiscard]] bool is_symbol_start(char c) const;
     };
 

@@ -373,8 +373,8 @@ void register_lexer_tests(TestRunner& runner) {
     });
 
     symbol_suite->add_test("normal_comment_filtering", [] {
-        auto tokens = tokenize_string("// this is a comment that is going to be filtered\n"
-                                                    "let x = 5; // not filtered, but this comment is!");
+        auto tokens = get_meaningful_tokens(tokenize_string("// this is a comment that is going to be filtered\n"
+                                                                        "let x = 5; // not filtered, but this comment is!"));
 
         AION_ASSERT_EQ(tokens.size(), 5u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_let));

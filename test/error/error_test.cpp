@@ -10,30 +10,6 @@
 
 namespace aion::test {
 
-// Global flag to enable neat output
-bool g_show_neat_output = false;
-
-// Helper to capture output and optionally print it neatly
-class OutputCapture {
-    std::stringstream buffer;
-    std::string test_name;
-
-public:
-    explicit OutputCapture(std::string name) : test_name(std::move(name)) {}
-
-    std::string get_output() const { return buffer.str(); }
-    std::stringstream& get_stream() { return buffer; }
-    
-    void finish() {
-        if (g_show_neat_output) {
-            std::cout << "\n[NEAT OUTPUT for " << test_name << "]:\n";
-            std::cout << "------------------------------------------\n";
-            std::cout << buffer.str();
-            std::cout << "------------------------------------------\n";
-        }
-    }
-};
-
 void register_error_tests(TestRunner& runner) {
 
     // ========================================================================
@@ -376,11 +352,8 @@ int main(int argc, char* argv[]) {
         std::string arg = argv[i];
         if (arg == "-v" || arg == "--verbose") {
             verbose = true;
-        } else if (arg == "--neat") {
-            g_show_neat_output = true;
         }
     }
-    g_show_neat_output = true;
 
     register_error_tests(runner);
 

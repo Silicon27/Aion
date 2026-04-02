@@ -169,6 +169,31 @@ private:
 };
 
 // ============================================================================
+// Output Capture Helper
+// ============================================================================
+class OutputCapture {
+public:
+    explicit OutputCapture(std::string name) : capture_name(std::move(name)) {}
+
+    [[nodiscard]] std::string get_output() const { return buffer.str(); }
+    std::stringstream& get_stream() { return buffer; }
+    
+    void finish() {
+        std::cout << "\n[" << capture_name << " Output]:\n";
+        std::cout << "------------------------------------------\n";
+        std::cout << buffer.str();
+        if (!buffer.str().empty() && buffer.str().back() != '\n') {
+            std::cout << "\n";
+        }
+        std::cout << "------------------------------------------\n";
+    }
+
+private:
+    std::stringstream buffer;
+    std::string capture_name;
+};
+
+// ============================================================================
 // Test Suite
 // ============================================================================
 class TestSuite {

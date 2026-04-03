@@ -76,6 +76,7 @@ static std::string token_type_to_string(TokenType type) {
         case TokenType::raw_string: return "raw_string";
         case TokenType::byte_string: return "byte_string";
         case TokenType::c_string: return "c_string";
+        case TokenType::error: return "error";
         case TokenType::unknown: return "unknown";
         case TokenType::newline: return "newline";
         case TokenType::eof: return "eof";
@@ -658,6 +659,51 @@ void register_lexer_tests(TestRunner& runner) {
         auto tokens = get_meaningful_tokens(tokenize_string("r\"a\\b\""));
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_STREQ(tokens[0].lexeme, "a\\b");
+    });
+
+    string_suite->add_test("triple_quoted_multiline", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string("\"\"\"multi\nline\"\"\""));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::string_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "multi\nline");
+        AION_ASSERT_EQ(tokens[0].line, 1);
+        AION_ASSERT_EQ(tokens[0].column, 1);
+    });
+
+    string_suite->add_test("unterminated_single_line_string_emits_error", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string("\"unterminated"));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::error));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "unterminated");
+        AION_ASSERT_EQ(tokens[0].line, 1);
+        AION_ASSERT_EQ(tokens[0].column, 1);
+    });
+
+    string_suite->add_test("unterminated_triple_quoted_emits_error", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string("\"\"\"incomplete\nmultiline"));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::error));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "incomplete\nmultiline");
+        AION_ASSERT_EQ(tokens[0].line, 1);
+        AION_ASSERT_EQ(tokens[0].column, 1);
+    });
+
+    string_suite->add_test("valid_then_unterminated_triple_quoted", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string(
+            "let x = \"\"\"multiline\nstring\"\"\"; let y = \"\"\"incomplete\nmultiline"
+        ));
+
+        AION_ASSERT_EQ(tokens.size(), 9u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_let));
+        AION_ASSERT_EQ(static_cast<int>(tokens[1].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_EQ(static_cast<int>(tokens[2].type), static_cast<int>(TokenType::equal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[3].type), static_cast<int>(TokenType::string_literal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[4].type), static_cast<int>(TokenType::semicolon));
+        AION_ASSERT_EQ(static_cast<int>(tokens[5].type), static_cast<int>(TokenType::kw_let));
+        AION_ASSERT_EQ(static_cast<int>(tokens[6].type), static_cast<int>(TokenType::identifier));
+        AION_ASSERT_EQ(static_cast<int>(tokens[7].type), static_cast<int>(TokenType::equal));
+        AION_ASSERT_EQ(static_cast<int>(tokens[8].type), static_cast<int>(TokenType::error));
+        AION_ASSERT_STREQ(tokens[8].lexeme, "incomplete\nmultiline");
     });
 
     runner.add_suite(std::move(string_suite));

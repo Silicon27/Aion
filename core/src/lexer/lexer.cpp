@@ -124,8 +124,25 @@ namespace aion::lexer {
                     }
                 }
 
-                // Unterminated multiline string: do not consume anything.
-                return false;
+                // Unterminated multiline string: emit one error token and consume to EOF.
+                const std::string prefix = current_line.substr(start_pos, quote_offset);
+                const std::string full_lexeme = prefix + R"(""")" + content;
+                unfiltered_tokens.emplace_back(TokenType::error, spaces + full_lexeme, start_line, column, flags);
+                spaces.clear();
+                out_token = Token(TokenType::error, content, start_line, column, flags);
+
+                if (!lines.empty()) {
+                    for (std::size_t consumed = line_index; consumed + 1 < lines.size(); ++consumed) {
+                        const int consumed_line = static_cast<int>(consumed + 1);
+                        tokens.emplace_back(TokenType::newline, "\n", consumed_line, 0);
+                        unfiltered_tokens.emplace_back(TokenType::newline, "\n", consumed_line, 0);
+                    }
+                    line_index = lines.size() - 1;
+                    current_line = lines[line_index];
+                    line_number = static_cast<int>(line_index + 1);
+                    current_pos = current_line.size();
+                }
+                return true;
             };
 
             while (current_pos < current_line.size()) {
@@ -271,7 +288,13 @@ namespace aion::lexer {
         }
 
         if (current_pos_dup >= current_line.size()) {
-            return false; // Unclosed string
+            std::size_t content_start = current_pos + dquote_start_offset + 1;
+            std::string content = current_line.substr(content_start);
+            std::string full_lexeme = current_line.substr(start_pos);
+            out_token = Token(TokenType::error, content, line_number, column, flags);
+            record_token(TokenType::error, full_lexeme, column, flags);
+            current_pos = current_line.size();
+            return true;
         }
 
         // Extract content WITHOUT quotes.

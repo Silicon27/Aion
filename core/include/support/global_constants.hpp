@@ -95,6 +95,7 @@ namespace aion::lexer {
         multiline_string,
 
         // Special
+        error,
         unknown,
         newline,
         eof,

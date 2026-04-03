@@ -78,7 +78,7 @@ namespace aion::parse {
             pos++;
             return previous();
         }
-        return {TokenType::invalid_token, ""};
+        return Token(TokenType::invalid_token);
     }
 
     Token Parser::silent_consume(const MatchToken &token) {
@@ -86,7 +86,7 @@ namespace aion::parse {
             pos++;
             return previous();
         }
-        return {TokenType::invalid_token, ""};
+        return Token(TokenType::invalid_token);
     }
 
     MutableType* Parser::match_type(const bool is_mut) {

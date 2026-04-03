@@ -27,6 +27,9 @@ namespace aion::lexer {
         Token(TokenType t, std::string l, int ln, int col, uint8_t f = 0)
             : type(t), flags(f), lexeme(std::move(l)), line(ln), column(col) {}
 
+        explicit Token(const TokenType t)
+            : type(t), line(0), column(0) {}
+
         TokenType get_type() const { return type; }
         const std::string& get_lexeme() const { return lexeme; }
         int get_line() const { return line; }

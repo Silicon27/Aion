@@ -28,6 +28,7 @@ namespace aion::ast {
         [[nodiscard]] TypeKind get_type_kind() const { return tk; }
         [[nodiscard]] MutableType* get_type() const { return type; }
         void set_type(MutableType* new_type) { type = new_type; }
+
     private:
         TypeKind tk;
         MutableType* type;
@@ -79,6 +80,16 @@ namespace aion::ast {
                    const bool is_comp, const SourceRange &sr = {})
             : TypedExpr(TypeKind::common_type, type, v, sr), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp) {
         }
+
+        [[nodiscard]] Expr* get_lhs() const { return lhs; }
+        [[nodiscard]] Expr* get_rhs() const { return rhs; }
+        [[nodiscard]] Op get_op() const { return op; }
+        [[nodiscard]] bool is_compile_time_computable() const { return is_comp; }
+
+        void set_lhs(Expr* new_lhs) { lhs = new_lhs; }
+        void set_rhs(Expr* new_rhs) { rhs = new_rhs; }
+        void set_op(const Op new_op) { op = new_op; }
+        void set_compile_time_computable(const bool new_is_comp) { is_comp = new_is_comp; }
 
     private:
         Expr* lhs;

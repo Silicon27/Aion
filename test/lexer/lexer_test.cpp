@@ -771,6 +771,10 @@ void register_lexer_tests(TestRunner& runner) {
         dump_tokens("MultiPrefixStrings", R"(fbrc"everything" fr"format_raw" bc"byte_c" rb"raw_byte")");
     });
 
+    dump_suite->add_test("multi_line_string", [] {
+        dump_tokens("MultiLineString", R"(let x = """multiline\nstring"""; let y = """incomplete\nmultiline)");
+    });
+
     dump_suite->add_test("numbers_dump", []() {
         dump_tokens("Numbers", "123 123.456 0xABC 0b101 1_000_000 0x1.P+3 123u 456ll");
     });

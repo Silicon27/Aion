@@ -11,19 +11,134 @@ namespace aion::lexer {
 
     std::tuple<std::vector<Token>, std::vector<Token>, std::map<int, std::string>> Lexer::tokenize() {
         std::vector<Token> tokens;
+        std::vector<std::string> lines;
         std::string line;
 
         while (std::getline(input, line)) {
-            current_line = line;
+            lines.push_back(line);
+        }
+
+        for (std::size_t i = 0; i < lines.size(); ++i) {
+            unfiltered_lines[static_cast<int>(i + 1)] = lines[i];
+        }
+
+        for (std::size_t line_index = 0; line_index < lines.size(); ++line_index) {
+            current_line = lines[line_index];
             current_pos = 0;
+            line_number = static_cast<int>(line_index + 1);
             spaces.clear();
 
+            auto try_consume_multiline_string = [&](Token &out_token) -> bool {
+                const std::size_t start_pos = current_pos;
+                std::size_t quote_offset = 0;
+                uint8_t flags = 0;
+
+                while (start_pos + quote_offset < current_line.size() && quote_offset < 4) {
+                    const char c = current_line[start_pos + quote_offset];
+                    if (c == '"') {
+                        break;
+                    }
+                    if (c == 'f') {
+                        flags |= (1 << 0);
+                    } else if (c == 'b') {
+                        flags |= (1 << 1);
+                    } else if (c == 'r') {
+                        flags |= (1 << 2);
+                    } else if (c == 'c') {
+                        flags |= (1 << 3);
+                    } else {
+                        return false;
+                    }
+                    ++quote_offset;
+                }
+
+                const std::size_t quote_pos = start_pos + quote_offset;
+                if (quote_pos + 2 >= current_line.size() ||
+                    current_line[quote_pos] != '"' ||
+                    current_line[quote_pos + 1] != '"' ||
+                    current_line[quote_pos + 2] != '"') {
+                    return false;
+                }
+
+                const int column = static_cast<int>(start_pos + 1);
+                const int start_line = static_cast<int>(line_index + 1);
+                const bool is_raw = (flags & (1 << 2)) != 0;
+                std::string content;
+                std::size_t scan_line = line_index;
+                std::size_t scan_pos = quote_pos + 3;
+                bool escaped = false;
+
+                while (scan_line < lines.size()) {
+                    const std::string &scan_text = lines[scan_line];
+
+                    while (scan_pos < scan_text.size()) {
+                        const char ch = scan_text[scan_pos];
+                        if (escaped) {
+                            escaped = false;
+                            content += ch;
+                            ++scan_pos;
+                            continue;
+                        }
+                        if (!is_raw && ch == '\\') {
+                            escaped = true;
+                            content += ch;
+                            ++scan_pos;
+                            continue;
+                        }
+                        if (ch == '"' &&
+                            scan_pos + 2 < scan_text.size() &&
+                            scan_text[scan_pos + 1] == '"' &&
+                            scan_text[scan_pos + 2] == '"') {
+                            const std::string prefix = current_line.substr(start_pos, quote_offset);
+                            const std::string full_lexeme = prefix + "\"\"\"" + content + "\"\"\"";
+
+                            unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + full_lexeme, start_line, column, flags);
+                            spaces.clear();
+
+                            out_token = Token(TokenType::string_literal, content, start_line, column, flags);
+
+                            if (scan_line > line_index) {
+                                for (std::size_t consumed = line_index; consumed < scan_line; ++consumed) {
+                                    const int consumed_line = static_cast<int>(consumed + 1);
+                                    tokens.emplace_back(TokenType::newline, "\n", consumed_line, 0);
+                                    unfiltered_tokens.emplace_back(TokenType::newline, "\n", consumed_line, 0);
+                                }
+                                line_index = scan_line;
+                                current_line = lines[line_index];
+                                line_number = static_cast<int>(line_index + 1);
+                            }
+
+                            current_pos = scan_pos + 3;
+                            return true;
+                        }
+
+                        content += ch;
+                        ++scan_pos;
+                    }
+
+                    ++scan_line;
+                    if (scan_line < lines.size()) {
+                        content += '\n';
+                        scan_pos = 0;
+                        escaped = false;
+                    }
+                }
+
+                // Unterminated multiline string: do not consume anything.
+                return false;
+            };
+
             while (current_pos < current_line.size()) {
-                char current_char = current_line[current_pos];
+                const char current_char = current_line[current_pos];
 
                 if (std::isspace(static_cast<unsigned char>(current_char))) {
                     spaces += current_char;
                     ++current_pos;
+                    continue;
+                }
+
+                if (Token string_token; try_consume_multiline_string(string_token)) {
+                    tokens.push_back(string_token);
                     continue;
                 }
 
@@ -55,8 +170,8 @@ namespace aion::lexer {
                     continue;
                 }
 
-                int column = static_cast<int>(current_pos + 1);
-                std::string lexeme(1, current_char);
+                const int column = static_cast<int>(current_pos + 1);
+                const std::string lexeme(1, current_char);
                 record_token(TokenType::unknown, lexeme, column);
                 tokens.emplace_back(TokenType::unknown, lexeme, line_number, column);
                 ++current_pos;
@@ -64,10 +179,9 @@ namespace aion::lexer {
 
             record_token(TokenType::newline, "\n", 0);
             tokens.emplace_back(TokenType::newline, "\n", line_number, 0);
-
-            unfiltered_lines[line_number++] = line;
         }
 
+        line_number = static_cast<int>(lines.size() + 1);
         record_token(TokenType::eof, "", 0);
         tokens.emplace_back(TokenType::eof, "", line_number, 0);
         return {tokens, unfiltered_tokens, unfiltered_lines};
@@ -104,11 +218,9 @@ namespace aion::lexer {
         return true;
     }
 
-    /// Internally aion supports length encoded strings, format strings, byte strings, raw strings, and C strings
-    /// all of which are denoted with the syntax "...", f"...", b"...", r"...", and c"..."
-    /// the tags can be combined, that is: fbrc"..." (a, format byte raw C string)
-    /// This function handles the special string literals, including format, byte, raw, and C string literals.
-    /// Length encoded strings are not supported by this function
+    /// Internally aion supports strings with optional f/b/r/c prefixes.
+    /// This function handles only single-line quoted strings. Triple-quoted
+    /// multiline strings are handled in tokenize() where line iteration lives.
     bool Lexer::try_consume_special_string(Token &out_token) {
         uint8_t flags = 0; // bits: f=0, b=1, r=2, c=3
         int dquote_start_offset = 0;
@@ -137,30 +249,15 @@ namespace aion::lexer {
         std::size_t start_pos = current_pos;
         std::size_t current_pos_dup = current_pos + dquote_start_offset + 1; // skip prefix and opening "
 
-        const bool is_raw = (flags & (1 << 2));
+        // Triple-quoted strings are handled by tokenize().
+        if (current_pos_dup + 1 < current_line.size() &&
+            current_line[current_pos_dup] == '"' &&
+            current_line[current_pos_dup + 1] == '"') {
+            return false;
+        }
+
+        const bool is_raw = (flags & (1 << 2)) != 0;
         bool escaped = false;
-        // NOTE not going to work, we need support from the actual tokenize() loop itself
-        // bool multiline = false;
-        //
-        // if (current_pos_dup + 2 < current_line.size() &&
-        //     current_line[current_pos_dup + 1] == '"'  &&
-        //     current_line[current_pos_dup + 2] == '"') {
-        //     multiline = true;
-        //     current_pos_dup += 2; // skip the other 2 "
-        //     while (current_pos_dup < current_line.size()) {
-        //         if (escaped) {
-        //             escaped = false;
-        //         } else if (!is_raw && current_line[current_pos_dup] == '\\') {
-        //             escaped = true;
-        //         } else if (current_line[current_pos_dup] == '"' &&
-        //             current_line[current_pos_dup + 1] == '"'    &&
-        //             current_line[current_pos_dup + 2] == '"') {
-        //             break;
-        //         }
-        //         current_pos_dup++;
-        //     }
-        //
-        // }
 
         while (current_pos_dup < current_line.size()) {
             if (escaped) {
@@ -177,10 +274,10 @@ namespace aion::lexer {
             return false; // Unclosed string
         }
 
-        // Extract content WITHOUT quotes
+        // Extract content WITHOUT quotes.
         std::size_t content_start = current_pos + dquote_start_offset + 1;
         std::string content = current_line.substr(content_start, current_pos_dup - content_start);
-        
+
         current_pos_dup++; // skip closing "
         std::string full_lexeme = current_line.substr(start_pos, current_pos_dup - start_pos);
 

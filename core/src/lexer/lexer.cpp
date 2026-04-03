@@ -155,7 +155,7 @@ namespace aion::lexer {
         std::string lexeme = current_line.substr(start_pos, current_pos_dup - start_pos);
         out_token = Token(TokenType::string_literal, lexeme, line_number, column, flags);
 
-        unfiltered_tokens.push_back({TokenType::string_literal, spaces + lexeme, line_number, column, flags});
+        unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + lexeme, line_number, column, flags);
         spaces.clear();
 
         current_pos = current_pos_dup;

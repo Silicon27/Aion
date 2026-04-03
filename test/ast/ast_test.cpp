@@ -74,7 +74,7 @@ void register_ast_tests(TestRunner& runner) {
         
         BuiltinType* bt = context.create<BuiltinType>(BuiltinType::Kind::i32);
         MutableType* type = context.create<MutableType>(bt, false);
-        IdentifierInfo* ii = context.get_identifier("x");
+        IdentifierInfo* ii = context.emplace_or_get_identifier("x");
         VarDecl* vd = context.create<VarDecl>(ii, *type,
             StorageClass::stack,
             SourceRange(SourceLocation(fid, offset), SourceLocation(fid, offset + 4)));
@@ -82,7 +82,7 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_EQ(vd->get_identifier(), "x");
         AION_ASSERT_EQ(static_cast<int>(vd->get_storage_class()), static_cast<int>(StorageClass::stack));
 
-        AION_ASSERT_EQ(context.get_identifier("x"), ii);
+        AION_ASSERT_EQ(context.emplace_or_get_identifier("x"), ii);
     });
 
     runner.add_suite(std::move(node_suite));

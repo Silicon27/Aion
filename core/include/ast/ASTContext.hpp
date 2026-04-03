@@ -310,12 +310,20 @@ namespace aion::ast {
         [[nodiscard]] TranslationUnitDecl *get_translation_unit_decl() const { return tu_decl; }
         [[nodiscard]] const StringMap<IdentifierInfo *>& get_identifiers() const { return identifiers; }
 
-        [[nodiscard]] IdentifierInfo *get_identifier(const std::string_view name) {
+        [[nodiscard]] IdentifierInfo* emplace_or_get_identifier(const std::string_view name) {
             auto &info = identifiers.emplace_or_get(name, nullptr);
             if (!info) {
                 info = create<IdentifierInfo>(allocate_string(name));
             }
             return info;
+        }
+
+        [[nodiscard]] IdentifierInfo* get_identifier(const std::string_view name) {
+            const auto it = identifiers.find(name);
+            if (!it) {
+                return nullptr;
+            }
+            return *it;
         }
 
         void *allocate(std::size_t size, std::size_t alignment = alignof(std::max_align_t)) {

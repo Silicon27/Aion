@@ -21,14 +21,9 @@ namespace aion::lexer {
             while (current_pos < current_line.size()) {
                 char current_char = current_line[current_pos];
 
-                if (std::isspace(current_char)) {
+                if (std::isspace(static_cast<unsigned char>(current_char))) {
                     spaces += current_char;
                     ++current_pos;
-                    continue;
-                }
-
-                if (Token string_token; try_consume_string_literal(string_token)) {
-                    tokens.push_back(string_token);
                     continue;
                 }
 
@@ -37,17 +32,15 @@ namespace aion::lexer {
                     continue;
                 }
 
-                if (std::isdigit(current_char)) {
+                if (std::isdigit(static_cast<unsigned char>(current_char))) {
                     tokens.push_back(tokenize_number());
                     continue;
                 }
 
-                if (std::isalpha(current_char) || current_char == '_') {
+                if (std::isalpha(static_cast<unsigned char>(current_char)) || current_char == '_') {
                     tokens.push_back(tokenize_identifier());
                     continue;
                 }
-
-
 
                 if (is_symbol_start(current_char)) {
                     std::optional<Token> comment_token;
@@ -62,22 +55,27 @@ namespace aion::lexer {
                     continue;
                 }
 
-                tokens.emplace_back(TokenType::unknown, std::string(1, current_char), line_number, static_cast<int>(current_pos + 1));
-                unfiltered_tokens.emplace_back(TokenType::unknown, std::string(1, current_char) + spaces, line_number, static_cast<int>(current_pos + 1));
+                int column = static_cast<int>(current_pos + 1);
+                std::string lexeme(1, current_char);
+                record_token(TokenType::unknown, lexeme, column);
+                tokens.emplace_back(TokenType::unknown, lexeme, line_number, column);
                 ++current_pos;
             }
 
+            record_token(TokenType::newline, "\n", 0);
             tokens.emplace_back(TokenType::newline, "\n", line_number, 0);
-            unfiltered_tokens.emplace_back(TokenType::newline, "\n", line_number, 0);
 
             unfiltered_lines[line_number++] = line;
-
-
         }
 
+        record_token(TokenType::eof, "", 0);
         tokens.emplace_back(TokenType::eof, "", line_number, 0);
-        unfiltered_tokens.emplace_back(TokenType::eof, "", line_number, 0);
         return {tokens, unfiltered_tokens, unfiltered_lines};
+    }
+
+    void Lexer::record_token(TokenType type, const std::string& full_lexeme, int column, uint8_t flags) {
+        unfiltered_tokens.emplace_back(type, spaces + full_lexeme, line_number, column, flags);
+        spaces.clear();
     }
 
     bool Lexer::try_consume_line_comment(std::optional<Token> &out_token) {
@@ -97,13 +95,11 @@ namespace aion::lexer {
         current_pos = current_line.size();
 
         if (!is_doc_comment) {
-            unfiltered_tokens.emplace_back(TokenType::comment, spaces + comment, line_number, column);
-            spaces.clear();
+            record_token(TokenType::comment, comment, column);
             return true;
         }
 
-        unfiltered_tokens.emplace_back(TokenType::doc_comment, spaces + comment, line_number, column);
-        spaces.clear();
+        record_token(TokenType::doc_comment, comment, column);
         out_token = Token{TokenType::doc_comment, comment, line_number, column};
         return true;
     }
@@ -140,11 +136,12 @@ namespace aion::lexer {
         std::size_t start_pos = current_pos;
         std::size_t current_pos_dup = current_pos + dquote_start_offset + 1; // skip prefix and opening "
 
+        const bool is_raw = (flags & (1 << 2));
         bool escaped = false;
         while (current_pos_dup < current_line.size()) {
             if (escaped) {
                 escaped = false;
-            } else if (current_line[current_pos_dup] == '\\') {
+            } else if (!is_raw && current_line[current_pos_dup] == '\\') {
                 escaped = true;
             } else if (current_line[current_pos_dup] == '"') {
                 break;
@@ -156,53 +153,15 @@ namespace aion::lexer {
             return false; // Unclosed string
         }
 
-        // Extract content WITHOUT quotes (strip opening " and closing ")
-        std::size_t content_start = current_pos + dquote_start_offset + 1; // after prefix and opening "
+        // Extract content WITHOUT quotes
+        std::size_t content_start = current_pos + dquote_start_offset + 1;
         std::string content = current_line.substr(content_start, current_pos_dup - content_start);
+        
         current_pos_dup++; // skip closing "
+        std::string full_lexeme = current_line.substr(start_pos, current_pos_dup - start_pos);
 
         out_token = Token(TokenType::string_literal, content, line_number, column, flags);
-
-        unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + content, line_number, column, flags);
-        spaces.clear();
-
-        current_pos = current_pos_dup;
-        return true;
-    }
-
-    bool Lexer::try_consume_string_literal(Token &out_token) {
-        if (current_pos >= current_line.size() || current_line[current_pos] != '"') {
-            return false;
-        }
-
-        int column = static_cast<int>(current_pos) + 1;
-        std::size_t string_start = current_pos + 1; // position after opening "
-
-        bool escaped = false;
-        std::size_t current_pos_dup = current_pos + 1;
-
-        while (current_pos_dup < current_line.size()) {
-            if (escaped) {
-                escaped = false;
-            } else if (current_line[current_pos_dup] == '\\') {
-                escaped = true;
-            } else if (current_line[current_pos_dup] == '"') {
-                break;
-            }
-            current_pos_dup++;
-        }
-
-        if (current_pos_dup >= current_line.size()) {
-            return false; // Unclosed string
-        }
-
-        // Extract content WITHOUT the quotes
-        std::string content = current_line.substr(string_start, current_pos_dup - string_start);
-        current_pos_dup++; // skip closing "
-
-        out_token = Token(TokenType::string_literal, content, line_number, column);
-        unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + content, line_number, column);
-        spaces.clear();
+        record_token(TokenType::string_literal, full_lexeme, column, flags);
 
         current_pos = current_pos_dup;
         return true;
@@ -232,7 +191,7 @@ namespace aion::lexer {
                 base = 8;
                 lexeme += s[current_pos++];
                 lexeme += s[current_pos++];
-            } else if (std::isdigit(c1)) {
+            } else if (std::isdigit(static_cast<unsigned char>(c1))) {
                 // C-style octal: 0755
                 base = 8;
                 lexeme += s[current_pos++];
@@ -240,8 +199,9 @@ namespace aion::lexer {
         }
 
         auto validDigit = [base](char c) -> bool {
-            if (base == 16) return std::isdigit(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-            if (base == 10) return std::isdigit(c) != 0;
+            unsigned char uc = static_cast<unsigned char>(c);
+            if (base == 16) return std::isdigit(uc) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+            if (base == 10) return std::isdigit(uc) != 0;
             if (base == 8) return c >= '0' && c <= '7';
             if (base == 2) return c == '0' || c == '1';
             return false;
@@ -315,11 +275,11 @@ namespace aion::lexer {
                 // Exponent digits (always decimal, even for hex floats)
                 bool has_exp_digits = false;
                 while (current_pos < s.size()) {
-                    if (std::isdigit(s[current_pos])) {
+                    if (std::isdigit(static_cast<unsigned char>(s[current_pos]))) {
                         lexeme += s[current_pos++];
                         has_exp_digits = true;
                     } else if (isSeparator(s[current_pos]) && has_exp_digits &&
-                               current_pos + 1 < s.size() && std::isdigit(s[current_pos + 1])) {
+                               current_pos + 1 < s.size() && std::isdigit(static_cast<unsigned char>(s[current_pos + 1]))) {
                         lexeme += s[current_pos++];
                     } else {
                         break;
@@ -327,32 +287,38 @@ namespace aion::lexer {
                 }
 
                 if (!has_exp_digits) {
-                    return {TokenType::unknown, s.substr(start, current_pos - start), line_number, column};
+                    std::string err_lexeme = s.substr(start, current_pos - start);
+                    record_token(TokenType::unknown, err_lexeme, column);
+                    return {TokenType::unknown, err_lexeme, line_number, column};
                 }
                 is_float = true;
             } else if (needs_exponent) {
                 // Hex float without required 'p' exponent
-                return {TokenType::unknown, s.substr(start, current_pos - start), line_number, column};
+                std::string err_lexeme = s.substr(start, current_pos - start);
+                record_token(TokenType::unknown, err_lexeme, column);
+                return {TokenType::unknown, err_lexeme, line_number, column};
             }
         }
 
         // Type suffixes
         std::string suffix;
-        while (current_pos < s.size() && std::isalpha(s[current_pos])) {
+        while (current_pos < s.size() && std::isalpha(static_cast<unsigned char>(s[current_pos]))) {
             suffix += s[current_pos++];
         }
 
         if (!suffix.empty()) {
             std::string lower;
             for (auto c : suffix) {
-                lower += static_cast<char>(std::tolower(c));
+                lower += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
             }
 
             // Validate suffix
             if (is_float) {
                 // Float suffixes: f, lf, l (long double)
                 if (lower != "f" && lower != "lf" && lower != "l") {
-                    return {TokenType::unknown, s.substr(start, current_pos - start), line_number, column};
+                    std::string err_lexeme = s.substr(start, current_pos - start);
+                    record_token(TokenType::unknown, err_lexeme, column);
+                    return {TokenType::unknown, err_lexeme, line_number, column};
                 }
             } else {
                 // Integer suffixes: u, l, ul, lu, ll, ull, llu, z, uz, zu
@@ -367,15 +333,16 @@ namespace aion::lexer {
                     }
                 }
                 if (!is_valid) {
-                    return {TokenType::unknown, s.substr(start, current_pos - start), line_number, column};
+                    std::string err_lexeme = s.substr(start, current_pos - start);
+                    record_token(TokenType::unknown, err_lexeme, column);
+                    return {TokenType::unknown, err_lexeme, line_number, column};
                 }
             }
             lexeme += suffix;
         }
 
         TokenType tok_type = is_float ? TokenType::float_literal : TokenType::int_literal;
-        unfiltered_tokens.emplace_back(tok_type, spaces + lexeme, line_number, column);
-        spaces.clear();
+        record_token(tok_type, lexeme, column);
         return {tok_type, lexeme, line_number, column};
     }
 
@@ -383,13 +350,12 @@ namespace aion::lexer {
         int column = static_cast<int>(current_pos) + 1;
         std::string ident;
 
-        while (current_pos < current_line.size() && (std::isalnum(current_line[current_pos]) || current_line[current_pos] == '_')) {
+        while (current_pos < current_line.size() && (std::isalnum(static_cast<unsigned char>(current_line[current_pos])) || current_line[current_pos] == '_')) {
             ident += current_line[current_pos++];
         }
 
         TokenType type = is_keyword(ident) ? get_keyword_type(ident) : TokenType::identifier;
-        unfiltered_tokens.emplace_back(type, spaces + ident, line_number, column);
-        spaces.clear();
+        record_token(type, ident, column);
         return {type, ident, line_number, column};
     }
 
@@ -402,15 +368,13 @@ namespace aion::lexer {
                 current_line.substr(current_pos, len) == sym) {
                 current_pos += len;
                 TokenType type = get_symbol_type(sym);
-                unfiltered_tokens.emplace_back(type, spaces + sym, line_number, column);
-                spaces.clear();
+                record_token(type, sym, column);
                 return {type, sym, line_number, column};
             }
         }
 
         char unknown_char = current_line[current_pos++];
-        unfiltered_tokens.emplace_back(TokenType::unknown, spaces + std::string(1, unknown_char), line_number, column);
-        spaces.clear();
+        record_token(TokenType::unknown, std::string(1, unknown_char), column);
         return {TokenType::unknown, std::string(1, unknown_char), line_number, column};
     }
 

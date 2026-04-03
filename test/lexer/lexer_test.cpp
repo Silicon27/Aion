@@ -19,6 +19,13 @@ static std::vector<Token> tokenize_string(const std::string& input) {
     return tokens;
 }
 
+static std::vector<Token> tokenize_string_unfiltered(const std::string& input) {
+    std::istringstream stream(input);
+    Lexer lexer(stream);
+    auto [tokens, unfiltered, lines] = lexer.tokenize();
+    return unfiltered;
+}
+
 // Helper to get token without newlines and EOF
 static std::vector<Token> get_meaningful_tokens(const std::vector<Token>& tokens) {
     std::vector<Token> result;
@@ -511,7 +518,66 @@ void register_lexer_tests(TestRunner& runner) {
         AION_ASSERT_STREQ(tokens[0].lexeme, "a\\\"b");
     });
 
+    string_suite->add_test("raw_string_no_escape", []() {
+        // In a raw string, \" should NOT escape the quote.
+        // So r"a\"b" should be a raw string "a\" followed by b" and then a syntax error or similar.
+        // Wait, if it's r"a\", the first quote terminates it.
+        // Let's test r"a\b". The \ should be preserved.
+        auto tokens = get_meaningful_tokens(tokenize_string("r\"a\\b\""));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_STREQ(tokens[0].lexeme, "a\\b");
+    });
+
     runner.add_suite(std::move(string_suite));
+
+    // ========================================================================
+    // Unfiltered Reconstruction Tests
+    // ========================================================================
+
+    auto unfiltered_suite = std::make_unique<TestSuite>("Lexer::Unfiltered");
+
+    unfiltered_suite->add_test("reconstruct_simple", []() {
+        std::string input = "let x = 10;";
+        auto tokens = tokenize_string_unfiltered(input);
+        std::string reconstructed;
+        for (const auto& t : tokens) {
+            if (t.type != TokenType::eof) reconstructed += t.lexeme;
+        }
+        AION_ASSERT_STREQ(reconstructed, input + "\n");
+    });
+
+    unfiltered_suite->add_test("reconstruct_with_spaces", []() {
+        std::string input = "  let   x = 10 ;  ";
+        auto tokens = tokenize_string_unfiltered(input);
+        std::string reconstructed;
+        for (const auto& t : tokens) {
+            if (t.type != TokenType::eof) reconstructed += t.lexeme;
+        }
+        // trailing spaces should be preserved in the newline token or somewhere
+        AION_ASSERT_STREQ(reconstructed, input + "\n");
+    });
+
+    unfiltered_suite->add_test("reconstruct_unknown_chars", []() {
+        std::string input = "  ?  !  ";
+        auto tokens = tokenize_string_unfiltered(input);
+        std::string reconstructed;
+        for (const auto& t : tokens) {
+            if (t.type != TokenType::eof) reconstructed += t.lexeme;
+        }
+        AION_ASSERT_STREQ(reconstructed, input + "\n");
+    });
+
+    unfiltered_suite->add_test("reconstruct_string_literal", []() {
+        std::string input = "f\"hello\"";
+        auto tokens = tokenize_string_unfiltered(input);
+        std::string reconstructed;
+        for (const auto& t : tokens) {
+            if (t.type != TokenType::eof) reconstructed += t.lexeme;
+        }
+        AION_ASSERT_STREQ(reconstructed, input + "\n");
+    });
+
+    runner.add_suite(std::move(unfiltered_suite));
 
     // ========================================================================
     // Edge Case Tests

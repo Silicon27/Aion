@@ -83,11 +83,16 @@ namespace aion::lexer {
         float_literal,
         string_literal,
         number,
-        length_encoded_string, // has length encoded into the allocated storage for the string
+        /// has length encoded into the allocated storage for the string
+        length_encoded_string,
         format_string,
         raw_string,
         byte_string,
         c_string,
+        /// non-length encoded string, similar to C/C++'s char[], a pure, contiguous block of memory containing chars
+        pure_string,
+        /// length encoded string, containing multiple lines of text; newlines are preserved
+        multiline_string,
 
         // Special
         unknown,

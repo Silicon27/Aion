@@ -122,6 +122,7 @@ namespace aion::lexer {
             else if (c == 'b') flags |= (1 << 1);
             else if (c == 'r') flags |= (1 << 2);
             else if (c == 'c') flags |= (1 << 3);
+            /// TODO add p_string support
             else return false;
 
             dquote_start_offset++;
@@ -138,6 +139,29 @@ namespace aion::lexer {
 
         const bool is_raw = (flags & (1 << 2));
         bool escaped = false;
+        // NOTE not going to work, we need support from the actual tokenize() loop itself
+        // bool multiline = false;
+        //
+        // if (current_pos_dup + 2 < current_line.size() &&
+        //     current_line[current_pos_dup + 1] == '"'  &&
+        //     current_line[current_pos_dup + 2] == '"') {
+        //     multiline = true;
+        //     current_pos_dup += 2; // skip the other 2 "
+        //     while (current_pos_dup < current_line.size()) {
+        //         if (escaped) {
+        //             escaped = false;
+        //         } else if (!is_raw && current_line[current_pos_dup] == '\\') {
+        //             escaped = true;
+        //         } else if (current_line[current_pos_dup] == '"' &&
+        //             current_line[current_pos_dup + 1] == '"'    &&
+        //             current_line[current_pos_dup + 2] == '"') {
+        //             break;
+        //         }
+        //         current_pos_dup++;
+        //     }
+        //
+        // }
+
         while (current_pos_dup < current_line.size()) {
             if (escaped) {
                 escaped = false;

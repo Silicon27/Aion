@@ -163,6 +163,8 @@ namespace aion::ast {
         UnnamedExpr(const UnnamedKind k, MutableType* type, const SourceRange& sr = {})
             : TypedExpr(TypeKind::common_type, type, ValueCategory::unnamed, sr), kind(k) {}
 
+        [[nodiscard]] UnnamedKind get_kind() const { return kind; }
+
     private:
         UnnamedKind kind;
     };

@@ -36,7 +36,7 @@ namespace aion::ast {
 
     class BinaryExpr : public TypedExpr {
     public:
-        enum class Op : std::uint8_t {
+        enum class BinaryOp : std::uint8_t {
             add,
             sub,
             mul,
@@ -76,32 +76,32 @@ namespace aion::ast {
             as,
         };
 
-        BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type,
+        BinaryExpr(Expr* lhs, Expr* rhs, const BinaryOp op, const ValueCategory v, MutableType* type,
                    const bool is_comp, const SourceRange &sr = {})
             : TypedExpr(TypeKind::common_type, type, v, sr), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp) {
         }
 
         [[nodiscard]] Expr* get_lhs() const { return lhs; }
         [[nodiscard]] Expr* get_rhs() const { return rhs; }
-        [[nodiscard]] Op get_op() const { return op; }
+        [[nodiscard]] BinaryOp get_op() const { return op; }
         [[nodiscard]] bool is_compile_time_computable() const { return is_comp; }
 
         void set_lhs(Expr* new_lhs) { lhs = new_lhs; }
         void set_rhs(Expr* new_rhs) { rhs = new_rhs; }
-        void set_op(const Op new_op) { op = new_op; }
+        void set_op(const BinaryOp new_op) { op = new_op; }
         void set_compile_time_computable(const bool new_is_comp) { is_comp = new_is_comp; }
 
     private:
         Expr* lhs;
         Expr* rhs;
-        Op op;
+        BinaryOp op;
 
         bool is_comp = false;
     };
 
     class UnaryExpr : public TypedExpr {
     public:
-        enum class Op : std::uint8_t {
+        enum class UnaryOp : std::uint8_t {
             plus,
             minus,
             logical_not,
@@ -110,27 +110,27 @@ namespace aion::ast {
             deref,
         };
 
-        UnaryExpr(Expr* operand, const Op op, const ValueCategory v, MutableType* type,
+        UnaryExpr(Expr* operand, const UnaryOp op, const ValueCategory v, MutableType* type,
                    bool is_comp, const SourceRange &sr = {})
             : TypedExpr(TypeKind::common_type, type, v, sr), operand(operand), op(op), is_comp(is_comp) {
         }
 
         [[nodiscard]] Expr* get_operand() const { return operand; }
-        [[nodiscard]] Op get_op() const { return op; }
+        [[nodiscard]] UnaryOp get_op() const { return op; }
         [[nodiscard]] bool is_compile_time_computable() const { return is_comp; }
 
         void set_operand(Expr* new_operand) { operand = new_operand; }
-        void set_op(const Op new_op) { op = new_op; }
+        void set_op(const UnaryOp new_op) { op = new_op; }
         void set_compile_time_computable(const bool new_is_comp) { is_comp = new_is_comp; }
 
     private:
         Expr* operand; // would be a ResolvedIdentifierExpr
-        Op op;
+        UnaryOp op;
 
         bool is_comp = false;
     };
 
-    /// Represents any resolved identifier at parse time that is part of an expression
+    /// Represents any resolved identifier (named elements of an expression) at parse time that is part of an expression
     ///
     /// said node would represent variables, functions, and enums by which are resolved at parse time.
     class ResolvedIdentifierExpr : public TypedExpr {
@@ -141,8 +141,8 @@ namespace aion::ast {
             enum_,
         };
 
-        ResolvedIdentifierExpr(IdentifierInfo* name, const ValueCategory v, MutableType* type, const IdentifierKind k, const SourceRange& sr = {})
-            : TypedExpr(TypeKind::atom_type, type, v, sr), name(name), kind(k) {
+        ResolvedIdentifierExpr(IdentifierInfo* name, MutableType* type, const IdentifierKind k, const SourceRange& sr = {})
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::named, sr), name(name), kind(k) {
         }
 
     private:
@@ -150,12 +150,21 @@ namespace aion::ast {
         IdentifierKind kind;
     };
 
+
+    /// Any unnamed literal value would be represented by this node
+    /// ex: "some string", 324, 241u, etc.
     class UnnamedExpr : public TypedExpr {
     public:
         enum class UnnamedKind : std::uint8_t {
             Number,
             String,
         };
+
+        UnnamedExpr(const UnnamedKind k, MutableType* type, const SourceRange& sr = {})
+            : TypedExpr(TypeKind::common_type, type, ValueCategory::unnamed, sr), kind(k) {}
+
+    private:
+        UnnamedKind kind;
     };
 }
 

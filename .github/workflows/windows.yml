@@ -75,8 +75,28 @@ jobs:
           }
 
           if (-not $llvmDir) {
-            Write-Host 'LLVMConfig.cmake was not found in known locations.'
-            Get-ChildItem 'C:\Program Files\LLVM' -Recurse -Filter LLVMConfig.cmake -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+            Write-Host 'LLVM not found from cache/known paths. installing LLVM now...'
+            choco uninstall llvm -y --all-versions | Out-Null
+            choco install llvm --version=16.0.0 -y --allow-downgrade --force
+
+            $searchRoots = @(
+              'C:\Program Files\LLVM',
+              'C:\tools\llvm'
+            )
+
+            foreach ($root in $searchRoots) {
+              if (-not (Test-Path $root)) { continue }
+              $found = Get-ChildItem $root -Recurse -Filter LLVMConfig.cmake -ErrorAction SilentlyContinue |
+                Select-Object -First 1
+              if ($found) {
+                $llvmDir = $found.DirectoryName
+                break
+              }
+            }
+          }
+
+          if (-not $llvmDir) {
+            Write-Host 'LLVMConfig.cmake was not found in known locations after install.'
             throw 'Unable to resolve LLVM_DIR'
           }
 

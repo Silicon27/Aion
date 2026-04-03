@@ -670,6 +670,24 @@ void register_lexer_tests(TestRunner& runner) {
         AION_ASSERT_EQ(tokens[0].column, 1);
     });
 
+    string_suite->add_test("prefixed_triple_quoted_multiline", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string("f\"\"\"multi\nline\"\"\""));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::string_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "multi\nline");
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].flags), 1);
+        AION_ASSERT_EQ(tokens[0].line, 1);
+        AION_ASSERT_EQ(tokens[0].column, 1);
+    });
+
+    string_suite->add_test("raw_triple_quoted_multiline", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string("r\"\"\"raw\\ntext\"\"\""));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::string_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "raw\\ntext");
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].flags), 4);
+    });
+
     string_suite->add_test("unterminated_single_line_string_emits_error", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("\"unterminated"));
         AION_ASSERT_EQ(tokens.size(), 1u);
@@ -684,6 +702,16 @@ void register_lexer_tests(TestRunner& runner) {
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::error));
         AION_ASSERT_STREQ(tokens[0].lexeme, "incomplete\nmultiline");
+        AION_ASSERT_EQ(tokens[0].line, 1);
+        AION_ASSERT_EQ(tokens[0].column, 1);
+    });
+
+    string_suite->add_test("prefixed_unterminated_triple_quoted_emits_error", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string("f\"\"\"incomplete\nmultiline"));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::error));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "incomplete\nmultiline");
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].flags), 1);
         AION_ASSERT_EQ(tokens[0].line, 1);
         AION_ASSERT_EQ(tokens[0].column, 1);
     });
@@ -818,7 +846,11 @@ void register_lexer_tests(TestRunner& runner) {
     });
 
     dump_suite->add_test("multi_line_string", [] {
-        dump_tokens("MultiLineString", R"(let x = """multiline\nstring"""; let y = """incomplete\nmultiline)");
+        dump_tokens("MultiLineString", "let x = \"\"\"multiline\nstring\"\"\"; let y = \"\"\"incomplete\nmultiline");
+    });
+
+    dump_suite->add_test("multiline_string_error_dump", []() {
+        dump_tokens("MultilineStringError", "let y = \"\"\"incomplete\nmultiline");
     });
 
     dump_suite->add_test("numbers_dump", []() {

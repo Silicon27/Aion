@@ -40,6 +40,8 @@ namespace aion::ast {
             sub,
             mul,
             div,
+            mod,
+            pow,
             equal,
             not_equal,
             less,
@@ -48,6 +50,29 @@ namespace aion::ast {
             greater_equal,
             logical_and,
             logical_or,
+            bit_and,
+            bit_or,
+            bit_xor,
+            lshift,
+            rshift,
+            assign,
+            add_assign,
+            sub_assign,
+            mul_assign,
+            div_assign,
+            mod_assign,
+            and_assign,
+            or_assign,
+            xor_assign,
+            lshift_assign,
+            rshift_assign,
+            dot,
+            arrow,
+            scope_resolution,
+            range,
+            inclusive_range,
+            fat_arrow,
+            as,
         };
 
         BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type,
@@ -58,6 +83,29 @@ namespace aion::ast {
     private:
         Expr* lhs;
         Expr* rhs;
+        Op op;
+
+        bool is_comp = false;
+    };
+
+    class UnaryExpr : public TypedExpr {
+    public:
+        enum class Op : std::uint8_t {
+            plus,
+            minus,
+            logical_not,
+            bit_not,
+            address_of,
+            deref,
+        };
+
+        UnaryExpr(Expr* operand, const Op op, const ValueCategory v, MutableType* type,
+                   const SourceRange &sr = {})
+            : TypedExpr(TypeKind::common_type, type, v, sr), operand(operand), op(op) {
+        }
+
+    private:
+        Expr* operand;
         Op op;
 
         bool is_comp = false;

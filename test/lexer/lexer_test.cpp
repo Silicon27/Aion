@@ -97,6 +97,7 @@ static std::string token_type_to_string(TokenType type) {
         case TokenType::star: return "star";
         case TokenType::double_star: return "double_star";
         case TokenType::slash: return "slash";
+        case TokenType::percent: return "percent";
         case TokenType::bang: return "bang";
         case TokenType::bang_equal: return "bang_equal";
         case TokenType::equal_equal: return "equal_equal";
@@ -107,6 +108,30 @@ static std::string token_type_to_string(TokenType type) {
         case TokenType::dot: return "dot";
         case TokenType::double_dot: return "double_dot";
         case TokenType::triple_dot: return "triple_dot";
+        case TokenType::arrow: return "arrow";
+        case TokenType::fat_arrow: return "fat_arrow";
+        case TokenType::ampersand: return "ampersand";
+        case TokenType::pipe: return "pipe";
+        case TokenType::caret: return "caret";
+        case TokenType::tilde: return "tilde";
+        case TokenType::logical_and: return "logical_and";
+        case TokenType::logical_or: return "logical_or";
+        case TokenType::lshift: return "lshift";
+        case TokenType::rshift: return "rshift";
+        case TokenType::plus_equal: return "plus_equal";
+        case TokenType::minus_equal: return "minus_equal";
+        case TokenType::star_equal: return "star_equal";
+        case TokenType::slash_equal: return "slash_equal";
+        case TokenType::percent_equal: return "percent_equal";
+        case TokenType::amp_equal: return "amp_equal";
+        case TokenType::pipe_equal: return "pipe_equal";
+        case TokenType::caret_equal: return "caret_equal";
+        case TokenType::lshift_equal: return "lshift_equal";
+        case TokenType::rshift_equal: return "rshift_equal";
+        case TokenType::question: return "question";
+        case TokenType::at: return "at";
+        case TokenType::hash: return "hash";
+        case TokenType::dollar: return "dollar";
         case TokenType::invalid_token: return "invalid_token";
         default: return "UNKNOWN(" + std::to_string(static_cast<int>(type)) + ")";
     }

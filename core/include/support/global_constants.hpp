@@ -113,6 +113,7 @@ namespace aion::lexer {
         star,
         double_star,
         slash,
+        percent,
         bang,
         bang_equal,
         equal_equal,
@@ -123,6 +124,30 @@ namespace aion::lexer {
         dot,
         double_dot,
         triple_dot,
+        arrow,
+        fat_arrow,
+        ampersand,
+        pipe,
+        caret,
+        tilde,
+        logical_and,
+        logical_or,
+        lshift,
+        rshift,
+        plus_equal,
+        minus_equal,
+        star_equal,
+        slash_equal,
+        percent_equal,
+        amp_equal,
+        pipe_equal,
+        caret_equal,
+        lshift_equal,
+        rshift_equal,
+        question,
+        at,
+        hash,
+        dollar,
 
         // misc
         invalid_token,
@@ -190,7 +215,9 @@ namespace aion::lexer {
         if (str == "+") return TokenType::plus;
         if (str == "-") return TokenType::minus;
         if (str == "*") return TokenType::star;
+        if (str == "**") return TokenType::double_star;
         if (str == "/") return TokenType::slash;
+        if (str == "%") return TokenType::percent;
         if (str == "!") return TokenType::bang;
         if (str == "!=") return TokenType::bang_equal;
         if (str == "==") return TokenType::equal_equal;
@@ -198,21 +225,44 @@ namespace aion::lexer {
         if (str == "<=") return TokenType::less_equal;
         if (str == ">") return TokenType::greater;
         if (str == ">=") return TokenType::greater_equal;
-        if (str == "\\") return TokenType::comment;
         if (str == ".") return TokenType::dot;
         if (str == "..") return TokenType::double_dot;
         if (str == "...") return TokenType::triple_dot;
+        if (str == "->") return TokenType::arrow;
+        if (str == "=>") return TokenType::fat_arrow;
+        if (str == "&") return TokenType::ampersand;
+        if (str == "|") return TokenType::pipe;
+        if (str == "^") return TokenType::caret;
+        if (str == "~") return TokenType::tilde;
+        if (str == "&&") return TokenType::logical_and;
+        if (str == "||") return TokenType::logical_or;
+        if (str == "<<") return TokenType::lshift;
+        if (str == ">>") return TokenType::rshift;
+        if (str == "+=") return TokenType::plus_equal;
+        if (str == "-=") return TokenType::minus_equal;
+        if (str == "*=") return TokenType::star_equal;
+        if (str == "/=") return TokenType::slash_equal;
+        if (str == "%=") return TokenType::percent_equal;
+        if (str == "&=") return TokenType::amp_equal;
+        if (str == "|=") return TokenType::pipe_equal;
+        if (str == "^=") return TokenType::caret_equal;
+        if (str == "<<=") return TokenType::lshift_equal;
+        if (str == ">>=") return TokenType::rshift_equal;
+        if (str == "?") return TokenType::question;
+        if (str == "@") return TokenType::at;
+        if (str == "#") return TokenType::hash;
+        if (str == "$") return TokenType::dollar;
+        if (str == "\\") return TokenType::comment;
         return TokenType::unknown;
     }
 
     // Lexer symbols list (sorted by length descending for longest-match)
     inline std::vector<std::string> get_symbols() {
         std::vector<std::string> syms = {
-            "\\\"", "\\\'", "\\\t", "\\\n", "\\\r", "\\\v", "\\\f", "\\\b", "\\\a",
-            "<<@", "...", "==", "!=", "<=", ">=", "=>", "->", "::", "||", "&&",
-            "+=", "-=", "<<", ">>", "^+", "^-", "\\\\", "..",
-            "=", "+", "-", "*", "/", "(", ")", "{", "}", "[", "]", ";", ",", ":",
-            "\"", "\'", "\\", "@", "#", "$", "%", "&", "?", "!", "<", ">", "|", "^", "~", "."
+            "<<@", "...", "<<=", ">>=", "==", "!=", "<=", ">=", "=>", "->", "::", "||", "&&",
+            "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<", ">>", "**", "..",
+            "=", "+", "-", "*", "/", "%", "(", ")", "{", "}", "[", "]", ";", ",", ":",
+            "\"", "\'", "\\", "@", "#", "$", "&", "?", "!", "<", ">", "|", "^", "~", "."
         };
         std::ranges::sort(syms, [](const std::string &a, const std::string &b) {
             return a.size() > b.size();

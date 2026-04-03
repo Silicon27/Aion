@@ -14,10 +14,12 @@ namespace aion::lexer {
         std::vector<std::string> lines;
         std::string line;
 
+        // load the whole file first so multiline strings can look ahead safely
         while (std::getline(input, line)) {
             lines.push_back(line);
         }
 
+        // keep the original lines around for dumps and recovery
         for (std::size_t i = 0; i < lines.size(); ++i) {
             unfiltered_lines[static_cast<int>(i + 1)] = lines[i];
         }
@@ -28,11 +30,14 @@ namespace aion::lexer {
             line_number = static_cast<int>(line_index + 1);
             spaces.clear();
 
+            // multiline strings are the only case where we need to scan across
+            // more than one physical line, so keep that logic local here.
             auto try_consume_multiline_string = [&](Token &out_token) -> bool {
                 const std::size_t start_pos = current_pos;
                 std::size_t quote_offset = 0;
                 uint8_t flags = 0;
 
+                // grab any prefix letters before the opening quote
                 while (start_pos + quote_offset < current_line.size() && quote_offset < 4) {
                     const char c = current_line[start_pos + quote_offset];
                     if (c == '"') {
@@ -52,6 +57,7 @@ namespace aion::lexer {
                     ++quote_offset;
                 }
 
+                // no triple quote here, so let the regular string helper try it
                 const std::size_t quote_pos = start_pos + quote_offset;
                 if (quote_pos + 2 >= current_line.size() ||
                     current_line[quote_pos] != '"' ||
@@ -68,6 +74,8 @@ namespace aion::lexer {
                 std::size_t scan_pos = quote_pos + 3;
                 bool escaped = false;
 
+                // walk forward until we find the closing delimiter or run out of
+                // input, keeping newlines in the content as we go
                 while (scan_line < lines.size()) {
                     const std::string &scan_text = lines[scan_line];
 
@@ -85,12 +93,14 @@ namespace aion::lexer {
                             ++scan_pos;
                             continue;
                         }
+
+                        // found the closing triple quote, so finish the token here
                         if (ch == '"' &&
                             scan_pos + 2 < scan_text.size() &&
                             scan_text[scan_pos + 1] == '"' &&
                             scan_text[scan_pos + 2] == '"') {
                             const std::string prefix = current_line.substr(start_pos, quote_offset);
-                            const std::string full_lexeme = prefix + "\"\"\"" + content + "\"\"\"";
+                            const std::string full_lexeme = prefix + R"(""")" + content + R"(""")";
 
                             unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + full_lexeme, start_line, column, flags);
                             spaces.clear();
@@ -118,13 +128,14 @@ namespace aion::lexer {
 
                     ++scan_line;
                     if (scan_line < lines.size()) {
+                        // keep the newline in the lexeme so the contents stay exact
                         content += '\n';
                         scan_pos = 0;
                         escaped = false;
                     }
                 }
 
-                // Unterminated multiline string: emit one error token and consume to EOF.
+                // unterminated multiline string: emit one error token and stop the noise
                 const std::string prefix = current_line.substr(start_pos, quote_offset);
                 const std::string full_lexeme = prefix + R"(""")" + content;
                 unfiltered_tokens.emplace_back(TokenType::error, spaces + full_lexeme, start_line, column, flags);
@@ -132,6 +143,8 @@ namespace aion::lexer {
                 out_token = Token(TokenType::error, content, start_line, column, flags);
 
                 if (!lines.empty()) {
+                    // advance the visible stream over the skipped lines so the rest
+                    // of the file stays in sync after the error token
                     for (std::size_t consumed = line_index; consumed + 1 < lines.size(); ++consumed) {
                         const int consumed_line = static_cast<int>(consumed + 1);
                         tokens.emplace_back(TokenType::newline, "\n", consumed_line, 0);
@@ -154,26 +167,32 @@ namespace aion::lexer {
                     continue;
                 }
 
+                // try the multiline path before the normal string helper so triple
+                // quotes never get broken into smaller tokens
                 if (Token string_token; try_consume_multiline_string(string_token)) {
                     tokens.push_back(string_token);
                     continue;
                 }
 
+                // regular quoted strings stay line-local
                 if (Token string_token; try_consume_special_string(string_token)) {
                     tokens.push_back(string_token);
                     continue;
                 }
 
+                // numbers come before identifiers so digit-leading lexemes stay numeric
                 if (std::isdigit(static_cast<unsigned char>(current_char))) {
                     tokens.push_back(tokenize_number());
                     continue;
                 }
 
+                // plain names and keywords land here
                 if (std::isalpha(static_cast<unsigned char>(current_char)) || current_char == '_') {
                     tokens.push_back(tokenize_identifier());
                     continue;
                 }
 
+                // symbols and comments share the same entry point
                 if (is_symbol_start(current_char)) {
                     std::optional<Token> comment_token;
                     if (try_consume_line_comment(comment_token)) {
@@ -187,6 +206,7 @@ namespace aion::lexer {
                     continue;
                 }
 
+                // anything else is just an unknown character token
                 const int column = static_cast<int>(current_pos + 1);
                 const std::string lexeme(1, current_char);
                 record_token(TokenType::unknown, lexeme, column);
@@ -194,10 +214,13 @@ namespace aion::lexer {
                 ++current_pos;
             }
 
+            // every physical line gets a newline token so downstream consumers can
+            // rebuild the original source shape
             record_token(TokenType::newline, "\n", 0);
             tokens.emplace_back(TokenType::newline, "\n", line_number, 0);
         }
 
+        // eof is always emitted once at the end
         line_number = static_cast<int>(lines.size() + 1);
         record_token(TokenType::eof, "", 0);
         tokens.emplace_back(TokenType::eof, "", line_number, 0);
@@ -235,9 +258,8 @@ namespace aion::lexer {
         return true;
     }
 
-    /// Internally aion supports strings with optional f/b/r/c prefixes.
-    /// This function handles only single-line quoted strings. Triple-quoted
-    /// multiline strings are handled in tokenize() where line iteration lives.
+    /// internally aion supports strings with optional f/b/r/c prefixes.
+    /// triple-quoted strings are handled in tokenize() so the line loop stays in control.
     bool Lexer::try_consume_special_string(Token &out_token) {
         uint8_t flags = 0; // bits: f=0, b=1, r=2, c=3
         int dquote_start_offset = 0;
@@ -266,7 +288,7 @@ namespace aion::lexer {
         std::size_t start_pos = current_pos;
         std::size_t current_pos_dup = current_pos + dquote_start_offset + 1; // skip prefix and opening "
 
-        // Triple-quoted strings are handled by tokenize().
+        // triple-quoted strings are handled by tokenize().
         if (current_pos_dup + 1 < current_line.size() &&
             current_line[current_pos_dup] == '"' &&
             current_line[current_pos_dup + 1] == '"') {

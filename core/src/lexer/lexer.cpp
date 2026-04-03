@@ -56,21 +56,21 @@ namespace aion::lexer {
                     continue;
                 }
 
-                tokens.push_back({TokenType::unknown, std::string(1, current_char), line_number, static_cast<int>(current_pos + 1)});
-                unfiltered_tokens.push_back({TokenType::unknown, std::string(1, current_char) + spaces, line_number, static_cast<int>(current_pos + 1)});
+                tokens.emplace_back(TokenType::unknown, std::string(1, current_char), line_number, static_cast<int>(current_pos + 1));
+                unfiltered_tokens.emplace_back(TokenType::unknown, std::string(1, current_char) + spaces, line_number, static_cast<int>(current_pos + 1));
                 ++current_pos;
             }
 
-            tokens.push_back({TokenType::newline, "\n", line_number, 0});
-            unfiltered_tokens.push_back({TokenType::newline, "\n", line_number, 0});
+            tokens.emplace_back(TokenType::newline, "\n", line_number, 0);
+            unfiltered_tokens.emplace_back(TokenType::newline, "\n", line_number, 0);
 
             unfiltered_lines[line_number++] = line;
 
 
         }
 
-        tokens.push_back({TokenType::eof, "", line_number, 0});
-        unfiltered_tokens.push_back({TokenType::eof, "", line_number, 0});
+        tokens.emplace_back(TokenType::eof, "", line_number, 0);
+        unfiltered_tokens.emplace_back(TokenType::eof, "", line_number, 0);
         return {tokens, unfiltered_tokens, unfiltered_lines};
     }
 
@@ -91,12 +91,12 @@ namespace aion::lexer {
         current_pos = current_line.size();
 
         if (!is_doc_comment) {
-            unfiltered_tokens.push_back({TokenType::comment, spaces + comment, line_number, column});
+            unfiltered_tokens.emplace_back(TokenType::comment, spaces + comment, line_number, column);
             spaces.clear();
             return true;
         }
 
-        unfiltered_tokens.push_back({TokenType::doc_comment, spaces + comment, line_number, column});
+        unfiltered_tokens.emplace_back(TokenType::doc_comment, spaces + comment, line_number, column);
         spaces.clear();
         out_token = Token{TokenType::doc_comment, comment, line_number, column};
         return true;
@@ -328,7 +328,7 @@ namespace aion::lexer {
         }
 
         TokenType tok_type = is_float ? TokenType::float_literal : TokenType::int_literal;
-        unfiltered_tokens.push_back({tok_type, spaces + lexeme, line_number, column});
+        unfiltered_tokens.emplace_back(tok_type, spaces + lexeme, line_number, column);
         spaces.clear();
         return {tok_type, lexeme, line_number, column};
     }
@@ -342,7 +342,7 @@ namespace aion::lexer {
         }
 
         TokenType type = is_keyword(ident) ? get_keyword_type(ident) : TokenType::identifier;
-        unfiltered_tokens.push_back({type, spaces + ident, line_number, column});
+        unfiltered_tokens.emplace_back(type, spaces + ident, line_number, column);
         spaces.clear();
         return {type, ident, line_number, column};
     }
@@ -356,14 +356,14 @@ namespace aion::lexer {
                 current_line.substr(current_pos, len) == sym) {
                 current_pos += len;
                 TokenType type = get_symbol_type(sym);
-                unfiltered_tokens.push_back({type, spaces + sym, line_number, column});
+                unfiltered_tokens.emplace_back(type, spaces + sym, line_number, column);
                 spaces.clear();
                 return {type, sym, line_number, column};
             }
         }
 
         char unknown_char = current_line[current_pos++];
-        unfiltered_tokens.push_back({TokenType::unknown, spaces + std::string(1, unknown_char), line_number, column});
+        unfiltered_tokens.emplace_back(TokenType::unknown, spaces + std::string(1, unknown_char), line_number, column);
         spaces.clear();
         return {TokenType::unknown, std::string(1, unknown_char), line_number, column};
     }

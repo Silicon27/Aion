@@ -6,6 +6,7 @@
 #include "lexer_test.hpp"
 #include <lexer/lexer.hpp>
 #include <sstream>
+#include <iomanip>
 
 namespace aion::test {
 
@@ -35,6 +36,112 @@ static std::vector<Token> get_meaningful_tokens(const std::vector<Token>& tokens
         }
     }
     return result;
+}
+
+static std::string token_type_to_string(TokenType type) {
+    switch (type) {
+        case TokenType::kw_let: return "kw_let";
+        case TokenType::kw_as: return "kw_as";
+        case TokenType::kw_if: return "kw_if";
+        case TokenType::kw_else: return "kw_else";
+        case TokenType::kw_functor: return "kw_functor";
+        case TokenType::kw_return: return "kw_return";
+        case TokenType::kw_i4: return "kw_i4";
+        case TokenType::kw_i8: return "kw_i8";
+        case TokenType::kw_i16: return "kw_i16";
+        case TokenType::kw_i32: return "kw_i32";
+        case TokenType::kw_i64: return "kw_i64";
+        case TokenType::kw_i128: return "kw_i128";
+        case TokenType::kw_f4: return "kw_f4";
+        case TokenType::kw_f8: return "kw_f8";
+        case TokenType::kw_f16: return "kw_f16";
+        case TokenType::kw_f32: return "kw_f32";
+        case TokenType::kw_f64: return "kw_f64";
+        case TokenType::kw_f128: return "kw_f128";
+        case TokenType::kw_char: return "kw_char";
+        case TokenType::kw_bool: return "kw_bool";
+        case TokenType::kw_import: return "kw_import";
+        case TokenType::kw_mod: return "kw_mod";
+        case TokenType::kw_export: return "kw_export";
+        case TokenType::kw_bind: return "kw_bind";
+        case TokenType::kw_mut: return "kw_mut";
+        case TokenType::kw_comp: return "kw_comp";
+        case TokenType::identifier: return "identifier";
+        case TokenType::int_literal: return "int_literal";
+        case TokenType::float_literal: return "float_literal";
+        case TokenType::string_literal: return "string_literal";
+        case TokenType::number: return "number";
+        case TokenType::length_encoded_string: return "length_encoded_string";
+        case TokenType::format_string: return "format_string";
+        case TokenType::raw_string: return "raw_string";
+        case TokenType::byte_string: return "byte_string";
+        case TokenType::c_string: return "c_string";
+        case TokenType::unknown: return "unknown";
+        case TokenType::newline: return "newline";
+        case TokenType::eof: return "eof";
+        case TokenType::comment: return "comment";
+        case TokenType::doc_comment: return "doc_comment";
+        case TokenType::equal: return "equal";
+        case TokenType::semicolon: return "semicolon";
+        case TokenType::double_colon: return "double_colon";
+        case TokenType::comma: return "comma";
+        case TokenType::colon: return "colon";
+        case TokenType::lbrace: return "lbrace";
+        case TokenType::rbrace: return "rbrace";
+        case TokenType::lbracket: return "lbracket";
+        case TokenType::rbracket: return "rbracket";
+        case TokenType::lparen: return "lparen";
+        case TokenType::rparen: return "rparen";
+        case TokenType::plus: return "plus";
+        case TokenType::minus: return "minus";
+        case TokenType::star: return "star";
+        case TokenType::double_star: return "double_star";
+        case TokenType::slash: return "slash";
+        case TokenType::bang: return "bang";
+        case TokenType::bang_equal: return "bang_equal";
+        case TokenType::equal_equal: return "equal_equal";
+        case TokenType::less: return "less";
+        case TokenType::less_equal: return "less_equal";
+        case TokenType::greater: return "greater";
+        case TokenType::greater_equal: return "greater_equal";
+        case TokenType::dot: return "dot";
+        case TokenType::double_dot: return "double_dot";
+        case TokenType::triple_dot: return "triple_dot";
+        case TokenType::invalid_token: return "invalid_token";
+        default: return "UNKNOWN(" + std::to_string(static_cast<int>(type)) + ")";
+    }
+}
+
+static void dump_tokens(const std::string& name, const std::string& input) {
+    OutputCapture capture(name);
+    std::cout << "Input: " << input << "\n";
+    std::cout << "----------------------------------------------------------------------\n";
+    std::cout << std::left << std::setw(25) << "Type" 
+              << std::setw(20) << "Lexeme" 
+              << std::setw(15) << "Line:Col" 
+              << "Flags\n";
+    std::cout << "----------------------------------------------------------------------\n";
+    
+    std::istringstream stream(input);
+    Lexer lexer(stream);
+    auto [tokens, unfiltered, lines] = lexer.tokenize();
+    
+    for (const auto& tok : tokens) {
+        std::string flags_str;
+        if (tok.format_flag_set()) flags_str += 'f';
+        if (tok.binary_flag_set()) flags_str += 'b';
+        if (tok.raw_flag_set()) flags_str += 'r';
+        if (tok.cstr_flag_set()) flags_str += 'c';
+        
+        std::string lexeme_disp = tok.lexeme;
+        if (tok.type == TokenType::newline) lexeme_disp = "\\n";
+        
+        std::cout << std::left << std::setw(25) << token_type_to_string(tok.type)
+                  << std::setw(20) << lexeme_disp
+                  << std::setw(15) << (std::to_string(tok.line) + ":" + std::to_string(tok.column))
+                  << flags_str << "\n";
+    }
+    capture.finish();
 }
 
 // Helper to check if a TokenType is a keyword type
@@ -620,6 +727,42 @@ void register_lexer_tests(TestRunner& runner) {
     });
 
     runner.add_suite(std::move(edge_suite));
+
+    // ========================================================================
+    // Visual Token Dumps
+    // ========================================================================
+
+    auto dump_suite = std::make_unique<TestSuite>("Lexer::VisualDumps");
+
+    dump_suite->add_test("basic_syntax_dump", []() {
+        dump_tokens("BasicSyntax", "let x: i32 = 42; // initialize x\nreturn x * 2;");
+    });
+
+    dump_suite->add_test("string_prefixes_dump", []() {
+        dump_tokens("StringPrefixes", R"("plain" f"format" r"raw\path" b"byte" c"c_string")");
+    });
+
+    dump_suite->add_test("multi_prefix_dump", []() {
+        dump_tokens("MultiPrefixStrings", R"(fbrc"everything" fr"format_raw" bc"byte_c" rb"raw_byte")");
+    });
+
+    dump_suite->add_test("numbers_dump", []() {
+        dump_tokens("Numbers", "123 123.456 0xABC 0b101 1_000_000 0x1.P+3 123u 456ll");
+    });
+
+    dump_suite->add_test("symbols_dump", []() {
+        dump_tokens("Symbols", ":: -> => ... .. . + - * / % == != < > <= >= && || ! & | ^ << >> ~ = += -= *= /= %= &= |= ^= <<= >>= ( ) [ ] { } , : ; ? @ # $");
+    });
+
+    dump_suite->add_test("edge_cases_dump", []() {
+        dump_tokens("EdgeCases", "\"\" f\"\" r\"\" \"escaped \\\" quote\" r\"raw \\\" quote\" /// doc comment\n£unknown");
+    });
+
+    dump_suite->add_test("multiline_dump", []() {
+        dump_tokens("Multiline", "let a = 1;\nlet b = 2;\nlet c = a + b;");
+    });
+
+    runner.add_suite(std::move(dump_suite));
 }
 
 } // namespace aion::test

@@ -104,8 +104,16 @@ namespace aion::ast {
             : TypedExpr(TypeKind::common_type, type, v, sr), operand(operand), op(op), is_comp(is_comp) {
         }
 
+        [[nodiscard]] Expr* get_operand() const { return operand; }
+        [[nodiscard]] Op get_op() const { return op; }
+        [[nodiscard]] bool is_compile_time_computable() const { return is_comp; }
+
+        void set_operand(Expr* new_operand) { operand = new_operand; }
+        void set_op(const Op new_op) { op = new_op; }
+        void set_compile_time_computable(const bool new_is_comp) { is_comp = new_is_comp; }
+
     private:
-        Expr* operand;
+        Expr* operand; // would be a ResolvedIdentifierExpr
         Op op;
 
         bool is_comp = false;

@@ -154,6 +154,10 @@ namespace aion::parse {
                 case TokenType::slash:
                     return 60; // multiplicative
 
+                case TokenType::lparen:
+                    return 70; // function call — binds tighter than arithmetic, looser than ::
+                case TokenType::bang:
+                    return 75; // postfix !
 
                 case TokenType::dot:
                 case TokenType::double_colon:

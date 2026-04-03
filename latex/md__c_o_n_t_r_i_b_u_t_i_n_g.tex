@@ -1,0 +1,28 @@
+\chapter{Contributing }
+\hypertarget{md__c_o_n_t_r_i_b_u_t_i_n_g}{}\label{md__c_o_n_t_r_i_b_u_t_i_n_g}\index{Contributing@{Contributing}}
+\label{md__c_o_n_t_r_i_b_u_t_i_n_g_autotoc_md0}%
+\Hypertarget{md__c_o_n_t_r_i_b_u_t_i_n_g_autotoc_md0}%
+
+
+Well it is a pleasure to have you here! Kaion is always on the board for anyone to scrutinize, including you, my friend. Thanks for considering contributing to Kaion!\hypertarget{md__c_o_n_t_r_i_b_u_t_i_n_g_autotoc_md1}{}\doxysection{\texorpdfstring{Getting started}{Getting started}}\label{md__c_o_n_t_r_i_b_u_t_i_n_g_autotoc_md1}
+Rather than downloading the built executable, contributors would be required to download the raw source folder or clone from the repository.
+
+If it is your first time using {\ttfamily git}, you can follow the official \href{https://git-scm.com/book/en/v2/Getting-Started-Installing-Git}{\texttt{Git documentation}} to install it on your system. Once installed, you can clone the repository using the following command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git\ clone\ https://github.com/Silicon27/Aion.git}
+
+\end{DoxyCode}
+
+
+This will create a local copy of the repository on your machine. You can then navigate to the project directory and start making changes to the codebase.\hypertarget{md__c_o_n_t_r_i_b_u_t_i_n_g_autotoc_md2}{}\doxysection{\texorpdfstring{Guidelines \& Conventions}{Guidelines \& Conventions}}\label{md__c_o_n_t_r_i_b_u_t_i_n_g_autotoc_md2}
+Kaion is rather soft on its restrictions for contributions. There exists a couple of simple, baseline requirements for all contributors\+:
+\begin{DoxyEnumerate}
+\item Git acts as the standardized version control system for Kaion
+\item Commits should always be descriptive and meaningful, by which changes per-\/commit should also be kept relatively small (i.\+e., implementing a simple 20\texorpdfstring{$\sim$}{\string~} line function or fixing a small bug). Larger, or significant modifications/additions shall be severed into multiple commits if applicable.
+\item The naming convention for types (i.\+e., {\ttfamily struct}, {\ttfamily class}, {\ttfamily enum}/{\ttfamily enum class}, {\ttfamily typedef}/{\ttfamily using}, or anything that names or creates a new type) is camel case (i.\+e., {\ttfamily My\+Name}, {\ttfamily My\+Type}, etc), and must have a capital initial letter.
+\item The naming convention for functions, variables, and other identifiers is snake case (i.\+e., {\ttfamily my\+\_\+function}, {\ttfamily my\+\_\+variable}, etc), and must have a lowercase initial letter (if the context allows for the lowercase letter).
+\item Doxygen style documentation (specifically with {\ttfamily ///}, block documentation comments {\ttfamily /\texorpdfstring{$\ast$}{*} ... \texorpdfstring{$\ast$}{*}/} are not prefered) is required for all public APIs and functions. Refer to \href{https://www.doxygen.nl/manual/docblocks.html}{\texttt{Doxygen Documentation}} for more information.
+\item Public APIs should always be accompanied with its corresponding suite or test. Aion has a custom test framework, refer to Aion test suite guide for more information. 
+\end{DoxyEnumerate}

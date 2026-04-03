@@ -27,8 +27,12 @@ namespace aion::lexer {
                     continue;
                 }
 
-                Token string_token;
-                if (try_consume_special_string(string_token)) {
+                if (Token string_token; try_consume_string_literal(string_token)) {
+                    tokens.push_back(string_token);
+                    continue;
+                }
+
+                if (Token string_token; try_consume_special_string(string_token)) {
                     tokens.push_back(string_token);
                     continue;
                 }
@@ -42,6 +46,8 @@ namespace aion::lexer {
                     tokens.push_back(tokenize_identifier());
                     continue;
                 }
+
+
 
                 if (is_symbol_start(current_char)) {
                     std::optional<Token> comment_token;
@@ -150,12 +156,52 @@ namespace aion::lexer {
             return false; // Unclosed string
         }
 
+        // Extract content WITHOUT quotes (strip opening " and closing ")
+        std::size_t content_start = current_pos + dquote_start_offset + 1; // after prefix and opening "
+        std::string content = current_line.substr(content_start, current_pos_dup - content_start);
         current_pos_dup++; // skip closing "
 
-        std::string lexeme = current_line.substr(start_pos, current_pos_dup - start_pos);
-        out_token = Token(TokenType::string_literal, lexeme, line_number, column, flags);
+        out_token = Token(TokenType::string_literal, content, line_number, column, flags);
 
-        unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + lexeme, line_number, column, flags);
+        unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + content, line_number, column, flags);
+        spaces.clear();
+
+        current_pos = current_pos_dup;
+        return true;
+    }
+
+    bool Lexer::try_consume_string_literal(Token &out_token) {
+        if (current_pos >= current_line.size() || current_line[current_pos] != '"') {
+            return false;
+        }
+
+        int column = static_cast<int>(current_pos) + 1;
+        std::size_t string_start = current_pos + 1; // position after opening "
+
+        bool escaped = false;
+        std::size_t current_pos_dup = current_pos + 1;
+
+        while (current_pos_dup < current_line.size()) {
+            if (escaped) {
+                escaped = false;
+            } else if (current_line[current_pos_dup] == '\\') {
+                escaped = true;
+            } else if (current_line[current_pos_dup] == '"') {
+                break;
+            }
+            current_pos_dup++;
+        }
+
+        if (current_pos_dup >= current_line.size()) {
+            return false; // Unclosed string
+        }
+
+        // Extract content WITHOUT the quotes
+        std::string content = current_line.substr(string_start, current_pos_dup - string_start);
+        current_pos_dup++; // skip closing "
+
+        out_token = Token(TokenType::string_literal, content, line_number, column);
+        unfiltered_tokens.emplace_back(TokenType::string_literal, spaces + content, line_number, column);
         spaces.clear();
 
         current_pos = current_pos_dup;

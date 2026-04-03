@@ -66,9 +66,11 @@ namespace aion::lexer {
         Token tokenize_symbol();
         bool try_consume_line_comment(std::optional<Token> &out_token);
         bool try_consume_special_string(Token &out_token);
+        bool try_consume_string_literal(Token &out_token);
         [[nodiscard]] bool is_symbol_start(char c) const;
     };
 
 } // namespace aion::lexer
 
 #endif // LEXER_HPP
+

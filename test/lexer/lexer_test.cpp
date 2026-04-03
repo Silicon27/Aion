@@ -477,7 +477,7 @@ void register_lexer_tests(TestRunner& runner) {
         auto tokens = get_meaningful_tokens(tokenize_string("\"hello\""));
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::string_literal));
-        AION_ASSERT_STREQ(tokens[0].lexeme, "\"hello\"");
+        AION_ASSERT_STREQ(tokens[0].lexeme, "hello");
         AION_ASSERT_EQ(static_cast<int>(tokens[0].flags), 0);
     });
 
@@ -485,7 +485,7 @@ void register_lexer_tests(TestRunner& runner) {
         auto tokens = get_meaningful_tokens(tokenize_string("f\"hello\""));
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::string_literal));
-        AION_ASSERT_STREQ(tokens[0].lexeme, "f\"hello\"");
+        AION_ASSERT_STREQ(tokens[0].lexeme, "hello");
         AION_ASSERT_EQ(static_cast<int>(tokens[0].flags), 1); // bit 0
     });
 
@@ -493,7 +493,7 @@ void register_lexer_tests(TestRunner& runner) {
         auto tokens = get_meaningful_tokens(tokenize_string("br\"hello\""));
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::string_literal));
-        AION_ASSERT_STREQ(tokens[0].lexeme, "br\"hello\"");
+        AION_ASSERT_STREQ(tokens[0].lexeme, "hello");
         AION_ASSERT_EQ(static_cast<int>(tokens[0].flags), 6); // bit 1 (b=2) | bit 2 (r=4) = 6
     });
 
@@ -501,14 +501,14 @@ void register_lexer_tests(TestRunner& runner) {
         auto tokens = get_meaningful_tokens(tokenize_string("fbrc\"hello\""));
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::string_literal));
-        AION_ASSERT_STREQ(tokens[0].lexeme, "fbrc\"hello\"");
+        AION_ASSERT_STREQ(tokens[0].lexeme, "hello");
         AION_ASSERT_EQ(static_cast<int>(tokens[0].flags), 15); // 1|2|4|8 = 15
     });
 
     string_suite->add_test("escaped_quote", []() {
         auto tokens = get_meaningful_tokens(tokenize_string("\"a\\\"b\""));
         AION_ASSERT_EQ(tokens.size(), 1u);
-        AION_ASSERT_STREQ(tokens[0].lexeme, "\"a\\\"b\"");
+        AION_ASSERT_STREQ(tokens[0].lexeme, "a\\\"b");
     });
 
     runner.add_suite(std::move(string_suite));

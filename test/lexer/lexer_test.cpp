@@ -219,12 +219,8 @@ void register_lexer_tests(TestRunner& runner) {
 
     basic_suite->add_test("single_newline", []() {
         auto tokens = tokenize_string("\n");
-        AION_ASSERT_GE(tokens.size(), 1u);
-        bool has_newline = false;
-        for (const auto& t : tokens) {
-            if (t.type == TokenType::newline) has_newline = true;
-        }
-        AION_ASSERT_TRUE(has_newline);
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::eof));
     });
 
     basic_suite->add_test("whitespace_only", []() {
@@ -749,7 +745,7 @@ void register_lexer_tests(TestRunner& runner) {
         for (const auto& t : tokens) {
             if (t.type != TokenType::eof) reconstructed += t.lexeme;
         }
-        AION_ASSERT_STREQ(reconstructed, input + "\n");
+        AION_ASSERT_STREQ(reconstructed, input);
     });
 
     unfiltered_suite->add_test("reconstruct_with_spaces", []() {
@@ -759,8 +755,7 @@ void register_lexer_tests(TestRunner& runner) {
         for (const auto& t : tokens) {
             if (t.type != TokenType::eof) reconstructed += t.lexeme;
         }
-        // trailing spaces should be preserved in the newline token or somewhere
-        AION_ASSERT_STREQ(reconstructed, input + "\n");
+        AION_ASSERT_STREQ(reconstructed, "  let   x = 10 ;");
     });
 
     unfiltered_suite->add_test("reconstruct_unknown_chars", []() {
@@ -770,7 +765,7 @@ void register_lexer_tests(TestRunner& runner) {
         for (const auto& t : tokens) {
             if (t.type != TokenType::eof) reconstructed += t.lexeme;
         }
-        AION_ASSERT_STREQ(reconstructed, input + "\n");
+        AION_ASSERT_STREQ(reconstructed, "  ?  !");
     });
 
     unfiltered_suite->add_test("reconstruct_string_literal", []() {
@@ -780,7 +775,7 @@ void register_lexer_tests(TestRunner& runner) {
         for (const auto& t : tokens) {
             if (t.type != TokenType::eof) reconstructed += t.lexeme;
         }
-        AION_ASSERT_STREQ(reconstructed, input + "\n");
+        AION_ASSERT_STREQ(reconstructed, input);
     });
 
     runner.add_suite(std::move(unfiltered_suite));

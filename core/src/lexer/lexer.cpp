@@ -9,6 +9,7 @@ namespace aion::lexer {
     {
     }
 
+    /// primary entry point that handles the entire tokenization process
     std::tuple<std::vector<Token>, std::vector<Token>, std::map<int, std::string>> Lexer::tokenize() {
         std::vector<Token> tokens;
         std::vector<std::string> lines;
@@ -214,16 +215,18 @@ namespace aion::lexer {
                 ++current_pos;
             }
 
-            // every physical line gets a newline token so downstream consumers can
-            // rebuild the original source shape
-            record_token(TokenType::newline, "\n", 0);
-            tokens.emplace_back(TokenType::newline, "\n", line_number, 0);
+            // only emit newline between physical lines, never as a trailing token
+            if (line_index + 1 < lines.size()) {
+                record_token(TokenType::newline, "\n", static_cast<int>(current_line.size() + 1));
+                tokens.emplace_back(TokenType::newline, "\n", line_number, static_cast<int>(current_line.size() + 1));
+            }
         }
 
         // eof is always emitted once at the end
-        line_number = static_cast<int>(lines.size() + 1);
-        record_token(TokenType::eof, "", 0);
-        tokens.emplace_back(TokenType::eof, "", line_number, 0);
+        const int eof_line = (lines.empty() ? 1 : static_cast<int>(lines.size()) + 1);
+        line_number = eof_line;
+        record_token(TokenType::eof, "", 1);
+        tokens.emplace_back(TokenType::eof, "", eof_line, 1);
         return {tokens, unfiltered_tokens, unfiltered_lines};
     }
 

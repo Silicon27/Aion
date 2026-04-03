@@ -27,6 +27,12 @@ namespace aion::lexer {
                     continue;
                 }
 
+                Token string_token;
+                if (try_consume_special_string(string_token)) {
+                    tokens.push_back(string_token);
+                    continue;
+                }
+
                 if (std::isdigit(current_char)) {
                     tokens.push_back(tokenize_number());
                     continue;
@@ -96,10 +102,64 @@ namespace aion::lexer {
         return true;
     }
 
-    bool Lexer::try_consume_special_string(std::span<Token> tokens) {
-        /// Internally aion supports length encoded strings, format strings, byte strings, raw strings, and C strings
-        /// all of which are denoted with the syntax "...", f"...", b"...", r"...", and c"..."
-        /// the tags can be combined, that is: fbrc"..." (a, format byte raw C string)
+    /// Internally aion supports length encoded strings, format strings, byte strings, raw strings, and C strings
+    /// all of which are denoted with the syntax "...", f"...", b"...", r"...", and c"..."
+    /// the tags can be combined, that is: fbrc"..." (a, format byte raw C string)
+    /// This function handles the special string literals, including format, byte, raw, and C string literals.
+    /// Length encoded strings are not supported by this function
+    bool Lexer::try_consume_special_string(Token &out_token) {
+        uint8_t flags = 0; // bits: f=0, b=1, r=2, c=3
+        int dquote_start_offset = 0;
+
+        // Peek for prefixes: f, b, r, c
+        while (current_pos + dquote_start_offset < current_line.size() && dquote_start_offset < 4) {
+            char c = current_line[current_pos + dquote_start_offset];
+            if (c == '"') break;
+
+            if (c == 'f') flags |= (1 << 0);
+            else if (c == 'b') flags |= (1 << 1);
+            else if (c == 'r') flags |= (1 << 2);
+            else if (c == 'c') flags |= (1 << 3);
+            else return false;
+
+            dquote_start_offset++;
+        }
+
+        if (current_pos + dquote_start_offset >= current_line.size() ||
+            current_line[current_pos + dquote_start_offset] != '"') {
+            return false;
+        }
+
+        int column = static_cast<int>(current_pos) + 1;
+        std::size_t start_pos = current_pos;
+        std::size_t current_pos_dup = current_pos + dquote_start_offset + 1; // skip prefix and opening "
+
+        bool escaped = false;
+        while (current_pos_dup < current_line.size()) {
+            if (escaped) {
+                escaped = false;
+            } else if (current_line[current_pos_dup] == '\\') {
+                escaped = true;
+            } else if (current_line[current_pos_dup] == '"') {
+                break;
+            }
+            current_pos_dup++;
+        }
+
+        if (current_pos_dup >= current_line.size()) {
+            return false; // Unclosed string
+        }
+
+        current_pos_dup++; // skip closing "
+
+        std::string lexeme = current_line.substr(start_pos, current_pos_dup - start_pos);
+        out_token = Token(TokenType::string_literal, lexeme, line_number, column, flags);
+
+        unfiltered_tokens.push_back({TokenType::string_literal, spaces + lexeme, line_number, column, flags});
+        spaces.clear();
+
+        current_pos = current_pos_dup;
+        return true;
     }
 
     Token Lexer::tokenize_number() {

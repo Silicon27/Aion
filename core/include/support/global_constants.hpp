@@ -81,8 +81,9 @@ namespace aion::lexer {
         identifier,
         int_literal,
         float_literal,
+        string_literal,
         number,
-        string, // has length encoded into the allocated storage for the string
+        length_encoded_string, // has length encoded into the allocated storage for the string
         format_string,
         raw_string,
         byte_string,

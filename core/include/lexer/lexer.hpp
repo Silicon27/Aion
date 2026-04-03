@@ -18,14 +18,27 @@ namespace aion::lexer {
 
     struct Token {
         TokenType type;
+        uint8_t flags = 0; // fbrc bits
         std::string lexeme;
         int line;
         int column;
 
+        Token() = default;
+        Token(TokenType t, std::string l, int ln, int col, uint8_t f = 0)
+            : type(t), flags(f), lexeme(std::move(l)), line(ln), column(col) {}
+
         TokenType get_type() const { return type; }
-        std::string get_lexeme() const { return lexeme; }
+        const std::string& get_lexeme() const { return lexeme; }
         int get_line() const { return line; }
         int get_column() const { return column; }
+        uint8_t get_flags() const { return flags; }
+
+        // string prefix specific
+        bool has_string_prefix_flags() const { return flags & 0b1111; }
+        bool format_flag_set() const { return flags & 0b0001; }
+        bool binary_flag_set() const { return flags & 0b0010; }
+        bool raw_flag_set() const { return flags & 0b0100; }
+        bool cstr_flag_set() const { return flags & 0b1000; }
     };
 
 
@@ -49,7 +62,7 @@ namespace aion::lexer {
         Token tokenize_identifier();
         Token tokenize_symbol();
         bool try_consume_line_comment(std::optional<Token> &out_token);
-        bool try_consume_special_string(std::span<Token> tokens);
+        bool try_consume_special_string(Token &out_token);
         [[nodiscard]] bool is_symbol_start(char c) const;
     };
 

@@ -76,8 +76,8 @@ namespace aion::ast {
         };
 
         BinaryExpr(Expr* lhs, Expr* rhs, const Op op, const ValueCategory v, MutableType* type,
-                   const SourceRange &sr = {})
-            : TypedExpr(TypeKind::common_type, type, v, sr), lhs(lhs), rhs(rhs), op(op) {
+                   const bool is_comp, const SourceRange &sr = {})
+            : TypedExpr(TypeKind::common_type, type, v, sr), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp) {
         }
 
     private:
@@ -100,8 +100,8 @@ namespace aion::ast {
         };
 
         UnaryExpr(Expr* operand, const Op op, const ValueCategory v, MutableType* type,
-                   const SourceRange &sr = {})
-            : TypedExpr(TypeKind::common_type, type, v, sr), operand(operand), op(op) {
+                   bool is_comp, const SourceRange &sr = {})
+            : TypedExpr(TypeKind::common_type, type, v, sr), operand(operand), op(op), is_comp(is_comp) {
         }
 
     private:

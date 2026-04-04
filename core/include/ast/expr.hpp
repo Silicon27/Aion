@@ -4,6 +4,8 @@
 
 #ifndef AION_EXPR_HPP
 #define AION_EXPR_HPP
+
+#include <string_view>
 #include "ast.hpp"
 #include "type.hpp"
 
@@ -153,26 +155,8 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<ResolvedIdentifierExpr>);
 
-    /// Any unnamed literal value would be represented by this node (or inherit this node)
-    /// ex: "some string", 324, 241u, etc.
-    class UnnamedExpr : public TypedExpr {
-    public:
-        enum class UnnamedKind : std::uint8_t {
-            Number,
-            String,
-        };
-
-        UnnamedExpr(const UnnamedKind k, MutableType* type, const SourceRange& sr = {})
-            : TypedExpr(TypeKind::common_type, type, ValueCategory::unnamed, sr), kind(k) {}
-
-        [[nodiscard]] UnnamedKind get_kind() const { return kind; }
-
-    private:
-        UnnamedKind kind;
-    };
-    static_assert(std::is_trivially_destructible_v<UnnamedExpr>);
-
-    class NumberLiteralExpr : public UnnamedExpr {
+    /// any number literal (integers, floats, doubles, etc.)
+    class NumberLiteralExpr : public TypedExpr {
     public:
 
         // Avoid storing as a float or int here – actual
@@ -181,12 +165,13 @@ namespace aion::ast {
         // let sema handle the rest
         std::string_view value;
 
-        NumberLiteralExpr(const UnnamedKind k, MutableType* type, const std::string_view v, const SourceRange& sr = {})
-            : UnnamedExpr(k, type, sr), value(v) {}
+        NumberLiteralExpr(const TypedExpr te, MutableType* type, const std::string_view v, const SourceRange& sr = {})
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed, sr), value(v) {}
     };
     static_assert(std::is_trivially_destructible_v<NumberLiteralExpr>);
 
-    class StringLiteralExpr : public UnnamedExpr {
+    /// any string literal (e. "this string", f"this{x}", etc.)
+    class StringLiteralExpr : public TypedExpr {
     public:
         std::string_view value;
 
@@ -194,12 +179,24 @@ namespace aion::ast {
         std::uint8_t prefix_flags;
 
 
-        StringLiteralExpr(const UnnamedKind k, MutableType* type, const std::string_view v, const std::uint8_t flags, const SourceRange& sr = {})
-            : UnnamedExpr(k, type, sr), value(v), prefix_flags(flags) {}
+        StringLiteralExpr(MutableType* type, const std::string_view v, const std::uint8_t flags, const SourceRange& sr = {})
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed, sr), value(v), prefix_flags(flags) {}
 
     };
     static_assert(std::is_trivially_destructible_v<StringLiteralExpr>);
 
+
+    class CallExpr : public ResolvedIdentifierExpr {
+    public:
+        Expr* callee;
+        Expr** args;
+        unsigned num_args;
+
+        CallExpr(IdentifierInfo* name, MutableType* type, Expr* callee, Expr** args, unsigned num_args, const SourceRange& sr = {})
+            : ResolvedIdentifierExpr(name, type, IdentifierKind::function, sr),
+                callee(callee), args(args), num_args(num_args) {}
+    };
+    static_assert(std::is_trivially_destructible_v<CallExpr>);
 }
 
 #endif //AION_EXPR_HPP

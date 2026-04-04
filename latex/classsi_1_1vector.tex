@@ -1,0 +1,70 @@
+\doxysection{si\+::vector\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classsi_1_1vector}{}\label{classsi_1_1vector}\index{si::vector$<$ T $>$@{si::vector$<$ T $>$}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classsi_1_1vector_a27c01dddb5cc192e3038d0bc42a646a3}\label{classsi_1_1vector_a27c01dddb5cc192e3038d0bc42a646a3} 
+using {\bfseries value\+\_\+type} = T
+\item 
+\Hypertarget{classsi_1_1vector_ab665f946a8bcbd97cb5e8a317b9e389b}\label{classsi_1_1vector_ab665f946a8bcbd97cb5e8a317b9e389b} 
+using {\bfseries allocator\+\_\+type} = si\+::allocator$<$T$>$
+\item 
+\Hypertarget{classsi_1_1vector_a61d18ea539765f4bab9a46a074e02130}\label{classsi_1_1vector_a61d18ea539765f4bab9a46a074e02130} 
+using {\bfseries size\+\_\+type} = si\+::size\+\_\+t
+\item 
+\Hypertarget{classsi_1_1vector_a3aaa13b7583a541f729ddd374da10c7c}\label{classsi_1_1vector_a3aaa13b7583a541f729ddd374da10c7c} 
+using {\bfseries difference\+\_\+type} = ptrdiff\+\_\+t
+\item 
+\Hypertarget{classsi_1_1vector_a5e9ba7120dbf1b9a68b46036c428c681}\label{classsi_1_1vector_a5e9ba7120dbf1b9a68b46036c428c681} 
+using {\bfseries reference} = T\&
+\item 
+\Hypertarget{classsi_1_1vector_a28036e16bb92eb51b4d6587f6aeecc1a}\label{classsi_1_1vector_a28036e16bb92eb51b4d6587f6aeecc1a} 
+using {\bfseries const\+\_\+reference} = const T\&
+\item 
+\Hypertarget{classsi_1_1vector_a9d4ecfa4ed012a29c18955672125a343}\label{classsi_1_1vector_a9d4ecfa4ed012a29c18955672125a343} 
+using {\bfseries pointer} = typename si\+::allocator\+\_\+traits$<$allocator\+\_\+type$>$\+::pointer
+\item 
+\Hypertarget{classsi_1_1vector_a34f242fc3f655d31dcd4318927da4b1f}\label{classsi_1_1vector_a34f242fc3f655d31dcd4318927da4b1f} 
+using {\bfseries const\+\_\+pointer} = typename si\+::allocator\+\_\+traits$<$allocator\+\_\+type$>$\+::const\+\_\+pointer
+\item 
+\Hypertarget{classsi_1_1vector_ab0dd6f197db0a7a801a0460432281c01}\label{classsi_1_1vector_ab0dd6f197db0a7a801a0460432281c01} 
+using {\bfseries iterator} = value\+\_\+type\texorpdfstring{$\ast$}{*}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classsi_1_1vector_ad8cdd7091e406fc58e220238f1aeba0d}\label{classsi_1_1vector_ad8cdd7091e406fc58e220238f1aeba0d} 
+{\bfseries vector} (std\+::initializer\+\_\+list$<$ T $>$ init)
+\item 
+\Hypertarget{classsi_1_1vector_a1eac4494324abe3ce7a622e751a576c8}\label{classsi_1_1vector_a1eac4494324abe3ce7a622e751a576c8} 
+void {\bfseries append} (std\+::initializer\+\_\+list$<$ T $>$ init)
+\item 
+\Hypertarget{classsi_1_1vector_a4966927391989d27424b24c3ceee6220}\label{classsi_1_1vector_a4966927391989d27424b24c3ceee6220} 
+void {\bfseries push\+\_\+back} (const T \&value)
+\item 
+\Hypertarget{classsi_1_1vector_a69d3028f42e0f5980011cf7bac4c707d}\label{classsi_1_1vector_a69d3028f42e0f5980011cf7bac4c707d} 
+void {\bfseries reserve} (const int new\+\_\+cap)
+\item 
+\Hypertarget{classsi_1_1vector_a2a374be7e119b6436062585ec77c38c1}\label{classsi_1_1vector_a2a374be7e119b6436062585ec77c38c1} 
+T \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (int pos)
+\item 
+\Hypertarget{classsi_1_1vector_ad7b496afd489348dd602a7f907c52fae}\label{classsi_1_1vector_ad7b496afd489348dd602a7f907c52fae} 
+const T \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (int pos) const
+\item 
+\Hypertarget{classsi_1_1vector_a52367ec7cfde8107538b92a9997b1f10}\label{classsi_1_1vector_a52367ec7cfde8107538b92a9997b1f10} 
+T \texorpdfstring{$\ast$}{*} {\bfseries begin} ()
+\item 
+\Hypertarget{classsi_1_1vector_aa051512598766366872570e452eb02fd}\label{classsi_1_1vector_aa051512598766366872570e452eb02fd} 
+T \texorpdfstring{$\ast$}{*} {\bfseries end} ()
+\item 
+\Hypertarget{classsi_1_1vector_a2fd377b90055db555e5b863e4ddfadd9}\label{classsi_1_1vector_a2fd377b90055db555e5b863e4ddfadd9} 
+size\+\_\+t {\bfseries capacity} () const noexcept
+\item 
+\Hypertarget{classsi_1_1vector_a58155181eb3b811ab1500a26250dd075}\label{classsi_1_1vector_a58155181eb3b811ab1500a26250dd075} 
+size\+\_\+t {\bfseries size} () const noexcept
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/si/vector.\+hpp\end{DoxyCompactItemize}

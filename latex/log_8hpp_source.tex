@@ -1,0 +1,75 @@
+\doxysection{log.\+hpp}
+\hypertarget{log_8hpp_source}{}\label{log_8hpp_source}\index{core/include/support/si/include/si/log.hpp@{core/include/support/si/include/si/log.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/03-\/17.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_LOG\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_LOG\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../impl/log/level.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}../impl/log/color.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}../impl/log/sink.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}../impl/log/stdout\_sink.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}../impl/log/file\_sink.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}../impl/log/ostream\_sink.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}../impl/log/logger.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classlogger}{logger}}\&\ default\_logger()\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classlogger}{logger}}\ l;}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ initialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!initialized)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ sink\ =\ std::make\_shared<stdout\_sink>();}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ l.add\_sink(sink);}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ initialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ l;}
+\DoxyCodeLine{00027\ \ \ \ \ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ trace(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fmt,\ Args\&\&...\ args)\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ default\_logger().trace(fmt,\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classlog__builder}{log\_builder}}\ trace()\ \{\ \textcolor{keywordflow}{return}\ default\_logger().trace();\ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ debug(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fmt,\ Args\&\&...\ args)\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ default\_logger().debug(fmt,\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classlog__builder}{log\_builder}}\ debug()\ \{\ \textcolor{keywordflow}{return}\ default\_logger().debug();\ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ info(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fmt,\ Args\&\&...\ args)\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ default\_logger().info(fmt,\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classlog__builder}{log\_builder}}\ info()\ \{\ \textcolor{keywordflow}{return}\ default\_logger().info();\ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ warn(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fmt,\ Args\&\&...\ args)\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ default\_logger().warn(fmt,\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classlog__builder}{log\_builder}}\ warn()\ \{\ \textcolor{keywordflow}{return}\ default\_logger().warn();\ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ error(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fmt,\ Args\&\&...\ args)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ default\_logger().error(fmt,\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classlog__builder}{log\_builder}}\ error()\ \{\ \textcolor{keywordflow}{return}\ default\_logger().error();\ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ fatal(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fmt,\ Args\&\&...\ args)\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ default\_logger().fatal(fmt,\ std::forward<Args>(args)...);}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classlog__builder}{log\_builder}}\ fatal()\ \{\ \textcolor{keywordflow}{return}\ default\_logger().fatal();\ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ enable\_backtrace(\textcolor{keywordtype}{size\_t}\ n)\ \{\ default\_logger().enable\_backtrace(n);\ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ dump\_backtrace()\ \{\ default\_logger().dump\_backtrace();\ \}}
+\DoxyCodeLine{00067\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_LOG\_HPP}}
+
+\end{DoxyCode}

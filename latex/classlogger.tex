@@ -1,0 +1,64 @@
+\doxysection{logger Class Reference}
+\hypertarget{classlogger}{}\label{classlogger}\index{logger@{logger}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlogger_afcecd41214ded3ad418ad32431ee14d1}\label{classlogger_afcecd41214ded3ad418ad32431ee14d1} 
+void {\bfseries add\+\_\+sink} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}} $>$ sink)
+\item 
+\Hypertarget{classlogger_ae0ac24a11a5e2c9f419ce79aaa6fbdd6}\label{classlogger_ae0ac24a11a5e2c9f419ce79aaa6fbdd6} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries trace} (const char \texorpdfstring{$\ast$}{*}fmt, Args \&\&... args)
+\item 
+\Hypertarget{classlogger_a2b6dd4b11fa35d8f3d703e4577539ae1}\label{classlogger_a2b6dd4b11fa35d8f3d703e4577539ae1} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries debug} (const char \texorpdfstring{$\ast$}{*}fmt, Args \&\&... args)
+\item 
+\Hypertarget{classlogger_aa9e23d9e6032fc9686042f35fc6cd07c}\label{classlogger_aa9e23d9e6032fc9686042f35fc6cd07c} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries info} (const char \texorpdfstring{$\ast$}{*}fmt, Args \&\&... args)
+\item 
+\Hypertarget{classlogger_a0e0801ccb124b96409a3b31688e9bb7b}\label{classlogger_a0e0801ccb124b96409a3b31688e9bb7b} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries warn} (const char \texorpdfstring{$\ast$}{*}fmt, Args \&\&... args)
+\item 
+\Hypertarget{classlogger_a88a49ad822ae404d16a259d78f234b14}\label{classlogger_a88a49ad822ae404d16a259d78f234b14} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries error} (const char \texorpdfstring{$\ast$}{*}fmt, Args \&\&... args)
+\item 
+\Hypertarget{classlogger_a9fbe65973da1b37cd01005c23c1408eb}\label{classlogger_a9fbe65973da1b37cd01005c23c1408eb} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries fatal} (const char \texorpdfstring{$\ast$}{*}fmt, Args \&\&... args)
+\item 
+\Hypertarget{classlogger_a74870c213ac8521f565c5d9e27a8ed32}\label{classlogger_a74870c213ac8521f565c5d9e27a8ed32} 
+\mbox{\hyperlink{classlog__builder}{log\+\_\+builder}} {\bfseries trace} ()
+\item 
+\Hypertarget{classlogger_acd7c22a5a02a90c3810c36e8f685ff1d}\label{classlogger_acd7c22a5a02a90c3810c36e8f685ff1d} 
+\mbox{\hyperlink{classlog__builder}{log\+\_\+builder}} {\bfseries debug} ()
+\item 
+\Hypertarget{classlogger_a1a524ae07176f6a13c4b4d528e9868c6}\label{classlogger_a1a524ae07176f6a13c4b4d528e9868c6} 
+\mbox{\hyperlink{classlog__builder}{log\+\_\+builder}} {\bfseries info} ()
+\item 
+\Hypertarget{classlogger_a44cc40c2fae05c0fd9e09da0413c26a4}\label{classlogger_a44cc40c2fae05c0fd9e09da0413c26a4} 
+\mbox{\hyperlink{classlog__builder}{log\+\_\+builder}} {\bfseries warn} ()
+\item 
+\Hypertarget{classlogger_a267e8ad3bf6bc39bd0be7259f64b3111}\label{classlogger_a267e8ad3bf6bc39bd0be7259f64b3111} 
+\mbox{\hyperlink{classlog__builder}{log\+\_\+builder}} {\bfseries error} ()
+\item 
+\Hypertarget{classlogger_ab235ec838d30999fbf436a913c553aae}\label{classlogger_ab235ec838d30999fbf436a913c553aae} 
+\mbox{\hyperlink{classlog__builder}{log\+\_\+builder}} {\bfseries fatal} ()
+\item 
+\Hypertarget{classlogger_a1d5098f4695a833b785235a239ef9e2e}\label{classlogger_a1d5098f4695a833b785235a239ef9e2e} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries log} (log\+\_\+level level, const char \texorpdfstring{$\ast$}{*}fmt, Args \&\&... args)
+\item 
+\Hypertarget{classlogger_a8dacc449a85dca7ef3e27eeacf41fdc4}\label{classlogger_a8dacc449a85dca7ef3e27eeacf41fdc4} 
+void {\bfseries log\+\_\+message} (log\+\_\+level level, const char \texorpdfstring{$\ast$}{*}message)
+\item 
+\Hypertarget{classlogger_a497a3e0cd7e0a7b499fe7db2ac2dc638}\label{classlogger_a497a3e0cd7e0a7b499fe7db2ac2dc638} 
+void {\bfseries enable\+\_\+backtrace} (size\+\_\+t n)
+\item 
+\Hypertarget{classlogger_a63380d0ff2307fe33afd9464c6346a12}\label{classlogger_a63380d0ff2307fe33afd9464c6346a12} 
+void {\bfseries dump\+\_\+backtrace} ()
+\item 
+\Hypertarget{classlogger_af026254ee95ac41660de5d9010cd7a49}\label{classlogger_af026254ee95ac41660de5d9010cd7a49} 
+void {\bfseries flush} ()
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/log/logger.\+h\end{DoxyCompactItemize}

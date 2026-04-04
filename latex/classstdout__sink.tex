@@ -1,0 +1,60 @@
+\doxysection{stdout\+\_\+sink Class Reference}
+\hypertarget{classstdout__sink}{}\label{classstdout__sink}\index{stdout\_sink@{stdout\_sink}}
+Inheritance diagram for stdout\+\_\+sink\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classstdout__sink}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classstdout__sink_aee4b72b11181d8e8302962d9f846acfe}{log}} (log\+\_\+level level, const char \texorpdfstring{$\ast$}{*}message) override
+\item 
+void \mbox{\hyperlink{classstdout__sink_af75a3a5129dccafeedd4a682d08e27ff}{flush}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries set\+\_\+level} (log\+\_\+level level)
+\item 
+log\+\_\+level {\bfseries get\+\_\+level} () const
+\item 
+bool {\bfseries should\+\_\+log} (log\+\_\+level level) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}}
+\begin{DoxyCompactItemize}
+\item 
+log\+\_\+level {\bfseries level\+\_\+} = log\+\_\+level\+::\+TRACE
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classstdout__sink_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classstdout__sink_af75a3a5129dccafeedd4a682d08e27ff}\index{stdout\_sink@{stdout\_sink}!flush@{flush}}
+\index{flush@{flush}!stdout\_sink@{stdout\_sink}}
+\doxysubsubsection{\texorpdfstring{flush()}{flush()}}
+{\footnotesize\ttfamily \label{classstdout__sink_af75a3a5129dccafeedd4a682d08e27ff} 
+void stdout\+\_\+sink\+::flush (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}.
+
+\Hypertarget{classstdout__sink_aee4b72b11181d8e8302962d9f846acfe}\index{stdout\_sink@{stdout\_sink}!log@{log}}
+\index{log@{log}!stdout\_sink@{stdout\_sink}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}}
+{\footnotesize\ttfamily \label{classstdout__sink_aee4b72b11181d8e8302962d9f846acfe} 
+void stdout\+\_\+sink\+::log (\begin{DoxyParamCaption}\item[{log\+\_\+level}]{level}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{message}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/log/stdout\+\_\+sink.\+h\end{DoxyCompactItemize}

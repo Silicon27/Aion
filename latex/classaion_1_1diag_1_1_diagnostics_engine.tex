@@ -1,0 +1,112 @@
+\doxysection{aion\+::diag\+::Diagnostics\+Engine Class Reference}
+\hypertarget{classaion_1_1diag_1_1_diagnostics_engine}{}\label{classaion_1_1diag_1_1_diagnostics_engine}\index{aion::diag::DiagnosticsEngine@{aion::diag::DiagnosticsEngine}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a8f116d5408249763b9b898a9be0f5818}\label{classaion_1_1diag_1_1_diagnostics_engine_a8f116d5408249763b9b898a9be0f5818} 
+enum \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine_a8f116d5408249763b9b898a9be0f5818}{Level}} \{ \newline
+{\bfseries ignored} = static\+\_\+cast\texorpdfstring{$<$}{<}int\texorpdfstring{$>$}{>}(Severity\+::ignored)
+, {\bfseries note} = static\+\_\+cast\texorpdfstring{$<$}{<}int\texorpdfstring{$>$}{>}(Severity\+::note)
+, {\bfseries remark} = static\+\_\+cast\texorpdfstring{$<$}{<}int\texorpdfstring{$>$}{>}(Severity\+::remark)
+, {\bfseries warning} = static\+\_\+cast\texorpdfstring{$<$}{<}int\texorpdfstring{$>$}{>}(Severity\+::warning)
+, \newline
+{\bfseries error} = static\+\_\+cast\texorpdfstring{$<$}{<}int\texorpdfstring{$>$}{>}(Severity\+::error)
+, {\bfseries fatal} = static\+\_\+cast\texorpdfstring{$<$}{<}int\texorpdfstring{$>$}{>}(Severity\+::fatal)
+ \}
+\begin{DoxyCompactList}\small\item\em The level of a diagnostic after mapping. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_abba7d21d41e25431c1d27053337d9e6a}\label{classaion_1_1diag_1_1_diagnostics_engine_abba7d21d41e25431c1d27053337d9e6a} 
+{\bfseries Diagnostics\+Engine} (\mbox{\hyperlink{classaion_1_1_source_manager}{Source\+\_\+\+Manager}} \texorpdfstring{$\ast$}{*}sm, \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer}{Diagnostic\+Consumer}} \texorpdfstring{$\ast$}{*}consumer, bool owns=false)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a3a09f5ef2bd19865ec9b3d91199c05ce}\label{classaion_1_1diag_1_1_diagnostics_engine_a3a09f5ef2bd19865ec9b3d91199c05ce} 
+{\bfseries Diagnostics\+Engine} (const \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{Diagnostics\+Engine}} \&)=delete
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a2d2da0c4e3cb22bad3478eb7268dad7e}\label{classaion_1_1diag_1_1_diagnostics_engine_a2d2da0c4e3cb22bad3478eb7268dad7e} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{Diagnostics\+Engine}} \& {\bfseries operator=} (const \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{Diagnostics\+Engine}} \&)=delete
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a9928e05aea26fd50522339e98bdd3b77}\label{classaion_1_1diag_1_1_diagnostics_engine_a9928e05aea26fd50522339e98bdd3b77} 
+void {\bfseries set\+\_\+source\+\_\+manager} (\mbox{\hyperlink{classaion_1_1_source_manager}{Source\+\_\+\+Manager}} \texorpdfstring{$\ast$}{*}sm)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_aa73bab0c47c8bd4b423534ae38dbd563}\label{classaion_1_1diag_1_1_diagnostics_engine_aa73bab0c47c8bd4b423534ae38dbd563} 
+\mbox{\hyperlink{classaion_1_1_source_manager}{Source\+\_\+\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+source\+\_\+manager} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_abd2154bf580d1f578f0dbd620aae2185}\label{classaion_1_1diag_1_1_diagnostics_engine_abd2154bf580d1f578f0dbd620aae2185} 
+void {\bfseries set\+\_\+client} (\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer}{Diagnostic\+Consumer}} \texorpdfstring{$\ast$}{*}client, bool owns=false)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a3d518ae92213319d2c94ca7b083fb246}\label{classaion_1_1diag_1_1_diagnostics_engine_a3d518ae92213319d2c94ca7b083fb246} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer}{Diagnostic\+Consumer}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+client} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_acfad95f11727d1ae5ed0d24d3a65264a}\label{classaion_1_1diag_1_1_diagnostics_engine_acfad95f11727d1ae5ed0d24d3a65264a} 
+void {\bfseries set\+\_\+warnings\+\_\+as\+\_\+errors} (bool val)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a2eadf2b408f8664b9a27113ff904294c}\label{classaion_1_1diag_1_1_diagnostics_engine_a2eadf2b408f8664b9a27113ff904294c} 
+bool {\bfseries get\+\_\+warnings\+\_\+as\+\_\+errors} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_ab94134f6a22c7591204a61e194454f32}\label{classaion_1_1diag_1_1_diagnostics_engine_ab94134f6a22c7591204a61e194454f32} 
+void {\bfseries set\+\_\+errors\+\_\+as\+\_\+fatal} (bool val)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a85269a8a0e131155eb7b36433b968aa5}\label{classaion_1_1diag_1_1_diagnostics_engine_a85269a8a0e131155eb7b36433b968aa5} 
+bool {\bfseries get\+\_\+errors\+\_\+as\+\_\+fatal} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a80a623e866b3231faadb9339b5f78974}\label{classaion_1_1diag_1_1_diagnostics_engine_a80a623e866b3231faadb9339b5f78974} 
+void {\bfseries set\+\_\+suppress\+\_\+all\+\_\+diagnostics} (bool val)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a258cc4660341bac4fdac3d42ba053fa6}\label{classaion_1_1diag_1_1_diagnostics_engine_a258cc4660341bac4fdac3d42ba053fa6} 
+bool {\bfseries get\+\_\+suppress\+\_\+all\+\_\+diagnostics} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a401407e1d31823c91381ced8d983be79}\label{classaion_1_1diag_1_1_diagnostics_engine_a401407e1d31823c91381ced8d983be79} 
+void {\bfseries set\+\_\+show\+\_\+colors} (bool val)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a339913a888fbc0a3264679ed28e95f46}\label{classaion_1_1diag_1_1_diagnostics_engine_a339913a888fbc0a3264679ed28e95f46} 
+bool {\bfseries get\+\_\+show\+\_\+colors} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a3bdc4371f56db29bf9c0cffb90da2d59}\label{classaion_1_1diag_1_1_diagnostics_engine_a3bdc4371f56db29bf9c0cffb90da2d59} 
+void {\bfseries set\+\_\+error\+\_\+limit} (unsigned limit)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_ab0d44905fb48d1497337c554f7d8ffb2}\label{classaion_1_1diag_1_1_diagnostics_engine_ab0d44905fb48d1497337c554f7d8ffb2} 
+unsigned {\bfseries get\+\_\+error\+\_\+limit} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_abf717554cb77262fdf34ec82e42c106f}\label{classaion_1_1diag_1_1_diagnostics_engine_abf717554cb77262fdf34ec82e42c106f} 
+void {\bfseries set\+\_\+severity} (Diag\+ID id, Severity sev, bool is\+\_\+pragma=false)
+\begin{DoxyCompactList}\small\item\em Set the severity for a specific diagnostic. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_af1b1f1e4632dbc809c05293c60859a0a}\label{classaion_1_1diag_1_1_diagnostics_engine_af1b1f1e4632dbc809c05293c60859a0a} 
+Severity {\bfseries get\+\_\+severity} (Diag\+ID id) const
+\begin{DoxyCompactList}\small\item\em Get the current severity for a diagnostic. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a77ea80190bb197f0ef9d74a492769d27}\label{classaion_1_1diag_1_1_diagnostics_engine_a77ea80190bb197f0ef9d74a492769d27} 
+unsigned {\bfseries get\+\_\+num\+\_\+errors} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a9b7a4b8de695a99f59b39fb895e90620}\label{classaion_1_1diag_1_1_diagnostics_engine_a9b7a4b8de695a99f59b39fb895e90620} 
+unsigned {\bfseries get\+\_\+num\+\_\+warnings} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_ad1d2bd6391bccb83cf9849a7a32d852d}\label{classaion_1_1diag_1_1_diagnostics_engine_ad1d2bd6391bccb83cf9849a7a32d852d} 
+bool {\bfseries has\+\_\+error\+\_\+occurred} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_aa95696cafa674f811ca4e811b2e0d402}\label{classaion_1_1diag_1_1_diagnostics_engine_aa95696cafa674f811ca4e811b2e0d402} 
+bool {\bfseries has\+\_\+fatal\+\_\+error\+\_\+occurred} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a9acdfa5642a563389afe64bf3c5c93de}\label{classaion_1_1diag_1_1_diagnostics_engine_a9acdfa5642a563389afe64bf3c5c93de} 
+void {\bfseries reset} ()
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a8982be99bd257c546f9a94cba306882b}\label{classaion_1_1diag_1_1_diagnostics_engine_a8982be99bd257c546f9a94cba306882b} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} {\bfseries report} (\mbox{\hyperlink{structaion_1_1_source_location}{Source\+\_\+\+Location}} loc, Diag\+ID id)
+\begin{DoxyCompactList}\small\item\em Report a diagnostic at the given location. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a62547d87f89753ebc219f4478e8d2e60}\label{classaion_1_1diag_1_1_diagnostics_engine_a62547d87f89753ebc219f4478e8d2e60} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} {\bfseries report} (Diag\+ID id)
+\begin{DoxyCompactList}\small\item\em Report a diagnostic at the current location. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_ac8b01a3b1c381c1e7518b474f11de77a}\label{classaion_1_1diag_1_1_diagnostics_engine_ac8b01a3b1c381c1e7518b474f11de77a} 
+void {\bfseries emit\+\_\+diagnostic} (const \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}} \&diag)
+\begin{DoxyCompactList}\small\item\em Emit a fully-\/formed diagnostic. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostics_engine_a97ec9151bbe20af5173173f6de89f3bb}\label{classaion_1_1diag_1_1_diagnostics_engine_a97ec9151bbe20af5173173f6de89f3bb} 
+class {\bfseries Diagnostic\+Builder}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/error/error.\+hpp\item 
+core/src/error/error.\+cpp\end{DoxyCompactItemize}

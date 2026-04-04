@@ -291,6 +291,9 @@ namespace aion::ast {
         persistent, // static storage duration, access is still enforced at compile time, but lives for the duration of the program
     };
 
+    /// any identifier (value) can either be categorized
+    /// as being named or unnamed, by which the nature of
+    /// the identifier is determined via this distinction
     enum class ValueCategory : std::uint8_t {
         named,
         unnamed,

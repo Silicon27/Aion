@@ -1,0 +1,62 @@
+\doxysection{compiler\+\_\+config.\+hpp}
+\hypertarget{compiler__config_8hpp_source}{}\label{compiler__config_8hpp_source}\index{core/include/cli/compiler\_config.hpp@{core/include/cli/compiler\_config.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/02-\/03.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ COMPILER\_CONFIG\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ COMPILER\_CONFIG\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace\ }aion::compiler\_config\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{enum\ class}\ Opt\_Level\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ O0,\ \textcolor{comment}{//\ compiler\ attempts\ 1:1\ of\ source\ code,\ minimal\ change\ in\ output}}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ O1,\ \textcolor{comment}{//\ refer\ to\ https://llvm.org/doxygen/classllvm\_1\_1OptimizationLevel.html\ for\ all\ the\ below.}}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ O2,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ O3,}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ Os,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ Oz}
+\DoxyCodeLine{00019\ \ \ \ \ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{enum\ class}\ Output\_Format\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ Object,}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ Assembly,}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ LLVM\_IR,}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ LLVM\_Bitcode,}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ Wasm\_Object,}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ Wasm\_Text,}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ Null,}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Native\ executable,\ requires\ lld}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ Executable}
+\DoxyCodeLine{00045\ \ \ \ \ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1compiler__config_1_1_flags}{Flags}}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ frontend\ flags}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ max\_error\_count\ =\ 20;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ backend\ flags}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ Opt\_Level\ \ \ \ \ level\ \ \ \ \ \ \ \ =\ Opt\_Level::O1;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ Output\_Format\ output\_format\ =\ Output\_Format::Executable;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ std::string\ \ \ output\_file;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ raw\ -\/o\ argument,\ if\ any}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ pipeline\ control}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ link\ =\ \textcolor{keyword}{true};\ \ \ \ \ \ \ \textcolor{comment}{//\ whether\ to\ invoke\ the\ linker\ /\ produce\ final\ executable}}
+\DoxyCodeLine{00059\ \ \ \ \ \};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \}\ \textcolor{comment}{//\ namespace\ aion::compiler\_config}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//COMPILER\_CONFIG\_HPP}}
+
+\end{DoxyCode}

@@ -1,0 +1,32 @@
+\doxysection{instruction\+\_\+selector.\+hpp}
+\hypertarget{instruction__selector_8hpp_source}{}\label{instruction__selector_8hpp_source}\index{core/include/codegen/instruction\_selector.hpp@{core/include/codegen/instruction\_selector.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/10-\/18.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ INSTRUCTION\_SELECTOR\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ INSTRUCTION\_SELECTOR\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{enum}\ Instruction\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ MOV,}
+\DoxyCodeLine{00010\ \ \ \ \ ADD,}
+\DoxyCodeLine{00011\ \ \ \ \ SUB,}
+\DoxyCodeLine{00012\ \ \ \ \ ADRP,}
+\DoxyCodeLine{00013\ \ \ \ \ LDR,}
+\DoxyCodeLine{00014\ \ \ \ \ STR,}
+\DoxyCodeLine{00015\ \ \ \ \ B,}
+\DoxyCodeLine{00016\ \ \ \ \ BL,}
+\DoxyCodeLine{00017\ \ \ \ \ BDOTLE,\ \textcolor{comment}{//\ b.le\ branch\ if\ less\ than\ or\ equal\ to}}
+\DoxyCodeLine{00018\ \ \ \ \ BDOTGE,\ \textcolor{comment}{//\ b.ge\ branch\ if\ greater\ than\ or\ equal\ to}}
+\DoxyCodeLine{00019\ \ \ \ \ BDOTEQ,\ \textcolor{comment}{//\ b.eq\ branch\ if\ equal}}
+\DoxyCodeLine{00020\ \ \ \ \ BDOTNE,\ \textcolor{comment}{//\ b.ne\ branch\ if\ not\ equal}}
+\DoxyCodeLine{00021\ \ \ \ \ BDOTLT,\ \textcolor{comment}{//\ b.lt\ branch\ if\ less\ than}}
+\DoxyCodeLine{00022\ \ \ \ \ BDOTGT,\ \textcolor{comment}{//\ b.gt\ branch\ if\ greater\ than}}
+\DoxyCodeLine{00023\ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//INSTRUCTION\_SELECTOR\_HPP}}
+
+\end{DoxyCode}

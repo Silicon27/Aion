@@ -1,0 +1,45 @@
+\doxysection{decay.\+h}
+\hypertarget{decay_8h_source}{}\label{decay_8h_source}\index{core/include/support/si/include/impl/type\_traits/decay.h@{core/include/support/si/include/impl/type\_traits/decay.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/01-\/13.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_DECAY\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_DECAY\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}remove\_reference.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}is\_array.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}remove\_extent.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}is\_function.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}add\_pointer.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}remove\_cv.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}conditional.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdecay}{decay}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }U\ =\ remove\_reference\_t<T>;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }type\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structconditional}{conditional}}<}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ is\_array\_v<U>,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ remove\_extent\_t<U>*,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structconditional}{conditional}}<}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_function\_v<U>,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ add\_pointer\_t<U>,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ remove\_cv\_t<U>}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ >::type}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ >::type;}
+\DoxyCodeLine{00033\ \ \ \ \ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{using\ }decay\_t\ =\ \textcolor{keyword}{typename}\ decay<T>::type;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_DECAY\_H}}
+
+\end{DoxyCode}

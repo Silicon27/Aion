@@ -1,0 +1,62 @@
+\doxysection{aion\+::diag\+::Text\+Diagnostic\+Printer Class Reference}
+\hypertarget{classaion_1_1diag_1_1_text_diagnostic_printer}{}\label{classaion_1_1diag_1_1_text_diagnostic_printer}\index{aion::diag::TextDiagnosticPrinter@{aion::diag::TextDiagnosticPrinter}}
+Inheritance diagram for aion\+::diag\+::Text\+Diagnostic\+Printer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1diag_1_1_text_diagnostic_printer}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_text_diagnostic_printer_a48fa6e3b932c2efc88c1e87e9f67853b}\label{classaion_1_1diag_1_1_text_diagnostic_printer_a48fa6e3b932c2efc88c1e87e9f67853b} 
+{\bfseries Text\+Diagnostic\+Printer} (std\+::ostream \&os, \mbox{\hyperlink{classaion_1_1_source_manager}{Source\+\_\+\+Manager}} \texorpdfstring{$\ast$}{*}sm=nullptr, bool colors=true)
+\item 
+void \mbox{\hyperlink{classaion_1_1diag_1_1_text_diagnostic_printer_a73a6274d1c6891d21867336f2102e7d2}{handle\+\_\+diagnostic}} (Severity severity, const \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}} \&diag) override
+\begin{DoxyCompactList}\small\item\em Callback for when a diagnostic is emitted. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer}{aion\+::diag\+::\+Diagnostic\+Consumer}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries begin\+\_\+source\+\_\+file} ()
+\begin{DoxyCompactList}\small\item\em Called at the beginning of processing a source file. \end{DoxyCompactList}\item 
+virtual void {\bfseries end\+\_\+source\+\_\+file} ()
+\begin{DoxyCompactList}\small\item\em Called at the end of processing a source file. \end{DoxyCompactList}\item 
+unsigned {\bfseries get\+\_\+num\+\_\+errors} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of errors emitted. \end{DoxyCompactList}\item 
+unsigned {\bfseries get\+\_\+num\+\_\+warnings} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of warnings emitted. \end{DoxyCompactList}\item 
+virtual void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Reset the error/warning counts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer}{aion\+::diag\+::\+Diagnostic\+Consumer}}}
+\begin{DoxyCompactItemize}
+\item 
+unsigned {\bfseries num\+\_\+errors\+\_\+} = 0
+\item 
+unsigned {\bfseries num\+\_\+warnings\+\_\+} = 0
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classaion_1_1diag_1_1_text_diagnostic_printer_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classaion_1_1diag_1_1_text_diagnostic_printer_a73a6274d1c6891d21867336f2102e7d2}\index{aion::diag::TextDiagnosticPrinter@{aion::diag::TextDiagnosticPrinter}!handle\_diagnostic@{handle\_diagnostic}}
+\index{handle\_diagnostic@{handle\_diagnostic}!aion::diag::TextDiagnosticPrinter@{aion::diag::TextDiagnosticPrinter}}
+\doxysubsubsection{\texorpdfstring{handle\_diagnostic()}{handle\_diagnostic()}}
+{\footnotesize\ttfamily \label{classaion_1_1diag_1_1_text_diagnostic_printer_a73a6274d1c6891d21867336f2102e7d2} 
+void aion\+::diag\+::\+Text\+Diagnostic\+Printer\+::handle\+\_\+diagnostic (\begin{DoxyParamCaption}\item[{Severity}]{severity}{, }\item[{const \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}} \&}]{diag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Callback for when a diagnostic is emitted. 
+
+
+
+Implements \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer_a5701220bccc309b7aface60292719235}{aion\+::diag\+::\+Diagnostic\+Consumer}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/error/error.\+hpp\item 
+core/src/error/error.\+cpp\end{DoxyCompactItemize}

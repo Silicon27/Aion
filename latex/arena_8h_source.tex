@@ -1,0 +1,54 @@
+\doxysection{arena.\+h}
+\hypertarget{arena_8h_source}{}\label{arena_8h_source}\index{core/include/support/si/include/impl/memory/arena.h@{core/include/support/si/include/impl/memory/arena.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/02-\/18.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_MEMORY\_ARENA\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_MEMORY\_ARENA\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <si/stddef.hpp>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <impl/memory/align.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <impl/memory/offset\_to\_alignment.hpp>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <impl/iterator/reverse\_iterator.hpp>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }arena\ \{}
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ T;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using\ }pointer\ =\ T*;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ =\ \textcolor{keyword}{const}\ T*;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{using\ }void\_pointer\ =\ \textcolor{keywordtype}{void}*;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{using\ }const\_void\_pointer\ =\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ size\_t;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{using\ }difference\_type\ =\ ptrdiff\_t;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using\ }reference\ =\ value\_type\&;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using\ }const\_reference\ =\ \textcolor{keyword}{const}\ value\_type\&;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{using\ }iterator\ =\ pointer;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using\ }const\_iterator\ =\ const\_pointer;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{using\ }reverse\_iterator\ =\ si::reverse\_iterator<iterator>;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{explicit}\ arena(\textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ alloc\_size\ =\ offset\_to\_alignment(size,\ \textcolor{keyword}{sizeof}(value\_type));}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ this-\/>size\ =\ alloc\_size;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ data\ =\ \textcolor{keyword}{static\_cast<}value\_type\textcolor{keyword}{>}(::operator\ \textcolor{keyword}{new}(alloc\_size));}
+\DoxyCodeLine{00037\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \string~arena()\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ ::operator\ \textcolor{keyword}{delete}(data);}
+\DoxyCodeLine{00040\ \ \ \ \ \}}
+\DoxyCodeLine{00041\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size;}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{char}*\ data;}
+\DoxyCodeLine{00044\ \};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_MEMORY\_ARENA\_H}}
+
+\end{DoxyCode}

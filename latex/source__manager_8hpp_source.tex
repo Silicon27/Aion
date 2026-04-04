@@ -1,0 +1,139 @@
+\doxysection{source\+\_\+manager.\+hpp}
+\hypertarget{source__manager_8hpp_source}{}\label{source__manager_8hpp_source}\index{core/include/support/source\_manager.hpp@{core/include/support/source\_manager.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/11-\/30.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SOURCE\_MANAGER\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SOURCE\_MANAGER\_HPP}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <ostream>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ GET\_COLUMN\_FOR\_BUFFER\ (data.empty()\ ?\ 1\ :\ (data.size()\ -\/\ line\_starts.back()\ +\ 1))}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{namespace\ }aion::diag\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{DiagnosticsEngine}};}
+\DoxyCodeLine{00019\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace\ }aion::lexer\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}};}
+\DoxyCodeLine{00023\ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{namespace\ }aion\ \{}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using\ }Column\ =\ std::size\_t;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using\ }Line\ =\ std::size\_t;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ forward\ types}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{using\ }FileId\ =\ uint32\_t;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{using\ }Offset\ =\ uint64\_t;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{struct\ }SourceLocation\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ FileId\ file\ =\ 0;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ Offset\ offset\ =\ 0;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ SourceLocation()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ SourceLocation(FileId\ f,\ Offset\ o)\ :\ file(f),\ offset(o)\ \{\}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_valid()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ file\ !=\ 0\ ||\ offset\ !=\ 0;\ \}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_invalid()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ !is\_valid();\ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ SourceLocation\&\ other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ file\ ==\ other.file\ \&\&\ offset\ ==\ other.offset;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator!=(\textcolor{keyword}{const}\ SourceLocation\&\ other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !(*\textcolor{keyword}{this}\ ==\ other);}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{struct\ }SourceRange\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ begin;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ end;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ SourceRange()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ SourceRange(\mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ b,\ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ e)\ :\ begin(b),\ end(e)\ \{\}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_valid()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ begin.is\_valid()\ \&\&\ end.is\_valid();\ \}}
+\DoxyCodeLine{00060\ \ \ \ \ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ make\_source\_loc(FileId\ file,\ Offset\ offset)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}(file,\ offset);}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{inline}\ FileId\ loc\_to\_file\_id(SourceLocation\ loc)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ loc.file;}
+\DoxyCodeLine{00068\ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{inline}\ Offset\ loc\_to\_offset(\mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ loc)\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ loc.offset;}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{//\ Backward-\/compatible\ aliases\ for\ legacy\ call\ sites.}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{using\ }FileID\ =\ FileId;}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{using\ }Source\_Location\ =\ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}};}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{using\ }Source\_Range\ =\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}};}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{inline}\ FileID\ loc\_to\_FileID(\textcolor{keyword}{const}\ Source\_Location\ loc)\ \{\ \textcolor{keywordflow}{return}\ loc\_to\_file\_id(loc);\ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{inline}\ Offset\ loc\_to\_Offset(\textcolor{keyword}{const}\ Source\_Location\ loc)\ \{\ \textcolor{keywordflow}{return}\ loc\_to\_offset(loc);\ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{struct\ }Buffer\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ std::string\ data;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ owned\ contents}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ std::string\ path;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ path\ to\ the\ original\ file}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ std::vector<std::size\_t>\ line\_starts;\ \ \ \ \ \ \ \textcolor{comment}{//\ offsets\ for\ start\ of\ each\ line\ (0-\/based)}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ computed\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ line\ starts\ computed}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ Buffer()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ Buffer(\textcolor{keyword}{const}\ std::string\ \&data,\ \textcolor{keyword}{const}\ std::string\ \&path);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ compute\_line\_starts();}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ Offset\ get\_offset(Line\ line,\ Column\ column);}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::pair<Line,\ Column>\ get\_line\_column(Offset\ offset);}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ std::string\ get\_line\_text(Line\ line\_no);}
+\DoxyCodeLine{00095\ \ \ \ \ \};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{class\ }SourceManager\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ std::unordered\_map<FileId,\ Buffer>\ buffers;}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ FileId\ next\_file\_id\_\ =\ 1;}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ SourceManager()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ FileId\ \mbox{\hyperlink{classaion_1_1_source_manager_af11a6840c4175b2f1a5d65c3a8a4144a}{add\_buffer}}(std::string\ content,\ std::string\ path=\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ FileId\ \mbox{\hyperlink{classaion_1_1_source_manager_a6e6f85c9fd0cdd32fb1f61391a87d2c4}{add\_file\_from\_disk}}(\textcolor{keyword}{const}\ std::string\ \&path,\ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion::diag::DiagnosticsEngine}}\ \&diag);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_buffer}{Buffer}}*\ \mbox{\hyperlink{classaion_1_1_source_manager_aae6413f31e2f4fe818a96bea7ab11b36}{get\_buffer}}(FileId\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_buffer}{Buffer}}*\ \mbox{\hyperlink{classaion_1_1_source_manager_aae6413f31e2f4fe818a96bea7ab11b36}{get\_buffer}}(FileId\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ std::pair<Line,\ Column>\ \mbox{\hyperlink{classaion_1_1_source_manager_a8b943f60687b61c050c19d0bd5633d03}{get\_line\_column}}(\mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ loc)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ \mbox{\hyperlink{classaion_1_1_source_manager_abbada801e89716ef56b3bfbe02a5a597}{get\_location}}(FileId\ file,\ Line\ line,\ Column\ column)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ \mbox{\hyperlink{classaion_1_1_source_manager_abbada801e89716ef56b3bfbe02a5a597}{get\_location}}(FileId\ file,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{lexer::Token}}\&\ token)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classaion_1_1_source_manager_a8c9043259a59ca33cac5bccea9adc6fa}{get\_line\_text}}(\mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ loc)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classaion_1_1_source_manager_aa31c44d7bdb705d72fab1e2dc9e92272}{get\_file\_path}}(\mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\ loc)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Backward-\/compatible\ wrappers\ for\ legacy\ method\ names.}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_buffer}{Buffer}}*\ getBuffer(FileID\ \textcolor{keywordtype}{id})\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classaion_1_1_source_manager_aae6413f31e2f4fe818a96bea7ab11b36}{get\_buffer}}(\textcolor{keywordtype}{id});\ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_buffer}{Buffer}}*\ getBuffer(FileID\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classaion_1_1_source_manager_aae6413f31e2f4fe818a96bea7ab11b36}{get\_buffer}}(\textcolor{keywordtype}{id});\ \}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ std::pair<Line,\ Column>\ getLineColumn(Source\_Location\ loc)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classaion_1_1_source_manager_a8b943f60687b61c050c19d0bd5633d03}{get\_line\_column}}(loc);\ \}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ std::string\ getLineText(Source\_Location\ loc)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classaion_1_1_source_manager_a8c9043259a59ca33cac5bccea9adc6fa}{get\_line\_text}}(loc);\ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ std::string\ getFilePath(Source\_Location\ loc)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classaion_1_1_source_manager_aa31c44d7bdb705d72fab1e2dc9e92272}{get\_file\_path}}(loc);\ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{using\ }Source\_Manager\ =\ \mbox{\hyperlink{classaion_1_1_source_manager}{SourceManager}};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SOURCE\_MANAGER\_HPP}}
+
+\end{DoxyCode}

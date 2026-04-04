@@ -1,0 +1,61 @@
+\doxysection{sconfig.\+h}
+\hypertarget{sconfig_8h_source}{}\label{sconfig_8h_source}\index{core/include/support/si/include/compat/sconfig.h@{core/include/support/si/include/compat/sconfig.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/06-\/02.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_COMPAT\_SCONFIG\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_COMPAT\_SCONFIG\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}compiler\_features.hpp"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ SI\_LIB\_VER\ 2025}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ SI\_VERSION\_MAJOR\ 1}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ SI\_VERSION\_MINOR\ 0}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ SI\_VERSION\_PATCH\ 0}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ SI\_NAMESPACE\_START\ namespace\ si\ \{}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ SI\_NAMESPACE\_END\ \}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#if\ defined(\_\_cpp\_attributes)\ \&\&\ \_\_cpp\_attributes\ >=\ 200809L}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_LIB\_DEPRECATED\ [[deprecated]]}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_LIB\_DEPRECATED\_MSG(msg)\ [[deprecated(msg)]]}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_LIB\_ATTR\_UNSUPPORTED\ true}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_LIB\_DEPRECATED}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_LIB\_DEPRECATED\_MSG(msg)}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ defined(\_\_cpp\_attributes)\ \&\&\ \_\_cpp\_attributes\ >=\ 200809L}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#ifdef\ \_\_has\_builtin}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_COMPILER\_INTRINSIC\_\_\_has\_builtin(x)\ \_\_has\_builtin(x)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifdef\ \_\_has\_attribute}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_COMPILER\_INTRINSIC\_\_\_has\_attribute(x)\ \_\_has\_attribute(x)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#if\ defined(\_\_SIZEOF\_POINTER\_\_)}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#\ \ \ if\ \_\_SIZEOF\_POINTER\_\_\ ==\ 8}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SI\_ARCH\_BITS\ 64}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#\ \ \ elif\ \_\_SIZEOF\_POINTER\_\_\ ==\ 4}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SI\_ARCH\_BITS\ 32}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#\ \ \ elif\ \_\_SIZEOF\_POINTER\_\_\ ==\ 2}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SI\_ARCH\_BITS\ 16}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#ifndef\ SI\_ARCH\_BITS}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#\ \ \ if\ defined(\_\_LP64\_\_)\ ||\ defined(\_LP64)\ ||\ defined(\_\_x86\_64\_\_)\ ||\ defined(\_\_aarch64\_\_)\ ||\ defined(\_M\_X64)\ ||\ defined(\_M\_AMD64)\ ||\ defined(\_M\_ARM64)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SI\_ARCH\_BITS\ 64}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#\ \ \ elif\ defined(\_\_i386\_\_)\ ||\ defined(\_M\_IX86)\ ||\ defined(\_WIN32)}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SI\_ARCH\_BITS\ 32}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#\ \ \ else}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SI\_ARCH\_BITS\ 32}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_COMPAT\_SCONFIG\_H}}
+
+\end{DoxyCode}

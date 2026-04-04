@@ -1,0 +1,67 @@
+\doxysection{allocator\+\_\+traits.\+h}
+\hypertarget{allocator__traits_8h_source}{}\label{allocator__traits_8h_source}\index{core/include/support/si/include/impl/memory/allocator\_traits.h@{core/include/support/si/include/impl/memory/allocator\_traits.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/06-\/03.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_MEMORY\_ALLOCATOR\_TRAITS\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_MEMORY\_ALLOCATOR\_TRAITS\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../../si/utility.hpp"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Alloc>}
+\DoxyCodeLine{00014\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structallocator__traits}{allocator\_traits}}\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{using\ }allocator\_type\ =\ Alloc;}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ \textcolor{keyword}{typename}\ Alloc::value\_type;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{using\ }pointer\ \ \ \ \ \ \ \ \ \ \ \ =\ \textcolor{keyword}{typename}\ Alloc::pointer;}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ \ \ \ \ \ =\ \textcolor{keyword}{typename}\ Alloc::const\_pointer;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using\ }void\_pointer\ \ \ \ \ \ \ =\ \textcolor{keyword}{typename}\ Alloc::void\_pointer;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using\ }const\_void\_pointer\ =\ \textcolor{keyword}{typename}\ Alloc::const\_void\_pointer;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{using\ }difference\_type\ \ \ \ =\ \textcolor{keyword}{typename}\ Alloc::difference\_type;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ \ \ \ \ \ \ \ \ \ =\ \textcolor{keyword}{typename}\ Alloc::size\_type;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using\ }rebind\_alloc\ =\ \textcolor{keyword}{typename}\ Alloc::template\ rebind<T>::other;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using\ }rebind\_traits\ =\ \mbox{\hyperlink{structallocator__traits}{allocator\_traits<rebind\_alloc<T>}}>;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ pointer\ allocate(allocator\_type\&\ alloc,\ size\_type\ n)\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ alloc.allocate(n);}
+\DoxyCodeLine{00034\ \ \ \ \ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ deallocate(Alloc\&\ a,\ pointer\ p,\ size\_type\ n)\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ a.deallocate(p,\ n);}
+\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ construct(Alloc\&\ a,\ T*\ p,\ Args\&\&...\ args)\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ ::new(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{void}\ *\textcolor{keyword}{>}(p))\ T(forward<Args>(args)...);}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ destroy(Alloc\&\ a,\ T*\ p)\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ p-\/>\string~T();}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ size\_type\ max\_size(\textcolor{keyword}{const}\ Alloc\&\ a)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ a.max\_size();}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{static}\ Alloc\ select\_on\_container\_copy\_construction(\textcolor{keyword}{const}\ Alloc\&\ a)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ a;}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_MEMORY\_ALLOCATOR\_TRAITS\_H}}
+
+\end{DoxyCode}

@@ -25,19 +25,43 @@
 var NAVTREE =
 [
   [ "My Project", "index.html", [
-    [ "Contributing", "md__c_o_n_t_r_i_b_u_t_i_n_g.html", [
-      [ "Getting started", "md__c_o_n_t_r_i_b_u_t_i_n_g.html#autotoc_md1", null ],
-      [ "Guidelines &amp; Conventions", "md__c_o_n_t_r_i_b_u_t_i_n_g.html#autotoc_md2", null ]
+    [ "xxHash", "index.html", null ],
+    [ "Intricacies of the Allocator", "md_core_2include_2support_2si_2blog_2intricacies__of__the__allocator.html", null ],
+    [ "Contributing Guidelines", "md_core_2include_2support_2si_2_c_o_n_t_r_i_b_u_t_i_n_g.html", [
+      [ "Layout of Si", "md_core_2include_2support_2si_2_c_o_n_t_r_i_b_u_t_i_n_g.html#autotoc_md4", null ]
     ] ],
-    [ "Aion", "md__r_e_a_d_m_e.html", [
-      [ "Downloading Kaion", "md__r_e_a_d_m_e.html#autotoc_md4", null ]
+    [ "Topics", "topics.html", "topics" ],
+    [ "Concepts", "concepts.html", "concepts" ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
+      [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ],
+        [ "Enumerations", "functions_enum.html", null ]
+      ] ]
+    ] ],
+    [ "Files", "files.html", [
+      [ "File List", "files.html", "files_dup" ],
+      [ "File Members", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Functions", "globals_func.html", null ],
+        [ "Typedefs", "globals_type.html", null ],
+        [ "Enumerations", "globals_enum.html", null ],
+        [ "Enumerator", "globals_eval.html", null ],
+        [ "Macros", "globals_defs.html", null ]
+      ] ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"index.html"
+"_a_s_t_context_8hpp_source.html",
+"group__public.html#ga5832897ed49938aefa629a76034b36b1",
+"structis__trivially__copyable_3_01long_01_4.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

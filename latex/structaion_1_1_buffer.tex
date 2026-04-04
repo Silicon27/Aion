@@ -1,0 +1,41 @@
+\doxysection{aion\+::Buffer Struct Reference}
+\hypertarget{structaion_1_1_buffer}{}\label{structaion_1_1_buffer}\index{aion::Buffer@{aion::Buffer}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structaion_1_1_buffer_a36e0bd5d773660fd050cecfda05ba789}\label{structaion_1_1_buffer_a36e0bd5d773660fd050cecfda05ba789} 
+{\bfseries Buffer} (const std\+::string \&data, const std\+::string \&path)
+\item 
+\Hypertarget{structaion_1_1_buffer_a0e3c265532eebd03f42fd4d3fbd5bf7b}\label{structaion_1_1_buffer_a0e3c265532eebd03f42fd4d3fbd5bf7b} 
+void {\bfseries compute\+\_\+line\+\_\+starts} ()
+\item 
+\Hypertarget{structaion_1_1_buffer_aaf1233970a5a3bc24ba9cbc77d0db53a}\label{structaion_1_1_buffer_aaf1233970a5a3bc24ba9cbc77d0db53a} 
+Offset {\bfseries get\+\_\+offset} (Line line, Column column)
+\item 
+\Hypertarget{structaion_1_1_buffer_aaa932bdf59b31ed7d4a9b20b165d0c9b}\label{structaion_1_1_buffer_aaa932bdf59b31ed7d4a9b20b165d0c9b} 
+std\+::pair$<$ Line, Column $>$ {\bfseries get\+\_\+line\+\_\+column} (Offset offset)
+\item 
+\Hypertarget{structaion_1_1_buffer_aef72f4f4398d59722d6cdff323168953}\label{structaion_1_1_buffer_aef72f4f4398d59722d6cdff323168953} 
+std\+::string {\bfseries get\+\_\+line\+\_\+text} (Line line\+\_\+no)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structaion_1_1_buffer_a5fa2caee7ac35c341cdd3ac0f8b3161e}\label{structaion_1_1_buffer_a5fa2caee7ac35c341cdd3ac0f8b3161e} 
+std\+::string {\bfseries data}
+\item 
+\Hypertarget{structaion_1_1_buffer_a68624a37990acfbdd9ae2f01fbc6cd0c}\label{structaion_1_1_buffer_a68624a37990acfbdd9ae2f01fbc6cd0c} 
+std\+::string {\bfseries path}
+\item 
+\Hypertarget{structaion_1_1_buffer_a1127bf8e9d46c9a8b7becf60d0d39ffe}\label{structaion_1_1_buffer_a1127bf8e9d46c9a8b7becf60d0d39ffe} 
+std\+::vector$<$ std\+::size\+\_\+t $>$ {\bfseries line\+\_\+starts}
+\item 
+\Hypertarget{structaion_1_1_buffer_a2cd23304f3877cf962331dc5caf347dc}\label{structaion_1_1_buffer_a2cd23304f3877cf962331dc5caf347dc} 
+bool {\bfseries computed} = false
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/source\+\_\+manager.\+hpp\item 
+core/src/support/source\+\_\+manager.\+cpp\end{DoxyCompactItemize}

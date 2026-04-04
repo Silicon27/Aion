@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['downloading_20kaion_0',['Downloading Kaion',['../md__r_e_a_d_m_e.html#autotoc_md4',1,'']]]
+  ['contributing_20guidelines_0',['Contributing Guidelines',['../md_core_2include_2support_2si_2_c_o_n_t_r_i_b_u_t_i_n_g.html',1,'']]]
 ];

@@ -1,0 +1,303 @@
+\doxysection{global\+\_\+constants.\+hpp}
+\hypertarget{global__constants_8hpp_source}{}\label{global__constants_8hpp_source}\index{core/include/support/global\_constants.hpp@{core/include/support/global\_constants.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/12-\/06.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ GLOBAL\_CONSTANTS\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ GLOBAL\_CONSTANTS\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <ranges>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OS\ Specific\ Constants}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ get\ the\ cache\ line\ size\ for\ the\ current\ platform,\ used\ for\ ASTContext\ slab\ allocation}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#if\ defined(\_\_x86\_64\_\_)\ ||\ defined(\_M\_X64)\ ||\ defined(\_\_i386)\ ||\ defined(\_M\_IX86)}}
+\DoxyCodeLine{00022\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ std::size\_t\ cache\_line\_size\ =\ 64;}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#elif\ defined(\_\_aarch64\_\_)}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ std::size\_t\ cache\_line\_size\ =\ 128;}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ std::size\_t\ cache\_line\_size\ =\ 64;\ \textcolor{comment}{//\ default\ to\ 64\ if\ unknown\ platform}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#ifndef\ CACHE\_LINE\_SIZE}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ CACHE\_LINE\_SIZE\ cache\_line\_size}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00034\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Source\_Manager}}
+\DoxyCodeLine{00035\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ source\_manager\_invalid\_file\_id\ =\ -\/300;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#ifndef\ SOURCE\_MANAGER\_INVALID\_FILE\_ID}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ SOURCE\_MANAGER\_INVALID\_FILE\_ID\ source\_manager\_invalid\_file\_id}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00044\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lexer\ Types}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{namespace\ }aion::lexer\ \{}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{using\ }TokenType\_t\ =\ uint16\_t;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{enum\ class}\ TokenType\ :\ TokenType\_t\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Keywords}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ kw\_let,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ kw\_as,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ kw\_if,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ kw\_else,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ kw\_functor,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ kw\_return,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ kw\_i4,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ kw\_i8,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ kw\_i16,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ kw\_i32,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ kw\_i64,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ kw\_i128,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ kw\_f4,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ kw\_f8,}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ kw\_f16,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ kw\_f32,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ kw\_f64,}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ kw\_f128,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ kw\_char,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ kw\_bool,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ kw\_import,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ kw\_mod,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ kw\_export,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ kw\_bind,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ kw\_mut,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ kw\_comp,}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Identifiers\ and\ Literals}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ identifier,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ int\_literal,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ float\_literal,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ string\_literal,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ number,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ length\_encoded\_string,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ format\_string,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ raw\_string,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ byte\_string,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ c\_string,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ pure\_string,}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ multiline\_string,}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Special}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ error,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ unknown,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ newline,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ eof,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ comment,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ doc\_comment,}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Operators\ and\ Punctuation}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ equal,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ semicolon,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ double\_colon,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ comma,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ colon,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ lbrace,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ rbrace,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ lbracket,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ rbracket,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ lparen,}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ rparen,}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ plus,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ minus,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ star,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ double\_star,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ slash,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ percent,}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ bang,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ bang\_equal,}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ equal\_equal,}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ less,}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ less\_equal,}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ greater,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ greater\_equal,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ dot,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ double\_dot,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ triple\_dot,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ arrow,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ fat\_arrow,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ ampersand,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ pipe,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ caret,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ tilde,}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ logical\_and,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ logical\_or,}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ lshift,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ rshift,}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ plus\_equal,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ minus\_equal,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ star\_equal,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ slash\_equal,}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ percent\_equal,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ amp\_equal,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ pipe\_equal,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ caret\_equal,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ lshift\_equal,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ rshift\_equal,}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ question,}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ at,}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ hash,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ dollar,}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ misc}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ invalid\_token,}
+\DoxyCodeLine{00160\ \ \ \ \ \};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{//\ Keyword\ set\ for\ fast\ lookup}}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ std::unordered\_set<std::string>\ keywords\ =\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}let"{}},\ \textcolor{stringliteral}{"{}as"{}},\ \textcolor{stringliteral}{"{}if"{}},\ \textcolor{stringliteral}{"{}else"{}},}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}functor"{}},\ \textcolor{stringliteral}{"{}return"{}},\ \textcolor{stringliteral}{"{}i4"{}},}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}i8"{}},\ \textcolor{stringliteral}{"{}i16"{}},\ \textcolor{stringliteral}{"{}i32"{}},\ \textcolor{stringliteral}{"{}i64"{}},\ \textcolor{stringliteral}{"{}i128"{}},}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}f4"{}},\ \textcolor{stringliteral}{"{}f8"{}},\ \textcolor{stringliteral}{"{}f16"{}},\ \textcolor{stringliteral}{"{}f32"{}},\ \textcolor{stringliteral}{"{}f64"{}},\ \textcolor{stringliteral}{"{}f128"{}},}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}char"{}},\ \textcolor{stringliteral}{"{}bool"{}},\ \textcolor{stringliteral}{"{}import"{}},\ \textcolor{stringliteral}{"{}mod"{}},\ \textcolor{stringliteral}{"{}export"{}},}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}bind"{}},\ \textcolor{stringliteral}{"{}mut"{}},\ \textcolor{stringliteral}{"{}comp"{}},}
+\DoxyCodeLine{00170\ \ \ \ \ \};}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ a\ string\ is\ a\ keyword}}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ is\_keyword(\textcolor{keyword}{const}\ std::string\ \&str)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ keywords.contains(str);}
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ TokenType\ for\ a\ keyword\ string}}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keyword}{inline}\ TokenType\ get\_keyword\_type(\textcolor{keyword}{const}\ std::string\ \&str)\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}let"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_let;}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}as"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_as;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}if"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_if;}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}else"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_else;}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}functor"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_functor;}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}return"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_return;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}i4"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_i4;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}i8"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_i8;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}i16"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_i16;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}i32"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_i32;}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}i64"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_i64;}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}i128"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_i128;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}f4"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_f4;}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}f8"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_f8;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}f16"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_f16;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}f32"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_f32;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}f64"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_f64;}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}f128"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_f128;}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}char"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_char;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}bool"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_bool;}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}import"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_import;}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}mod"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_mod;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}export"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_export;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}bind"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_bind;}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}mut"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_mut;}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}comp"{}})\ \textcolor{keywordflow}{return}\ TokenType::kw\_comp;}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TokenType::identifier;\ \textcolor{comment}{//\ fallback}}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ TokenType\ for\ a\ symbol\ string}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{inline}\ TokenType\ get\_symbol\_type(\textcolor{keyword}{const}\ std::string\ \&str)\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}="{}})\ \textcolor{keywordflow}{return}\ TokenType::equal;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{};"{}})\ \textcolor{keywordflow}{return}\ TokenType::semicolon;}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}::"{}})\ \textcolor{keywordflow}{return}\ TokenType::double\_colon;}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{},"{}})\ \textcolor{keywordflow}{return}\ TokenType::comma;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}:"{}})\ \textcolor{keywordflow}{return}\ TokenType::colon;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\{"{}})\ \textcolor{keywordflow}{return}\ TokenType::lbrace;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\}"{}})\ \textcolor{keywordflow}{return}\ TokenType::rbrace;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}["{}})\ \textcolor{keywordflow}{return}\ TokenType::lbracket;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}]"{}})\ \textcolor{keywordflow}{return}\ TokenType::rbracket;}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}("{}})\ \textcolor{keywordflow}{return}\ TokenType::lparen;}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{})"{}})\ \textcolor{keywordflow}{return}\ TokenType::rparen;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}+"{}})\ \textcolor{keywordflow}{return}\ TokenType::plus;}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}-\/"{}})\ \textcolor{keywordflow}{return}\ TokenType::minus;}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}*"{}})\ \textcolor{keywordflow}{return}\ TokenType::star;}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}**"{}})\ \textcolor{keywordflow}{return}\ TokenType::double\_star;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}/"{}})\ \textcolor{keywordflow}{return}\ TokenType::slash;}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\%"{}})\ \textcolor{keywordflow}{return}\ TokenType::percent;}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}!"{}})\ \textcolor{keywordflow}{return}\ TokenType::bang;}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}!="{}})\ \textcolor{keywordflow}{return}\ TokenType::bang\_equal;}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}=="{}})\ \textcolor{keywordflow}{return}\ TokenType::equal\_equal;}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}<"{}})\ \textcolor{keywordflow}{return}\ TokenType::less;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}<="{}})\ \textcolor{keywordflow}{return}\ TokenType::less\_equal;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}>"{}})\ \textcolor{keywordflow}{return}\ TokenType::greater;}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}>="{}})\ \textcolor{keywordflow}{return}\ TokenType::greater\_equal;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}."{}})\ \textcolor{keywordflow}{return}\ TokenType::dot;}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}.."{}})\ \textcolor{keywordflow}{return}\ TokenType::double\_dot;}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}..."{}})\ \textcolor{keywordflow}{return}\ TokenType::triple\_dot;}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}-\/>"{}})\ \textcolor{keywordflow}{return}\ TokenType::arrow;}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}=>"{}})\ \textcolor{keywordflow}{return}\ TokenType::fat\_arrow;}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\&"{}})\ \textcolor{keywordflow}{return}\ TokenType::ampersand;}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}|"{}})\ \textcolor{keywordflow}{return}\ TokenType::pipe;}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\string^"{}})\ \textcolor{keywordflow}{return}\ TokenType::caret;}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\string~"{}})\ \textcolor{keywordflow}{return}\ TokenType::tilde;}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\&\&"{}})\ \textcolor{keywordflow}{return}\ TokenType::logical\_and;}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}||"{}})\ \textcolor{keywordflow}{return}\ TokenType::logical\_or;}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}<<"{}})\ \textcolor{keywordflow}{return}\ TokenType::lshift;}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}>>"{}})\ \textcolor{keywordflow}{return}\ TokenType::rshift;}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}+="{}})\ \textcolor{keywordflow}{return}\ TokenType::plus\_equal;}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}-\/="{}})\ \textcolor{keywordflow}{return}\ TokenType::minus\_equal;}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}*="{}})\ \textcolor{keywordflow}{return}\ TokenType::star\_equal;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}/="{}})\ \textcolor{keywordflow}{return}\ TokenType::slash\_equal;}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\%="{}})\ \textcolor{keywordflow}{return}\ TokenType::percent\_equal;}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\&="{}})\ \textcolor{keywordflow}{return}\ TokenType::amp\_equal;}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}|="{}})\ \textcolor{keywordflow}{return}\ TokenType::pipe\_equal;}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\string^="{}})\ \textcolor{keywordflow}{return}\ TokenType::caret\_equal;}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}<<="{}})\ \textcolor{keywordflow}{return}\ TokenType::lshift\_equal;}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}>>="{}})\ \textcolor{keywordflow}{return}\ TokenType::rshift\_equal;}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}?"{}})\ \textcolor{keywordflow}{return}\ TokenType::question;}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}@"{}})\ \textcolor{keywordflow}{return}\ TokenType::at;}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\#"{}})\ \textcolor{keywordflow}{return}\ TokenType::hash;}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\$"{}})\ \textcolor{keywordflow}{return}\ TokenType::dollar;}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str\ ==\ \textcolor{stringliteral}{"{}\(\backslash\)\(\backslash\)"{}})\ \textcolor{keywordflow}{return}\ TokenType::comment;}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TokenType::unknown;}
+\DoxyCodeLine{00263\ \ \ \ \ \}}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{comment}{//\ Lexer\ symbols\ list\ (sorted\ by\ length\ descending\ for\ longest-\/match)}}
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keyword}{inline}\ std::vector<std::string>\ get\_symbols()\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ std::vector<std::string>\ syms\ =\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}<<@"{}},\ \textcolor{stringliteral}{"{}..."{}},\ \textcolor{stringliteral}{"{}<<="{}},\ \textcolor{stringliteral}{"{}>>="{}},\ \textcolor{stringliteral}{"{}=="{}},\ \textcolor{stringliteral}{"{}!="{}},\ \textcolor{stringliteral}{"{}<="{}},\ \textcolor{stringliteral}{"{}>="{}},\ \textcolor{stringliteral}{"{}=>"{}},\ \textcolor{stringliteral}{"{}-\/>"{}},\ \textcolor{stringliteral}{"{}::"{}},\ \textcolor{stringliteral}{"{}||"{}},\ \textcolor{stringliteral}{"{}\&\&"{}},}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}+="{}},\ \textcolor{stringliteral}{"{}-\/="{}},\ \textcolor{stringliteral}{"{}*="{}},\ \textcolor{stringliteral}{"{}/="{}},\ \textcolor{stringliteral}{"{}\%="{}},\ \textcolor{stringliteral}{"{}\&="{}},\ \textcolor{stringliteral}{"{}|="{}},\ \textcolor{stringliteral}{"{}\string^="{}},\ \textcolor{stringliteral}{"{}<<"{}},\ \textcolor{stringliteral}{"{}>>"{}},\ \textcolor{stringliteral}{"{}**"{}},\ \textcolor{stringliteral}{"{}.."{}},}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}="{}},\ \textcolor{stringliteral}{"{}+"{}},\ \textcolor{stringliteral}{"{}-\/"{}},\ \textcolor{stringliteral}{"{}*"{}},\ \textcolor{stringliteral}{"{}/"{}},\ \textcolor{stringliteral}{"{}\%"{}},\ \textcolor{stringliteral}{"{}("{}},\ \textcolor{stringliteral}{"{})"{}},\ \textcolor{stringliteral}{"{}\{"{}},\ \textcolor{stringliteral}{"{}\}"{}},\ \textcolor{stringliteral}{"{}["{}},\ \textcolor{stringliteral}{"{}]"{}},\ \textcolor{stringliteral}{"{};"{}},\ \textcolor{stringliteral}{"{},"{}},\ \textcolor{stringliteral}{"{}:"{}},}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}},\ \textcolor{stringliteral}{"{}\(\backslash\)'"{}},\ \textcolor{stringliteral}{"{}\(\backslash\)\(\backslash\)"{}},\ \textcolor{stringliteral}{"{}@"{}},\ \textcolor{stringliteral}{"{}\#"{}},\ \textcolor{stringliteral}{"{}\$"{}},\ \textcolor{stringliteral}{"{}\&"{}},\ \textcolor{stringliteral}{"{}?"{}},\ \textcolor{stringliteral}{"{}!"{}},\ \textcolor{stringliteral}{"{}<"{}},\ \textcolor{stringliteral}{"{}>"{}},\ \textcolor{stringliteral}{"{}|"{}},\ \textcolor{stringliteral}{"{}\string^"{}},\ \textcolor{stringliteral}{"{}\string~"{}},\ \textcolor{stringliteral}{"{}."{}}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ std::ranges::sort(syms,\ [](\textcolor{keyword}{const}\ std::string\ \&a,\ \textcolor{keyword}{const}\ std::string\ \&b)\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ a.size()\ >\ b.size();}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ syms;}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{comment}{//\ Pre-\/sorted\ symbols\ constant\ (initialized\ once)}}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ std::vector<std::string>\&\ symbols()\ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::vector<std::string>\ sorted\_symbols\ =\ get\_symbols();}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sorted\_symbols;}
+\DoxyCodeLine{00283\ \ \ \ \ \}}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \}\ \textcolor{comment}{//\ namespace\ aion::lexer}}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keyword}{enum\ class}\ StorageClass\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ stack,}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ heap,}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ persistent,\ \textcolor{comment}{//\ static\ storage\ duration,\ access\ is\ still\ enforced\ at\ compile\ time,\ but\ lives\ for\ the\ duration\ of\ the\ program}}
+\DoxyCodeLine{00292\ \ \ \ \ \};}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keyword}{enum\ class}\ ValueCategory\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ named,}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ unnamed,}
+\DoxyCodeLine{00300\ \ \ \ \ \};}
+\DoxyCodeLine{00301\ \}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//GLOBAL\_CONSTANTS\_HPP}}
+
+\end{DoxyCode}

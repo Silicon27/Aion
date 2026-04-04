@@ -1,0 +1,27 @@
+\doxysection{preprocessor.\+hpp}
+\hypertarget{preprocessor_8hpp_source}{}\label{preprocessor_8hpp_source}\index{core/include/preprocessor/preprocessor.hpp@{core/include/preprocessor/preprocessor.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/10-\/18.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ PREPROCESSOR\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ PREPROCESSOR\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }Preprocessor\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ std::fstream\ file;}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{explicit}\ Preprocessor(std::string\ file);}
+\DoxyCodeLine{00014\ \ \ \ \ \string~Preprocessor();}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00018\ \ \ \ \ std::string\ \mbox{\hyperlink{class_preprocessor_a45ffeaf4f08b3e8397cbf859f4471c6e}{get\_next\_line\_with\_preprocessing\_directive}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ preprocess();}
+\DoxyCodeLine{00021\ \};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//PREPROCESSOR\_HPP}}
+
+\end{DoxyCode}

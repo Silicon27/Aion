@@ -1,0 +1,33 @@
+\doxysection{size\+\_\+t.\+h}
+\hypertarget{size__t_8h_source}{}\label{size__t_8h_source}\index{core/include/support/si/include/impl/stddef/size\_t.h@{core/include/support/si/include/impl/stddef/size\_t.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/06-\/04.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_STDDEF\_SIZE\_T\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_STDDEF\_SIZE\_T\_H}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#if\ defined(\_\_SIZE\_TYPE\_\_)}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{using\ }size\_t\ =\ \_\_SIZE\_TYPE\_\_;}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#elif\ defined(SI\_MSVC)}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined(\_WIN64)}}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }size\_t\ =\ \textcolor{keywordtype}{unsigned}\ \_\_int64;\ \textcolor{comment}{//\ 64-\/bit\ Windows}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\ \ \ \ \#elif\ defined(\_WIN32)}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }size\_t\ =\ \textcolor{keywordtype}{unsigned}\ int;\ \ \ \ \ \textcolor{comment}{//\ 32-\/bit\ Windows}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#elif\ defined\ (\_\_x86\_64\_\_)\ ||\ defined(\_\_aarch64\_\_)}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using\ }size\_t\ =\ \textcolor{keywordtype}{unsigned}\ long;\ \ \ \ \textcolor{comment}{//\ 32-\/bit\ Linux/macOS}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using\ }size\_t\ =\ \textcolor{keywordtype}{unsigned}\ long;\ \textcolor{comment}{//\ Default\ to\ unsigned\ long\ for\ other\ platforms}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_STDDEF\_SIZE\_T\_H}}
+
+\end{DoxyCode}

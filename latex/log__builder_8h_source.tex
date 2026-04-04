@@ -1,0 +1,40 @@
+\doxysection{log\+\_\+builder.\+h}
+\hypertarget{log__builder_8h_source}{}\label{log__builder_8h_source}\index{core/include/support/si/include/impl/log/log\_builder.h@{core/include/support/si/include/impl/log/log\_builder.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/03-\/17.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_LOG\_LOG\_BUILDER\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_LOG\_LOG\_BUILDER\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}level.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classlogger}{logger}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{class\ }log\_builder\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ log\_builder(\mbox{\hyperlink{classlogger}{logger}}\&\ l,\ log\_level\ lvl);}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \string~log\_builder();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ log\_builder\&\ operator<<(\textcolor{keyword}{const}\ T\&\ msg)\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ oss\_\ <<\ msg;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classlogger}{logger}}\&\ logger\_;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ log\_level\ level\_;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ std::ostringstream\ oss\_;}
+\DoxyCodeLine{00031\ \ \ \ \ \};}
+\DoxyCodeLine{00032\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_LOG\_LOG\_BUILDER\_H}}
+
+\end{DoxyCode}

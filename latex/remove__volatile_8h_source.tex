@@ -1,0 +1,31 @@
+\doxysection{remove\+\_\+volatile.\+h}
+\hypertarget{remove__volatile_8h_source}{}\label{remove__volatile_8h_source}\index{core/include/support/si/include/impl/type\_traits/remove\_volatile.h@{core/include/support/si/include/impl/type\_traits/remove\_volatile.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/06-\/02.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_REMOVE\_VOLATILE\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_REMOVE\_VOLATILE\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#if\ SI\_HAS\_BUILTIN(\_\_remove\_volatile)}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structremove__volatile}{remove\_volatile}}\ \{\ \textcolor{keyword}{using\ }type\ =\ SI\_REMOVE\_VOLATILE(T);\ \};}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structremove__volatile}{remove\_volatile}}\ \{\ \textcolor{keyword}{typedef}\ T\ type;\ \};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structremove__volatile}{remove\_volatile}}<volatile\ T>\ \{\ \textcolor{keyword}{typedef}\ T\ type;\ \};}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#if\ \_\_cplusplus\ >=\ 201402L}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{using\ }remove\_volatile\_t\ =\ \textcolor{keyword}{typename}\ remove\_volatile<T>::type;}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_REMOVE\_VOLATILE\_H}}
+
+\end{DoxyCode}

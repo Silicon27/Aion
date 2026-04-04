@@ -1,0 +1,244 @@
+\doxysection{argparse\+::Argument\+Parser Class Reference}
+\hypertarget{classargparse_1_1_argument_parser}{}\label{classargparse_1_1_argument_parser}\index{argparse::ArgumentParser@{argparse::ArgumentParser}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classargparse_1_1_argument_parser_1_1_mutually_exclusive_group}{Mutually\+Exclusive\+Group}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a12c13ac7a60a9a6d9f06189435d9e866}\label{classargparse_1_1_argument_parser_a12c13ac7a60a9a6d9f06189435d9e866} 
+{\bfseries Argument\+Parser} (std\+::string program\+\_\+name=\{\}, std\+::string version="{}1.\+0"{}, default\+\_\+arguments add\+\_\+args=default\+\_\+arguments\+::all, bool exit\+\_\+on\+\_\+default\+\_\+arguments=true, std\+::ostream \&os=std\+::cout)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ad4e5e2d9ac63558dbd2736c2173c7fc1}\label{classargparse_1_1_argument_parser_ad4e5e2d9ac63558dbd2736c2173c7fc1} 
+{\bfseries Argument\+Parser} (const \mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&other)=delete
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ad57f822098214463205e4367a03945bc}\label{classargparse_1_1_argument_parser_ad57f822098214463205e4367a03945bc} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries operator=} (const \mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&other)=delete
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_aaf8d5528e8d042943c0cc131bf7e9844}\label{classargparse_1_1_argument_parser_aaf8d5528e8d042943c0cc131bf7e9844} 
+{\bfseries Argument\+Parser} (\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&\&) noexcept=delete
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_af9efb7894d8a1de409a473a62808133f}\label{classargparse_1_1_argument_parser_af9efb7894d8a1de409a473a62808133f} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries operator=} (\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&\&)=delete
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_abecd5ea49732622b6e14eebb7d628c93}\label{classargparse_1_1_argument_parser_abecd5ea49732622b6e14eebb7d628c93} 
+{\bfseries operator bool} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_abe042a76161fd0cf40fbc1000a7276db}\label{classargparse_1_1_argument_parser_abe042a76161fd0cf40fbc1000a7276db} 
+{\footnotesize template$<$typename... Targs$>$ }\\\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries add\+\_\+argument} (Targs... f\+\_\+args)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a166feaef4544574aea28f277b75c2248}\label{classargparse_1_1_argument_parser_a166feaef4544574aea28f277b75c2248} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser_1_1_mutually_exclusive_group}{Mutually\+Exclusive\+Group}} \& {\bfseries add\+\_\+mutually\+\_\+exclusive\+\_\+group} (bool required=false)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a583d24c017c6a62b3d4669d22b976cef}\label{classargparse_1_1_argument_parser_a583d24c017c6a62b3d4669d22b976cef} 
+{\footnotesize template$<$typename... Targs$>$ }\\\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries add\+\_\+parents} (const Targs \&... f\+\_\+args)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ac9580211d9e4ec34a6541463f0a65819}\label{classargparse_1_1_argument_parser_ac9580211d9e4ec34a6541463f0a65819} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries add\+\_\+usage\+\_\+newline} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a726e4a1422674e536c1ac16ac8abb260}\label{classargparse_1_1_argument_parser_a726e4a1422674e536c1ac16ac8abb260} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries add\+\_\+group} (std\+::string group\+\_\+name)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a67611d92546717a8660a98f83db0fc4f}\label{classargparse_1_1_argument_parser_a67611d92546717a8660a98f83db0fc4f} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries add\+\_\+description} (std\+::string description)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_adfb435c0558b0a4862762e15e89771c7}\label{classargparse_1_1_argument_parser_adfb435c0558b0a4862762e15e89771c7} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries add\+\_\+epilog} (std\+::string epilog)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ae6bf953770d3d438f2fbfece0e83d7de}\label{classargparse_1_1_argument_parser_ae6bf953770d3d438f2fbfece0e83d7de} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries add\+\_\+hidden\+\_\+alias\+\_\+for} (\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \&arg, std\+::string\+\_\+view alias)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a18a21862cf13fa8c40aff4193f9f0d76}\label{classargparse_1_1_argument_parser_a18a21862cf13fa8c40aff4193f9f0d76} 
+{\footnotesize template$<$typename T = Argument$>$ }\\T \& {\bfseries at} (std\+::string\+\_\+view name)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a0dadfd9ef92d0cddef907ba082fb7b59}\label{classargparse_1_1_argument_parser_a0dadfd9ef92d0cddef907ba082fb7b59} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries set\+\_\+prefix\+\_\+chars} (std\+::string prefix\+\_\+chars)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a32c09b95481bc4a9219d85ba9128618f}\label{classargparse_1_1_argument_parser_a32c09b95481bc4a9219d85ba9128618f} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries set\+\_\+assign\+\_\+chars} (std\+::string assign\+\_\+chars)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a7dc1bd6299338e38faa257b506e6d35e}\label{classargparse_1_1_argument_parser_a7dc1bd6299338e38faa257b506e6d35e} 
+void {\bfseries parse\+\_\+args} (const std\+::vector$<$ std\+::string $>$ \&arguments)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ab3c5c8193bb840120e55fa93ce8d3c7b}\label{classargparse_1_1_argument_parser_ab3c5c8193bb840120e55fa93ce8d3c7b} 
+std\+::vector$<$ std\+::string $>$ {\bfseries parse\+\_\+known\+\_\+args} (const std\+::vector$<$ std\+::string $>$ \&arguments)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a1ea9557fac0ac2011136cf34c60614b3}\label{classargparse_1_1_argument_parser_a1ea9557fac0ac2011136cf34c60614b3} 
+void {\bfseries parse\+\_\+args} (int argc, const char \texorpdfstring{$\ast$}{*}const argv\mbox{[}$\,$\mbox{]})
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a0da23d69f25a0e5d086f05ff2cdf91d9}\label{classargparse_1_1_argument_parser_a0da23d69f25a0e5d086f05ff2cdf91d9} 
+auto {\bfseries parse\+\_\+known\+\_\+args} (int argc, const char \texorpdfstring{$\ast$}{*}const argv\mbox{[}$\,$\mbox{]})
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a5697bb11e1f51ad10dfefb3c1d826361}\label{classargparse_1_1_argument_parser_a5697bb11e1f51ad10dfefb3c1d826361} 
+{\footnotesize template$<$typename T = std\+::string$>$ }\\T {\bfseries get} (std\+::string\+\_\+view arg\+\_\+name) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a3ba4e6cabbda01e8d49eabe44e084606}\label{classargparse_1_1_argument_parser_a3ba4e6cabbda01e8d49eabe44e084606} 
+{\footnotesize template$<$typename T = std\+::string$>$ }\\auto {\bfseries present} (std\+::string\+\_\+view arg\+\_\+name) const -\/$>$ std\+::optional$<$ T $>$
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a9a0a325c01f68e63d61f0194158cd334}\label{classargparse_1_1_argument_parser_a9a0a325c01f68e63d61f0194158cd334} 
+auto {\bfseries is\+\_\+used} (std\+::string\+\_\+view arg\+\_\+name) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a3ba2b22d311940d407750ae72c331d25}\label{classargparse_1_1_argument_parser_a3ba2b22d311940d407750ae72c331d25} 
+auto {\bfseries is\+\_\+subcommand\+\_\+used} (std\+::string\+\_\+view subcommand\+\_\+name) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a46abd8b5756942892b66be701b087320}\label{classargparse_1_1_argument_parser_a46abd8b5756942892b66be701b087320} 
+auto {\bfseries is\+\_\+subcommand\+\_\+used} (const \mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&subparser) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a813cc4c8552f38dcc644e6d954699ce5}\label{classargparse_1_1_argument_parser_a813cc4c8552f38dcc644e6d954699ce5} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (std\+::string\+\_\+view arg\+\_\+name) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ab037d74d79df0b97e119fe52d7e9505e}\label{classargparse_1_1_argument_parser_ab037d74d79df0b97e119fe52d7e9505e} 
+auto {\bfseries help} () const -\/$>$ std\+::stringstream
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a418478886c813d3c617e9c4efcc80a47}\label{classargparse_1_1_argument_parser_a418478886c813d3c617e9c4efcc80a47} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries set\+\_\+usage\+\_\+max\+\_\+line\+\_\+width} (size\+\_\+t w)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ad940f4492b7927878e0154401dbf9b13}\label{classargparse_1_1_argument_parser_ad940f4492b7927878e0154401dbf9b13} 
+\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \& {\bfseries set\+\_\+usage\+\_\+break\+\_\+on\+\_\+mutex} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a210b0efa84fcbddca1e9fc7b9706dafd}\label{classargparse_1_1_argument_parser_a210b0efa84fcbddca1e9fc7b9706dafd} 
+auto {\bfseries usage} () const -\/$>$ std\+::string
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a1df6fd0b40c0a8fefdca711d4f55081a}\label{classargparse_1_1_argument_parser_a1df6fd0b40c0a8fefdca711d4f55081a} 
+std\+::string {\bfseries print\+\_\+help} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a68490e0cf8d80c95f454f2c126abcac8}\label{classargparse_1_1_argument_parser_a68490e0cf8d80c95f454f2c126abcac8} 
+void {\bfseries add\+\_\+subparser} (\mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&parser)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a4302135e65a6a5d3276b6e5e56ee0ce9}\label{classargparse_1_1_argument_parser_a4302135e65a6a5d3276b6e5e56ee0ce9} 
+void {\bfseries set\+\_\+suppress} (bool suppress)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_af695aa0c4c0f03d1a9918f445b1989c0}\label{classargparse_1_1_argument_parser_af695aa0c4c0f03d1a9918f445b1989c0} 
+using {\bfseries argument\+\_\+it} = std\+::list$<$\mbox{\hyperlink{classargparse_1_1_argument}{Argument}}$>$\+::iterator
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a55686df4755ba228e08791544cabcadd}\label{classargparse_1_1_argument_parser_a55686df4755ba228e08791544cabcadd} 
+using {\bfseries mutex\+\_\+group\+\_\+it} = std\+::vector$<$\mbox{\hyperlink{classargparse_1_1_argument_parser_1_1_mutually_exclusive_group}{Mutually\+Exclusive\+Group}}$>$\+::iterator
+\item 
+using \mbox{\hyperlink{classargparse_1_1_argument_parser_ab101b9a2c479d14ca7e1ab2a1cdbeefa}{argument\+\_\+parser\+\_\+it}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a76153d9050d753b4274489f44fae7b67}\label{classargparse_1_1_argument_parser_a76153d9050d753b4274489f44fae7b67} 
+const \mbox{\hyperlink{classargparse_1_1_argument_parser_1_1_mutually_exclusive_group}{Mutually\+Exclusive\+Group}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+belonging\+\_\+mutex} (const \mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \texorpdfstring{$\ast$}{*}arg) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a615078c633f4acf28de1216768f4feb9}\label{classargparse_1_1_argument_parser_a615078c633f4acf28de1216768f4feb9} 
+bool {\bfseries is\+\_\+valid\+\_\+prefix\+\_\+char} (char c) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_af5ce938b1d703f59e18a4f16b62d735f}\label{classargparse_1_1_argument_parser_af5ce938b1d703f59e18a4f16b62d735f} 
+char {\bfseries get\+\_\+any\+\_\+valid\+\_\+prefix\+\_\+char} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a086297049c79a37b29ab49ef97eef6f9}\label{classargparse_1_1_argument_parser_a086297049c79a37b29ab49ef97eef6f9} 
+std\+::vector$<$ std\+::string $>$ {\bfseries preprocess\+\_\+arguments} (const std\+::vector$<$ std\+::string $>$ \&raw\+\_\+arguments) const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ac2cb7a3249984104aeaa32edb7353d49}\label{classargparse_1_1_argument_parser_ac2cb7a3249984104aeaa32edb7353d49} 
+void {\bfseries parse\+\_\+args\+\_\+internal} (const std\+::vector$<$ std\+::string $>$ \&raw\+\_\+arguments)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_aa8c46fc9de6266f8edf34d8191e5a38a}\label{classargparse_1_1_argument_parser_aa8c46fc9de6266f8edf34d8191e5a38a} 
+std\+::vector$<$ std\+::string $>$ {\bfseries parse\+\_\+known\+\_\+args\+\_\+internal} (const std\+::vector$<$ std\+::string $>$ \&raw\+\_\+arguments)
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a4853074ea68020a06e6fba5db4a56b93}\label{classargparse_1_1_argument_parser_a4853074ea68020a06e6fba5db4a56b93} 
+std\+::size\+\_\+t {\bfseries get\+\_\+length\+\_\+of\+\_\+longest\+\_\+argument} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ad0f6e1eb5279a67000209c00b3dce8a6}\label{classargparse_1_1_argument_parser_ad0f6e1eb5279a67000209c00b3dce8a6} 
+void {\bfseries index\+\_\+argument} (argument\+\_\+it it)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a1098dac7a6de41659c608a6f8386fb10}\label{classargparse_1_1_argument_parser_a1098dac7a6de41659c608a6f8386fb10} 
+std\+::string {\bfseries m\+\_\+program\+\_\+name}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ae30380873b8f02187f4b876dcc531720}\label{classargparse_1_1_argument_parser_ae30380873b8f02187f4b876dcc531720} 
+std\+::string {\bfseries m\+\_\+version}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ae62ef771dd408aa3c9f92b0d3f992aa3}\label{classargparse_1_1_argument_parser_ae62ef771dd408aa3c9f92b0d3f992aa3} 
+std\+::string {\bfseries m\+\_\+description}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a695add015e9cf34c8c03772d93b29b74}\label{classargparse_1_1_argument_parser_a695add015e9cf34c8c03772d93b29b74} 
+std\+::string {\bfseries m\+\_\+epilog}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a17242bc53cf62312694d8d163c59a3b6}\label{classargparse_1_1_argument_parser_a17242bc53cf62312694d8d163c59a3b6} 
+bool {\bfseries m\+\_\+exit\+\_\+on\+\_\+default\+\_\+arguments} = true
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_aea423c30aa492fb012eca38e51a1729e}\label{classargparse_1_1_argument_parser_aea423c30aa492fb012eca38e51a1729e} 
+std\+::string {\bfseries m\+\_\+prefix\+\_\+chars} \{"{}-\/"{}\}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a4cc4b97a28272f652b9767dda924a260}\label{classargparse_1_1_argument_parser_a4cc4b97a28272f652b9767dda924a260} 
+std\+::string {\bfseries m\+\_\+assign\+\_\+chars} \{"{}="{}\}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a4df26e9cd9e65f1140f45685eb5b5316}\label{classargparse_1_1_argument_parser_a4df26e9cd9e65f1140f45685eb5b5316} 
+bool {\bfseries m\+\_\+is\+\_\+parsed} = false
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ac4f39fd70cc9109d8de91ee5576516de}\label{classargparse_1_1_argument_parser_ac4f39fd70cc9109d8de91ee5576516de} 
+std\+::list$<$ \mbox{\hyperlink{classargparse_1_1_argument}{Argument}} $>$ {\bfseries m\+\_\+positional\+\_\+arguments}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a5a597ffb24e87be478c4c00bf9e2834c}\label{classargparse_1_1_argument_parser_a5a597ffb24e87be478c4c00bf9e2834c} 
+std\+::list$<$ \mbox{\hyperlink{classargparse_1_1_argument}{Argument}} $>$ {\bfseries m\+\_\+optional\+\_\+arguments}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a99df078e8bf323767fa1191aad0be0fa}\label{classargparse_1_1_argument_parser_a99df078e8bf323767fa1191aad0be0fa} 
+std\+::map$<$ std\+::string, argument\+\_\+it $>$ {\bfseries m\+\_\+argument\+\_\+map}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a62f995d14a2f865aec4785aab5ff2137}\label{classargparse_1_1_argument_parser_a62f995d14a2f865aec4785aab5ff2137} 
+std\+::string {\bfseries m\+\_\+parser\+\_\+path}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a4fd3c243cc8036bd290b6dc8831b5511}\label{classargparse_1_1_argument_parser_a4fd3c243cc8036bd290b6dc8831b5511} 
+std\+::list$<$ std\+::reference\+\_\+wrapper$<$ \mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} $>$ $>$ {\bfseries m\+\_\+subparsers}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_aebe353c31dc71d6b2dd646aa9253961e}\label{classargparse_1_1_argument_parser_aebe353c31dc71d6b2dd646aa9253961e} 
+std\+::map$<$ std\+::string, argument\+\_\+parser\+\_\+it $>$ {\bfseries m\+\_\+subparser\+\_\+map}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_af124927e49520c36499fd6d1f4a61664}\label{classargparse_1_1_argument_parser_af124927e49520c36499fd6d1f4a61664} 
+std\+::map$<$ std\+::string, bool $>$ {\bfseries m\+\_\+subparser\+\_\+used}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_ad704992b174d9fdc06326c5bd989c868}\label{classargparse_1_1_argument_parser_ad704992b174d9fdc06326c5bd989c868} 
+std\+::vector$<$ \mbox{\hyperlink{classargparse_1_1_argument_parser_1_1_mutually_exclusive_group}{Mutually\+Exclusive\+Group}} $>$ {\bfseries m\+\_\+mutually\+\_\+exclusive\+\_\+groups}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a1dad473e87d4b2e60aaaf8724d304f06}\label{classargparse_1_1_argument_parser_a1dad473e87d4b2e60aaaf8724d304f06} 
+bool {\bfseries m\+\_\+suppress} = false
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_abdb51e206f0b8f49b928c3b28e141b39}\label{classargparse_1_1_argument_parser_abdb51e206f0b8f49b928c3b28e141b39} 
+std\+::size\+\_\+t {\bfseries m\+\_\+usage\+\_\+max\+\_\+line\+\_\+width} = (std\+::numeric\+\_\+limits$<$std\+::size\+\_\+t$>$\+::max)()
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a438bc915ba56981889ad7657c405163e}\label{classargparse_1_1_argument_parser_a438bc915ba56981889ad7657c405163e} 
+bool {\bfseries m\+\_\+usage\+\_\+break\+\_\+on\+\_\+mutex} = false
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_aed4c016e85f10156998bb0ec739346e0}\label{classargparse_1_1_argument_parser_aed4c016e85f10156998bb0ec739346e0} 
+int {\bfseries m\+\_\+usage\+\_\+newline\+\_\+counter} = 0
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_a958605462d70f4d6e69a552f1da84336}\label{classargparse_1_1_argument_parser_a958605462d70f4d6e69a552f1da84336} 
+std\+::vector$<$ std\+::string $>$ {\bfseries m\+\_\+group\+\_\+names}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_parser_aa4d339774ec7cbdd83321a17e2cda661}\label{classargparse_1_1_argument_parser_aa4d339774ec7cbdd83321a17e2cda661} 
+auto {\bfseries operator$<$$<$} (std\+::ostream \&stream, const \mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&parser) -\/$>$ std\+::ostream \&
+\end{DoxyCompactItemize}
+
+
+\label{doc-typedef-members}
+\Hypertarget{classargparse_1_1_argument_parser_doc-typedef-members}
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classargparse_1_1_argument_parser_ab101b9a2c479d14ca7e1ab2a1cdbeefa}\index{argparse::ArgumentParser@{argparse::ArgumentParser}!argument\_parser\_it@{argument\_parser\_it}}
+\index{argument\_parser\_it@{argument\_parser\_it}!argparse::ArgumentParser@{argparse::ArgumentParser}}
+\doxysubsubsection{\texorpdfstring{argument\_parser\_it}{argument\_parser\_it}}
+{\footnotesize\ttfamily \label{classargparse_1_1_argument_parser_ab101b9a2c479d14ca7e1ab2a1cdbeefa} 
+using argparse\+::\+Argument\+Parser\+::argument\+\_\+parser\+\_\+it\hspace{0.3cm}{\ttfamily [protected]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ std::list<std::reference\_wrapper<ArgumentParser>>::iterator}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/cli/argparse.\+hpp\end{DoxyCompactItemize}

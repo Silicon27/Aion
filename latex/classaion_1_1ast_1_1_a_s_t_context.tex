@@ -1,0 +1,43 @@
+\doxysection{aion\+::ast\+::ASTContext Class Reference}
+\hypertarget{classaion_1_1ast_1_1_a_s_t_context}{}\label{classaion_1_1ast_1_1_a_s_t_context}\index{aion::ast::ASTContext@{aion::ast::ASTContext}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator}{Bump\+Ptr\+Allocator}}
+\item 
+class \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_string_map}{String\+Map}}
+\begin{DoxyCompactList}\small\item\em Open addressing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_aad2a582d47283935f70efece496f6749}\label{classaion_1_1ast_1_1_a_s_t_context_aad2a582d47283935f70efece496f6749} 
+{\bfseries ASTContext} (std\+::size\+\_\+t initial\+\_\+slab\+\_\+size=1024 \texorpdfstring{$\ast$}{*}1024)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a1bd2c2c95bb7567b2d24af76b174463d}\label{classaion_1_1ast_1_1_a_s_t_context_a1bd2c2c95bb7567b2d24af76b174463d} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+translation\+\_\+unit\+\_\+decl} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a8d3918e7d133ff6217d86d4379da6bd3}\label{classaion_1_1ast_1_1_a_s_t_context_a8d3918e7d133ff6217d86d4379da6bd3} 
+const \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_string_map}{String\+Map}}$<$ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+\_\+identifiers} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_aa6f2930a8591c6c2e92fa8f21bd76147}\label{classaion_1_1ast_1_1_a_s_t_context_aa6f2930a8591c6c2e92fa8f21bd76147} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries emplace\+\_\+or\+\_\+get\+\_\+identifier} (const std\+::string\+\_\+view name)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a1d6d4dad14ed9d3da0517c38efe0f6c8}\label{classaion_1_1ast_1_1_a_s_t_context_a1d6d4dad14ed9d3da0517c38efe0f6c8} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+identifier} (const std\+::string\+\_\+view name)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_accfa16ab86e44e7cc5d187c95073615e}\label{classaion_1_1ast_1_1_a_s_t_context_accfa16ab86e44e7cc5d187c95073615e} 
+void \texorpdfstring{$\ast$}{*} {\bfseries allocate} (std\+::size\+\_\+t size, std\+::size\+\_\+t alignment=alignof(std\+::max\+\_\+align\+\_\+t))
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_ae83f50b6e32304603f559a92eaac58d2}\label{classaion_1_1ast_1_1_a_s_t_context_ae83f50b6e32304603f559a92eaac58d2} 
+{\footnotesize template$<$typename T, typename... Args$>$ \newline
+requires (std\+::is\+\_\+trivially\+\_\+destructible\+\_\+v$<$T$>$ \&\& std\+::is\+\_\+constructible\+\_\+v$<$T, Args...$>$)}\\T \texorpdfstring{$\ast$}{*} {\bfseries create} (Args \&\&... args)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a177ff47e4eadc7eac331e8d64ec6e67c}\label{classaion_1_1ast_1_1_a_s_t_context_a177ff47e4eadc7eac331e8d64ec6e67c} 
+char \texorpdfstring{$\ast$}{*} {\bfseries allocate\+\_\+string} (std\+::string\+\_\+view str)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/ASTContext.\+hpp\item 
+core/src/ast/ASTContext.\+cpp\end{DoxyCompactItemize}

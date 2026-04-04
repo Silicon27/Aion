@@ -1,0 +1,61 @@
+\doxysection{allocator\+\_\+traits\texorpdfstring{$<$}{<} Alloc \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structallocator__traits}{}\label{structallocator__traits}\index{allocator\_traits$<$ Alloc $>$@{allocator\_traits$<$ Alloc $>$}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structallocator__traits_ad233b7bcc6f8054d5bdeb4f282af34ae}\label{structallocator__traits_ad233b7bcc6f8054d5bdeb4f282af34ae} 
+using {\bfseries allocator\+\_\+type} = Alloc
+\item 
+\Hypertarget{structallocator__traits_a356ff27834019c9b9027e6e4b90078fe}\label{structallocator__traits_a356ff27834019c9b9027e6e4b90078fe} 
+using {\bfseries value\+\_\+type} = typename Alloc\+::value\+\_\+type
+\item 
+\Hypertarget{structallocator__traits_afc557ae7c172b31903f5ebf4bdec980f}\label{structallocator__traits_afc557ae7c172b31903f5ebf4bdec980f} 
+using {\bfseries pointer} = typename Alloc\+::pointer
+\item 
+\Hypertarget{structallocator__traits_a236e1f5246ef3e62d7e028a647d06f3c}\label{structallocator__traits_a236e1f5246ef3e62d7e028a647d06f3c} 
+using {\bfseries const\+\_\+pointer} = typename Alloc\+::const\+\_\+pointer
+\item 
+\Hypertarget{structallocator__traits_ae9f6f557a5c92f4b60830f2b935cdf48}\label{structallocator__traits_ae9f6f557a5c92f4b60830f2b935cdf48} 
+using {\bfseries void\+\_\+pointer} = typename Alloc\+::void\+\_\+pointer
+\item 
+\Hypertarget{structallocator__traits_a43d4772b85030196bd959c4aba8d6400}\label{structallocator__traits_a43d4772b85030196bd959c4aba8d6400} 
+using {\bfseries const\+\_\+void\+\_\+pointer} = typename Alloc\+::const\+\_\+void\+\_\+pointer
+\item 
+\Hypertarget{structallocator__traits_a334c774a54844e47c75155baa15bb8a6}\label{structallocator__traits_a334c774a54844e47c75155baa15bb8a6} 
+using {\bfseries difference\+\_\+type} = typename Alloc\+::difference\+\_\+type
+\item 
+\Hypertarget{structallocator__traits_ac7c79496ab640b1259522a71ac87f5e6}\label{structallocator__traits_ac7c79496ab640b1259522a71ac87f5e6} 
+using {\bfseries size\+\_\+type} = typename Alloc\+::size\+\_\+type
+\item 
+\Hypertarget{structallocator__traits_a472c40891089355bc3bd734495d604a7}\label{structallocator__traits_a472c40891089355bc3bd734495d604a7} 
+{\footnotesize template$<$typename T$>$ }\\using {\bfseries rebind\+\_\+alloc} = typename Alloc\+::template rebind$<$T$>$\+::other
+\item 
+\Hypertarget{structallocator__traits_adf1bfd49752245c1acf613983e638504}\label{structallocator__traits_adf1bfd49752245c1acf613983e638504} 
+{\footnotesize template$<$typename T$>$ }\\using {\bfseries rebind\+\_\+traits} = \mbox{\hyperlink{structallocator__traits}{allocator\+\_\+traits}}$<$rebind\+\_\+alloc$<$T$>$$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structallocator__traits_a14ecce345add8dfc4029e1e7c141db44}\label{structallocator__traits_a14ecce345add8dfc4029e1e7c141db44} 
+static pointer {\bfseries allocate} (allocator\+\_\+type \&alloc, size\+\_\+type n)
+\item 
+\Hypertarget{structallocator__traits_ad6eb28a198abb2418daf935e7103036d}\label{structallocator__traits_ad6eb28a198abb2418daf935e7103036d} 
+static void {\bfseries deallocate} (Alloc \&a, pointer p, size\+\_\+type n)
+\item 
+\Hypertarget{structallocator__traits_a0752d3a40e57db2a9d4ef680f5ec3a9e}\label{structallocator__traits_a0752d3a40e57db2a9d4ef680f5ec3a9e} 
+{\footnotesize template$<$typename T, typename... Args$>$ }\\static void {\bfseries construct} (Alloc \&a, T \texorpdfstring{$\ast$}{*}p, Args \&\&... args)
+\item 
+\Hypertarget{structallocator__traits_a71134cd8a25acfda639e3ee93a111cbc}\label{structallocator__traits_a71134cd8a25acfda639e3ee93a111cbc} 
+{\footnotesize template$<$typename T$>$ }\\static void {\bfseries destroy} (Alloc \&a, T \texorpdfstring{$\ast$}{*}p)
+\item 
+\Hypertarget{structallocator__traits_a7f2403fd3710426d7b9a4b2f0a8056e7}\label{structallocator__traits_a7f2403fd3710426d7b9a4b2f0a8056e7} 
+static size\+\_\+type {\bfseries max\+\_\+size} (const Alloc \&a) noexcept
+\item 
+\Hypertarget{structallocator__traits_a1f2c540e8db96be6548733e1a5dcee11}\label{structallocator__traits_a1f2c540e8db96be6548733e1a5dcee11} 
+static Alloc {\bfseries select\+\_\+on\+\_\+container\+\_\+copy\+\_\+construction} (const Alloc \&a)
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/memory/allocator\+\_\+traits.\+h\end{DoxyCompactItemize}

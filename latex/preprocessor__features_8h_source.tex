@@ -1,0 +1,38 @@
+\doxysection{preprocessor\+\_\+features.\+h}
+\hypertarget{preprocessor__features_8h_source}{}\label{preprocessor__features_8h_source}\index{core/include/support/si/include/compat/preprocessor\_features.h@{core/include/support/si/include/compat/preprocessor\_features.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/06-\/04.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_COMPAT\_PREPROCESSOR\_FEATURES\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_COMPAT\_PREPROCESSOR\_FEATURES\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#if\ defined(\_\_has\_builtin)}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_BUILTIN(x)\ \_\_has\_builtin(x)}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_BUILTIN(x)\ 0}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#if\ defined(\_\_has\_feature)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_FEATURE(x)\ \_\_has\_feature(x)}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_FEATURE(x)\ 0}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#if\ defined(\_\_has\_cpp\_attribute)}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_CPP\_ATTRIBUTE(x)\ \_\_has\_cpp\_attribute(x)}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_CPP\_ATTRIBUTE(x)\ 0}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#if\ defined(\_\_has\_include)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_INCLUDE(x)\ \_\_has\_include(x)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \#define\ SI\_HAS\_INCLUDE(x)\ 0}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_COMPAT\_PREPROCESSOR\_FEATURES\_H}}
+
+\end{DoxyCode}

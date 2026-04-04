@@ -1,0 +1,65 @@
+\doxysection{aion\+::diag\+::Diagnostic\+Builder Class Reference}
+\hypertarget{classaion_1_1diag_1_1_diagnostic_builder}{}\label{classaion_1_1diag_1_1_diagnostic_builder}\index{aion::diag::DiagnosticBuilder@{aion::diag::DiagnosticBuilder}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_ac05b271baa159374eb5834c25d3dc602}\label{classaion_1_1diag_1_1_diagnostic_builder_ac05b271baa159374eb5834c25d3dc602} 
+{\bfseries Diagnostic\+Builder} (\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{Diagnostics\+Engine}} \texorpdfstring{$\ast$}{*}engine, Diag\+ID id)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_ac8d02fb45fcaf1faa0fd52ae09eb8b5c}\label{classaion_1_1diag_1_1_diagnostic_builder_ac8d02fb45fcaf1faa0fd52ae09eb8b5c} 
+{\bfseries Diagnostic\+Builder} (const \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \&)=delete
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_ad8506b2cd5d3a2a03c6bab40fc88cae2}\label{classaion_1_1diag_1_1_diagnostic_builder_ad8506b2cd5d3a2a03c6bab40fc88cae2} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator=} (const \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \&)=delete
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a635aca2251be91bae25a5327c69d2574}\label{classaion_1_1diag_1_1_diagnostic_builder_a635aca2251be91bae25a5327c69d2574} 
+{\bfseries Diagnostic\+Builder} (\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \&\&other) noexcept
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a0ddd8826e28c0f8fe78a7fb4a3f6f89e}\label{classaion_1_1diag_1_1_diagnostic_builder_a0ddd8826e28c0f8fe78a7fb4a3f6f89e} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator=} (\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \&\&other) noexcept
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_aa0db443f6df02bce59c6cb141cd798e4}\label{classaion_1_1diag_1_1_diagnostic_builder_aa0db443f6df02bce59c6cb141cd798e4} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (const std\+::string \&str)
+\begin{DoxyCompactList}\small\item\em Add a string argument. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a0b7a05c4b782ca7527e2fc67a32fd724}\label{classaion_1_1diag_1_1_diagnostic_builder_a0b7a05c4b782ca7527e2fc67a32fd724} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (const char \texorpdfstring{$\ast$}{*}str)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_aba3ceaff421a350c1e4740e8f1c18c61}\label{classaion_1_1diag_1_1_diagnostic_builder_aba3ceaff421a350c1e4740e8f1c18c61} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (int val)
+\begin{DoxyCompactList}\small\item\em Add an integer argument. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a90529b2b1a3ccd370e28c7cdae6466e1}\label{classaion_1_1diag_1_1_diagnostic_builder_a90529b2b1a3ccd370e28c7cdae6466e1} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (unsigned val)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_aa24d3ee6f590b703103699493af4abce}\label{classaion_1_1diag_1_1_diagnostic_builder_aa24d3ee6f590b703103699493af4abce} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (int64\+\_\+t val)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a84ca35c1b5e363862e1368f5ef70a77e}\label{classaion_1_1diag_1_1_diagnostic_builder_a84ca35c1b5e363862e1368f5ef70a77e} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (\mbox{\hyperlink{structaion_1_1diag_1_1_char_source_range}{Char\+Source\+Range}} range)
+\begin{DoxyCompactList}\small\item\em Add a source range to highlight. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_ab35a9d23dcb2fce55f5a3f7c83b520d6}\label{classaion_1_1diag_1_1_diagnostic_builder_ab35a9d23dcb2fce55f5a3f7c83b520d6} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (\mbox{\hyperlink{structaion_1_1_source_location}{Source\+\_\+\+Location}} loc)
+\begin{DoxyCompactList}\small\item\em Add an extra location for a caret. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a8ba76a331b3a55446631b6e1a826621f}\label{classaion_1_1diag_1_1_diagnostic_builder_a8ba76a331b3a55446631b6e1a826621f} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_builder}{Diagnostic\+Builder}} \& {\bfseries operator$<$$<$} (\mbox{\hyperlink{classaion_1_1diag_1_1_fix_it_hint}{Fix\+It\+Hint}} hint)
+\begin{DoxyCompactList}\small\item\em Add a fix-\/it hint. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_af5115b27bb3c15c3054ed6d83cc9f04c}\label{classaion_1_1diag_1_1_diagnostic_builder_af5115b27bb3c15c3054ed6d83cc9f04c} 
+void {\bfseries emit} ()
+\begin{DoxyCompactList}\small\item\em Emit the diagnostic. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a0906b48fa02347303baf9e5f33898b86}\label{classaion_1_1diag_1_1_diagnostic_builder_a0906b48fa02347303baf9e5f33898b86} 
+bool {\bfseries is\+\_\+active} () const
+\begin{DoxyCompactList}\small\item\em Check if this builder is still active. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_a7ece27b05c2a2ca12217cbdb065668e2}\label{classaion_1_1diag_1_1_diagnostic_builder_a7ece27b05c2a2ca12217cbdb065668e2} 
+void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Abandon this diagnostic without emitting. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_builder_aa7d8a8f06e908555a91839762c38fe22}\label{classaion_1_1diag_1_1_diagnostic_builder_aa7d8a8f06e908555a91839762c38fe22} 
+class {\bfseries Diagnostics\+Engine}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/error/error.\+hpp\item 
+core/src/error/error.\+cpp\end{DoxyCompactItemize}

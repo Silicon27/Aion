@@ -1,0 +1,27 @@
+\doxysection{is\+\_\+arithmetic.\+h}
+\hypertarget{is__arithmetic_8h_source}{}\label{is__arithmetic_8h_source}\index{core/include/support/si/include/impl/type\_traits/is\_arithmetic.h@{core/include/support/si/include/impl/type\_traits/is\_arithmetic.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/01-\/13.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_IS\_ARITHMETIC\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_IS\_ARITHMETIC\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}is\_integral.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}is\_floating\_point.h"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__arithmetic}{is\_arithmetic}}\ :\ \mbox{\hyperlink{structintegral__constant}{integral\_constant}}<bool,\ is\_integral<T>::value\ ||\ is\_floating\_point<T>::value>\ \{\};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_arithmetic\_v\ =\ is\_arithmetic<T>::value;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_IS\_ARITHMETIC\_H}}
+
+\end{DoxyCode}

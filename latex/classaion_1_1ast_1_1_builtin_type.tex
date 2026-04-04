@@ -1,0 +1,84 @@
+\doxysection{aion\+::ast\+::Builtin\+Type Class Reference}
+\hypertarget{classaion_1_1ast_1_1_builtin_type}{}\label{classaion_1_1ast_1_1_builtin_type}\index{aion::ast::BuiltinType@{aion::ast::BuiltinType}}
+Inheritance diagram for aion\+::ast\+::Builtin\+Type\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1ast_1_1_builtin_type}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_builtin_type_acff0dc8a21d1aedd4b4bf784fbb89e42}\label{classaion_1_1ast_1_1_builtin_type_acff0dc8a21d1aedd4b4bf784fbb89e42} 
+enum class {\bfseries Kind} \{ \newline
+{\bfseries i4}
+, {\bfseries i8}
+, {\bfseries i16}
+, {\bfseries i32}
+, \newline
+{\bfseries i64}
+, {\bfseries i128}
+, {\bfseries f4}
+, {\bfseries f8}
+, \newline
+{\bfseries f16}
+, {\bfseries f32}
+, {\bfseries f64}
+, {\bfseries f128}
+, \newline
+{\bfseries char\+\_\+}
+, {\bfseries bool\+\_\+}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_type}{aion\+::ast\+::\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_type_abe317abddde123f0c5ea477378dd6a26}\label{classaion_1_1ast_1_1_type_abe317abddde123f0c5ea477378dd6a26} 
+enum class {\bfseries Kind} \{ {\bfseries builtin}
+, {\bfseries user\+\_\+defined}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_builtin_type_a5c9d8d64bf51cd8afc70bbf808cbf76f}\label{classaion_1_1ast_1_1_builtin_type_a5c9d8d64bf51cd8afc70bbf808cbf76f} 
+{\bfseries Builtin\+Type} (const Kind BK)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_type}{aion\+::ast\+::\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Type} (const Kind K)
+\item 
+Kind {\bfseries get\+\_\+kind} () const
+\item 
+void {\bfseries set\+\_\+kind} (const Kind K)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_builtin_type_a9d6b2564a8396f76ab5901cc1e2711d5}\label{classaion_1_1ast_1_1_builtin_type_a9d6b2564a8396f76ab5901cc1e2711d5} 
+static Kind {\bfseries get\+\_\+kind} (const lexer\+::\+Token\+Type type)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_builtin_type_a911cd61c9e1ef8abab6023e354bbaa5c}\label{classaion_1_1ast_1_1_builtin_type_a911cd61c9e1ef8abab6023e354bbaa5c} 
+Kind {\bfseries get\+\_\+builtin\+\_\+kind} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_builtin_type_a81992f52dc601812ba88cecd0da65c8c}\label{classaion_1_1ast_1_1_builtin_type_a81992f52dc601812ba88cecd0da65c8c} 
+class {\bfseries ASTContext}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_type}{aion\+::ast\+::\+Type}}}
+\begin{DoxyCompactItemize}
+\item 
+Kind {\bfseries type\+\_\+kind}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/type.\+hpp\end{DoxyCompactItemize}

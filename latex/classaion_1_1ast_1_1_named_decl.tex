@@ -1,0 +1,58 @@
+\doxysection{aion\+::ast\+::Named\+Decl Class Reference}
+\hypertarget{classaion_1_1ast_1_1_named_decl}{}\label{classaion_1_1ast_1_1_named_decl}\index{aion::ast::NamedDecl@{aion::ast::NamedDecl}}
+Inheritance diagram for aion\+::ast\+::Named\+Decl\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classaion_1_1ast_1_1_named_decl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_named_decl_a973ff6f115abb3654a23dc24e4a7ca2a}\label{classaion_1_1ast_1_1_named_decl_a973ff6f115abb3654a23dc24e4a7ca2a} 
+{\bfseries Named\+Decl} (Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_named_decl_a011199745776597fcfbe6f361b20d2a4}\label{classaion_1_1ast_1_1_named_decl_a011199745776597fcfbe6f361b20d2a4} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+name} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_named_decl_a052af121dac3304f0b090870e306cc81}\label{classaion_1_1ast_1_1_named_decl_a052af121dac3304f0b090870e306cc81} 
+std\+::string\+\_\+view {\bfseries get\+\_\+identifier} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_named_decl_abf1ec897dc5c7729b0d7cf48c0a4ae81}\label{classaion_1_1ast_1_1_named_decl_abf1ec897dc5c7729b0d7cf48c0a4ae81} 
+void {\bfseries set\+\_\+name} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}new\+\_\+name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Decl} (const Kind K)
+\item 
+Kind {\bfseries get\+\_\+kind} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145}\label{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145} 
+enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
+{\bfseries translation\+\_\+unit}
+, {\bfseries named\+\_\+decl}
+, {\bfseries variable}
+, {\bfseries function}
+, \newline
+{\bfseries struct\+\_\+}
+, {\bfseries enum\+\_\+}
+, {\bfseries module}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries next} = nullptr
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{aion\+::\+Source\+\_\+\+Range}} {\bfseries source\+\_\+range}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/decl.\+hpp\end{DoxyCompactItemize}

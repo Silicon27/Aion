@@ -1,0 +1,29 @@
+\doxysection{offset\+\_\+to\+\_\+alignment.\+hpp}
+\hypertarget{offset__to__alignment_8hpp_source}{}\label{offset__to__alignment_8hpp_source}\index{core/include/support/si/include/impl/memory/offset\_to\_alignment.hpp@{core/include/support/si/include/impl/memory/offset\_to\_alignment.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/02-\/20.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_MEMORY\_OFFSET\_TO\_ALIGNMENT\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_MEMORY\_OFFSET\_TO\_ALIGNMENT\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../../si/stddef.hpp"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{size\_t}\ offset\_to\_alignment(\textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ offset,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ alignment)\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ misalignment\ =\ offset\ \%\ alignment;}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordflow}{if}\ (misalignment\ ==\ 0)\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00017\ \ \ \ \ \}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordflow}{return}\ alignment\ -\/\ misalignment;}
+\DoxyCodeLine{00019\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_MEMORY\_OFFSET\_TO\_ALIGNMENT\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,45 @@
+\doxysection{stmt.\+hpp}
+\hypertarget{stmt_8hpp_source}{}\label{stmt_8hpp_source}\index{core/include/ast/stmt.hpp@{core/include/ast/stmt.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/03-\/17.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ AION\_STMT\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ AION\_STMT\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <ast/ast.hpp>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <ast/ASTContext.hpp>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{CompoundStmt}};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{class\ }CompoundStmt\ final\ :\ \textcolor{keyword}{public}\ Stmt\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ std::uint32\_t\ num\_stmts\ =\ 0;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ CompoundStmt(std::uint32\_t\ num\_stmts)}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Stmt(Kind::compound\_stmt),\ num\_stmts(num\_stmts)\ \{\}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ CompoundStmt*\ \mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt_aab0ca656624b9595ab7496ec9f5f06d0}{create}}(ASTContext\&\ context,\ Stmt**\ stmts,\ std::uint32\_t\ num\_stmts);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }iterator\ =\ Stmt**;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }const\_iterator\ =\ Stmt*\ \textcolor{keyword}{const}*;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ [[nodiscard]]\ std::uint32\_t\ size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ num\_stmts;\ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ [[nodiscard]]\ Stmt**\ get\_stmts()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{reinterpret\_cast<}Stmt**\textcolor{keyword}{>}(\textcolor{keyword}{this}\ +\ 1);\ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ [[nodiscard]]\ Stmt*\ \textcolor{keyword}{const}*\ get\_stmts()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{reinterpret\_cast<}Stmt*\ const*\textcolor{keyword}{>}(\textcolor{keyword}{this}\ +\ 1);\ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ [[nodiscard]]\ iterator\ begin()\ \{\ \textcolor{keywordflow}{return}\ get\_stmts();\ \}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ [[nodiscard]]\ iterator\ end()\ \{\ \textcolor{keywordflow}{return}\ get\_stmts()\ +\ num\_stmts;\ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ [[nodiscard]]\ const\_iterator\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ get\_stmts();\ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ [[nodiscard]]\ const\_iterator\ end()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ get\_stmts()\ +\ num\_stmts;\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<CompoundStmt>);}
+\DoxyCodeLine{00038\ \}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_STMT\_HPP}}
+
+\end{DoxyCode}

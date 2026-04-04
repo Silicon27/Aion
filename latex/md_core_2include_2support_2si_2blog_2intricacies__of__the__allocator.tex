@@ -1,0 +1,58 @@
+\chapter{Intricacies of the Allocator }
+\hypertarget{md_core_2include_2support_2si_2blog_2intricacies__of__the__allocator}{}\label{md_core_2include_2support_2si_2blog_2intricacies__of__the__allocator}\index{Intricacies of the Allocator@{Intricacies of the Allocator}}
+\label{md_core_2include_2support_2si_2blog_2intricacies__of__the__allocator_autotoc_md2}%
+\Hypertarget{md_core_2include_2support_2si_2blog_2intricacies__of__the__allocator_autotoc_md2}%
+
+
+For the past week, I\textquotesingle{}ve indulged myself in the world of remaking the STL. It is not necessarily a fun thing to do, considering the timing, as my finals are approaching. I could have also used the time more wisely than redoing some 30-\/34 years\textquotesingle{} worth of work. Through this process, I learned a great deal, most notably about the allocator. The allocator is a crucial part of the STL, and it is often overlooked. It is the unsung hero of the STL, providing memory management for all the containers.
+
+Let\textquotesingle{}s take a look at the signature of the allocator\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{class\ }\mbox{\hyperlink{classallocator}{allocator}}\ \{}
+\DoxyCodeLine{\textcolor{keyword}{public}:}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ T;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }pointer\ =\ T*;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ =\ \textcolor{keyword}{const}\ T*;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }void\_pointer\ =\ \textcolor{keywordtype}{void}*;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }const\_void\_pointer\ =\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ size\_t;}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }difference\_type\ =\ ptrdiff\_t;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ allocator()\ noexcept\ =\ default;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ template\ <typename\ U>}
+\DoxyCodeLine{\ \ \ \ explicit\ allocator(const\ allocator<U>\&);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ [[nodiscard]]\ T*\ allocate(\textcolor{keywordtype}{size\_t}\ n);}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{void}\ deallocate(value\_type*\ p,\ \textcolor{keywordtype}{size\_t}\ n)\ noexcept;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ template\ <typename\ U>}
+\DoxyCodeLine{\ \ \ \ struct\ \mbox{\hyperlink{structallocator_1_1rebind}{rebind}};}
+\DoxyCodeLine{\};}
+
+\end{DoxyCode}
+
+
+{\ttfamily allocator} contains mainly the contructor, an {\ttfamily allocate} function, a {\ttfamily deallocate} function, and a {\ttfamily rebind} struct. The {\ttfamily allocate} function is used to allocate memory for the container, while the {\ttfamily deallocate} function is used to deallocate memory. The {\ttfamily rebind} struct is used to rebind the allocator to a different type.
+
+Let\textquotesingle{}s see how {\ttfamily allocate} works\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}\ <typname\ T>}
+\DoxyCodeLine{[[nodicard]]\ T*\ allocator<T>::allocate(\textcolor{keywordtype}{size\_t}\ n)\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (n\ >\ std::numeric\_limits<size\_t>::max()\ /\ \textcolor{keyword}{sizeof}(T))\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::bad\_alloc();}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ T*\ p\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(::operator\ \textcolor{keyword}{new}(n\ *\ \textcolor{keyword}{sizeof}(T)));}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ p;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ 

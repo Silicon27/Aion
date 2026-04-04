@@ -1,0 +1,61 @@
+\doxysection{aion\+::diag\+::Diagnostic\+Consumer Class Reference}
+\hypertarget{classaion_1_1diag_1_1_diagnostic_consumer}{}\label{classaion_1_1diag_1_1_diagnostic_consumer}\index{aion::diag::DiagnosticConsumer@{aion::diag::DiagnosticConsumer}}
+Inheritance diagram for aion\+::diag\+::Diagnostic\+Consumer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1diag_1_1_diagnostic_consumer}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_ac535df0e8ee8c556ebafdce0da2c5901}\label{classaion_1_1diag_1_1_diagnostic_consumer_ac535df0e8ee8c556ebafdce0da2c5901} 
+virtual void {\bfseries begin\+\_\+source\+\_\+file} ()
+\begin{DoxyCompactList}\small\item\em Called at the beginning of processing a source file. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a5ef230916c08743af934667a9ba8ba92}\label{classaion_1_1diag_1_1_diagnostic_consumer_a5ef230916c08743af934667a9ba8ba92} 
+virtual void {\bfseries end\+\_\+source\+\_\+file} ()
+\begin{DoxyCompactList}\small\item\em Called at the end of processing a source file. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer_a5701220bccc309b7aface60292719235}{handle\+\_\+diagnostic}} (Severity severity, const \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}} \&diag)=0
+\begin{DoxyCompactList}\small\item\em Callback for when a diagnostic is emitted. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a8f7dfa0c6d1c0da068aad58853472223}\label{classaion_1_1diag_1_1_diagnostic_consumer_a8f7dfa0c6d1c0da068aad58853472223} 
+unsigned {\bfseries get\+\_\+num\+\_\+errors} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of errors emitted. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a836d861af56807d14a2ba09971344062}\label{classaion_1_1diag_1_1_diagnostic_consumer_a836d861af56807d14a2ba09971344062} 
+unsigned {\bfseries get\+\_\+num\+\_\+warnings} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of warnings emitted. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a92edd8ab4d52eb267bd4f493b2c3ed75}\label{classaion_1_1diag_1_1_diagnostic_consumer_a92edd8ab4d52eb267bd4f493b2c3ed75} 
+virtual void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Reset the error/warning counts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a2bc73755a682278cc6bf4d262d0bb47d}\label{classaion_1_1diag_1_1_diagnostic_consumer_a2bc73755a682278cc6bf4d262d0bb47d} 
+unsigned {\bfseries num\+\_\+errors\+\_\+} = 0
+\item 
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a1b36576385ab3668e9f30329365bb072}\label{classaion_1_1diag_1_1_diagnostic_consumer_a1b36576385ab3668e9f30329365bb072} 
+unsigned {\bfseries num\+\_\+warnings\+\_\+} = 0
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a5701220bccc309b7aface60292719235}\index{aion::diag::DiagnosticConsumer@{aion::diag::DiagnosticConsumer}!handle\_diagnostic@{handle\_diagnostic}}
+\index{handle\_diagnostic@{handle\_diagnostic}!aion::diag::DiagnosticConsumer@{aion::diag::DiagnosticConsumer}}
+\doxysubsubsection{\texorpdfstring{handle\_diagnostic()}{handle\_diagnostic()}}
+{\footnotesize\ttfamily \label{classaion_1_1diag_1_1_diagnostic_consumer_a5701220bccc309b7aface60292719235} 
+virtual void aion\+::diag\+::\+Diagnostic\+Consumer\+::handle\+\_\+diagnostic (\begin{DoxyParamCaption}\item[{Severity}]{severity}{, }\item[{const \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}} \&}]{diag}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Callback for when a diagnostic is emitted. 
+
+
+
+Implemented in \mbox{\hyperlink{classaion_1_1diag_1_1_text_diagnostic_printer_a73a6274d1c6891d21867336f2102e7d2}{aion\+::diag\+::\+Text\+Diagnostic\+Printer}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/error/error.\+hpp\end{DoxyCompactItemize}

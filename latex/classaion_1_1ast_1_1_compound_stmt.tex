@@ -1,0 +1,109 @@
+\doxysection{aion\+::ast\+::Compound\+Stmt Class Reference}
+\hypertarget{classaion_1_1ast_1_1_compound_stmt}{}\label{classaion_1_1ast_1_1_compound_stmt}\index{aion::ast::CompoundStmt@{aion::ast::CompoundStmt}}
+
+
+For statement chaining.  
+
+
+
+
+{\ttfamily \#include $<$stmt.\+hpp$>$}
+
+Inheritance diagram for aion\+::ast\+::Compound\+Stmt\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1ast_1_1_compound_stmt}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_ae84685decce6360ec4d6dcdeda12d2da}\label{classaion_1_1ast_1_1_compound_stmt_ae84685decce6360ec4d6dcdeda12d2da} 
+using {\bfseries iterator} = \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}}\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_a06bda50cba86b7d1d52129fc1ede7f1e}\label{classaion_1_1ast_1_1_compound_stmt_a06bda50cba86b7d1d52129fc1ede7f1e} 
+using {\bfseries const\+\_\+iterator} = \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}}\texorpdfstring{$\ast$}{*} const\texorpdfstring{$\ast$}{*}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{aion\+::ast\+::\+Stmt}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_stmt_a5d7f6c265f7de6cb51f1cd160a23786a}\label{classaion_1_1ast_1_1_stmt_a5d7f6c265f7de6cb51f1cd160a23786a} 
+enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
+{\bfseries compound\+\_\+stmt}
+, {\bfseries if\+\_\+stmt}
+, {\bfseries while\+\_\+stmt}
+, {\bfseries for\+\_\+stmt}
+, \newline
+{\bfseries return\+\_\+stmt}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_aa8a27a10359b33e744d4bf559b563bc6}\label{classaion_1_1ast_1_1_compound_stmt_aa8a27a10359b33e744d4bf559b563bc6} 
+std\+::uint32\+\_\+t {\bfseries size} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_a1a0f066364aded2865fa5f0cce2192a9}\label{classaion_1_1ast_1_1_compound_stmt_a1a0f066364aded2865fa5f0cce2192a9} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+stmts} ()
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_a49c5c3f431fc5c016fda4906c3096985}\label{classaion_1_1ast_1_1_compound_stmt_a49c5c3f431fc5c016fda4906c3096985} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}} \texorpdfstring{$\ast$}{*}const \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+stmts} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_aae050049bab729ed2e4edabed4ec26c7}\label{classaion_1_1ast_1_1_compound_stmt_aae050049bab729ed2e4edabed4ec26c7} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{iterator}} {\bfseries begin} ()
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_a19b0f10274a367710c225f5b6d2f2b34}\label{classaion_1_1ast_1_1_compound_stmt_a19b0f10274a367710c225f5b6d2f2b34} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{iterator}} {\bfseries end} ()
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_a9662854c707332cb84e8207fc9287fd7}\label{classaion_1_1ast_1_1_compound_stmt_a9662854c707332cb84e8207fc9287fd7} 
+const\+\_\+iterator {\bfseries begin} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_a7f6f74c9d29aa2660b5f85d5d46aea7d}\label{classaion_1_1ast_1_1_compound_stmt_a7f6f74c9d29aa2660b5f85d5d46aea7d} 
+const\+\_\+iterator {\bfseries end} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{aion\+::ast\+::\+Stmt}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Stmt} (const Kind K)
+\item 
+Kind {\bfseries get\+\_\+kind} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt_aab0ca656624b9595ab7496ec9f5f06d0}{create}} (\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}} \&context, \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}stmts, std\+::uint32\+\_\+t num\+\_\+stmts)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+For statement chaining. 
+
+\label{doc-func-members}
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classaion_1_1ast_1_1_compound_stmt_aab0ca656624b9595ab7496ec9f5f06d0}\index{aion::ast::CompoundStmt@{aion::ast::CompoundStmt}!create@{create}}
+\index{create@{create}!aion::ast::CompoundStmt@{aion::ast::CompoundStmt}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \label{classaion_1_1ast_1_1_compound_stmt_aab0ca656624b9595ab7496ec9f5f06d0} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*} aion\+::ast\+::\+Compound\+Stmt\+::create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}} \&}]{context}{, }\item[{\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{stmts}{, }\item[{std\+::uint32\+\_\+t}]{num\+\_\+stmts}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Creates a {\ttfamily \doxylink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} instance by allocating memory for it within the specified {\ttfamily \doxylink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}} and initializing it with the given statements.
+
+
+\begin{DoxyParams}{Parameters}
+{\em C} & The {\ttfamily \doxylink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}} used for allocating memory for the {\ttfamily \doxylink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} instance. \\
+\hline
+{\em stmts} & Array of pointers to {\ttfamily \doxylink{classaion_1_1ast_1_1_stmt}{Stmt}} objects that will be included in the {\ttfamily \doxylink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}}. \\
+\hline
+{\em num\+\_\+stmts} & The number of statements in the {\ttfamily stmts} array. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the newly created {\ttfamily \doxylink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} instance containing the provided statements. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/stmt.\+hpp\item 
+core/src/ast/ast.\+cpp\end{DoxyCompactItemize}

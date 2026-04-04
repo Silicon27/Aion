@@ -1,0 +1,145 @@
+\doxysection{argparse\+::Argument Class Reference}
+\hypertarget{classargparse_1_1_argument}{}\label{classargparse_1_1_argument}\index{argparse::Argument@{argparse::Argument}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_a3acacb3d6458ba97ee4359f6466fe9f6}\label{classargparse_1_1_argument_a3acacb3d6458ba97ee4359f6466fe9f6} 
+{\footnotesize template$<$std\+::size\+\_\+t N$>$ }\\{\bfseries Argument} (std\+::string\+\_\+view prefix\+\_\+chars, std\+::array$<$ std\+::string\+\_\+view, N $>$ \&\&a)
+\item 
+\Hypertarget{classargparse_1_1_argument_a5011f7a72a5b69fe1ca27e1baff20411}\label{classargparse_1_1_argument_a5011f7a72a5b69fe1ca27e1baff20411} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries help} (std\+::string help\+\_\+text)
+\item 
+\Hypertarget{classargparse_1_1_argument_acdf8341266ee361132b7fa0a3823b1d3}\label{classargparse_1_1_argument_acdf8341266ee361132b7fa0a3823b1d3} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries metavar} (std\+::string metavar)
+\item 
+\Hypertarget{classargparse_1_1_argument_a6723d8728efb851a46b9dd39e1620e0c}\label{classargparse_1_1_argument_a6723d8728efb851a46b9dd39e1620e0c} 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries default\+\_\+value} (T \&\&value)
+\item 
+\Hypertarget{classargparse_1_1_argument_a611b811d9f8f71f88c08807496fabc04}\label{classargparse_1_1_argument_a611b811d9f8f71f88c08807496fabc04} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries default\+\_\+value} (const char \texorpdfstring{$\ast$}{*}value)
+\item 
+\Hypertarget{classargparse_1_1_argument_a9870d5c9efd218ad7bab39855f3ea57f}\label{classargparse_1_1_argument_a9870d5c9efd218ad7bab39855f3ea57f} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries required} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_afe376b29b99d506a24473e88bab5b517}\label{classargparse_1_1_argument_afe376b29b99d506a24473e88bab5b517} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries implicit\+\_\+value} (std\+::any value)
+\item 
+\Hypertarget{classargparse_1_1_argument_a4cc60e1af0c7eeb2eace203a87b6a593}\label{classargparse_1_1_argument_a4cc60e1af0c7eeb2eace203a87b6a593} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries flag} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_a39626a4414ce2ac38e9d59f0d583c178}\label{classargparse_1_1_argument_a39626a4414ce2ac38e9d59f0d583c178} 
+{\footnotesize template$<$class F, class... Args$>$ }\\auto {\bfseries action} (F \&\&callable, Args \&\&... bound\+\_\+args) -\/$>$ std\+::enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+invocable\+\_\+v$<$ F, Args..., std\+::string const $>$, \mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& $>$
+\item 
+\Hypertarget{classargparse_1_1_argument_a2dd4a7f5af14e6a6d27961f4a9ac4c04}\label{classargparse_1_1_argument_a2dd4a7f5af14e6a6d27961f4a9ac4c04} 
+auto \& {\bfseries store\+\_\+into} (bool \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_a9c4f71f13be9b39c74c7d474e79332ce}\label{classargparse_1_1_argument_a9c4f71f13be9b39c74c7d474e79332ce} 
+{\footnotesize template$<$typename T, typename std\+::enable\+\_\+if$<$ std\+::is\+\_\+integral$<$ T $>$\+::value $>$\+::type \texorpdfstring{$\ast$}{*} = nullptr$>$ }\\auto \& {\bfseries store\+\_\+into} (T \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_a9c4f71f13be9b39c74c7d474e79332ce}\label{classargparse_1_1_argument_a9c4f71f13be9b39c74c7d474e79332ce} 
+{\footnotesize template$<$typename T, typename std\+::enable\+\_\+if$<$ std\+::is\+\_\+floating\+\_\+point$<$ T $>$\+::value $>$\+::type \texorpdfstring{$\ast$}{*} = nullptr$>$ }\\auto \& {\bfseries store\+\_\+into} (T \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_ac92c880e39d2738faa7492e1a491ad84}\label{classargparse_1_1_argument_ac92c880e39d2738faa7492e1a491ad84} 
+auto \& {\bfseries store\+\_\+into} (std\+::string \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_ab68dc46554465f9534fd2476b7960ed5}\label{classargparse_1_1_argument_ab68dc46554465f9534fd2476b7960ed5} 
+auto \& {\bfseries store\+\_\+into} (std\+::filesystem\+::path \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_ab5b579e211cc4faee9458bb598b6ee00}\label{classargparse_1_1_argument_ab5b579e211cc4faee9458bb598b6ee00} 
+auto \& {\bfseries store\+\_\+into} (std\+::vector$<$ std\+::string $>$ \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_ad7eddbf11f9f0d3aefb67e9077e2b429}\label{classargparse_1_1_argument_ad7eddbf11f9f0d3aefb67e9077e2b429} 
+auto \& {\bfseries store\+\_\+into} (std\+::vector$<$ int $>$ \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_a88c97757a0aff742108b9647a6b95543}\label{classargparse_1_1_argument_a88c97757a0aff742108b9647a6b95543} 
+auto \& {\bfseries store\+\_\+into} (std\+::set$<$ std\+::string $>$ \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_a3661502a7b60b1b4cd109423ed9f7d2e}\label{classargparse_1_1_argument_a3661502a7b60b1b4cd109423ed9f7d2e} 
+auto \& {\bfseries store\+\_\+into} (std\+::set$<$ int $>$ \&var)
+\item 
+\Hypertarget{classargparse_1_1_argument_a6bfed1ff20081d558148dafe89aaa9da}\label{classargparse_1_1_argument_a6bfed1ff20081d558148dafe89aaa9da} 
+auto \& {\bfseries append} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_a83ac4bd79a1e72ddfef5ecadf8d7ce47}\label{classargparse_1_1_argument_a83ac4bd79a1e72ddfef5ecadf8d7ce47} 
+auto \& {\bfseries hidden} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_a09053d140082d45bc47bed74f0f00210}\label{classargparse_1_1_argument_a09053d140082d45bc47bed74f0f00210} 
+{\footnotesize template$<$char Shape, typename T$>$ }\\auto {\bfseries scan} () -\/$>$ std\+::enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+arithmetic\+\_\+v$<$ T $>$, \mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& $>$
+\item 
+\Hypertarget{classargparse_1_1_argument_a53782d59766fb6b6b2e35e626689f2a5}\label{classargparse_1_1_argument_a53782d59766fb6b6b2e35e626689f2a5} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries nargs} (std\+::size\+\_\+t num\+\_\+args)
+\item 
+\Hypertarget{classargparse_1_1_argument_ad7d78ec8800bc61dfca95c359607a54e}\label{classargparse_1_1_argument_ad7d78ec8800bc61dfca95c359607a54e} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries nargs} (std\+::size\+\_\+t num\+\_\+args\+\_\+min, std\+::size\+\_\+t num\+\_\+args\+\_\+max)
+\item 
+\Hypertarget{classargparse_1_1_argument_a60a2efdbc55b9b575756be2c3ac91bb7}\label{classargparse_1_1_argument_a60a2efdbc55b9b575756be2c3ac91bb7} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries nargs} (nargs\+\_\+pattern pattern)
+\item 
+\Hypertarget{classargparse_1_1_argument_a93a68634f7f4bd7496f6cd0bdc8d3e79}\label{classargparse_1_1_argument_a93a68634f7f4bd7496f6cd0bdc8d3e79} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries remaining} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_a453b90519f54f851e287e552c9f92e8f}\label{classargparse_1_1_argument_a453b90519f54f851e287e552c9f92e8f} 
+{\footnotesize template$<$typename T$>$ }\\void {\bfseries add\+\_\+choice} (T \&\&choice)
+\item 
+\Hypertarget{classargparse_1_1_argument_ade82f018f60248dc34df623fbaacc69f}\label{classargparse_1_1_argument_ade82f018f60248dc34df623fbaacc69f} 
+\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries choices} ()
+\item 
+\Hypertarget{classargparse_1_1_argument_a58e96b99d4983f44ae994497a68579f6}\label{classargparse_1_1_argument_a58e96b99d4983f44ae994497a68579f6} 
+{\footnotesize template$<$typename T, typename... U$>$ }\\\mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \& {\bfseries choices} (T \&\&first, U \&\&... rest)
+\item 
+\Hypertarget{classargparse_1_1_argument_a44c2d44e574836f0f5a2ea4e9f31fc43}\label{classargparse_1_1_argument_a44c2d44e574836f0f5a2ea4e9f31fc43} 
+void {\bfseries find\+\_\+default\+\_\+value\+\_\+in\+\_\+choices\+\_\+or\+\_\+throw} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_a520e38edd76cb89e24749377656aacec}\label{classargparse_1_1_argument_a520e38edd76cb89e24749377656aacec} 
+{\footnotesize template$<$typename Iterator$>$ }\\bool {\bfseries is\+\_\+value\+\_\+in\+\_\+choices} (Iterator option\+\_\+it) const
+\item 
+\Hypertarget{classargparse_1_1_argument_ae4b1f4c9070ae1d6848d705292742c25}\label{classargparse_1_1_argument_ae4b1f4c9070ae1d6848d705292742c25} 
+{\footnotesize template$<$typename Iterator$>$ }\\void {\bfseries throw\+\_\+invalid\+\_\+arguments\+\_\+error} (Iterator option\+\_\+it) const
+\item 
+\Hypertarget{classargparse_1_1_argument_a3dfa9c3892161b998696cc0d27e3b70e}\label{classargparse_1_1_argument_a3dfa9c3892161b998696cc0d27e3b70e} 
+{\footnotesize template$<$typename Iterator$>$ }\\Iterator {\bfseries consume} (Iterator start, Iterator end, std\+::string\+\_\+view used\+\_\+name=\{\}, bool dry\+\_\+run=false)
+\item 
+\Hypertarget{classargparse_1_1_argument_a36116c082d6afa0be1910d29dcbb8c55}\label{classargparse_1_1_argument_a36116c082d6afa0be1910d29dcbb8c55} 
+void {\bfseries validate} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_a16a92e66a212f47e562fd46c6b79df8a}\label{classargparse_1_1_argument_a16a92e66a212f47e562fd46c6b79df8a} 
+std\+::string {\bfseries get\+\_\+names\+\_\+csv} (char separator=\textquotesingle{},\textquotesingle{}) const
+\item 
+\Hypertarget{classargparse_1_1_argument_a0300f1bea4cff76979ac033aab755184}\label{classargparse_1_1_argument_a0300f1bea4cff76979ac033aab755184} 
+std\+::string {\bfseries get\+\_\+usage\+\_\+full} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_af46efcbe4957e9306fc21c7b051c9205}\label{classargparse_1_1_argument_af46efcbe4957e9306fc21c7b051c9205} 
+std\+::string {\bfseries get\+\_\+inline\+\_\+usage} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_ad8aaf2df6d3bb3fde0d09b2a04cba378}\label{classargparse_1_1_argument_ad8aaf2df6d3bb3fde0d09b2a04cba378} 
+std\+::size\+\_\+t {\bfseries get\+\_\+arguments\+\_\+length} () const
+\item 
+\Hypertarget{classargparse_1_1_argument_a68fb2ffd4e2dcaea80aefd7812f1e850}\label{classargparse_1_1_argument_a68fb2ffd4e2dcaea80aefd7812f1e850} 
+{\footnotesize template$<$typename T$>$ }\\bool {\bfseries operator!=} (const T \&rhs) const
+\item 
+\Hypertarget{classargparse_1_1_argument_aa3bd4389cb5362f88906ec1286bdc2b7}\label{classargparse_1_1_argument_aa3bd4389cb5362f88906ec1286bdc2b7} 
+{\footnotesize template$<$typename T$>$ }\\bool {\bfseries operator==} (const T \&rhs) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_a213a124764afeb5bb22c1090c9ce9f62}\label{classargparse_1_1_argument_a213a124764afeb5bb22c1090c9ce9f62} 
+static bool {\bfseries is\+\_\+positional} (std\+::string\+\_\+view name, std\+::string\+\_\+view prefix\+\_\+chars)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classargparse_1_1_argument_a55c9e1ac006a645af402e3aee6b64e00}\label{classargparse_1_1_argument_a55c9e1ac006a645af402e3aee6b64e00} 
+class {\bfseries Argument\+Parser}
+\item 
+\Hypertarget{classargparse_1_1_argument_aa4d339774ec7cbdd83321a17e2cda661}\label{classargparse_1_1_argument_aa4d339774ec7cbdd83321a17e2cda661} 
+auto {\bfseries operator$<$$<$} (std\+::ostream \&stream, const \mbox{\hyperlink{classargparse_1_1_argument_parser}{Argument\+Parser}} \&parser) -\/$>$ std\+::ostream \&
+\item 
+\Hypertarget{classargparse_1_1_argument_a8ee97386cf348b35c5fec033ab7d8925}\label{classargparse_1_1_argument_a8ee97386cf348b35c5fec033ab7d8925} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&stream, const \mbox{\hyperlink{classargparse_1_1_argument}{Argument}} \&argument)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/cli/argparse.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,33 @@
+\doxysection{Compiler\+\_\+\+Invocation Class Reference}
+\hypertarget{class_compiler___invocation}{}\label{class_compiler___invocation}\index{Compiler\_Invocation@{Compiler\_Invocation}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_compiler___invocation_aee358c33567de0906a5e836a203d5d57}\label{class_compiler___invocation_aee358c33567de0906a5e836a203d5d57} 
+{\bfseries Compiler\+\_\+\+Invocation} (const \mbox{\hyperlink{structaion_1_1compiler__config_1_1_compiler___config}{aion\+::compiler\+\_\+config\+::\+Compiler\+\_\+\+Config}} \&config, \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion\+::diag\+::\+Diagnostics\+Engine}} \&diag)
+\item 
+int \mbox{\hyperlink{class_compiler___invocation_afc9be16758738546db9ba14fba3ab108}{run}} ()
+\item 
+\Hypertarget{class_compiler___invocation_abf96b43ac4d42c6e730acd643753e9eb}\label{class_compiler___invocation_abf96b43ac4d42c6e730acd643753e9eb} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion\+::diag\+::\+Diagnostics\+Engine}} \& {\bfseries get\+Diagnostics} ()
+\begin{DoxyCompactList}\small\item\em Get the diagnostics engine. \end{DoxyCompactList}\item 
+\Hypertarget{class_compiler___invocation_a1a71d3c4f1f97214f118fd41ec825682}\label{class_compiler___invocation_a1a71d3c4f1f97214f118fd41ec825682} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{aion\+::ast\+::\+ASTContext}} \& {\bfseries get\+ASTContext} ()
+\begin{DoxyCompactList}\small\item\em Get the AST context. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_compiler___invocation_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_compiler___invocation_afc9be16758738546db9ba14fba3ab108}\index{Compiler\_Invocation@{Compiler\_Invocation}!run@{run}}
+\index{run@{run}!Compiler\_Invocation@{Compiler\_Invocation}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{class_compiler___invocation_afc9be16758738546db9ba14fba3ab108} 
+int Compiler\+\_\+\+Invocation\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Run the entire pipeline (preprocess, lex, parse, sema, codegen, link). Currently, codegen is not wired here; focus is on CC as orchestration. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/cli/compiler\+\_\+invocation.\+hpp\item 
+core/src/cli/compiler\+\_\+invocation.\+cpp\end{DoxyCompactItemize}

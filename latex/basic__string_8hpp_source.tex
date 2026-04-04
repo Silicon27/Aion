@@ -1,0 +1,52 @@
+\doxysection{basic\+\_\+string.\+hpp}
+\hypertarget{basic__string_8hpp_source}{}\label{basic__string_8hpp_source}\index{core/include/support/si/include/impl/string/basic\_string.hpp@{core/include/support/si/include/impl/string/basic\_string.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/10-\/11.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_STRING\_BASIC\_STRING\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_STRING\_BASIC\_STRING\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../../si/memory.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}char\_traits.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}\ <}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{typename}\ CharT,}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{typename}\ Traits\ =\ \mbox{\hyperlink{structchar__traits}{char\_traits<CharT>}},}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{typename}\ Allocator\ =\ \mbox{\hyperlink{classallocator}{allocator<CharT>}}}
+\DoxyCodeLine{00018\ >}
+\DoxyCodeLine{00019\ \textcolor{keyword}{class\ }basic\_string\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ CharT*\ m\_data;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\_size;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\_capacity;}
+\DoxyCodeLine{00023\ \ \ \ \ Allocator\ m\_allocator;}
+\DoxyCodeLine{00024\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ CharT;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{using\ }traits\_type\ =\ Traits;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using\ }allocator\_type\ =\ Allocator;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ size\_t;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{using\ }difference\_type\ =\ ptrdiff\_t;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using\ }reference\ =\ value\_type\&;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{using\ }const\_reference\ =\ \textcolor{keyword}{const}\ value\_type\&;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{using\ }pointer\ =\ value\_type*;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ =\ \textcolor{keyword}{const}\ value\_type*;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{using\ }iterator\ =\ pointer;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{using\ }const\_iterator\ =\ const\_pointer;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ basic\_string()\ \textcolor{keyword}{noexcept}\ =\ \textcolor{keywordflow}{default};\ \textcolor{comment}{//\ default}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{explicit}\ basic\_string(\textcolor{keyword}{const}\ allocator\_type\&\ alloc)\ noexcept\ :\ m\_data(\textcolor{keyword}{nullptr}),\ m\_size(0),\ m\_capacity(0),}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_allocator(alloc)\ \{\}\ \textcolor{comment}{//\ allocator\ aware\ default}}
+\DoxyCodeLine{00040\ \ \ \ \ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_STRING\_BASIC\_STRING\_HPP}}
+
+\end{DoxyCode}

@@ -1,0 +1,37 @@
+\doxysection{decay\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structdecay}{}\label{structdecay}\index{decay$<$ T $>$@{decay$<$ T $>$}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{structdecay_a692db33b227645d72e6fbddf3df5e627}{type}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-typedef-members}
+\Hypertarget{structdecay_doc-typedef-members}
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{structdecay_a692db33b227645d72e6fbddf3df5e627}\index{decay$<$ T $>$@{decay$<$ T $>$}!type@{type}}
+\index{type@{type}!decay$<$ T $>$@{decay$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily \label{structdecay_a692db33b227645d72e6fbddf3df5e627} 
+template$<$typename T$>$ \\
+using \mbox{\hyperlink{structdecay}{decay}}$<$ T $>$\+::type}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structconditional}{conditional}}<}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ is\_array\_v<U>,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ remove\_extent\_t<U>*,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structconditional}{conditional}}<}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_function\_v<U>,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ add\_pointer\_t<U>,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ remove\_cv\_t<U>}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ >::type}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ >::type}
+
+\end{DoxyCode}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/type\+\_\+traits/decay.\+h\end{DoxyCompactItemize}

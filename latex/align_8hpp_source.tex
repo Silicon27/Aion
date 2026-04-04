@@ -1,0 +1,38 @@
+\doxysection{align.\+hpp}
+\hypertarget{align_8hpp_source}{}\label{align_8hpp_source}\index{core/include/support/si/include/impl/memory/align.hpp@{core/include/support/si/include/impl/memory/align.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/02-\/20.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_MEMORY\_ALIGN\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_MEMORY\_ALIGN\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <si/stddef.hpp>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}*\ align(\textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ alignment,}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ size,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\&\ ptr,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\&\ space\ )\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{const}\ uintptr\_t\ \ \ \ \ p\ \ \ \ \ \ \ \ \ \ \ =\ \textcolor{keyword}{reinterpret\_cast<}uintptr\_t\textcolor{keyword}{>}(ptr);}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{const}\ uintptr\_t\ \ \ \ \ aligned\ \ \ \ \ =\ (p\ +\ alignment\ -\/\ 1)\ \&\ \string~(alignment\ -\/\ 1);}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ \ \ \ \ \ \ \ adjustment\ \ =\ aligned\ -\/\ p;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordflow}{if}\ (adjustment\ +\ size\ >\ space)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00023\ \ \ \ \ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ space\ \ \ -\/=\ adjustment;}
+\DoxyCodeLine{00026\ \ \ \ \ ptr\ \ \ \ \ \ =\ \textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{void}*\textcolor{keyword}{>}(aligned);}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordflow}{return}\ ptr;}
+\DoxyCodeLine{00028\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_MEMORY\_ALIGN\_H}}
+
+\end{DoxyCode}

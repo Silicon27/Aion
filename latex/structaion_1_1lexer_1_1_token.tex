@@ -1,0 +1,64 @@
+\doxysection{aion\+::lexer\+::Token Struct Reference}
+\hypertarget{structaion_1_1lexer_1_1_token}{}\label{structaion_1_1lexer_1_1_token}\index{aion::lexer::Token@{aion::lexer::Token}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a2389d416ec29bba08659447c2b1fec0e}\label{structaion_1_1lexer_1_1_token_a2389d416ec29bba08659447c2b1fec0e} 
+{\bfseries Token} (Token\+Type t, std\+::string l, int ln, int col, uint8\+\_\+t f=0)
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_ab6fb480ecaef029983bec57b46f4b616}\label{structaion_1_1lexer_1_1_token_ab6fb480ecaef029983bec57b46f4b616} 
+{\bfseries Token} (const Token\+Type t)
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a5c8b5c9864db353ab3cad7141c1413a0}\label{structaion_1_1lexer_1_1_token_a5c8b5c9864db353ab3cad7141c1413a0} 
+Token\+Type {\bfseries get\+\_\+type} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a732421d9f24e1d37e541818ad389ee23}\label{structaion_1_1lexer_1_1_token_a732421d9f24e1d37e541818ad389ee23} 
+const std\+::string \& {\bfseries get\+\_\+lexeme} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a278891c55a5bcd212d1a7d8ea2e1c1c9}\label{structaion_1_1lexer_1_1_token_a278891c55a5bcd212d1a7d8ea2e1c1c9} 
+int {\bfseries get\+\_\+line} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_aff8e52ccd93ca50f2873078610e7c1c9}\label{structaion_1_1lexer_1_1_token_aff8e52ccd93ca50f2873078610e7c1c9} 
+int {\bfseries get\+\_\+column} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_aad128ea7c3be5757571530d7846ceaf7}\label{structaion_1_1lexer_1_1_token_aad128ea7c3be5757571530d7846ceaf7} 
+uint8\+\_\+t {\bfseries get\+\_\+flags} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_afd5a7155c032f97649ee76e84478fbb1}\label{structaion_1_1lexer_1_1_token_afd5a7155c032f97649ee76e84478fbb1} 
+bool {\bfseries has\+\_\+string\+\_\+prefix\+\_\+flags} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a209bf63fd84039f32c65bbe20aeffc49}\label{structaion_1_1lexer_1_1_token_a209bf63fd84039f32c65bbe20aeffc49} 
+bool {\bfseries format\+\_\+flag\+\_\+set} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_ab5390418a5a6e47c4422e9113c70a5b9}\label{structaion_1_1lexer_1_1_token_ab5390418a5a6e47c4422e9113c70a5b9} 
+bool {\bfseries binary\+\_\+flag\+\_\+set} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a1ddb5b2f68eca057bdaf94d34042c55a}\label{structaion_1_1lexer_1_1_token_a1ddb5b2f68eca057bdaf94d34042c55a} 
+bool {\bfseries raw\+\_\+flag\+\_\+set} () const
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a90940478218d395b474ef96867abe10b}\label{structaion_1_1lexer_1_1_token_a90940478218d395b474ef96867abe10b} 
+bool {\bfseries cstr\+\_\+flag\+\_\+set} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_af22483522fa81e6e0608c28a223b0443}\label{structaion_1_1lexer_1_1_token_af22483522fa81e6e0608c28a223b0443} 
+Token\+Type {\bfseries type}
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_ad8072790221f545e8d7266b02bc93920}\label{structaion_1_1lexer_1_1_token_ad8072790221f545e8d7266b02bc93920} 
+uint8\+\_\+t {\bfseries flags} = 0
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_acd411a54b8b615f9efe7d04410a959d8}\label{structaion_1_1lexer_1_1_token_acd411a54b8b615f9efe7d04410a959d8} 
+std\+::string {\bfseries lexeme}
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a586dce76ace7926c92e2cd701cf49c4f}\label{structaion_1_1lexer_1_1_token_a586dce76ace7926c92e2cd701cf49c4f} 
+int {\bfseries line}
+\item 
+\Hypertarget{structaion_1_1lexer_1_1_token_a6a14afe60b7cc70b3ead9bbeddd9f436}\label{structaion_1_1lexer_1_1_token_a6a14afe60b7cc70b3ead9bbeddd9f436} 
+int {\bfseries column}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/lexer/lexer.\+hpp\end{DoxyCompactItemize}

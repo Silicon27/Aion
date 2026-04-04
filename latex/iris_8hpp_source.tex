@@ -1,0 +1,241 @@
+\doxysection{iris.\+hpp}
+\hypertarget{iris_8hpp_source}{}\label{iris_8hpp_source}\index{core/include/support/iris/src/iris.hpp@{core/include/support/iris/src/iris.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ iris\ -\/\ instantiation,\ resolution\ and\ (i)xpansion\ system}}
+\DoxyCodeLine{00002\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *\ copyright\ (c)\ 2026\ Silicon27}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ A\ C++20\ compile\ time\ support\ library\ with\ each\ element\ designed\ to\ aid\ compile\ time\ resolution}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#ifndef\ IRIS\_HPP}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ IRIS\_HPP}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }iris\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//\ get\ pack\ at\ some\ index}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{template}\ <std::size\_t\ I,\ \textcolor{keyword}{auto}...\ Vs>}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{consteval}\ \textcolor{keyword}{decltype}(\textcolor{keyword}{auto})\ pack\_at()\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ tup\ =\ std::tuple\{Vs...\};}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::get<I>(tup);}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ \}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{namespace\ }iris::support\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ check\ for\ homogeneity\ in\ template\ packs}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1support_1_1all__same}{all\_same}}\ :\ std::true\_type\ \{\};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Ts>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1support_1_1all__same}{all\_same}}<T,\ Ts...>}
+\DoxyCodeLine{00027\ \ \ \ \ :\ std::bool\_constant<(...\ \&\&\ std::is\_same\_v<std::remove\_cvref\_t\ <T>,\ std::remove\_cvref\_t<Ts>>)>\ \{\};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ create\ applicable\ alias\ for\ homogenous\ packs}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Ts>\ \textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptiris_1_1support_1_1homogeneous__pack__v}{homogeneous\_pack\_v}}\ =\ \mbox{\hyperlink{structiris_1_1support_1_1all__same}{all\_same}}<Ts...>::value;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{auto}...\ Vs>}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1support_1_1homogenous__value__type__pack__helper}{homogenous\_value\_type\_pack\_helper}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ value\ =\ (\mbox{\hyperlink{structiris_1_1support_1_1all__same}{all\_same}}<\textcolor{keyword}{decltype}(Vs)...>::value);}
+\DoxyCodeLine{00035\ \ \ \ \ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{auto}...\ Vs>\ \textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptiris_1_1support_1_1homogenous__value__type__pack}{homogenous\_value\_type\_pack}}\ =\ \mbox{\hyperlink{structiris_1_1support_1_1homogenous__value__type__pack__helper}{homogenous\_value\_type\_pack\_helper}}<Vs...>::value;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ helper\ to\ get\ the\ type\ of\ a\ homogeneous\ value\ type\ pack}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{auto}...\ Vs>}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{requires}\ \mbox{\hyperlink{conceptiris_1_1support_1_1homogenous__value__type__pack}{homogenous\_value\_type\_pack}}<Vs...>}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{using\ }homogenous\_value\_type\_pack\_t\ =\ \textcolor{keyword}{decltype}(pack\_at<0,\ Vs...>);}
+\DoxyCodeLine{00043\ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keyword}{namespace\ }iris\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{template}\ <std::\textcolor{keywordtype}{size\_t}\ I,\ \textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1bundle__leaf}{bundle\_leaf}}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ T\ value;}
+\DoxyCodeLine{00049\ \ \ \ \ \};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{template}\ <std::size\_t\ I,\ \textcolor{keyword}{typename}...\ Ts>}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1bundle__impl}{bundle\_impl}};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{template}\ <std::\textcolor{keywordtype}{size\_t}\ I>}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1bundle__impl}{bundle\_impl}}<I>\ \{\};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{template}\ <std::size\_t\ I,\ \textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}...\ Ts>}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1bundle__impl}{bundle\_impl}}<I,\ T,\ Ts...>}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structiris_1_1bundle__leaf}{bundle\_leaf}}<I,\ T>,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structiris_1_1bundle__impl}{bundle\_impl}}<I+1,\ Ts...>}
+\DoxyCodeLine{00062\ \ \ \ \ \{\};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//\ a\ bundle\ denotes\ a\ non-\/type\ template\ parameter\ pack.\ It\ is\ obligatory\ that\ a\ pack\ is\ converted\ into}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ a\ bundle\ before\ iris\ may\ apply\ its\ operations\ on\ said\ pack}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Ts>}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1bundle}{bundle}}\ :\ \mbox{\hyperlink{structiris_1_1bundle__leaf}{bundle\_leaf}}<0,\ Ts...>\ \{\ \};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{template}\ <std::\textcolor{keywordtype}{size\_t}\ I,\ \textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00071\ \ \ \ \ T\&\ get\_leaf(\mbox{\hyperlink{structiris_1_1bundle__leaf}{bundle\_leaf<I,\ T>}}\&\ leaf)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ leaf.value;}
+\DoxyCodeLine{00073\ \ \ \ \ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{template}\ <std::size\_t\ I,\ \textcolor{keyword}{typename}...\ Ts>}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{auto}\&\ get(bundle<Ts...>\&\ b)\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ get\_leaf<I>(b);}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{keyword}{namespace\ }iris::pgen\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ iris::pgen\ -\/\ iris\ parser\ generator\ }}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}...\ Cs>}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{consteval}\ \textcolor{keyword}{auto}\ has\_trailing\_null()\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Cs)\ ==\ 0)\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ pack\_at<\textcolor{keyword}{sizeof}...(Cs)\ -\/\ 1,\ Cs...>()\ ==\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}...\ Cs>}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1string}{string}}\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ value[\textcolor{keyword}{sizeof}...(Cs)]\ =\ \{Cs...\};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{consteval}\ \textcolor{keywordtype}{size\_t}\ max\_idx()\ \{\textcolor{keywordflow}{return}\ \textcolor{keyword}{sizeof}...(Cs)\ -\/\ 1;\}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{consteval}\ \textcolor{keywordtype}{size\_t}\ length()\ \{\textcolor{keywordflow}{return}\ \textcolor{keyword}{sizeof}...(Cs);\}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{consteval}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ begin()\ \{\textcolor{keywordflow}{return}\ value;\}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{consteval}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ end()\ \{\textcolor{keywordflow}{return}\ value\ +\ \textcolor{keyword}{sizeof}...(Cs);\}}
+\DoxyCodeLine{00100\ \ \ \ \ \};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}...>}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1remove__trailing__null__recursive}{remove\_trailing\_null\_recursive}};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1remove__trailing__null__recursive_3_4}{remove\_trailing\_null\_recursive<>}}\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }type\ =\ \mbox{\hyperlink{structiris_1_1pgen_1_1string}{string<>}};}
+\DoxyCodeLine{00108\ \ \ \ \ \};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}\ Last>}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1remove__trailing__null__recursive}{remove\_trailing\_null\_recursive<Last>}}\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }type\ =\ std::conditional\_t<Last\ ==\ \textcolor{charliteral}{'\(\backslash\)0'},\ \mbox{\hyperlink{structiris_1_1pgen_1_1string}{string<>}},\ \mbox{\hyperlink{structiris_1_1pgen_1_1string}{string<Last>}}>;}
+\DoxyCodeLine{00113\ \ \ \ \ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}\ First,\ \textcolor{keywordtype}{char}...\ Rest>}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1remove__trailing__null__recursive}{remove\_trailing\_null\_recursive}}<First,\ Rest...>\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }tail\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structiris_1_1pgen_1_1remove__trailing__null__recursive}{remove\_trailing\_null\_recursive}}<Rest...>::type;}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }type\ =\ \textcolor{keyword}{decltype}([]<\textcolor{keywordtype}{char}...\ Cs2>(\textcolor{keywordtype}{string}<Cs2...>)\ -\/>\ \textcolor{keywordtype}{string}<First,\ Cs2...>\ \{\ \textcolor{keywordflow}{return}\ \{\};\ \}(tail\{\}));}
+\DoxyCodeLine{00121\ \ \ \ \ \};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}...\ Cs>}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{consteval}\ \textcolor{keyword}{auto}\ remove\_trailing\_null()\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Cs)\ ==\ 0)\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structiris_1_1pgen_1_1string}{string<>}}\{\};}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ arr[]\ =\ \{Cs...\};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (arr[\textcolor{keyword}{sizeof}...(Cs)\ -\/\ 1]\ ==\ \textcolor{charliteral}{'\(\backslash\)0'})\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ []<std::size\_t...\ Is>(std::index\_sequence<Is...>)\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{string}<arr[Is]...>\{\};}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}(std::make\_index\_sequence<\textcolor{keyword}{sizeof}...(Cs)\ -\/\ 1>\{\});}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{string}<Cs...>\{\};}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}...\ Cs>}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{using\ }remove\_trailing\_null\_t\ =\ \textcolor{keyword}{decltype}(remove\_trailing\_null<Cs...>());}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Str1,\ \textcolor{keyword}{typename}\ Str2>}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1append}{append}};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}...\ Cs1,\ \textcolor{keywordtype}{char}...\ Cs2>}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1append}{append}}<\mbox{\hyperlink{structiris_1_1pgen_1_1string}{string}}<Cs1...>,\ \mbox{\hyperlink{structiris_1_1pgen_1_1string}{string}}<Cs2...>>\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }str1\ =\ remove\_trailing\_null\_t<Cs1...>;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }str2\ =\ remove\_trailing\_null\_t<Cs2...>;}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }type\ =\ \textcolor{keyword}{decltype}(}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ []<\textcolor{keywordtype}{char}...\ C1,\ \textcolor{keywordtype}{char}...\ C2>(\textcolor{keywordtype}{string}<C1...>,\ \textcolor{keywordtype}{string}<C2...>)\ -\/>\ \textcolor{keywordtype}{string}<C1...,\ C2...>}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \{\textcolor{keywordflow}{return}\ \{\};\}\ (str1\{\},\ str2\{\})}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00154\ \ \ \ \ \};}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Str1,\ \textcolor{keyword}{typename}\ Str2>}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{using\ }append\_t\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structiris_1_1pgen_1_1append}{append<Str1,\ Str2>::type}};}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Str1,\ \textcolor{keyword}{typename}\ Str2>}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1append__as__literal}{append\_as\_literal}};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{char}...\ Cs1,\ \textcolor{keywordtype}{char}...\ Cs2>}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1append__as__literal}{append\_as\_literal}}<\mbox{\hyperlink{structiris_1_1pgen_1_1string}{string}}<Cs1...>,\ \mbox{\hyperlink{structiris_1_1pgen_1_1string}{string}}<Cs2...>>\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }str1\ =\ remove\_trailing\_null\_t<Cs1...>;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }str2\ =\ remove\_trailing\_null\_t<Cs2...>;}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }type\ =\ \textcolor{keyword}{decltype}([]<\textcolor{keywordtype}{char}...\ C1,\ \textcolor{keywordtype}{char}...\ C2>(\textcolor{keywordtype}{string}<C1...>,\ \textcolor{keywordtype}{string}<C2...>)\ -\/>\ append\_t<\textcolor{keywordtype}{string}<C1...,\ C2...>,\ \textcolor{keywordtype}{string}<\textcolor{charliteral}{'\(\backslash\)0'}>>}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \{\textcolor{keywordflow}{return}\ \{\};\}\ (str1\{\},\ str2\{\}));}
+\DoxyCodeLine{00169\ \ \ \ \ \};}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{auto}\&\ Str,\ std::size\_t\ N,\ std::size\_t...\ Is>}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{consteval}\ \textcolor{keyword}{auto}\ make\_string\_literal\_helper(std::index\_sequence<Is...>)\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (has\_trailing\_null<Str[Is]...>())\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{string}<Str[Is]...>\{\};}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{string}<Str[Is]...,\ \textcolor{charliteral}{'\(\backslash\)0'}>\{\};}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keyword}{template}\ <auto\&\ Str,\ std::\textcolor{keywordtype}{size\_t}\ N>}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1make__string__literal}{make\_string\_literal}}\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }type\ =\ \textcolor{keyword}{decltype}(make\_string\_literal\_helper<Str,\ N>(std::make\_index\_sequence<N>\{\}));}
+\DoxyCodeLine{00183\ \ \ \ \ \};}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{template}\ <auto\&\ Str,\ std::\textcolor{keywordtype}{size\_t}\ N>}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{using\ }make\_string\_literal\_t\ =\ \textcolor{keyword}{typename}\ make\_string\_literal<Str,\ N>::type;}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1input}{input}}\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ data;}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ std::size\_t\ pos;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ std::size\_t\ size;}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ eof()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ pos\ >=\ size;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ peek()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eof()\ ?\ \textcolor{charliteral}{'\(\backslash\)0'}\ :\ data[pos];}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ advance()\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!eof())\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++pos;}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00206\ \ \ \ \ \};}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Rules>}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1seq}{seq}};}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ First,\ \textcolor{keyword}{typename}...\ Rest>}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structiris_1_1pgen_1_1seq}{seq}}<First,\ Rest...>\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ match(\mbox{\hyperlink{structiris_1_1pgen_1_1input}{input}}\&\ in)\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ save\ =\ in;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!First::match(in))\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ =\ save;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Rest)\ ==\ 0)\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{structiris_1_1pgen_1_1seq}{seq<Rest...>::match}}(in))\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ =\ save;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00230\ \ \ \ \ \};}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ IRIS\_HPP}}
+
+\end{DoxyCode}

@@ -1,0 +1,50 @@
+\doxysection{aion\+::diag\+::Stored\+Diagnostic Class Reference}
+\hypertarget{classaion_1_1diag_1_1_stored_diagnostic}{}\label{classaion_1_1diag_1_1_stored_diagnostic}\index{aion::diag::StoredDiagnostic@{aion::diag::StoredDiagnostic}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_ad1767c0b1b6221279d1fd987ccad2957}\label{classaion_1_1diag_1_1_stored_diagnostic_ad1767c0b1b6221279d1fd987ccad2957} 
+using {\bfseries range\+\_\+iterator} = std\+::vector$<$\mbox{\hyperlink{structaion_1_1diag_1_1_char_source_range}{Char\+Source\+Range}}$>$\+::const\+\_\+iterator
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_acf53255ee9e815d5a2c7f10e35398e3c}\label{classaion_1_1diag_1_1_stored_diagnostic_acf53255ee9e815d5a2c7f10e35398e3c} 
+using {\bfseries fixit\+\_\+iterator} = std\+::vector$<$\mbox{\hyperlink{classaion_1_1diag_1_1_fix_it_hint}{Fix\+It\+Hint}}$>$\+::const\+\_\+iterator
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a97026a03fa82c477e15c0e3e5fe59565}\label{classaion_1_1diag_1_1_stored_diagnostic_a97026a03fa82c477e15c0e3e5fe59565} 
+{\bfseries Stored\+Diagnostic} (Severity sev, const \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}} \&diag)
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_ad9e7a86c236133778bf0c33a19e925b0}\label{classaion_1_1diag_1_1_stored_diagnostic_ad9e7a86c236133778bf0c33a19e925b0} 
+Diag\+ID {\bfseries get\+\_\+id} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a6826d53f4f5a527d017c60042a128870}\label{classaion_1_1diag_1_1_stored_diagnostic_a6826d53f4f5a527d017c60042a128870} 
+Severity {\bfseries get\+\_\+severity} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a491960f8dd16d472ebb0d203a9042e15}\label{classaion_1_1diag_1_1_stored_diagnostic_a491960f8dd16d472ebb0d203a9042e15} 
+const std\+::string \& {\bfseries get\+\_\+message} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a30146934d25b8460af816e854de1a275}\label{classaion_1_1diag_1_1_stored_diagnostic_a30146934d25b8460af816e854de1a275} 
+range\+\_\+iterator {\bfseries range\+\_\+begin} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a53a1ac2f58c54c7a18a07e510c8a8a2c}\label{classaion_1_1diag_1_1_stored_diagnostic_a53a1ac2f58c54c7a18a07e510c8a8a2c} 
+range\+\_\+iterator {\bfseries range\+\_\+end} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a1f3c4ca18c5b8b5abb8355944e6b43bb}\label{classaion_1_1diag_1_1_stored_diagnostic_a1f3c4ca18c5b8b5abb8355944e6b43bb} 
+unsigned {\bfseries range\+\_\+size} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a5b5a35002757b2ca104d27b459d42eb2}\label{classaion_1_1diag_1_1_stored_diagnostic_a5b5a35002757b2ca104d27b459d42eb2} 
+fixit\+\_\+iterator {\bfseries fixit\+\_\+begin} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a3e1f57048a05b1863cb27ede5bd314a6}\label{classaion_1_1diag_1_1_stored_diagnostic_a3e1f57048a05b1863cb27ede5bd314a6} 
+fixit\+\_\+iterator {\bfseries fixit\+\_\+end} () const
+\item 
+\Hypertarget{classaion_1_1diag_1_1_stored_diagnostic_a02c585809fab26395f9b31f5258a0022}\label{classaion_1_1diag_1_1_stored_diagnostic_a02c585809fab26395f9b31f5258a0022} 
+unsigned {\bfseries fixit\+\_\+size} () const
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/error/error.\+hpp\item 
+core/src/error/error.\+cpp\end{DoxyCompactItemize}

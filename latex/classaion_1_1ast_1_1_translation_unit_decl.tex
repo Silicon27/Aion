@@ -1,0 +1,64 @@
+\doxysection{aion\+::ast\+::Translation\+Unit\+Decl Class Reference}
+\hypertarget{classaion_1_1ast_1_1_translation_unit_decl}{}\label{classaion_1_1ast_1_1_translation_unit_decl}\index{aion::ast::TranslationUnitDecl@{aion::ast::TranslationUnitDecl}}
+
+
+The top-\/level declaration that represents the entire translation unit.  
+
+
+
+
+{\ttfamily \#include $<$decl.\+hpp$>$}
+
+Inheritance diagram for aion\+::ast\+::Translation\+Unit\+Decl\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1ast_1_1_translation_unit_decl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145}\label{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145} 
+enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
+{\bfseries translation\+\_\+unit}
+, {\bfseries named\+\_\+decl}
+, {\bfseries variable}
+, {\bfseries function}
+, \newline
+{\bfseries struct\+\_\+}
+, {\bfseries enum\+\_\+}
+, {\bfseries module}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Decl} (const Kind K)
+\item 
+Kind {\bfseries get\+\_\+kind} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl_context}{aion\+::ast\+::\+Decl\+Context}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries add\+\_\+decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+first\+\_\+decl} () const
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+last\+\_\+decl} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries next} = nullptr
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{aion\+::\+Source\+\_\+\+Range}} {\bfseries source\+\_\+range}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The top-\/level declaration that represents the entire translation unit. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/decl.\+hpp\end{DoxyCompactItemize}

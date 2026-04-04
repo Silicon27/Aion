@@ -1,0 +1,76 @@
+\doxysection{aion\+::ast\+::Typed\+Expr Class Reference}
+\hypertarget{classaion_1_1ast_1_1_typed_expr}{}\label{classaion_1_1ast_1_1_typed_expr}\index{aion::ast::TypedExpr@{aion::ast::TypedExpr}}
+Inheritance diagram for aion\+::ast\+::Typed\+Expr\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.251256cm]{classaion_1_1ast_1_1_typed_expr}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} \+: std\+::uint8\+\_\+t \{ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{atom\+\_\+type}}
+, \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{common\+\_\+type}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8}\label{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8} 
+enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\_\+expr}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_typed_expr_adb08b5e46c52c16c27e461c80f3be2a7}\label{classaion_1_1ast_1_1_typed_expr_adb08b5e46c52c16c27e461c80f3be2a7} 
+{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_typed_expr_a9be7c126529344bad30c79ef6ee85250}\label{classaion_1_1ast_1_1_typed_expr_a9be7c126529344bad30c79ef6ee85250} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} {\bfseries get\+\_\+type\+\_\+kind} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_typed_expr_a9581a9ab5183f64e4f45761a53ae1ec1}\label{classaion_1_1ast_1_1_typed_expr_a9581a9ab5183f64e4f45761a53ae1ec1} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+type} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_typed_expr_a4af6e8ee98eea206843bfc75d28c5e8e}\label{classaion_1_1ast_1_1_typed_expr_a4af6e8ee98eea206843bfc75d28c5e8e} 
+void {\bfseries set\+\_\+type} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}new\+\_\+type)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Expr} (const Expr\+Kind k, const Value\+Category v, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} sr)
+\item 
+Expr\+Kind {\bfseries get\+\_\+kind} () const
+\item 
+Value\+Category {\bfseries get\+\_\+category} () const
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+\_\+source\+\_\+range} () const
+\item 
+void {\bfseries set\+\_\+source\+\_\+range} (const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
+\end{DoxyCompactItemize}
+
+
+\label{doc-enum-members}
+\Hypertarget{classaion_1_1ast_1_1_typed_expr_doc-enum-members}
+\doxysubsection{Member Enumeration Documentation}
+\Hypertarget{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}\index{aion::ast::TypedExpr@{aion::ast::TypedExpr}!TypeKind@{TypeKind}}
+\index{TypeKind@{TypeKind}!aion::ast::TypedExpr@{aion::ast::TypedExpr}}
+\doxysubsubsection{\texorpdfstring{TypeKind}{TypeKind}}
+{\footnotesize\ttfamily \label{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0} 
+enum class \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{aion\+::ast\+::\+Typed\+Expr\+::\+Type\+Kind}} \+: std\+::uint8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{atom\_type@{atom\_type}!aion::ast::TypedExpr@{aion::ast::TypedExpr}}\index{aion::ast::TypedExpr@{aion::ast::TypedExpr}!atom\_type@{atom\_type}}}\Hypertarget{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}\label{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd} 
+atom\+\_\+type&any type that is not an inferred "{}common type"{} made from the combination of other types \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{common\_type@{common\_type}!aion::ast::TypedExpr@{aion::ast::TypedExpr}}\index{aion::ast::TypedExpr@{aion::ast::TypedExpr}!common\_type@{common\_type}}}\Hypertarget{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}\label{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc} 
+common\+\_\+type&any type that is inferred from the combination of other types (ex. binary expressions where the 2 types are related but not equal. you thereby infer a common type) \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/expr.\+hpp\end{DoxyCompactItemize}

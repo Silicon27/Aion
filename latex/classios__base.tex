@@ -1,0 +1,141 @@
+\doxysection{ios\+\_\+base Class Reference}
+\hypertarget{classios__base}{}\label{classios__base}\index{ios\_base@{ios\_base}}
+Inheritance diagram for ios\+\_\+base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classios__base}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classios__base_1_1_init}{Init}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classios__base_ae1174aff8a03ff961f97a78deba245f9}\label{classios__base_ae1174aff8a03ff961f97a78deba245f9} 
+using {\bfseries fmtflags} = unsigned int
+\item 
+\Hypertarget{classios__base_a46a3ff7ed27549f03a5e612cdef575cd}\label{classios__base_a46a3ff7ed27549f03a5e612cdef575cd} 
+using {\bfseries iostate} = unsigned char
+\item 
+\Hypertarget{classios__base_a24aa8719d799970773d85ab57fc0e79b}\label{classios__base_a24aa8719d799970773d85ab57fc0e79b} 
+using {\bfseries openmode} = unsigned char
+\item 
+\Hypertarget{classios__base_a7f4b38ae137bdb2a30133cfba3b88c87}\label{classios__base_a7f4b38ae137bdb2a30133cfba3b88c87} 
+using {\bfseries seekdir} = unsigned char
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classios__base_a2a73a30a8b157cc1cc92bb55b0a62e4a}\label{classios__base_a2a73a30a8b157cc1cc92bb55b0a62e4a} 
+fmtflags {\bfseries flags} () const
+\item 
+\Hypertarget{classios__base_a2784b5cc8011fd8e5f812c4934af197d}\label{classios__base_a2784b5cc8011fd8e5f812c4934af197d} 
+fmtflags {\bfseries flags} (const fmtflags fmt)
+\item 
+\Hypertarget{classios__base_a557d789bb78df2875a53cc10cdaa6b38}\label{classios__base_a557d789bb78df2875a53cc10cdaa6b38} 
+fmtflags {\bfseries setf} (const fmtflags fmt)
+\item 
+\Hypertarget{classios__base_a14635947cfae23476b10a372e2a0f4eb}\label{classios__base_a14635947cfae23476b10a372e2a0f4eb} 
+fmtflags {\bfseries setf} (const fmtflags fmt, const fmtflags mask)
+\item 
+\Hypertarget{classios__base_a10cee30c6b6e4faf26b19ae02543c67a}\label{classios__base_a10cee30c6b6e4faf26b19ae02543c67a} 
+void {\bfseries unsetf} (const fmtflags mask)
+\item 
+\Hypertarget{classios__base_aaa551b1db3b8e6e2fa3c1d65cfc89f68}\label{classios__base_aaa551b1db3b8e6e2fa3c1d65cfc89f68} 
+streamsize {\bfseries precision} () const
+\item 
+\Hypertarget{classios__base_a1f036e540c6e4ac1b360fd2eab9bc8fb}\label{classios__base_a1f036e540c6e4ac1b360fd2eab9bc8fb} 
+streamsize {\bfseries precision} (const streamsize prec)
+\item 
+\Hypertarget{classios__base_a5e26dac22a8b4548f63a8fc55e8a7b69}\label{classios__base_a5e26dac22a8b4548f63a8fc55e8a7b69} 
+streamsize {\bfseries width} () const
+\item 
+\Hypertarget{classios__base_a621ce5dc5193e36d1214fb2282d10699}\label{classios__base_a621ce5dc5193e36d1214fb2282d10699} 
+streamsize {\bfseries width} (const streamsize wid)
+\item 
+\Hypertarget{classios__base_af0bac7eab26343ac9a4708b7f5679364}\label{classios__base_af0bac7eab26343ac9a4708b7f5679364} 
+int {\bfseries rdstate} () const
+\item 
+\Hypertarget{classios__base_ad21ec09075ceb75d24dbed23fcb46e91}\label{classios__base_ad21ec09075ceb75d24dbed23fcb46e91} 
+void {\bfseries setstate} (const int state)
+\item 
+\Hypertarget{classios__base_aee6d44f1d43b4c563fcbc3af1da615c8}\label{classios__base_aee6d44f1d43b4c563fcbc3af1da615c8} 
+void {\bfseries clear} (const int s=goodbit)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classios__base_af411ca48741710c428bf2c6143712ba7}\label{classios__base_af411ca48741710c428bf2c6143712ba7} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries dec} = 0x0001
+\item 
+\Hypertarget{classios__base_a8c27864be933623950072a838beccb42}\label{classios__base_a8c27864be933623950072a838beccb42} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries oct} = 0x0002
+\item 
+\Hypertarget{classios__base_ac06eda71b53937c4504437bd7e664d07}\label{classios__base_ac06eda71b53937c4504437bd7e664d07} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries hex} = 0x0004
+\item 
+\Hypertarget{classios__base_a199bacf377adeb9441a81fbb06e32d9b}\label{classios__base_a199bacf377adeb9441a81fbb06e32d9b} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries basefield} = dec \texorpdfstring{$\vert$}{|} oct \texorpdfstring{$\vert$}{|} hex
+\item 
+\Hypertarget{classios__base_aa3df07ebc2e9a0259d8d75e3aabaa930}\label{classios__base_aa3df07ebc2e9a0259d8d75e3aabaa930} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries scientific} = 0x0008
+\item 
+\Hypertarget{classios__base_a6ccf5f0cb481f49cce0d7002c1bd7fe1}\label{classios__base_a6ccf5f0cb481f49cce0d7002c1bd7fe1} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries fixed} = 0x0010
+\item 
+\Hypertarget{classios__base_a02c6de92d5ceb778cba1be4df02cdf74}\label{classios__base_a02c6de92d5ceb778cba1be4df02cdf74} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries floatfield} = scientific \texorpdfstring{$\vert$}{|} fixed
+\item 
+\Hypertarget{classios__base_a2f24c9f0072e9082cdd802518579fc35}\label{classios__base_a2f24c9f0072e9082cdd802518579fc35} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries left} = 0x0020
+\item 
+\Hypertarget{classios__base_a78d9c949ff70c2ba330499877f20bbf2}\label{classios__base_a78d9c949ff70c2ba330499877f20bbf2} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries right} = 0x0040
+\item 
+\Hypertarget{classios__base_aad98960929f56bc53b415ca79073cfc4}\label{classios__base_aad98960929f56bc53b415ca79073cfc4} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries internal} = 0x0080
+\item 
+\Hypertarget{classios__base_a2037e2e0e15bd48d0007ee5c09084c88}\label{classios__base_a2037e2e0e15bd48d0007ee5c09084c88} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries adjustfield} = left \texorpdfstring{$\vert$}{|} right \texorpdfstring{$\vert$}{|} internal
+\item 
+\Hypertarget{classios__base_a80c3dac03e470cadf834464dbf32de68}\label{classios__base_a80c3dac03e470cadf834464dbf32de68} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries showbase} = 0x0100
+\item 
+\Hypertarget{classios__base_a2ef0064922813749752cd019154393d7}\label{classios__base_a2ef0064922813749752cd019154393d7} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries showpoint} = 0x0200
+\item 
+\Hypertarget{classios__base_a99e1a65eb808546e36c7cf0c4f04a1b6}\label{classios__base_a99e1a65eb808546e36c7cf0c4f04a1b6} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries showpos} = 0x0400
+\item 
+\Hypertarget{classios__base_a21f4a64d6387f4f3f4faadf25c1804cb}\label{classios__base_a21f4a64d6387f4f3f4faadf25c1804cb} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries skipws} = 0x0800
+\item 
+\Hypertarget{classios__base_ae805550b8d7289511a68c5ce5edc70b8}\label{classios__base_ae805550b8d7289511a68c5ce5edc70b8} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries unitbuf} = 0x1000
+\item 
+\Hypertarget{classios__base_a8ff0cdce06c82b40588320b92868f90e}\label{classios__base_a8ff0cdce06c82b40588320b92868f90e} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries uppercase} = 0x2000
+\item 
+\Hypertarget{classios__base_a57cc175589305800dc8d5282b9122812}\label{classios__base_a57cc175589305800dc8d5282b9122812} 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries boolalpha} = 0x4000
+\item 
+\Hypertarget{classios__base_a9e80f76d80eef48ceb89ae07b3565f1d}\label{classios__base_a9e80f76d80eef48ceb89ae07b3565f1d} 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries goodbit} = 0x00
+\item 
+\Hypertarget{classios__base_a1ebae9614a76c842f706907ac2223253}\label{classios__base_a1ebae9614a76c842f706907ac2223253} 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries eofbit} = 0x01
+\item 
+\Hypertarget{classios__base_a37815ed37b2dc471ae2cee0a387a5518}\label{classios__base_a37815ed37b2dc471ae2cee0a387a5518} 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries failbit} = 0x02
+\item 
+\Hypertarget{classios__base_a73e3adfbf8e0543cf3a613d9901a5299}\label{classios__base_a73e3adfbf8e0543cf3a613d9901a5299} 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries badbit} = 0x04
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/ios\+\_\+base/ios\+\_\+base.\+h\end{DoxyCompactItemize}

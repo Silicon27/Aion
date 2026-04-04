@@ -1,0 +1,25 @@
+\doxysection{is\+\_\+lvalue\+\_\+reference.\+h}
+\hypertarget{is__lvalue__reference_8h_source}{}\label{is__lvalue__reference_8h_source}\index{core/include/support/si/include/impl/type\_traits/is\_lvalue\_reference.h@{core/include/support/si/include/impl/type\_traits/is\_lvalue\_reference.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/01-\/13.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_IS\_LVALUE\_REFERENCE\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_IS\_LVALUE\_REFERENCE\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}integral\_constant.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__lvalue__reference}{is\_lvalue\_reference}}\ :\ false\_type\ \{\};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__lvalue__reference}{is\_lvalue\_reference}}<T\&>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_lvalue\_reference\_v\ =\ is\_lvalue\_reference<T>::value;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_IS\_LVALUE\_REFERENCE\_H}}
+
+\end{DoxyCode}

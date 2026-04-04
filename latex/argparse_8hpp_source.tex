@@ -1,0 +1,2595 @@
+\doxysection{argparse.\+hpp}
+\hypertarget{argparse_8hpp_source}{}\label{argparse_8hpp_source}\index{core/include/cli/argparse.hpp@{core/include/cli/argparse.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ \ \_\_\ \_\ \_\ \_\_\ \_\_\ \_\ \_\ \_\_\ \ \ \_\_\ \_\ \_\ \_\_\ \_\_\_\ \ \_\_\_}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ /\ \_`\ |\ '\_\_/\ \_`\ |\ '\_\ \(\backslash\)\ /\ \_`\ |\ '\_\_/\ \_\_|/\ \_\ \(\backslash\)\ Argument\ Parser\ for\ Modern\ C++}}
+\DoxyCodeLine{00004\ \textcolor{comment}{|\ (\_|\ |\ |\ |\ (\_|\ |\ |\_)\ |\ (\_|\ |\ |\ \ \(\backslash\)\_\_\ \(\backslash\)\ \ \_\_/\ http://github.com/p-\/ranav/argparse}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ \(\backslash\)\_\_,\_|\_|\ \ \(\backslash\)\_\_,\ |\ .\_\_/\ \(\backslash\)\_\_,\_|\_|\ \ |\_\_\_/\(\backslash\)\_\_\_|}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ |\_\_\_/|\_|}}
+\DoxyCodeLine{00007\ \textcolor{comment}{}}
+\DoxyCodeLine{00008\ \textcolor{comment}{Licensed\ under\ the\ MIT\ License\ <http://opensource.org/licenses/MIT>.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{SPDX-\/License-\/Identifier:\ MIT}}
+\DoxyCodeLine{00010\ \textcolor{comment}{Copyright\ (c)\ 2019-\/2022\ Pranav\ Srinivas\ Kumar\ <pranav.srinivas.kumar@gmail.com>}}
+\DoxyCodeLine{00011\ \textcolor{comment}{and\ other\ contributors.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{}}
+\DoxyCodeLine{00013\ \textcolor{comment}{Permission\ is\ hereby\ \ granted,\ free\ of\ charge,\ to\ any\ \ person\ obtaining\ a\ copy}}
+\DoxyCodeLine{00014\ \textcolor{comment}{of\ this\ software\ and\ associated\ \ documentation\ files\ (the\ "{}Software"{}),\ to\ deal}}
+\DoxyCodeLine{00015\ \textcolor{comment}{in\ the\ Software\ \ without\ restriction,\ including\ without\ \ limitation\ the\ rights}}
+\DoxyCodeLine{00016\ \textcolor{comment}{to\ \ use,\ copy,\ \ modify,\ merge,\ \ publish,\ distribute,\ \ sublicense,\ and/or\ \ sell}}
+\DoxyCodeLine{00017\ \textcolor{comment}{copies\ \ of\ \ the\ Software,\ \ and\ \ to\ \ permit\ persons\ \ to\ \ whom\ \ the\ Software\ \ is}}
+\DoxyCodeLine{00018\ \textcolor{comment}{furnished\ to\ do\ so,\ subject\ to\ the\ following\ conditions:}}
+\DoxyCodeLine{00019\ \textcolor{comment}{}}
+\DoxyCodeLine{00020\ \textcolor{comment}{The\ above\ copyright\ notice\ and\ this\ permission\ notice\ shall\ be\ included\ in\ all}}
+\DoxyCodeLine{00021\ \textcolor{comment}{copies\ or\ substantial\ portions\ of\ the\ Software.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{THE\ SOFTWARE\ \ IS\ PROVIDED\ "{}AS\ \ IS"{},\ WITHOUT\ WARRANTY\ \ OF\ ANY\ KIND,\ \ EXPRESS\ OR}}
+\DoxyCodeLine{00024\ \textcolor{comment}{IMPLIED,\ \ INCLUDING\ BUT\ \ NOT\ \ LIMITED\ TO\ \ THE\ \ WARRANTIES\ OF\ \ MERCHANTABILITY,}}
+\DoxyCodeLine{00025\ \textcolor{comment}{FITNESS\ FOR\ \ A\ PARTICULAR\ PURPOSE\ AND\ \ NONINFRINGEMENT.\ IN\ NO\ EVENT\ \ SHALL\ THE}}
+\DoxyCodeLine{00026\ \textcolor{comment}{AUTHORS\ \ OR\ COPYRIGHT\ \ HOLDERS\ \ BE\ \ LIABLE\ FOR\ \ ANY\ \ CLAIM,\ \ DAMAGES\ OR\ \ OTHER}}
+\DoxyCodeLine{00027\ \textcolor{comment}{LIABILITY,\ WHETHER\ IN\ AN\ ACTION\ OF\ \ CONTRACT,\ TORT\ OR\ OTHERWISE,\ ARISING\ FROM,}}
+\DoxyCodeLine{00028\ \textcolor{comment}{OUT\ OF\ OR\ IN\ CONNECTION\ WITH\ THE\ SOFTWARE\ \ OR\ THE\ USE\ OR\ OTHER\ DEALINGS\ IN\ THE}}
+\DoxyCodeLine{00029\ \textcolor{comment}{SOFTWARE.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ <cerrno>}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#ifndef\ ARGPARSE\_MODULE\_USE\_STD\_MODULE}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <any>}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ <set>}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#include\ <charconv>}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#include\ <cstdlib>}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ <iterator>}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#include\ <list>}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#include\ <numeric>}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#include\ <string\_view>}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#include\ <variant>}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#ifndef\ ARGPARSE\_CUSTOM\_STRTOF}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ ARGPARSE\_CUSTOM\_STRTOF\ strtof}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#ifndef\ ARGPARSE\_CUSTOM\_STRTOD}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ ARGPARSE\_CUSTOM\_STRTOD\ strtod}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#ifndef\ ARGPARSE\_CUSTOM\_STRTOLD}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ ARGPARSE\_CUSTOM\_STRTOLD\ strtold}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{keyword}{namespace\ }argparse\ \{}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{keyword}{namespace\ }details\ \{\ \textcolor{comment}{//\ namespace\ for\ helper\ methods}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ =\ \textcolor{keywordtype}{void}>}
+\DoxyCodeLine{00080\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structargparse_1_1details_1_1_has_container_traits}{HasContainerTraits}}\ :\ std::false\_type\ \{\};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structargparse_1_1details_1_1_has_container_traits}{HasContainerTraits}}<std::string>\ :\ std::false\_type\ \{\};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structargparse_1_1details_1_1_has_container_traits}{HasContainerTraits}}<std::string\_view>\ :\ std::false\_type\ \{\};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00087\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structargparse_1_1details_1_1_has_container_traits}{HasContainerTraits}}<}
+\DoxyCodeLine{00088\ \ \ \ \ T,\ std::void\_t<typename\ T::value\_type,\ decltype(std::declval<T>().begin()),}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ decltype(std::declval<T>().end()),}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ decltype(std::declval<T>().size())>>\ :\ std::true\_type\ \{\};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00093\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ IsContainer\ =\ \mbox{\hyperlink{structargparse_1_1details_1_1_has_container_traits}{HasContainerTraits<T>::value}};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ =\ \textcolor{keywordtype}{void}>}
+\DoxyCodeLine{00096\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structargparse_1_1details_1_1_has_streamable_traits}{HasStreamableTraits}}\ :\ std::false\_type\ \{\};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00099\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structargparse_1_1details_1_1_has_streamable_traits}{HasStreamableTraits}}<}
+\DoxyCodeLine{00100\ \ \ \ \ T,}
+\DoxyCodeLine{00101\ \ \ \ \ std::void\_t<decltype(std::declval<std::ostream\ \&>()\ <<\ std::declval<T>())>>}
+\DoxyCodeLine{00102\ \ \ \ \ :\ std::true\_type\ \{\};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ template\ <typename\ T>}
+\DoxyCodeLine{00105\ inline\ constexpr\ bool\ IsStreamable\ =\ HasStreamableTraits<T>::value;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ constexpr\ std::size\_t\ repr\_max\_container\_size\ =\ 5;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ template\ <typename\ T>\ std::string\ repr(T\ const\ \&val)\ \{}
+\DoxyCodeLine{00110\ \ \ if\ constexpr\ (std::is\_same\_v<T,\ bool>)\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ return\ val\ ?\ "{}true"{}\ :\ "{}false"{};}
+\DoxyCodeLine{00112\ \ \ \}\ else\ if\ constexpr\ (std::is\_convertible\_v<T,\ std::string\_view>)\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ return\ '"{}'\ +\ std::string\{std::string\_view\{val\}\}\ +\ '"{}';}
+\DoxyCodeLine{00114\ \ \ \}\ else\ if\ constexpr\ (IsContainer<T>)\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ std::stringstream\ out;}
+\DoxyCodeLine{00116\ \ \ \ \ out\ <<\ "{}\{"{};}
+\DoxyCodeLine{00117\ \ \ \ \ const\ auto\ size\ =\ val.size();}
+\DoxyCodeLine{00118\ \ \ \ \ if\ (size\ >\ 1)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ out\ <<\ repr(*val.begin());}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ std::for\_each(}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ std::next(val.begin()),}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ std::next(}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.begin(),}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ static\_cast<typename\ T::iterator::difference\_type>(}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::min<std::size\_t>(size,\ repr\_max\_container\_size)\ -\/\ 1)),}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ [\&out](const\ auto\ \&v)\ \{\ out\ <<\ "{}\ "{}\ <<\ repr(v);\ \});}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ if\ (size\ <=\ repr\_max\_container\_size)\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ out\ <<\ "{}\ "{};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ out\ <<\ "{}..."{};}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ \ \ \ \ if\ (size\ >\ 0)\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ out\ <<\ repr(*std::prev(val.end()));}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ \ \ \ \ out\ <<\ "{}\}"{};}
+\DoxyCodeLine{00137\ \ \ \ \ return\ out.str();}
+\DoxyCodeLine{00138\ \ \ \}\ else\ if\ constexpr\ (IsStreamable<T>)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ std::stringstream\ out;}
+\DoxyCodeLine{00140\ \ \ \ \ out\ <<\ val;}
+\DoxyCodeLine{00141\ \ \ \ \ return\ out.str();}
+\DoxyCodeLine{00142\ \ \ \}\ else\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ return\ "{}<not\ representable>"{};}
+\DoxyCodeLine{00144\ \ \ \}}
+\DoxyCodeLine{00145\ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ namespace\ \{}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ template\ <typename\ T>\ constexpr\ bool\ standard\_signed\_integer\ =\ false;}
+\DoxyCodeLine{00150\ template\ <>\ constexpr\ bool\ standard\_signed\_integer<signed\ char>\ =\ true;}
+\DoxyCodeLine{00151\ template\ <>\ constexpr\ bool\ standard\_signed\_integer<short\ int>\ =\ true;}
+\DoxyCodeLine{00152\ template\ <>\ constexpr\ bool\ standard\_signed\_integer<int>\ =\ true;}
+\DoxyCodeLine{00153\ template\ <>\ constexpr\ bool\ standard\_signed\_integer<long\ int>\ =\ true;}
+\DoxyCodeLine{00154\ template\ <>\ constexpr\ bool\ standard\_signed\_integer<long\ long\ int>\ =\ true;}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ template\ <typename\ T>\ constexpr\ bool\ standard\_unsigned\_integer\ =\ false;}
+\DoxyCodeLine{00157\ template\ <>\ constexpr\ bool\ standard\_unsigned\_integer<unsigned\ char>\ =\ true;}
+\DoxyCodeLine{00158\ template\ <>\ constexpr\ bool\ standard\_unsigned\_integer<unsigned\ short\ int>\ =\ true;}
+\DoxyCodeLine{00159\ template\ <>\ constexpr\ bool\ standard\_unsigned\_integer<unsigned\ int>\ =\ true;}
+\DoxyCodeLine{00160\ template\ <>\ constexpr\ bool\ standard\_unsigned\_integer<unsigned\ long\ int>\ =\ true;}
+\DoxyCodeLine{00161\ template\ <>}
+\DoxyCodeLine{00162\ constexpr\ bool\ standard\_unsigned\_integer<unsigned\ long\ long\ int>\ =\ true;}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \}\ \textcolor{comment}{//\ namespace}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ constexpr\ int\ radix\_2\ =\ 2;}
+\DoxyCodeLine{00167\ constexpr\ int\ radix\_8\ =\ 8;}
+\DoxyCodeLine{00168\ constexpr\ int\ radix\_10\ =\ 10;}
+\DoxyCodeLine{00169\ constexpr\ int\ radix\_16\ =\ 16;}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ template\ <typename\ T>}
+\DoxyCodeLine{00172\ constexpr\ bool\ standard\_integer\ =}
+\DoxyCodeLine{00173\ \ \ \ \ standard\_signed\_integer<T>\ ||\ standard\_unsigned\_integer<T>;}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ template\ <class\ F,\ class\ Tuple,\ class\ Extra,\ std::size\_t...\ I>}
+\DoxyCodeLine{00176\ constexpr\ decltype(auto)}
+\DoxyCodeLine{00177\ apply\_plus\_one\_impl(F\ \&\&f,\ Tuple\ \&\&t,\ Extra\ \&\&x,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::index\_sequence<I...>\ \textcolor{comment}{/*unused*/})\ \{}
+\DoxyCodeLine{00179\ \ \ return\ std::invoke(std::forward<F>(f),\ std::get<I>(std::forward<Tuple>(t))...,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::forward<Extra>(x));}
+\DoxyCodeLine{00181\ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ template\ <class\ F,\ class\ Tuple,\ class\ Extra>}
+\DoxyCodeLine{00184\ constexpr\ decltype(auto)\ apply\_plus\_one(F\ \&\&f,\ Tuple\ \&\&t,\ Extra\ \&\&x)\ \{}
+\DoxyCodeLine{00185\ \ \ return\ details::apply\_plus\_one\_impl(}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ std::forward<F>(f),\ std::forward<Tuple>(t),\ std::forward<Extra>(x),}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ std::make\_index\_sequence<}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ std::tuple\_size\_v<std::remove\_reference\_t<Tuple>>>\{\});}
+\DoxyCodeLine{00189\ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ constexpr\ auto\ pointer\_range(std::string\_view\ s)\ noexcept\ \{}
+\DoxyCodeLine{00192\ \ \ return\ std::tuple(s.data(),\ s.data()\ +\ s.size());}
+\DoxyCodeLine{00193\ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ template\ <class\ CharT,\ class\ Traits>}
+\DoxyCodeLine{00196\ constexpr\ bool\ starts\_with(std::basic\_string\_view<CharT,\ Traits>\ prefix,}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::basic\_string\_view<CharT,\ Traits>\ s)\ noexcept\ \{}
+\DoxyCodeLine{00198\ \ \ return\ s.substr(0,\ prefix.size())\ ==\ prefix;}
+\DoxyCodeLine{00199\ \}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ enum\ class\ chars\_format\ \{}
+\DoxyCodeLine{00202\ \ \ scientific\ =\ 0xf1,}
+\DoxyCodeLine{00203\ \ \ fixed\ =\ 0xf2,}
+\DoxyCodeLine{00204\ \ \ hex\ =\ 0xf4,}
+\DoxyCodeLine{00205\ \ \ binary\ =\ 0xf8,}
+\DoxyCodeLine{00206\ \ \ general\ =\ fixed\ |\ scientific}
+\DoxyCodeLine{00207\ \};}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ struct\ ConsumeBinaryPrefixResult\ \{}
+\DoxyCodeLine{00210\ \ \ bool\ is\_binary;}
+\DoxyCodeLine{00211\ \ \ std::string\_view\ rest;}
+\DoxyCodeLine{00212\ \};}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ constexpr\ auto\ consume\_binary\_prefix(std::string\_view\ s)}
+\DoxyCodeLine{00215\ \ \ \ \ -\/>\ ConsumeBinaryPrefixResult\ \{}
+\DoxyCodeLine{00216\ \ \ if\ (starts\_with(std::string\_view\{"{}0b"{}\},\ s)\ ||}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ starts\_with(std::string\_view\{"{}0B"{}\},\ s))\ \{}
+\DoxyCodeLine{00218\ \ \ \ \ s.remove\_prefix(2);}
+\DoxyCodeLine{00219\ \ \ \ \ return\ \{true,\ s\};}
+\DoxyCodeLine{00220\ \ \ \}}
+\DoxyCodeLine{00221\ \ \ return\ \{false,\ s\};}
+\DoxyCodeLine{00222\ \}}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ struct\ ConsumeHexPrefixResult\ \{}
+\DoxyCodeLine{00225\ \ \ bool\ is\_hexadecimal;}
+\DoxyCodeLine{00226\ \ \ std::string\_view\ rest;}
+\DoxyCodeLine{00227\ \};}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ using\ namespace\ std::literals;}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ constexpr\ auto\ consume\_hex\_prefix(std::string\_view\ s)}
+\DoxyCodeLine{00232\ \ \ \ \ -\/>\ ConsumeHexPrefixResult\ \{}
+\DoxyCodeLine{00233\ \ \ if\ (starts\_with("{}0x"{}sv,\ s)\ ||\ starts\_with("{}0X"{}sv,\ s))\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ s.remove\_prefix(2);}
+\DoxyCodeLine{00235\ \ \ \ \ return\ \{true,\ s\};}
+\DoxyCodeLine{00236\ \ \ \}}
+\DoxyCodeLine{00237\ \ \ return\ \{false,\ s\};}
+\DoxyCodeLine{00238\ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ template\ <class\ T,\ auto\ Param>}
+\DoxyCodeLine{00241\ inline\ auto\ do\_from\_chars(std::string\_view\ s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00242\ \ \ T\ x\{0\};}
+\DoxyCodeLine{00243\ \ \ auto\ [first,\ last]\ =\ pointer\_range(s);}
+\DoxyCodeLine{00244\ \ \ auto\ [ptr,\ ec]\ =\ std::from\_chars(first,\ last,\ x,\ Param);}
+\DoxyCodeLine{00245\ \ \ if\ (ec\ ==\ std::errc())\ \{}
+\DoxyCodeLine{00246\ \ \ \ \ if\ (ptr\ ==\ last)\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ return\ x;}
+\DoxyCodeLine{00248\ \ \ \ \ \}}
+\DoxyCodeLine{00249\ \ \ \ \ throw\ std::invalid\_argument\{"{}pattern\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ does\ not\ match\ to\ the\ end"{}\};}
+\DoxyCodeLine{00251\ \ \ \}}
+\DoxyCodeLine{00252\ \ \ if\ (ec\ ==\ std::errc::invalid\_argument)\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ throw\ std::invalid\_argument\{"{}pattern\ '"{}\ +\ std::string(s)\ +\ "{}'\ not\ found"{}\};}
+\DoxyCodeLine{00254\ \ \ \}}
+\DoxyCodeLine{00255\ \ \ if\ (ec\ ==\ std::errc::result\_out\_of\_range)\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ throw\ std::range\_error\{"{}'"{}\ +\ std::string(s)\ +\ "{}'\ not\ representable"{}\};}
+\DoxyCodeLine{00257\ \ \ \}}
+\DoxyCodeLine{00258\ \ \ return\ x;\ \textcolor{comment}{//\ unreachable}}
+\DoxyCodeLine{00259\ \}}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ template\ <class\ T,\ auto\ Param\ =\ 0>\ struct\ parse\_number\ \{}
+\DoxyCodeLine{00262\ \ \ auto\ operator()(std::string\_view\ s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ return\ do\_from\_chars<T,\ Param>(s);}
+\DoxyCodeLine{00264\ \ \ \}}
+\DoxyCodeLine{00265\ \};}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ template\ <class\ T>\ struct\ parse\_number<T,\ radix\_2>\ \{}
+\DoxyCodeLine{00268\ \ \ auto\ operator()(std::string\_view\ s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ if\ (auto\ [ok,\ rest]\ =\ consume\_binary\_prefix(s);\ ok)\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ return\ do\_from\_chars<T,\ radix\_2>(rest);}
+\DoxyCodeLine{00271\ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ throw\ std::invalid\_argument\{"{}pattern\ not\ found"{}\};}
+\DoxyCodeLine{00273\ \ \ \}}
+\DoxyCodeLine{00274\ \};}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ template\ <class\ T>\ struct\ parse\_number<T,\ radix\_16>\ \{}
+\DoxyCodeLine{00277\ \ \ auto\ operator()(std::string\_view\ s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00278\ \ \ \ \ if\ (starts\_with("{}0x"{}sv,\ s)\ ||\ starts\_with("{}0X"{}sv,\ s))\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ if\ (auto\ [ok,\ rest]\ =\ consume\_hex\_prefix(s);\ ok)\ \{}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ try\ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ return\ do\_from\_chars<T,\ radix\_16>(rest);}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00290\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \textcolor{comment}{//\ Allow\ passing\ hex\ numbers\ without\ prefix}}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \textcolor{comment}{//\ Shape\ 'x'\ already\ has\ to\ be\ specified}}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ try\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ return\ do\_from\_chars<T,\ radix\_16>(s);}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00302\ \ \ \ \ \}}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ throw\ std::invalid\_argument\{"{}pattern\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ not\ identified\ as\ hexadecimal"{}\};}
+\DoxyCodeLine{00306\ \ \ \}}
+\DoxyCodeLine{00307\ \};}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ template\ <class\ T>\ struct\ parse\_number<T>\ \{}
+\DoxyCodeLine{00310\ \ \ auto\ operator()(std::string\_view\ s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00311\ \ \ \ \ auto\ [ok,\ rest]\ =\ consume\_hex\_prefix(s);}
+\DoxyCodeLine{00312\ \ \ \ \ if\ (ok)\ \{}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ try\ \{}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ return\ do\_from\_chars<T,\ radix\_16>(rest);}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00322\ \ \ \ \ \}}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ auto\ [ok\_binary,\ rest\_binary]\ =\ consume\_binary\_prefix(s);}
+\DoxyCodeLine{00325\ \ \ \ \ if\ (ok\_binary)\ \{}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ try\ \{}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ return\ do\_from\_chars<T,\ radix\_2>(rest\_binary);}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ binary:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ binary:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00335\ \ \ \ \ \}}
+\DoxyCodeLine{00336\ }
+\DoxyCodeLine{00337\ \ \ \ \ if\ (starts\_with("{}0"{}sv,\ s))\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ try\ \{}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ return\ do\_from\_chars<T,\ radix\_8>(rest);}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ octal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ octal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00347\ \ \ \ \ \}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ try\ \{}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ return\ do\_from\_chars<T,\ radix\_10>(rest);}
+\DoxyCodeLine{00351\ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ decimal\ integer:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00354\ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ std::string(s)\ +}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ decimal\ integer:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00357\ \ \ \ \ \}}
+\DoxyCodeLine{00358\ \ \ \}}
+\DoxyCodeLine{00359\ \};}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ namespace\ \{}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ template\ <class\ T>\ inline\ const\ auto\ generic\_strtod\ =\ nullptr;}
+\DoxyCodeLine{00364\ template\ <>\ inline\ const\ auto\ generic\_strtod<float>\ =\ ARGPARSE\_CUSTOM\_STRTOF;}
+\DoxyCodeLine{00365\ template\ <>\ inline\ const\ auto\ generic\_strtod<double>\ =\ ARGPARSE\_CUSTOM\_STRTOD;}
+\DoxyCodeLine{00366\ template\ <>}
+\DoxyCodeLine{00367\ inline\ const\ auto\ generic\_strtod<long\ double>\ =\ ARGPARSE\_CUSTOM\_STRTOLD;}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \}\ \textcolor{comment}{//\ namespace}}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ template\ <class\ T>\ inline\ auto\ do\_strtod(std::string\ const\ \&s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00372\ \ \ if\ (isspace(static\_cast<unsigned\ char>(s[0]))\ ||\ s[0]\ ==\ '+')\ \{}
+\DoxyCodeLine{00373\ \ \ \ \ throw\ std::invalid\_argument\{"{}pattern\ '"{}\ +\ s\ +\ "{}'\ not\ found"{}\};}
+\DoxyCodeLine{00374\ \ \ \}}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ auto\ [first,\ last]\ =\ pointer\_range(s);}
+\DoxyCodeLine{00377\ \ \ char\ *ptr;}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ errno\ =\ 0;}
+\DoxyCodeLine{00380\ \ \ auto\ x\ =\ generic\_strtod<T>(first,\ \&ptr);}
+\DoxyCodeLine{00381\ \ \ if\ (errno\ ==\ 0)\ \{}
+\DoxyCodeLine{00382\ \ \ \ \ if\ (ptr\ ==\ last)\ \{}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ return\ x;}
+\DoxyCodeLine{00384\ \ \ \ \ \}}
+\DoxyCodeLine{00385\ \ \ \ \ throw\ std::invalid\_argument\{"{}pattern\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ does\ not\ match\ to\ the\ end"{}\};}
+\DoxyCodeLine{00387\ \ \ \}}
+\DoxyCodeLine{00388\ \ \ if\ (errno\ ==\ ERANGE)\ \{}
+\DoxyCodeLine{00389\ \ \ \ \ throw\ std::range\_error\{"{}'"{}\ +\ s\ +\ "{}'\ not\ representable"{}\};}
+\DoxyCodeLine{00390\ \ \ \}}
+\DoxyCodeLine{00391\ \ \ return\ x;\ \textcolor{comment}{//\ unreachable}}
+\DoxyCodeLine{00392\ \}}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00394\ template\ <class\ T>\ struct\ parse\_number<T,\ chars\_format::general>\ \{}
+\DoxyCodeLine{00395\ \ \ auto\ operator()(std::string\ const\ \&s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00396\ \ \ \ \ if\ (auto\ r\ =\ consume\_hex\_prefix(s);\ r.is\_hexadecimal)\ \{}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::general\ does\ not\ parse\ hexfloat"{}\};}
+\DoxyCodeLine{00399\ \ \ \ \ \}}
+\DoxyCodeLine{00400\ \ \ \ \ if\ (auto\ r\ =\ consume\_binary\_prefix(s);\ r.is\_binary)\ \{}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::general\ does\ not\ parse\ binfloat"{}\};}
+\DoxyCodeLine{00403\ \ \ \ \ \}}
+\DoxyCodeLine{00404\ }
+\DoxyCodeLine{00405\ \ \ \ \ try\ \{}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ return\ do\_strtod<T>(s);}
+\DoxyCodeLine{00407\ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ number:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00410\ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ number:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00413\ \ \ \ \ \}}
+\DoxyCodeLine{00414\ \ \ \}}
+\DoxyCodeLine{00415\ \};}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ template\ <class\ T>\ struct\ parse\_number<T,\ chars\_format::hex>\ \{}
+\DoxyCodeLine{00418\ \ \ auto\ operator()(std::string\ const\ \&s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00419\ \ \ \ \ if\ (auto\ r\ =\ consume\_hex\_prefix(s);\ !r.is\_hexadecimal)\ \{}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ throw\ std::invalid\_argument\{"{}chars\_format::hex\ parses\ hexfloat"{}\};}
+\DoxyCodeLine{00421\ \ \ \ \ \}}
+\DoxyCodeLine{00422\ \ \ \ \ if\ (auto\ r\ =\ consume\_binary\_prefix(s);\ r.is\_binary)\ \{}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ throw\ std::invalid\_argument\{"{}chars\_format::hex\ does\ not\ parse\ binfloat"{}\};}
+\DoxyCodeLine{00424\ \ \ \ \ \}}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ try\ \{}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ return\ do\_strtod<T>(s);}
+\DoxyCodeLine{00428\ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00431\ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ hexadecimal:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00434\ \ \ \ \ \}}
+\DoxyCodeLine{00435\ \ \ \}}
+\DoxyCodeLine{00436\ \};}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ template\ <class\ T>\ struct\ parse\_number<T,\ chars\_format::binary>\ \{}
+\DoxyCodeLine{00439\ \ \ auto\ operator()(std::string\ const\ \&s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00440\ \ \ \ \ if\ (auto\ r\ =\ consume\_hex\_prefix(s);\ r.is\_hexadecimal)\ \{}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::binary\ does\ not\ parse\ hexfloat"{}\};}
+\DoxyCodeLine{00443\ \ \ \ \ \}}
+\DoxyCodeLine{00444\ \ \ \ \ if\ (auto\ r\ =\ consume\_binary\_prefix(s);\ !r.is\_binary)\ \{}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ throw\ std::invalid\_argument\{"{}chars\_format::binary\ parses\ binfloat"{}\};}
+\DoxyCodeLine{00446\ \ \ \ \ \}}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ return\ do\_strtod<T>(s);}
+\DoxyCodeLine{00449\ \ \ \}}
+\DoxyCodeLine{00450\ \};}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ template\ <class\ T>\ struct\ parse\_number<T,\ chars\_format::scientific>\ \{}
+\DoxyCodeLine{00453\ \ \ auto\ operator()(std::string\ const\ \&s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00454\ \ \ \ \ if\ (auto\ r\ =\ consume\_hex\_prefix(s);\ r.is\_hexadecimal)\ \{}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::scientific\ does\ not\ parse\ hexfloat"{}\};}
+\DoxyCodeLine{00457\ \ \ \ \ \}}
+\DoxyCodeLine{00458\ \ \ \ \ if\ (auto\ r\ =\ consume\_binary\_prefix(s);\ r.is\_binary)\ \{}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::scientific\ does\ not\ parse\ binfloat"{}\};}
+\DoxyCodeLine{00461\ \ \ \ \ \}}
+\DoxyCodeLine{00462\ \ \ \ \ if\ (s.find\_first\_of("{}eE"{})\ ==\ std::string::npos)\ \{}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::scientific\ requires\ exponent\ part"{}\};}
+\DoxyCodeLine{00465\ \ \ \ \ \}}
+\DoxyCodeLine{00466\ }
+\DoxyCodeLine{00467\ \ \ \ \ try\ \{}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ return\ do\_strtod<T>(s);}
+\DoxyCodeLine{00469\ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ scientific\ notation:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00472\ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ scientific\ notation:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00475\ \ \ \ \ \}}
+\DoxyCodeLine{00476\ \ \ \}}
+\DoxyCodeLine{00477\ \};}
+\DoxyCodeLine{00478\ }
+\DoxyCodeLine{00479\ template\ <class\ T>\ struct\ parse\_number<T,\ chars\_format::fixed>\ \{}
+\DoxyCodeLine{00480\ \ \ auto\ operator()(std::string\ const\ \&s)\ -\/>\ T\ \{}
+\DoxyCodeLine{00481\ \ \ \ \ if\ (auto\ r\ =\ consume\_hex\_prefix(s);\ r.is\_hexadecimal)\ \{}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::fixed\ does\ not\ parse\ hexfloat"{}\};}
+\DoxyCodeLine{00484\ \ \ \ \ \}}
+\DoxyCodeLine{00485\ \ \ \ \ if\ (auto\ r\ =\ consume\_binary\_prefix(s);\ r.is\_binary)\ \{}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::fixed\ does\ not\ parse\ binfloat"{}\};}
+\DoxyCodeLine{00488\ \ \ \ \ \}}
+\DoxyCodeLine{00489\ \ \ \ \ if\ (s.find\_first\_of("{}eE"{})\ !=\ std::string::npos)\ \{}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ throw\ std::invalid\_argument\{}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ "{}chars\_format::fixed\ does\ not\ parse\ exponent\ part"{}\};}
+\DoxyCodeLine{00492\ \ \ \ \ \}}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \ \ \ \ try\ \{}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ return\ do\_strtod<T>(s);}
+\DoxyCodeLine{00496\ \ \ \ \ \}\ catch\ (const\ std::invalid\_argument\ \&err)\ \{}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ throw\ std::invalid\_argument("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ fixed\ notation:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00499\ \ \ \ \ \}\ catch\ (const\ std::range\_error\ \&err)\ \{}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ throw\ std::range\_error("{}Failed\ to\ parse\ '"{}\ +\ s\ +}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ as\ fixed\ notation:\ "{}\ +\ err.what());}
+\DoxyCodeLine{00502\ \ \ \ \ \}}
+\DoxyCodeLine{00503\ \ \ \}}
+\DoxyCodeLine{00504\ \};}
+\DoxyCodeLine{00505\ }
+\DoxyCodeLine{00506\ template\ <typename\ StrIt>}
+\DoxyCodeLine{00507\ std::string\ join(StrIt\ first,\ StrIt\ last,\ const\ std::string\ \&separator)\ \{}
+\DoxyCodeLine{00508\ \ \ if\ (first\ ==\ last)\ \{}
+\DoxyCodeLine{00509\ \ \ \ \ return\ "{}"{};}
+\DoxyCodeLine{00510\ \ \ \}}
+\DoxyCodeLine{00511\ \ \ std::stringstream\ value;}
+\DoxyCodeLine{00512\ \ \ value\ <<\ *first;}
+\DoxyCodeLine{00513\ \ \ ++first;}
+\DoxyCodeLine{00514\ \ \ while\ (first\ !=\ last)\ \{}
+\DoxyCodeLine{00515\ \ \ \ \ value\ <<\ separator\ <<\ *first;}
+\DoxyCodeLine{00516\ \ \ \ \ ++first;}
+\DoxyCodeLine{00517\ \ \ \}}
+\DoxyCodeLine{00518\ \ \ return\ value.str();}
+\DoxyCodeLine{00519\ \}}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ template\ <typename\ T>\ struct\ can\_invoke\_to\_string\ \{}
+\DoxyCodeLine{00522\ \ \ template\ <typename\ U>}
+\DoxyCodeLine{00523\ \ \ static\ auto\ test(int)}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ -\/>\ decltype(std::to\_string(std::declval<U>()),\ std::true\_type\{\});}
+\DoxyCodeLine{00525\ }
+\DoxyCodeLine{00526\ \ \ template\ <typename\ U>\ static\ auto\ test(...)\ -\/>\ std::false\_type;}
+\DoxyCodeLine{00527\ }
+\DoxyCodeLine{00528\ \ \ static\ constexpr\ bool\ value\ =\ decltype(test<T>(0))::value;}
+\DoxyCodeLine{00529\ \};}
+\DoxyCodeLine{00530\ }
+\DoxyCodeLine{00531\ template\ <typename\ T>\ struct\ IsChoiceTypeSupported\ \{}
+\DoxyCodeLine{00532\ \ \ using\ CleanType\ =\ typename\ std::decay<T>::type;}
+\DoxyCodeLine{00533\ \ \ static\ const\ bool\ value\ =\ std::is\_integral<CleanType>::value\ ||}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_same<CleanType,\ std::string>::value\ ||}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_same<CleanType,\ std::string\_view>::value\ ||}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_same<CleanType,\ const\ char\ *>::value;}
+\DoxyCodeLine{00537\ \};}
+\DoxyCodeLine{00538\ }
+\DoxyCodeLine{00539\ template\ <typename\ StringType>}
+\DoxyCodeLine{00540\ std::size\_t\ get\_levenshtein\_distance(const\ StringType\ \&s1,}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ StringType\ \&s2)\ \{}
+\DoxyCodeLine{00542\ \ \ std::vector<std::vector<std::size\_t>>\ dp(}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ s1.size()\ +\ 1,\ std::vector<std::size\_t>(s2.size()\ +\ 1,\ 0));}
+\DoxyCodeLine{00544\ }
+\DoxyCodeLine{00545\ \ \ for\ (std::size\_t\ i\ =\ 0;\ i\ <=\ s1.size();\ ++i)\ \{}
+\DoxyCodeLine{00546\ \ \ \ \ for\ (std::size\_t\ j\ =\ 0;\ j\ <=\ s2.size();\ ++j)\ \{}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ if\ (i\ ==\ 0)\ \{}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ dp[i][j]\ =\ j;}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \}\ else\ if\ (j\ ==\ 0)\ \{}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ dp[i][j]\ =\ i;}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \}\ else\ if\ (s1[i\ -\/\ 1]\ ==\ s2[j\ -\/\ 1])\ \{}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ dp[i][j]\ =\ dp[i\ -\/\ 1][j\ -\/\ 1];}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ dp[i][j]\ =\ 1\ +\ std::min<std::size\_t>(\{dp[i\ -\/\ 1][j],\ dp[i][j\ -\/\ 1],\ dp[i\ -\/\ 1][j\ -\/\ 1]\});}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00556\ \ \ \ \ \}}
+\DoxyCodeLine{00557\ \ \ \}}
+\DoxyCodeLine{00558\ }
+\DoxyCodeLine{00559\ \ \ return\ dp[s1.size()][s2.size()];}
+\DoxyCodeLine{00560\ \}}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ template\ <typename\ ValueType>}
+\DoxyCodeLine{00563\ std::string\ get\_most\_similar\_string(const\ std::map<std::string,\ ValueType>\ \&map,}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ std::string\ \&input)\ \{}
+\DoxyCodeLine{00565\ \ \ std::string\ most\_similar\{\};}
+\DoxyCodeLine{00566\ \ \ std::size\_t\ min\_distance\ =\ (std::numeric\_limits<std::size\_t>::max)();}
+\DoxyCodeLine{00567\ }
+\DoxyCodeLine{00568\ \ \ for\ (const\ auto\ \&entry\ :\ map)\ \{}
+\DoxyCodeLine{00569\ \ \ \ \ std::size\_t\ distance\ =\ get\_levenshtein\_distance(entry.first,\ input);}
+\DoxyCodeLine{00570\ \ \ \ \ if\ (distance\ <\ min\_distance)\ \{}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ min\_distance\ =\ distance;}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ most\_similar\ =\ entry.first;}
+\DoxyCodeLine{00573\ \ \ \ \ \}}
+\DoxyCodeLine{00574\ \ \ \}}
+\DoxyCodeLine{00575\ }
+\DoxyCodeLine{00576\ \ \ return\ most\_similar;}
+\DoxyCodeLine{00577\ \}}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00579\ \}\ \textcolor{comment}{//\ namespace\ details}}
+\DoxyCodeLine{00580\ }
+\DoxyCodeLine{00581\ enum\ class\ nargs\_pattern\ \{\ optional,\ any,\ at\_least\_one\ \};}
+\DoxyCodeLine{00582\ }
+\DoxyCodeLine{00583\ enum\ class\ default\_arguments\ :\ unsigned\ int\ \{}
+\DoxyCodeLine{00584\ \ \ none\ =\ 0,}
+\DoxyCodeLine{00585\ \ \ help\ =\ 1,}
+\DoxyCodeLine{00586\ \ \ version\ =\ 2,}
+\DoxyCodeLine{00587\ \ \ all\ =\ help\ |\ version,}
+\DoxyCodeLine{00588\ \};}
+\DoxyCodeLine{00589\ }
+\DoxyCodeLine{00590\ inline\ default\_arguments\ operator\&(const\ default\_arguments\ \&a,}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ default\_arguments\ \&b)\ \{}
+\DoxyCodeLine{00592\ \ \ return\ static\_cast<default\_arguments>(}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ static\_cast<std::underlying\_type<default\_arguments>::type>(a)\ \&}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ static\_cast<std::underlying\_type<default\_arguments>::type>(b));}
+\DoxyCodeLine{00595\ \}}
+\DoxyCodeLine{00596\ }
+\DoxyCodeLine{00597\ class\ ArgumentParser;}
+\DoxyCodeLine{00598\ }
+\DoxyCodeLine{00599\ class\ Argument\ \{}
+\DoxyCodeLine{00600\ \ \ friend\ class\ ArgumentParser;}
+\DoxyCodeLine{00601\ \ \ friend\ auto\ operator<<(std::ostream\ \&stream,\ const\ ArgumentParser\ \&parser)}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ -\/>\ std::ostream\ \&;}
+\DoxyCodeLine{00603\ }
+\DoxyCodeLine{00604\ \ \ template\ <std::size\_t\ N,\ std::size\_t...\ I>}
+\DoxyCodeLine{00605\ \ \ explicit\ Argument(std::string\_view\ prefix\_chars,}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::array<std::string\_view,\ N>\ \&\&a,}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::index\_sequence<I...>\ \textcolor{comment}{/*unused*/})}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ :\ m\_accepts\_optional\_like\_value(false),}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ m\_is\_optional((is\_optional(a[I],\ prefix\_chars)\ ||\ ...)),}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ m\_is\_required(false),\ m\_is\_repeatable(false),\ m\_is\_used(false),}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ m\_is\_hidden(false),\ m\_prefix\_chars(prefix\_chars)\ \{}
+\DoxyCodeLine{00612\ \ \ \ \ ((void)m\_names.emplace\_back(a[I]),\ ...);}
+\DoxyCodeLine{00613\ \ \ \ \ std::sort(}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ m\_names.begin(),\ m\_names.end(),\ [](const\ auto\ \&lhs,\ const\ auto\ \&rhs)\ \{}
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \ \ return\ lhs.size()\ ==\ rhs.size()\ ?\ lhs\ <\ rhs\ :\ lhs.size()\ <\ rhs.size();}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00617\ \ \ \}}
+\DoxyCodeLine{00618\ }
+\DoxyCodeLine{00619\ public:}
+\DoxyCodeLine{00620\ \ \ template\ <std::size\_t\ N>}
+\DoxyCodeLine{00621\ \ \ explicit\ Argument(std::string\_view\ prefix\_chars,}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::array<std::string\_view,\ N>\ \&\&a)}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ :\ Argument(prefix\_chars,\ std::move(a),\ std::make\_index\_sequence<N>\{\})\ \{\}}
+\DoxyCodeLine{00624\ }
+\DoxyCodeLine{00625\ \ \ Argument\ \&help(std::string\ help\_text)\ \{}
+\DoxyCodeLine{00626\ \ \ \ \ m\_help\ =\ std::move(help\_text);}
+\DoxyCodeLine{00627\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00628\ \ \ \}}
+\DoxyCodeLine{00629\ }
+\DoxyCodeLine{00630\ \ \ Argument\ \&metavar(std::string\ metavar)\ \{}
+\DoxyCodeLine{00631\ \ \ \ \ m\_metavar\ =\ std::move(metavar);}
+\DoxyCodeLine{00632\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00633\ \ \ \}}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00635\ \ \ template\ <typename\ T>\ Argument\ \&default\_value(T\ \&\&value)\ \{}
+\DoxyCodeLine{00636\ \ \ \ \ m\_num\_args\_range\ =\ NArgsRange\{0,\ m\_num\_args\_range.get\_max()\};}
+\DoxyCodeLine{00637\ \ \ \ \ m\_default\_value\_repr\ =\ details::repr(value);}
+\DoxyCodeLine{00638\ }
+\DoxyCodeLine{00639\ \ \ \ \ if\ constexpr\ (std::is\_convertible\_v<T,\ std::string\_view>)\ \{}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ m\_default\_value\_str\ =\ std::string\{std::string\_view\{value\}\};}
+\DoxyCodeLine{00641\ \ \ \ \ \}\ else\ if\ constexpr\ (details::can\_invoke\_to\_string<T>::value)\ \{}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ m\_default\_value\_str\ =\ std::to\_string(value);}
+\DoxyCodeLine{00643\ \ \ \ \ \}}
+\DoxyCodeLine{00644\ }
+\DoxyCodeLine{00645\ \ \ \ \ m\_default\_value\ =\ std::forward<T>(value);}
+\DoxyCodeLine{00646\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00647\ \ \ \}}
+\DoxyCodeLine{00648\ }
+\DoxyCodeLine{00649\ \ \ Argument\ \&default\_value(const\ char\ *value)\ \{}
+\DoxyCodeLine{00650\ \ \ \ \ return\ default\_value(std::string(value));}
+\DoxyCodeLine{00651\ \ \ \}}
+\DoxyCodeLine{00652\ }
+\DoxyCodeLine{00653\ \ \ Argument\ \&required()\ \{}
+\DoxyCodeLine{00654\ \ \ \ \ m\_is\_required\ =\ true;}
+\DoxyCodeLine{00655\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00656\ \ \ \}}
+\DoxyCodeLine{00657\ }
+\DoxyCodeLine{00658\ \ \ Argument\ \&implicit\_value(std::any\ value)\ \{}
+\DoxyCodeLine{00659\ \ \ \ \ m\_implicit\_value\ =\ std::move(value);}
+\DoxyCodeLine{00660\ \ \ \ \ m\_num\_args\_range\ =\ NArgsRange\{0,\ 0\};}
+\DoxyCodeLine{00661\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00662\ \ \ \}}
+\DoxyCodeLine{00663\ }
+\DoxyCodeLine{00664\ \ \ \textcolor{comment}{//\ This\ is\ shorthand\ for:}}
+\DoxyCodeLine{00665\ \ \ \textcolor{comment}{//\ \ \ program.add\_argument("{}foo"{})}}
+\DoxyCodeLine{00666\ \ \ \textcolor{comment}{//\ \ \ \ \ .default\_value(false)}}
+\DoxyCodeLine{00667\ \ \ \textcolor{comment}{//\ \ \ \ \ .implicit\_value(true)}}
+\DoxyCodeLine{00668\ \ \ Argument\ \&flag()\ \{}
+\DoxyCodeLine{00669\ \ \ \ \ default\_value(false);}
+\DoxyCodeLine{00670\ \ \ \ \ implicit\_value(true);}
+\DoxyCodeLine{00671\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00672\ \ \ \}}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00674\ \ \ template\ <class\ F,\ class...\ Args>}
+\DoxyCodeLine{00675\ \ \ auto\ action(F\ \&\&callable,\ Args\ \&\&...\ bound\_args)}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ -\/>\ std::enable\_if\_t<std::is\_invocable\_v<F,\ Args...,\ std::string\ const>,}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Argument\ \&>\ \{}
+\DoxyCodeLine{00678\ \ \ \ \ using\ action\_type\ =\ std::conditional\_t<}
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ std::is\_void\_v<std::invoke\_result\_t<F,\ Args...,\ std::string\ const>>,}
+\DoxyCodeLine{00680\ \ \ \ \ \ \ \ \ void\_action,\ valued\_action>;}
+\DoxyCodeLine{00681\ \ \ \ \ if\ constexpr\ (sizeof...(Args)\ ==\ 0)\ \{}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ m\_actions.emplace\_back<action\_type>(std::forward<F>(callable));}
+\DoxyCodeLine{00683\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ m\_actions.emplace\_back<action\_type>(}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \ \ [f\ =\ std::forward<F>(callable),}
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ tup\ =\ std::make\_tuple(std::forward<Args>(bound\_args)...)](}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ const\ \&opt)\ mutable\ \{}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ return\ details::apply\_plus\_one(f,\ tup,\ opt);}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00690\ \ \ \ \ \}}
+\DoxyCodeLine{00691\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00692\ \ \ \}}
+\DoxyCodeLine{00693\ }
+\DoxyCodeLine{00694\ \ \ auto\ \&store\_into(bool\ \&var)\ \{}
+\DoxyCodeLine{00695\ \ \ \ \ if\ ((!m\_default\_value.has\_value())\ \&\&\ (!m\_implicit\_value.has\_value()))\ \{}
+\DoxyCodeLine{00696\ \ \ \ \ \ \ flag();}
+\DoxyCodeLine{00697\ \ \ \ \ \}}
+\DoxyCodeLine{00698\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00699\ \ \ \ \ \ \ var\ =\ std::any\_cast<bool>(m\_default\_value);}
+\DoxyCodeLine{00700\ \ \ \ \ \}}
+\DoxyCodeLine{00701\ \ \ \ \ action([\&var](const\ auto\ \&\ \textcolor{comment}{/*unused*/})\ \{}
+\DoxyCodeLine{00702\ \ \ \ \ \ \ var\ =\ true;}
+\DoxyCodeLine{00703\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00704\ \ \ \ \ \});}
+\DoxyCodeLine{00705\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00706\ \ \ \}}
+\DoxyCodeLine{00707\ }
+\DoxyCodeLine{00708\ \ \ template\ <typename\ T,\ typename\ std::enable\_if<std::is\_integral<T>::value>::type\ *\ =\ nullptr>}
+\DoxyCodeLine{00709\ \ \ auto\ \&store\_into(T\ \&var)\ \{}
+\DoxyCodeLine{00710\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ var\ =\ std::any\_cast<T>(m\_default\_value);}
+\DoxyCodeLine{00712\ \ \ \ \ \}}
+\DoxyCodeLine{00713\ \ \ \ \ action([\&var](const\ auto\ \&s)\ \{}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ var\ =\ details::parse\_number<T,\ details::radix\_10>()(s);}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00716\ \ \ \ \ \});}
+\DoxyCodeLine{00717\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00718\ \ \ \}}
+\DoxyCodeLine{00719\ }
+\DoxyCodeLine{00720\ \ \ template\ <typename\ T,\ typename\ std::enable\_if<std::is\_floating\_point<T>::value>::type\ *\ =\ nullptr>}
+\DoxyCodeLine{00721\ \ \ auto\ \&store\_into(T\ \&var)\ \{}
+\DoxyCodeLine{00722\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ var\ =\ std::any\_cast<T>(m\_default\_value);}
+\DoxyCodeLine{00724\ \ \ \ \ \}}
+\DoxyCodeLine{00725\ \ \ \ \ action([\&var](const\ auto\ \&s)\ \{}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ var\ =\ details::parse\_number<T,\ details::chars\_format::general>()(s);}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00728\ \ \ \ \ \});}
+\DoxyCodeLine{00729\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00730\ \ \ \}}
+\DoxyCodeLine{00731\ }
+\DoxyCodeLine{00732\ \ \ auto\ \&store\_into(std::string\ \&var)\ \{}
+\DoxyCodeLine{00733\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00734\ \ \ \ \ \ \ var\ =\ std::any\_cast<std::string>(m\_default\_value);}
+\DoxyCodeLine{00735\ \ \ \ \ \}}
+\DoxyCodeLine{00736\ \ \ \ \ action([\&var](const\ std::string\ \&s)\ \{}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ var\ =\ s;}
+\DoxyCodeLine{00738\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00739\ \ \ \ \ \});}
+\DoxyCodeLine{00740\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00741\ \ \ \}}
+\DoxyCodeLine{00742\ }
+\DoxyCodeLine{00743\ \ \ auto\ \&store\_into(std::filesystem::path\ \&var)\ \{}
+\DoxyCodeLine{00744\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ var\ =\ std::any\_cast<std::filesystem::path>(m\_default\_value);}
+\DoxyCodeLine{00746\ \ \ \ \ \}}
+\DoxyCodeLine{00747\ \ \ \ \ action([\&var](const\ std::string\ \&s)\ \{\ var\ =\ s;\ \});}
+\DoxyCodeLine{00748\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00749\ \ \ \}}
+\DoxyCodeLine{00750\ }
+\DoxyCodeLine{00751\ \ \ auto\ \&store\_into(std::vector<std::string>\ \&var)\ \{}
+\DoxyCodeLine{00752\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00753\ \ \ \ \ \ \ var\ =\ std::any\_cast<std::vector<std::string>>(m\_default\_value);}
+\DoxyCodeLine{00754\ \ \ \ \ \}}
+\DoxyCodeLine{00755\ \ \ \ \ action([this,\ \&var](const\ std::string\ \&s)\ \{}
+\DoxyCodeLine{00756\ \ \ \ \ \ \ if\ (!m\_is\_used)\ \{}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ var.clear();}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00759\ \ \ \ \ \ \ m\_is\_used\ =\ true;}
+\DoxyCodeLine{00760\ \ \ \ \ \ \ var.push\_back(s);}
+\DoxyCodeLine{00761\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00762\ \ \ \ \ \});}
+\DoxyCodeLine{00763\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00764\ \ \ \}}
+\DoxyCodeLine{00765\ }
+\DoxyCodeLine{00766\ \ \ auto\ \&store\_into(std::vector<int>\ \&var)\ \{}
+\DoxyCodeLine{00767\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ var\ =\ std::any\_cast<std::vector<int>>(m\_default\_value);}
+\DoxyCodeLine{00769\ \ \ \ \ \}}
+\DoxyCodeLine{00770\ \ \ \ \ action([this,\ \&var](const\ std::string\ \&s)\ \{}
+\DoxyCodeLine{00771\ \ \ \ \ \ \ if\ (!m\_is\_used)\ \{}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ var.clear();}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00774\ \ \ \ \ \ \ m\_is\_used\ =\ true;}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ var.push\_back(details::parse\_number<int,\ details::radix\_10>()(s));}
+\DoxyCodeLine{00776\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00777\ \ \ \ \ \});}
+\DoxyCodeLine{00778\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00779\ \ \ \}}
+\DoxyCodeLine{00780\ }
+\DoxyCodeLine{00781\ \ \ auto\ \&store\_into(std::set<std::string>\ \&var)\ \{}
+\DoxyCodeLine{00782\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ var\ =\ std::any\_cast<std::set<std::string>>(m\_default\_value);}
+\DoxyCodeLine{00784\ \ \ \ \ \}}
+\DoxyCodeLine{00785\ \ \ \ \ action([this,\ \&var](const\ std::string\ \&s)\ \{}
+\DoxyCodeLine{00786\ \ \ \ \ \ \ if\ (!m\_is\_used)\ \{}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ var.clear();}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00789\ \ \ \ \ \ \ m\_is\_used\ =\ true;}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ var.insert(s);}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00792\ \ \ \ \ \});}
+\DoxyCodeLine{00793\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00794\ \ \ \}}
+\DoxyCodeLine{00795\ }
+\DoxyCodeLine{00796\ \ \ auto\ \&store\_into(std::set<int>\ \&var)\ \{}
+\DoxyCodeLine{00797\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00798\ \ \ \ \ \ \ var\ =\ std::any\_cast<std::set<int>>(m\_default\_value);}
+\DoxyCodeLine{00799\ \ \ \ \ \}}
+\DoxyCodeLine{00800\ \ \ \ \ action([this,\ \&var](const\ std::string\ \&s)\ \{}
+\DoxyCodeLine{00801\ \ \ \ \ \ \ if\ (!m\_is\_used)\ \{}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ var.clear();}
+\DoxyCodeLine{00803\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00804\ \ \ \ \ \ \ m\_is\_used\ =\ true;}
+\DoxyCodeLine{00805\ \ \ \ \ \ \ var.insert(details::parse\_number<int,\ details::radix\_10>()(s));}
+\DoxyCodeLine{00806\ \ \ \ \ \ \ return\ var;}
+\DoxyCodeLine{00807\ \ \ \ \ \});}
+\DoxyCodeLine{00808\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00809\ \ \ \}}
+\DoxyCodeLine{00810\ }
+\DoxyCodeLine{00811\ \ \ auto\ \&append()\ \{}
+\DoxyCodeLine{00812\ \ \ \ \ m\_is\_repeatable\ =\ true;}
+\DoxyCodeLine{00813\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00814\ \ \ \}}
+\DoxyCodeLine{00815\ }
+\DoxyCodeLine{00816\ \ \ \textcolor{comment}{//\ Cause\ the\ argument\ to\ be\ invisible\ in\ usage\ and\ help}}
+\DoxyCodeLine{00817\ \ \ auto\ \&hidden()\ \{}
+\DoxyCodeLine{00818\ \ \ \ \ m\_is\_hidden\ =\ true;}
+\DoxyCodeLine{00819\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00820\ \ \ \}}
+\DoxyCodeLine{00821\ }
+\DoxyCodeLine{00822\ \ \ template\ <char\ Shape,\ typename\ T>}
+\DoxyCodeLine{00823\ \ \ auto\ scan()\ -\/>\ std::enable\_if\_t<std::is\_arithmetic\_v<T>,\ Argument\ \&>\ \{}
+\DoxyCodeLine{00824\ \ \ \ \ static\_assert(!(std::is\_const\_v<T>\ ||\ std::is\_volatile\_v<T>),}
+\DoxyCodeLine{00825\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}T\ should\ not\ be\ cv-\/qualified"{});}
+\DoxyCodeLine{00826\ \ \ \ \ auto\ is\_one\_of\ =\ [](char\ c,\ auto...\ x)\ constexpr\ \{}
+\DoxyCodeLine{00827\ \ \ \ \ \ \ return\ ((c\ ==\ x)\ ||\ ...);}
+\DoxyCodeLine{00828\ \ \ \ \ \};}
+\DoxyCodeLine{00829\ }
+\DoxyCodeLine{00830\ \ \ \ \ if\ constexpr\ (is\_one\_of(Shape,\ 'd')\ \&\&\ details::standard\_integer<T>)\ \{}
+\DoxyCodeLine{00831\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::radix\_10>());}
+\DoxyCodeLine{00832\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'i')\ \&\&}
+\DoxyCodeLine{00833\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ details::standard\_integer<T>)\ \{}
+\DoxyCodeLine{00834\ \ \ \ \ \ \ action(details::parse\_number<T>());}
+\DoxyCodeLine{00835\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'u')\ \&\&}
+\DoxyCodeLine{00836\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ details::standard\_unsigned\_integer<T>)\ \{}
+\DoxyCodeLine{00837\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::radix\_10>());}
+\DoxyCodeLine{00838\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'b')\ \&\&}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ details::standard\_unsigned\_integer<T>)\ \{}
+\DoxyCodeLine{00840\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::radix\_2>());}
+\DoxyCodeLine{00841\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'o')\ \&\&}
+\DoxyCodeLine{00842\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ details::standard\_unsigned\_integer<T>)\ \{}
+\DoxyCodeLine{00843\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::radix\_8>());}
+\DoxyCodeLine{00844\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'x',\ 'X')\ \&\&}
+\DoxyCodeLine{00845\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ details::standard\_unsigned\_integer<T>)\ \{}
+\DoxyCodeLine{00846\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::radix\_16>());}
+\DoxyCodeLine{00847\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'a',\ 'A')\ \&\&}
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_floating\_point\_v<T>)\ \{}
+\DoxyCodeLine{00849\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::chars\_format::hex>());}
+\DoxyCodeLine{00850\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'e',\ 'E')\ \&\&}
+\DoxyCodeLine{00851\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_floating\_point\_v<T>)\ \{}
+\DoxyCodeLine{00852\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::chars\_format::scientific>());}
+\DoxyCodeLine{00853\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'f',\ 'F')\ \&\&}
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_floating\_point\_v<T>)\ \{}
+\DoxyCodeLine{00855\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::chars\_format::fixed>());}
+\DoxyCodeLine{00856\ \ \ \ \ \}\ else\ if\ constexpr\ (is\_one\_of(Shape,\ 'g',\ 'G')\ \&\&}
+\DoxyCodeLine{00857\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_floating\_point\_v<T>)\ \{}
+\DoxyCodeLine{00858\ \ \ \ \ \ \ action(details::parse\_number<T,\ details::chars\_format::general>());}
+\DoxyCodeLine{00859\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ static\_assert(alignof(T)\ ==\ 0,\ "{}No\ scan\ specification\ for\ T"{});}
+\DoxyCodeLine{00861\ \ \ \ \ \}}
+\DoxyCodeLine{00862\ }
+\DoxyCodeLine{00863\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00864\ \ \ \}}
+\DoxyCodeLine{00865\ }
+\DoxyCodeLine{00866\ \ \ Argument\ \&nargs(std::size\_t\ num\_args)\ \{}
+\DoxyCodeLine{00867\ \ \ \ \ m\_num\_args\_range\ =\ NArgsRange\{num\_args,\ num\_args\};}
+\DoxyCodeLine{00868\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00869\ \ \ \}}
+\DoxyCodeLine{00870\ }
+\DoxyCodeLine{00871\ \ \ Argument\ \&nargs(std::size\_t\ num\_args\_min,\ std::size\_t\ num\_args\_max)\ \{}
+\DoxyCodeLine{00872\ \ \ \ \ m\_num\_args\_range\ =\ NArgsRange\{num\_args\_min,\ num\_args\_max\};}
+\DoxyCodeLine{00873\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00874\ \ \ \}}
+\DoxyCodeLine{00875\ }
+\DoxyCodeLine{00876\ \ \ Argument\ \&nargs(nargs\_pattern\ pattern)\ \{}
+\DoxyCodeLine{00877\ \ \ \ \ switch\ (pattern)\ \{}
+\DoxyCodeLine{00878\ \ \ \ \ case\ nargs\_pattern::optional:}
+\DoxyCodeLine{00879\ \ \ \ \ \ \ m\_num\_args\_range\ =\ NArgsRange\{0,\ 1\};}
+\DoxyCodeLine{00880\ \ \ \ \ \ \ break;}
+\DoxyCodeLine{00881\ \ \ \ \ case\ nargs\_pattern::any:}
+\DoxyCodeLine{00882\ \ \ \ \ \ \ m\_num\_args\_range\ =}
+\DoxyCodeLine{00883\ \ \ \ \ \ \ \ \ \ \ NArgsRange\{0,\ (std::numeric\_limits<std::size\_t>::max)()\};}
+\DoxyCodeLine{00884\ \ \ \ \ \ \ break;}
+\DoxyCodeLine{00885\ \ \ \ \ case\ nargs\_pattern::at\_least\_one:}
+\DoxyCodeLine{00886\ \ \ \ \ \ \ m\_num\_args\_range\ =}
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \ \ NArgsRange\{1,\ (std::numeric\_limits<std::size\_t>::max)()\};}
+\DoxyCodeLine{00888\ \ \ \ \ \ \ break;}
+\DoxyCodeLine{00889\ \ \ \ \ \}}
+\DoxyCodeLine{00890\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00891\ \ \ \}}
+\DoxyCodeLine{00892\ }
+\DoxyCodeLine{00893\ \ \ Argument\ \&remaining()\ \{}
+\DoxyCodeLine{00894\ \ \ \ \ m\_accepts\_optional\_like\_value\ =\ true;}
+\DoxyCodeLine{00895\ \ \ \ \ return\ nargs(nargs\_pattern::any);}
+\DoxyCodeLine{00896\ \ \ \}}
+\DoxyCodeLine{00897\ }
+\DoxyCodeLine{00898\ \ \ template\ <typename\ T>\ void\ add\_choice(T\ \&\&choice)\ \{}
+\DoxyCodeLine{00899\ \ \ \ \ static\_assert(details::IsChoiceTypeSupported<T>::value,}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}Only\ string\ or\ integer\ type\ supported\ for\ choice"{});}
+\DoxyCodeLine{00901\ \ \ \ \ static\_assert(std::is\_convertible\_v<T,\ std::string\_view>\ ||}
+\DoxyCodeLine{00902\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ details::can\_invoke\_to\_string<T>::value,}
+\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}Choice\ is\ not\ convertible\ to\ string\_type"{});}
+\DoxyCodeLine{00904\ \ \ \ \ if\ (!m\_choices.has\_value())\ \{}
+\DoxyCodeLine{00905\ \ \ \ \ \ \ m\_choices\ =\ std::vector<std::string>\{\};}
+\DoxyCodeLine{00906\ \ \ \ \ \}}
+\DoxyCodeLine{00907\ }
+\DoxyCodeLine{00908\ \ \ \ \ if\ constexpr\ (std::is\_convertible\_v<T,\ std::string\_view>)\ \{}
+\DoxyCodeLine{00909\ \ \ \ \ \ \ m\_choices.value().push\_back(}
+\DoxyCodeLine{00910\ \ \ \ \ \ \ \ \ \ \ std::string\{std::string\_view\{std::forward<T>(choice)\}\});}
+\DoxyCodeLine{00911\ \ \ \ \ \}\ else\ if\ constexpr\ (details::can\_invoke\_to\_string<T>::value)\ \{}
+\DoxyCodeLine{00912\ \ \ \ \ \ \ m\_choices.value().push\_back(std::to\_string(std::forward<T>(choice)));}
+\DoxyCodeLine{00913\ \ \ \ \ \}}
+\DoxyCodeLine{00914\ \ \ \}}
+\DoxyCodeLine{00915\ }
+\DoxyCodeLine{00916\ \ \ Argument\ \&choices()\ \{}
+\DoxyCodeLine{00917\ \ \ \ \ if\ (!m\_choices.has\_value())\ \{}
+\DoxyCodeLine{00918\ \ \ \ \ \ \ throw\ std::runtime\_error("{}Zero\ choices\ provided"{});}
+\DoxyCodeLine{00919\ \ \ \ \ \}}
+\DoxyCodeLine{00920\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00921\ \ \ \}}
+\DoxyCodeLine{00922\ }
+\DoxyCodeLine{00923\ \ \ template\ <typename\ T,\ typename...\ U>}
+\DoxyCodeLine{00924\ \ \ Argument\ \&choices(T\ \&\&first,\ U\ \&\&...\ rest)\ \{}
+\DoxyCodeLine{00925\ \ \ \ \ add\_choice(std::forward<T>(first));}
+\DoxyCodeLine{00926\ \ \ \ \ choices(std::forward<U>(rest)...);}
+\DoxyCodeLine{00927\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{00928\ \ \ \}}
+\DoxyCodeLine{00929\ }
+\DoxyCodeLine{00930\ \ \ void\ find\_default\_value\_in\_choices\_or\_throw()\ const\ \{}
+\DoxyCodeLine{00931\ }
+\DoxyCodeLine{00932\ \ \ \ \ const\ auto\ \&choices\ =\ m\_choices.value();}
+\DoxyCodeLine{00933\ }
+\DoxyCodeLine{00934\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{00935\ \ \ \ \ \ \ if\ (std::find(choices.begin(),\ choices.end(),\ m\_default\_value\_str)\ ==}
+\DoxyCodeLine{00936\ \ \ \ \ \ \ \ \ \ \ choices.end())\ \{}
+\DoxyCodeLine{00937\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ provided\ arg\ not\ in\ list\ of\ allowed\ choices}}
+\DoxyCodeLine{00938\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ report\ error}}
+\DoxyCodeLine{00939\ }
+\DoxyCodeLine{00940\ \ \ \ \ \ \ \ \ std::string\ choices\_as\_csv\ =}
+\DoxyCodeLine{00941\ \ \ \ \ \ \ \ \ \ \ \ \ std::accumulate(choices.begin(),\ choices.end(),\ std::string(),}
+\DoxyCodeLine{00942\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](const\ std::string\ \&a,\ const\ std::string\ \&b)\ \{}
+\DoxyCodeLine{00943\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ a\ +\ (a.empty()\ ?\ "{}"{}\ :\ "{},\ "{})\ +\ b;}
+\DoxyCodeLine{00944\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00945\ }
+\DoxyCodeLine{00946\ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(}
+\DoxyCodeLine{00947\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\{"{}Invalid\ default\ value\ "{}\}\ +\ m\_default\_value\_repr\ +}
+\DoxyCodeLine{00948\ \ \ \ \ \ \ \ \ \ \ \ \ "{}\ -\/\ allowed\ options:\ \{"{}\ +\ choices\_as\_csv\ +\ "{}\}"{});}
+\DoxyCodeLine{00949\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00950\ \ \ \ \ \}}
+\DoxyCodeLine{00951\ \ \ \}}
+\DoxyCodeLine{00952\ }
+\DoxyCodeLine{00953\ \ \ template\ <typename\ Iterator>}
+\DoxyCodeLine{00954\ \ \ bool\ is\_value\_in\_choices(Iterator\ option\_it)\ const\ \{}
+\DoxyCodeLine{00955\ }
+\DoxyCodeLine{00956\ \ \ \ \ const\ auto\ \&choices\ =\ m\_choices.value();}
+\DoxyCodeLine{00957\ }
+\DoxyCodeLine{00958\ \ \ \ \ return\ (std::find(choices.begin(),\ choices.end(),\ *option\_it)\ !=}
+\DoxyCodeLine{00959\ \ \ \ \ \ \ \ \ \ \ \ \ choices.end());}
+\DoxyCodeLine{00960\ \ \ \}}
+\DoxyCodeLine{00961\ }
+\DoxyCodeLine{00962\ \ \ template\ <typename\ Iterator>}
+\DoxyCodeLine{00963\ \ \ void\ throw\_invalid\_arguments\_error(Iterator\ option\_it)\ const\ \{}
+\DoxyCodeLine{00964\ \ \ \ \ const\ auto\ \&choices\ =\ m\_choices.value();}
+\DoxyCodeLine{00965\ \ \ \ \ const\ std::string\ choices\_as\_csv\ =\ std::accumulate(}
+\DoxyCodeLine{00966\ \ \ \ \ \ \ \ \ choices.begin(),\ choices.end(),\ std::string(),}
+\DoxyCodeLine{00967\ \ \ \ \ \ \ \ \ [](const\ std::string\ \&option\_a,\ const\ std::string\ \&option\_b)\ \{}
+\DoxyCodeLine{00968\ \ \ \ \ \ \ \ \ \ \ return\ option\_a\ +\ (option\_a.empty()\ ?\ "{}"{}\ :\ "{},\ "{})\ +\ option\_b;}
+\DoxyCodeLine{00969\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00970\ }
+\DoxyCodeLine{00971\ \ \ \ \ throw\ std::runtime\_error(std::string\{"{}Invalid\ argument\ "{}\}\ +}
+\DoxyCodeLine{00972\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ details::repr(*option\_it)\ +}
+\DoxyCodeLine{00973\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}\ -\/\ allowed\ options:\ \{"{}\ +\ choices\_as\_csv\ +\ "{}\}"{});}
+\DoxyCodeLine{00974\ \ \ \}}
+\DoxyCodeLine{00975\ }
+\DoxyCodeLine{00976\ \ \ \textcolor{comment}{/*\ The\ dry\_run\ parameter\ can\ be\ set\ to\ true\ to\ avoid\ running\ the\ actions,}}
+\DoxyCodeLine{00977\ \textcolor{comment}{\ \ \ *\ and\ setting\ m\_is\_used.\ This\ may\ be\ used\ by\ a\ pre-\/processing\ step\ to\ do}}
+\DoxyCodeLine{00978\ \textcolor{comment}{\ \ \ *\ a\ first\ iteration\ over\ arguments.}}
+\DoxyCodeLine{00979\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{00980\ \ \ template\ <typename\ Iterator>}
+\DoxyCodeLine{00981\ \ \ Iterator\ consume(Iterator\ start,\ Iterator\ end,}
+\DoxyCodeLine{00982\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\_view\ used\_name\ =\ \{\},\ bool\ dry\_run\ =\ false)\ \{}
+\DoxyCodeLine{00983\ \ \ \ \ if\ (!m\_is\_repeatable\ \&\&\ m\_is\_used)\ \{}
+\DoxyCodeLine{00984\ \ \ \ \ \ \ throw\ std::runtime\_error(}
+\DoxyCodeLine{00985\ \ \ \ \ \ \ \ \ \ \ std::string("{}Duplicate\ argument\ "{}).append(used\_name));}
+\DoxyCodeLine{00986\ \ \ \ \ \}}
+\DoxyCodeLine{00987\ \ \ \ \ m\_used\_name\ =\ used\_name;}
+\DoxyCodeLine{00988\ }
+\DoxyCodeLine{00989\ \ \ \ \ std::size\_t\ passed\_options\ =\ 0;}
+\DoxyCodeLine{00990\ }
+\DoxyCodeLine{00991\ \ \ \ \ if\ (m\_choices.has\_value())\ \{}
+\DoxyCodeLine{00992\ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ each\ value\ in\ (start,\ end)\ and\ make\ sure}}
+\DoxyCodeLine{00993\ \ \ \ \ \ \ \textcolor{comment}{//\ it\ is\ in\ the\ list\ of\ allowed\ choices/options}}
+\DoxyCodeLine{00994\ \ \ \ \ \ \ const\ auto\ max\_number\_of\_args\ =\ m\_num\_args\_range.get\_max();}
+\DoxyCodeLine{00995\ \ \ \ \ \ \ const\ auto\ min\_number\_of\_args\ =\ m\_num\_args\_range.get\_min();}
+\DoxyCodeLine{00996\ \ \ \ \ \ \ for\ (auto\ it\ =\ start;\ it\ !=\ end;\ ++it)\ \{}
+\DoxyCodeLine{00997\ \ \ \ \ \ \ \ \ if\ (is\_value\_in\_choices(it))\ \{}
+\DoxyCodeLine{00998\ \ \ \ \ \ \ \ \ \ \ passed\_options\ +=\ 1;}
+\DoxyCodeLine{00999\ \ \ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{01000\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01001\ }
+\DoxyCodeLine{01002\ \ \ \ \ \ \ \ \ if\ ((passed\_options\ >=\ min\_number\_of\_args)\ \&\&}
+\DoxyCodeLine{01003\ \ \ \ \ \ \ \ \ \ \ \ \ (passed\_options\ <=\ max\_number\_of\_args))\ \{}
+\DoxyCodeLine{01004\ \ \ \ \ \ \ \ \ \ \ break;}
+\DoxyCodeLine{01005\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01006\ }
+\DoxyCodeLine{01007\ \ \ \ \ \ \ \ \ throw\_invalid\_arguments\_error(it);}
+\DoxyCodeLine{01008\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01009\ \ \ \ \ \}}
+\DoxyCodeLine{01010\ }
+\DoxyCodeLine{01011\ \ \ \ \ const\ auto\ num\_args\_max\ =}
+\DoxyCodeLine{01012\ \ \ \ \ \ \ \ \ (m\_choices.has\_value())\ ?\ passed\_options\ :\ m\_num\_args\_range.get\_max();}
+\DoxyCodeLine{01013\ \ \ \ \ const\ auto\ num\_args\_min\ =\ m\_num\_args\_range.get\_min();}
+\DoxyCodeLine{01014\ \ \ \ \ std::size\_t\ dist\ =\ 0;}
+\DoxyCodeLine{01015\ \ \ \ \ if\ (num\_args\_max\ ==\ 0)\ \{}
+\DoxyCodeLine{01016\ \ \ \ \ \ \ if\ (!dry\_run)\ \{}
+\DoxyCodeLine{01017\ \ \ \ \ \ \ \ \ m\_values.emplace\_back(m\_implicit\_value);}
+\DoxyCodeLine{01018\ \ \ \ \ \ \ \ \ for(auto\ \&action:\ m\_actions)\ \{}
+\DoxyCodeLine{01019\ \ \ \ \ \ \ \ \ \ \ std::visit([\&](const\ auto\ \&f)\ \{\ f(\{\});\ \},\ action);}
+\DoxyCodeLine{01020\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01021\ \ \ \ \ \ \ \ \ if(m\_actions.empty())\{}
+\DoxyCodeLine{01022\ \ \ \ \ \ \ \ \ \ \ std::visit([\&](const\ auto\ \&f)\ \{\ f(\{\});\ \},\ m\_default\_action);}
+\DoxyCodeLine{01023\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01024\ \ \ \ \ \ \ \ \ m\_is\_used\ =\ true;}
+\DoxyCodeLine{01025\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01026\ \ \ \ \ \ \ return\ start;}
+\DoxyCodeLine{01027\ \ \ \ \ \}}
+\DoxyCodeLine{01028\ \ \ \ \ if\ ((dist\ =\ static\_cast<std::size\_t>(std::distance(start,\ end)))\ >=}
+\DoxyCodeLine{01029\ \ \ \ \ \ \ \ \ num\_args\_min)\ \{}
+\DoxyCodeLine{01030\ \ \ \ \ \ \ if\ (num\_args\_max\ <\ dist)\ \{}
+\DoxyCodeLine{01031\ \ \ \ \ \ \ \ \ end\ =\ std::next(start,\ static\_cast<typename\ Iterator::difference\_type>(}
+\DoxyCodeLine{01032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ num\_args\_max));}
+\DoxyCodeLine{01033\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01034\ \ \ \ \ \ \ if\ (!m\_accepts\_optional\_like\_value)\ \{}
+\DoxyCodeLine{01035\ \ \ \ \ \ \ \ \ end\ =\ std::find\_if(}
+\DoxyCodeLine{01036\ \ \ \ \ \ \ \ \ \ \ \ \ start,\ end,}
+\DoxyCodeLine{01037\ \ \ \ \ \ \ \ \ \ \ \ \ std::bind(is\_optional,\ std::placeholders::\_1,\ m\_prefix\_chars));}
+\DoxyCodeLine{01038\ \ \ \ \ \ \ \ \ dist\ =\ static\_cast<std::size\_t>(std::distance(start,\ end));}
+\DoxyCodeLine{01039\ \ \ \ \ \ \ \ \ if\ (dist\ <\ num\_args\_min)\ \{}
+\DoxyCodeLine{01040\ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Too\ few\ arguments\ for\ '"{}\ +}
+\DoxyCodeLine{01041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string(m\_used\_name)\ +\ "{}'."{});}
+\DoxyCodeLine{01042\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01043\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01044\ \ \ \ \ \ \ struct\ ActionApply\ \{}
+\DoxyCodeLine{01045\ \ \ \ \ \ \ \ \ void\ operator()(valued\_action\ \&f)\ \{}
+\DoxyCodeLine{01046\ \ \ \ \ \ \ \ \ \ \ std::transform(first,\ last,\ std::back\_inserter(self.m\_values),\ f);}
+\DoxyCodeLine{01047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01048\ }
+\DoxyCodeLine{01049\ \ \ \ \ \ \ \ \ void\ operator()(void\_action\ \&f)\ \{}
+\DoxyCodeLine{01050\ \ \ \ \ \ \ \ \ \ \ std::for\_each(first,\ last,\ f);}
+\DoxyCodeLine{01051\ \ \ \ \ \ \ \ \ \ \ if\ (!self.m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{01052\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (!self.m\_accepts\_optional\_like\_value)\ \{}
+\DoxyCodeLine{01053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ self.m\_values.resize(}
+\DoxyCodeLine{01054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ static\_cast<std::size\_t>(std::distance(first,\ last)));}
+\DoxyCodeLine{01055\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01056\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01058\ }
+\DoxyCodeLine{01059\ \ \ \ \ \ \ \ \ Iterator\ first,\ last;}
+\DoxyCodeLine{01060\ \ \ \ \ \ \ \ \ Argument\ \&self;}
+\DoxyCodeLine{01061\ \ \ \ \ \ \ \};}
+\DoxyCodeLine{01062\ \ \ \ \ \ \ if\ (!dry\_run)\ \{}
+\DoxyCodeLine{01063\ \ \ \ \ \ \ \ \ for(auto\ \&action:\ m\_actions)\ \{}
+\DoxyCodeLine{01064\ \ \ \ \ \ \ \ \ \ \ std::visit(ActionApply\{start,\ end,\ *this\},\ action);}
+\DoxyCodeLine{01065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01066\ \ \ \ \ \ \ \ \ if(m\_actions.empty())\{}
+\DoxyCodeLine{01067\ \ \ \ \ \ \ \ \ \ \ std::visit(ActionApply\{start,\ end,\ *this\},\ m\_default\_action);}
+\DoxyCodeLine{01068\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01069\ \ \ \ \ \ \ \ \ m\_is\_used\ =\ true;}
+\DoxyCodeLine{01070\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01071\ \ \ \ \ \ \ return\ end;}
+\DoxyCodeLine{01072\ \ \ \ \ \}}
+\DoxyCodeLine{01073\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{01074\ \ \ \ \ \ \ if\ (!dry\_run)\ \{}
+\DoxyCodeLine{01075\ \ \ \ \ \ \ \ \ m\_is\_used\ =\ true;}
+\DoxyCodeLine{01076\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01077\ \ \ \ \ \ \ return\ start;}
+\DoxyCodeLine{01078\ \ \ \ \ \}}
+\DoxyCodeLine{01079\ \ \ \ \ throw\ std::runtime\_error("{}Too\ few\ arguments\ for\ '"{}\ +}
+\DoxyCodeLine{01080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string(m\_used\_name)\ +\ "{}'."{});}
+\DoxyCodeLine{01081\ \ \ \}}
+\DoxyCodeLine{01082\ }
+\DoxyCodeLine{01083\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{01084\ \textcolor{comment}{\ \ \ *\ @throws\ std::runtime\_error\ if\ argument\ values\ are\ not\ valid}}
+\DoxyCodeLine{01085\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01086\ \ \ void\ validate()\ const\ \{}
+\DoxyCodeLine{01087\ \ \ \ \ if\ (m\_is\_optional)\ \{}
+\DoxyCodeLine{01088\ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ check\ if\ an\ implicit\ value\ was\ programmed\ for\ this\ argument}}
+\DoxyCodeLine{01089\ \ \ \ \ \ \ if\ (!m\_is\_used\ \&\&\ !m\_default\_value.has\_value()\ \&\&\ m\_is\_required)\ \{}
+\DoxyCodeLine{01090\ \ \ \ \ \ \ \ \ throw\_required\_arg\_not\_used\_error();}
+\DoxyCodeLine{01091\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01092\ \ \ \ \ \ \ if\ (m\_is\_used\ \&\&\ m\_is\_required\ \&\&\ m\_values.empty())\ \{}
+\DoxyCodeLine{01093\ \ \ \ \ \ \ \ \ throw\_required\_arg\_no\_value\_provided\_error();}
+\DoxyCodeLine{01094\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01095\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01096\ \ \ \ \ \ \ if\ (!m\_num\_args\_range.contains(m\_values.size())\ \&\&}
+\DoxyCodeLine{01097\ \ \ \ \ \ \ \ \ \ \ !m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{01098\ \ \ \ \ \ \ \ \ throw\_nargs\_range\_validation\_error();}
+\DoxyCodeLine{01099\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01100\ \ \ \ \ \}}
+\DoxyCodeLine{01101\ }
+\DoxyCodeLine{01102\ \ \ \ \ if\ (m\_choices.has\_value())\ \{}
+\DoxyCodeLine{01103\ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ default\ value\ (if\ provided)}}
+\DoxyCodeLine{01104\ \ \ \ \ \ \ \textcolor{comment}{//\ is\ in\ the\ list\ of\ choices}}
+\DoxyCodeLine{01105\ \ \ \ \ \ \ find\_default\_value\_in\_choices\_or\_throw();}
+\DoxyCodeLine{01106\ \ \ \ \ \}}
+\DoxyCodeLine{01107\ \ \ \}}
+\DoxyCodeLine{01108\ }
+\DoxyCodeLine{01109\ \ \ std::string\ get\_names\_csv(char\ separator\ =\ ',')\ const\ \{}
+\DoxyCodeLine{01110\ \ \ \ \ return\ std::accumulate(}
+\DoxyCodeLine{01111\ \ \ \ \ \ \ \ \ m\_names.begin(),\ m\_names.end(),\ std::string\{"{}"{}\},}
+\DoxyCodeLine{01112\ \ \ \ \ \ \ \ \ [\&](const\ std::string\ \&result,\ const\ std::string\ \&name)\ \{}
+\DoxyCodeLine{01113\ \ \ \ \ \ \ \ \ \ \ return\ result.empty()\ ?\ name\ :\ result\ +\ separator\ +\ name;}
+\DoxyCodeLine{01114\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{01115\ \ \ \}}
+\DoxyCodeLine{01116\ }
+\DoxyCodeLine{01117\ \ \ std::string\ get\_usage\_full()\ const\ \{}
+\DoxyCodeLine{01118\ \ \ \ \ std::stringstream\ usage;}
+\DoxyCodeLine{01119\ }
+\DoxyCodeLine{01120\ \ \ \ \ usage\ <<\ get\_names\_csv('/');}
+\DoxyCodeLine{01121\ \ \ \ \ const\ std::string\ metavar\ =\ !m\_metavar.empty()\ ?\ m\_metavar\ :\ "{}VAR"{};}
+\DoxyCodeLine{01122\ \ \ \ \ if\ (m\_num\_args\_range.get\_max()\ >\ 0)\ \{}
+\DoxyCodeLine{01123\ \ \ \ \ \ \ usage\ <<\ "{}\ "{}\ <<\ metavar;}
+\DoxyCodeLine{01124\ \ \ \ \ \ \ if\ (m\_num\_args\_range.get\_max()\ >\ 1)\ \{}
+\DoxyCodeLine{01125\ \ \ \ \ \ \ \ \ usage\ <<\ "{}..."{};}
+\DoxyCodeLine{01126\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01127\ \ \ \ \ \}}
+\DoxyCodeLine{01128\ \ \ \ \ return\ usage.str();}
+\DoxyCodeLine{01129\ \ \ \}}
+\DoxyCodeLine{01130\ }
+\DoxyCodeLine{01131\ \ \ std::string\ get\_inline\_usage()\ const\ \{}
+\DoxyCodeLine{01132\ \ \ \ \ std::stringstream\ usage;}
+\DoxyCodeLine{01133\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ longest\ variant\ to\ show\ in\ the\ usage\ string}}
+\DoxyCodeLine{01134\ \ \ \ \ std::string\ longest\_name\ =\ m\_names.front();}
+\DoxyCodeLine{01135\ \ \ \ \ for\ (const\ auto\ \&s\ :\ m\_names)\ \{}
+\DoxyCodeLine{01136\ \ \ \ \ \ \ if\ (s.size()\ >\ longest\_name.size())\ \{}
+\DoxyCodeLine{01137\ \ \ \ \ \ \ \ \ longest\_name\ =\ s;}
+\DoxyCodeLine{01138\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01139\ \ \ \ \ \}}
+\DoxyCodeLine{01140\ \ \ \ \ if\ (!m\_is\_required)\ \{}
+\DoxyCodeLine{01141\ \ \ \ \ \ \ usage\ <<\ "{}["{};}
+\DoxyCodeLine{01142\ \ \ \ \ \}}
+\DoxyCodeLine{01143\ \ \ \ \ usage\ <<\ longest\_name;}
+\DoxyCodeLine{01144\ \ \ \ \ const\ std::string\ metavar\ =\ !m\_metavar.empty()\ ?\ m\_metavar\ :\ "{}VAR"{};}
+\DoxyCodeLine{01145\ \ \ \ \ if\ (m\_num\_args\_range.get\_max()\ >\ 0)\ \{}
+\DoxyCodeLine{01146\ \ \ \ \ \ \ usage\ <<\ "{}\ "{}\ <<\ metavar;}
+\DoxyCodeLine{01147\ \ \ \ \ \ \ if\ (m\_num\_args\_range.get\_max()\ >\ 1\ \&\&}
+\DoxyCodeLine{01148\ \ \ \ \ \ \ \ \ \ \ m\_metavar.find("{}>\ <"{})\ ==\ std::string::npos)\ \{}
+\DoxyCodeLine{01149\ \ \ \ \ \ \ \ \ usage\ <<\ "{}..."{};}
+\DoxyCodeLine{01150\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01151\ \ \ \ \ \}}
+\DoxyCodeLine{01152\ \ \ \ \ if\ (!m\_is\_required)\ \{}
+\DoxyCodeLine{01153\ \ \ \ \ \ \ usage\ <<\ "{}]"{};}
+\DoxyCodeLine{01154\ \ \ \ \ \}}
+\DoxyCodeLine{01155\ \ \ \ \ if\ (m\_is\_repeatable)\ \{}
+\DoxyCodeLine{01156\ \ \ \ \ \ \ usage\ <<\ "{}..."{};}
+\DoxyCodeLine{01157\ \ \ \ \ \}}
+\DoxyCodeLine{01158\ \ \ \ \ return\ usage.str();}
+\DoxyCodeLine{01159\ \ \ \}}
+\DoxyCodeLine{01160\ }
+\DoxyCodeLine{01161\ \ \ std::size\_t\ get\_arguments\_length()\ const\ \{}
+\DoxyCodeLine{01162\ }
+\DoxyCodeLine{01163\ \ \ \ \ std::size\_t\ names\_size\ =\ std::accumulate(}
+\DoxyCodeLine{01164\ \ \ \ \ \ \ \ \ std::begin(m\_names),\ std::end(m\_names),\ std::size\_t(0),}
+\DoxyCodeLine{01165\ \ \ \ \ \ \ \ \ [](const\ auto\ \&sum,\ const\ auto\ \&s)\ \{\ return\ sum\ +\ s.size();\ \});}
+\DoxyCodeLine{01166\ }
+\DoxyCodeLine{01167\ \ \ \ \ if\ (is\_positional(m\_names.front(),\ m\_prefix\_chars))\ \{}
+\DoxyCodeLine{01168\ \ \ \ \ \ \ \textcolor{comment}{//\ A\ set\ metavar\ means\ this\ replaces\ the\ names}}
+\DoxyCodeLine{01169\ \ \ \ \ \ \ if\ (!m\_metavar.empty())\ \{}
+\DoxyCodeLine{01170\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Indent\ and\ metavar}}
+\DoxyCodeLine{01171\ \ \ \ \ \ \ \ \ return\ 2\ +\ m\_metavar.size();}
+\DoxyCodeLine{01172\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01173\ }
+\DoxyCodeLine{01174\ \ \ \ \ \ \ \textcolor{comment}{//\ Indent\ and\ space-\/separated}}
+\DoxyCodeLine{01175\ \ \ \ \ \ \ return\ 2\ +\ names\_size\ +\ (m\_names.size()\ -\/\ 1);}
+\DoxyCodeLine{01176\ \ \ \ \ \}}
+\DoxyCodeLine{01177\ \ \ \ \ \textcolor{comment}{//\ Is\ an\ option\ -\/\ include\ both\ names\ \_and\_\ metavar}}
+\DoxyCodeLine{01178\ \ \ \ \ \textcolor{comment}{//\ size\ =\ text\ +\ ("{},\ "{}\ between\ names)}}
+\DoxyCodeLine{01179\ \ \ \ \ std::size\_t\ size\ =\ names\_size\ +\ 2\ *\ (m\_names.size()\ -\/\ 1);}
+\DoxyCodeLine{01180\ \ \ \ \ if\ (!m\_metavar.empty()\ \&\&\ m\_num\_args\_range\ ==\ NArgsRange\{1,\ 1\})\ \{}
+\DoxyCodeLine{01181\ \ \ \ \ \ \ size\ +=\ m\_metavar.size()\ +\ 1;}
+\DoxyCodeLine{01182\ \ \ \ \ \}}
+\DoxyCodeLine{01183\ \ \ \ \ return\ size\ +\ 2;\ \textcolor{comment}{//\ indent}}
+\DoxyCodeLine{01184\ \ \ \}}
+\DoxyCodeLine{01185\ }
+\DoxyCodeLine{01186\ \ \ friend\ std::ostream\ \&operator<<(std::ostream\ \&stream,}
+\DoxyCodeLine{01187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ Argument\ \&argument)\ \{}
+\DoxyCodeLine{01188\ \ \ \ \ std::stringstream\ name\_stream;}
+\DoxyCodeLine{01189\ \ \ \ \ name\_stream\ <<\ "{}\ \ "{};\ \textcolor{comment}{//\ indent}}
+\DoxyCodeLine{01190\ \ \ \ \ if\ (argument.is\_positional(argument.m\_names.front(),}
+\DoxyCodeLine{01191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ argument.m\_prefix\_chars))\ \{}
+\DoxyCodeLine{01192\ \ \ \ \ \ \ if\ (!argument.m\_metavar.empty())\ \{}
+\DoxyCodeLine{01193\ \ \ \ \ \ \ \ \ name\_stream\ <<\ argument.m\_metavar;}
+\DoxyCodeLine{01194\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01195\ \ \ \ \ \ \ \ \ name\_stream\ <<\ details::join(argument.m\_names.begin(),}
+\DoxyCodeLine{01196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ argument.m\_names.end(),\ "{}\ "{});}
+\DoxyCodeLine{01197\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01198\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01199\ \ \ \ \ \ \ name\_stream\ <<\ details::join(argument.m\_names.begin(),}
+\DoxyCodeLine{01200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ argument.m\_names.end(),\ "{},\ "{});}
+\DoxyCodeLine{01201\ \ \ \ \ \ \ \textcolor{comment}{//\ If\ we\ have\ a\ metavar,\ and\ one\ narg\ -\/\ print\ the\ metavar}}
+\DoxyCodeLine{01202\ \ \ \ \ \ \ if\ (!argument.m\_metavar.empty()\ \&\&}
+\DoxyCodeLine{01203\ \ \ \ \ \ \ \ \ \ \ argument.m\_num\_args\_range\ ==\ NArgsRange\{1,\ 1\})\ \{}
+\DoxyCodeLine{01204\ \ \ \ \ \ \ \ \ name\_stream\ <<\ "{}\ "{}\ <<\ argument.m\_metavar;}
+\DoxyCodeLine{01205\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01206\ \ \ \ \ \ \ else\ if\ (!argument.m\_metavar.empty()\ \&\&}
+\DoxyCodeLine{01207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ argument.m\_num\_args\_range.get\_min()\ ==\ argument.m\_num\_args\_range.get\_max()\ \&\&}
+\DoxyCodeLine{01208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ argument.m\_metavar.find("{}>\ <"{})\ !=\ std::string::npos)\ \{}
+\DoxyCodeLine{01209\ \ \ \ \ \ \ \ \ name\_stream\ <<\ "{}\ "{}\ <<\ argument.m\_metavar;}
+\DoxyCodeLine{01210\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01211\ \ \ \ \ \}}
+\DoxyCodeLine{01212\ }
+\DoxyCodeLine{01213\ \ \ \ \ \textcolor{comment}{//\ align\ multiline\ help\ message}}
+\DoxyCodeLine{01214\ \ \ \ \ auto\ stream\_width\ =\ stream.width();}
+\DoxyCodeLine{01215\ \ \ \ \ auto\ name\_padding\ =\ std::string(name\_stream.str().size(),\ '\ ');}
+\DoxyCodeLine{01216\ \ \ \ \ auto\ pos\ =\ std::string::size\_type\{\};}
+\DoxyCodeLine{01217\ \ \ \ \ auto\ prev\ =\ std::string::size\_type\{\};}
+\DoxyCodeLine{01218\ \ \ \ \ auto\ first\_line\ =\ true;}
+\DoxyCodeLine{01219\ \ \ \ \ auto\ hspace\ =\ "{}\ \ "{};\ \textcolor{comment}{//\ minimal\ space\ between\ name\ and\ help\ message}}
+\DoxyCodeLine{01220\ \ \ \ \ stream\ <<\ name\_stream.str();}
+\DoxyCodeLine{01221\ \ \ \ \ std::string\_view\ help\_view(argument.m\_help);}
+\DoxyCodeLine{01222\ \ \ \ \ while\ ((pos\ =\ argument.m\_help.find('\(\backslash\)n',\ prev))\ !=\ std::string::npos)\ \{}
+\DoxyCodeLine{01223\ \ \ \ \ \ \ auto\ line\ =\ help\_view.substr(prev,\ pos\ -\/\ prev\ +\ 1);}
+\DoxyCodeLine{01224\ \ \ \ \ \ \ if\ (first\_line)\ \{}
+\DoxyCodeLine{01225\ \ \ \ \ \ \ \ \ stream\ <<\ hspace\ <<\ line;}
+\DoxyCodeLine{01226\ \ \ \ \ \ \ \ \ first\_line\ =\ false;}
+\DoxyCodeLine{01227\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01228\ \ \ \ \ \ \ \ \ stream.width(stream\_width);}
+\DoxyCodeLine{01229\ \ \ \ \ \ \ \ \ stream\ <<\ name\_padding\ <<\ hspace\ <<\ line;}
+\DoxyCodeLine{01230\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01231\ \ \ \ \ \ \ prev\ +=\ pos\ -\/\ prev\ +\ 1;}
+\DoxyCodeLine{01232\ \ \ \ \ \}}
+\DoxyCodeLine{01233\ \ \ \ \ if\ (first\_line)\ \{}
+\DoxyCodeLine{01234\ \ \ \ \ \ \ stream\ <<\ hspace\ <<\ argument.m\_help;}
+\DoxyCodeLine{01235\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01236\ \ \ \ \ \ \ auto\ leftover\ =\ help\_view.substr(prev,\ argument.m\_help.size()\ -\/\ prev);}
+\DoxyCodeLine{01237\ \ \ \ \ \ \ if\ (!leftover.empty())\ \{}
+\DoxyCodeLine{01238\ \ \ \ \ \ \ \ \ stream.width(stream\_width);}
+\DoxyCodeLine{01239\ \ \ \ \ \ \ \ \ stream\ <<\ name\_padding\ <<\ hspace\ <<\ leftover;}
+\DoxyCodeLine{01240\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01241\ \ \ \ \ \}}
+\DoxyCodeLine{01242\ }
+\DoxyCodeLine{01243\ \ \ \ \ \textcolor{comment}{//\ print\ nargs\ spec}}
+\DoxyCodeLine{01244\ \ \ \ \ if\ (!argument.m\_help.empty())\ \{}
+\DoxyCodeLine{01245\ \ \ \ \ \ \ stream\ <<\ "{}\ "{};}
+\DoxyCodeLine{01246\ \ \ \ \ \}}
+\DoxyCodeLine{01247\ \ \ \ \ stream\ <<\ argument.m\_num\_args\_range;}
+\DoxyCodeLine{01248\ }
+\DoxyCodeLine{01249\ \ \ \ \ bool\ add\_space\ =\ false;}
+\DoxyCodeLine{01250\ \ \ \ \ if\ (argument.m\_default\_value.has\_value()\ \&\&}
+\DoxyCodeLine{01251\ \ \ \ \ \ \ \ \ argument.m\_num\_args\_range\ !=\ NArgsRange\{0,\ 0\})\ \{}
+\DoxyCodeLine{01252\ \ \ \ \ \ \ stream\ <<\ "{}[default:\ "{}\ <<\ argument.m\_default\_value\_repr\ <<\ "{}]"{};}
+\DoxyCodeLine{01253\ \ \ \ \ \ \ add\_space\ =\ true;}
+\DoxyCodeLine{01254\ \ \ \ \ \}\ else\ if\ (argument.m\_is\_required)\ \{}
+\DoxyCodeLine{01255\ \ \ \ \ \ \ stream\ <<\ "{}[required]"{};}
+\DoxyCodeLine{01256\ \ \ \ \ \ \ add\_space\ =\ true;}
+\DoxyCodeLine{01257\ \ \ \ \ \}}
+\DoxyCodeLine{01258\ \ \ \ \ if\ (argument.m\_is\_repeatable)\ \{}
+\DoxyCodeLine{01259\ \ \ \ \ \ \ if\ (add\_space)\ \{}
+\DoxyCodeLine{01260\ \ \ \ \ \ \ \ \ stream\ <<\ "{}\ "{};}
+\DoxyCodeLine{01261\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01262\ \ \ \ \ \ \ stream\ <<\ "{}[may\ be\ repeated]"{};}
+\DoxyCodeLine{01263\ \ \ \ \ \}}
+\DoxyCodeLine{01264\ \ \ \ \ stream\ <<\ "{}\(\backslash\)n"{};}
+\DoxyCodeLine{01265\ \ \ \ \ return\ stream;}
+\DoxyCodeLine{01266\ \ \ \}}
+\DoxyCodeLine{01267\ }
+\DoxyCodeLine{01268\ \ \ template\ <typename\ T>\ bool\ operator!=(const\ T\ \&rhs)\ const\ \{}
+\DoxyCodeLine{01269\ \ \ \ \ return\ !(*this\ ==\ rhs);}
+\DoxyCodeLine{01270\ \ \ \}}
+\DoxyCodeLine{01271\ }
+\DoxyCodeLine{01272\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{01273\ \textcolor{comment}{\ \ \ *\ Compare\ to\ an\ argument\ value\ of\ known\ type}}
+\DoxyCodeLine{01274\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ in\ case\ of\ incompatible\ types}}
+\DoxyCodeLine{01275\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01276\ \ \ template\ <typename\ T>\ bool\ operator==(const\ T\ \&rhs)\ const\ \{}
+\DoxyCodeLine{01277\ \ \ \ \ if\ constexpr\ (!details::IsContainer<T>)\ \{}
+\DoxyCodeLine{01278\ \ \ \ \ \ \ return\ get<T>()\ ==\ rhs;}
+\DoxyCodeLine{01279\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01280\ \ \ \ \ \ \ using\ ValueType\ =\ typename\ T::value\_type;}
+\DoxyCodeLine{01281\ \ \ \ \ \ \ auto\ lhs\ =\ get<T>();}
+\DoxyCodeLine{01282\ \ \ \ \ \ \ return\ std::equal(std::begin(lhs),\ std::end(lhs),\ std::begin(rhs),}
+\DoxyCodeLine{01283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::end(rhs),\ [](const\ auto\ \&a,\ const\ auto\ \&b)\ \{}
+\DoxyCodeLine{01284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ std::any\_cast<const\ ValueType\ \&>(a)\ ==\ b;}
+\DoxyCodeLine{01285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{01286\ \ \ \ \ \}}
+\DoxyCodeLine{01287\ \ \ \}}
+\DoxyCodeLine{01288\ }
+\DoxyCodeLine{01289\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{01290\ \textcolor{comment}{\ \ \ *\ positional:}}
+\DoxyCodeLine{01291\ \textcolor{comment}{\ \ \ *\ \ \ \ \_empty\_}}
+\DoxyCodeLine{01292\ \textcolor{comment}{\ \ \ *\ \ \ \ '-\/'}}
+\DoxyCodeLine{01293\ \textcolor{comment}{\ \ \ *\ \ \ \ '-\/'\ decimal-\/literal}}
+\DoxyCodeLine{01294\ \textcolor{comment}{\ \ \ *\ \ \ \ !'-\/'\ anything}}
+\DoxyCodeLine{01295\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01296\ \ \ static\ bool\ is\_positional(std::string\_view\ name,}
+\DoxyCodeLine{01297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\_view\ prefix\_chars)\ \{}
+\DoxyCodeLine{01298\ \ \ \ \ auto\ first\ =\ lookahead(name);}
+\DoxyCodeLine{01299\ }
+\DoxyCodeLine{01300\ \ \ \ \ if\ (first\ ==\ eof)\ \{}
+\DoxyCodeLine{01301\ \ \ \ \ \ \ return\ true;}
+\DoxyCodeLine{01302\ \ \ \ \ \}}
+\DoxyCodeLine{01303\ \ \ \ \ if\ (prefix\_chars.find(static\_cast<char>(first))\ !=}
+\DoxyCodeLine{01304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\_view::npos)\ \{}
+\DoxyCodeLine{01305\ \ \ \ \ \ \ name.remove\_prefix(1);}
+\DoxyCodeLine{01306\ \ \ \ \ \ \ if\ (name.empty())\ \{}
+\DoxyCodeLine{01307\ \ \ \ \ \ \ \ \ return\ true;}
+\DoxyCodeLine{01308\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01309\ \ \ \ \ \ \ return\ is\_decimal\_literal(name);}
+\DoxyCodeLine{01310\ \ \ \ \ \}}
+\DoxyCodeLine{01311\ \ \ \ \ return\ true;}
+\DoxyCodeLine{01312\ \ \ \}}
+\DoxyCodeLine{01313\ }
+\DoxyCodeLine{01314\ private:}
+\DoxyCodeLine{01315\ \ \ class\ NArgsRange\ \{}
+\DoxyCodeLine{01316\ \ \ \ \ std::size\_t\ m\_min;}
+\DoxyCodeLine{01317\ \ \ \ \ std::size\_t\ m\_max;}
+\DoxyCodeLine{01318\ }
+\DoxyCodeLine{01319\ \ \ public:}
+\DoxyCodeLine{01320\ \ \ \ \ NArgsRange(std::size\_t\ minimum,\ std::size\_t\ maximum)}
+\DoxyCodeLine{01321\ \ \ \ \ \ \ \ \ :\ m\_min(minimum),\ m\_max(maximum)\ \{}
+\DoxyCodeLine{01322\ \ \ \ \ \ \ if\ (minimum\ >\ maximum)\ \{}
+\DoxyCodeLine{01323\ \ \ \ \ \ \ \ \ throw\ std::logic\_error("{}Range\ of\ number\ of\ arguments\ is\ invalid"{});}
+\DoxyCodeLine{01324\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01325\ \ \ \ \ \}}
+\DoxyCodeLine{01326\ }
+\DoxyCodeLine{01327\ \ \ \ \ bool\ contains(std::size\_t\ value)\ const\ \{}
+\DoxyCodeLine{01328\ \ \ \ \ \ \ return\ value\ >=\ m\_min\ \&\&\ value\ <=\ m\_max;}
+\DoxyCodeLine{01329\ \ \ \ \ \}}
+\DoxyCodeLine{01330\ }
+\DoxyCodeLine{01331\ \ \ \ \ bool\ is\_exact()\ const\ \{\ return\ m\_min\ ==\ m\_max;\ \}}
+\DoxyCodeLine{01332\ }
+\DoxyCodeLine{01333\ \ \ \ \ bool\ is\_right\_bounded()\ const\ \{}
+\DoxyCodeLine{01334\ \ \ \ \ \ \ return\ m\_max\ <\ (std::numeric\_limits<std::size\_t>::max)();}
+\DoxyCodeLine{01335\ \ \ \ \ \}}
+\DoxyCodeLine{01336\ }
+\DoxyCodeLine{01337\ \ \ \ \ std::size\_t\ get\_min()\ const\ \{\ return\ m\_min;\ \}}
+\DoxyCodeLine{01338\ }
+\DoxyCodeLine{01339\ \ \ \ \ std::size\_t\ get\_max()\ const\ \{\ return\ m\_max;\ \}}
+\DoxyCodeLine{01340\ }
+\DoxyCodeLine{01341\ \ \ \ \ \textcolor{comment}{//\ Print\ help\ message}}
+\DoxyCodeLine{01342\ \ \ \ \ friend\ auto\ operator<<(std::ostream\ \&stream,\ const\ NArgsRange\ \&range)}
+\DoxyCodeLine{01343\ \ \ \ \ \ \ \ \ -\/>\ std::ostream\ \&\ \{}
+\DoxyCodeLine{01344\ \ \ \ \ \ \ if\ (range.m\_min\ ==\ range.m\_max)\ \{}
+\DoxyCodeLine{01345\ \ \ \ \ \ \ \ \ if\ (range.m\_min\ !=\ 0\ \&\&\ range.m\_min\ !=\ 1)\ \{}
+\DoxyCodeLine{01346\ \ \ \ \ \ \ \ \ \ \ stream\ <<\ "{}[nargs:\ "{}\ <<\ range.m\_min\ <<\ "{}]\ "{};}
+\DoxyCodeLine{01347\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01348\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01349\ \ \ \ \ \ \ \ \ if\ (range.m\_max\ ==\ (std::numeric\_limits<std::size\_t>::max)())\ \{}
+\DoxyCodeLine{01350\ \ \ \ \ \ \ \ \ \ \ stream\ <<\ "{}[nargs:\ "{}\ <<\ range.m\_min\ <<\ "{}\ or\ more]\ "{};}
+\DoxyCodeLine{01351\ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01352\ \ \ \ \ \ \ \ \ \ \ stream\ <<\ "{}[nargs="{}\ <<\ range.m\_min\ <<\ "{}.."{}\ <<\ range.m\_max\ <<\ "{}]\ "{};}
+\DoxyCodeLine{01353\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01354\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01355\ \ \ \ \ \ \ return\ stream;}
+\DoxyCodeLine{01356\ \ \ \ \ \}}
+\DoxyCodeLine{01357\ }
+\DoxyCodeLine{01358\ \ \ \ \ bool\ operator==(const\ NArgsRange\ \&rhs)\ const\ \{}
+\DoxyCodeLine{01359\ \ \ \ \ \ \ return\ rhs.m\_min\ ==\ m\_min\ \&\&\ rhs.m\_max\ ==\ m\_max;}
+\DoxyCodeLine{01360\ \ \ \ \ \}}
+\DoxyCodeLine{01361\ }
+\DoxyCodeLine{01362\ \ \ \ \ bool\ operator!=(const\ NArgsRange\ \&rhs)\ const\ \{\ return\ !(*this\ ==\ rhs);\ \}}
+\DoxyCodeLine{01363\ \ \ \};}
+\DoxyCodeLine{01364\ }
+\DoxyCodeLine{01365\ \ \ void\ throw\_nargs\_range\_validation\_error()\ const\ \{}
+\DoxyCodeLine{01366\ \ \ \ \ std::stringstream\ stream;}
+\DoxyCodeLine{01367\ \ \ \ \ if\ (!m\_used\_name.empty())\ \{}
+\DoxyCodeLine{01368\ \ \ \ \ \ \ stream\ <<\ m\_used\_name\ <<\ "{}:\ "{};}
+\DoxyCodeLine{01369\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01370\ \ \ \ \ \ \ stream\ <<\ m\_names.front()\ <<\ "{}:\ "{};}
+\DoxyCodeLine{01371\ \ \ \ \ \}}
+\DoxyCodeLine{01372\ \ \ \ \ if\ (m\_num\_args\_range.is\_exact())\ \{}
+\DoxyCodeLine{01373\ \ \ \ \ \ \ stream\ <<\ m\_num\_args\_range.get\_min();}
+\DoxyCodeLine{01374\ \ \ \ \ \}\ else\ if\ (m\_num\_args\_range.is\_right\_bounded())\ \{}
+\DoxyCodeLine{01375\ \ \ \ \ \ \ stream\ <<\ m\_num\_args\_range.get\_min()\ <<\ "{}\ to\ "{}}
+\DoxyCodeLine{01376\ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ m\_num\_args\_range.get\_max();}
+\DoxyCodeLine{01377\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01378\ \ \ \ \ \ \ stream\ <<\ m\_num\_args\_range.get\_min()\ <<\ "{}\ or\ more"{};}
+\DoxyCodeLine{01379\ \ \ \ \ \}}
+\DoxyCodeLine{01380\ \ \ \ \ stream\ <<\ "{}\ argument(s)\ expected.\ "{}\ <<\ m\_values.size()\ <<\ "{}\ provided."{};}
+\DoxyCodeLine{01381\ \ \ \ \ throw\ std::runtime\_error(stream.str());}
+\DoxyCodeLine{01382\ \ \ \}}
+\DoxyCodeLine{01383\ }
+\DoxyCodeLine{01384\ \ \ void\ throw\_required\_arg\_not\_used\_error()\ const\ \{}
+\DoxyCodeLine{01385\ \ \ \ \ std::stringstream\ stream;}
+\DoxyCodeLine{01386\ \ \ \ \ stream\ <<\ m\_names.front()\ <<\ "{}:\ required."{};}
+\DoxyCodeLine{01387\ \ \ \ \ throw\ std::runtime\_error(stream.str());}
+\DoxyCodeLine{01388\ \ \ \}}
+\DoxyCodeLine{01389\ }
+\DoxyCodeLine{01390\ \ \ void\ throw\_required\_arg\_no\_value\_provided\_error()\ const\ \{}
+\DoxyCodeLine{01391\ \ \ \ \ std::stringstream\ stream;}
+\DoxyCodeLine{01392\ \ \ \ \ stream\ <<\ m\_used\_name\ <<\ "{}:\ no\ value\ provided."{};}
+\DoxyCodeLine{01393\ \ \ \ \ throw\ std::runtime\_error(stream.str());}
+\DoxyCodeLine{01394\ \ \ \}}
+\DoxyCodeLine{01395\ }
+\DoxyCodeLine{01396\ \ \ static\ constexpr\ int\ eof\ =\ std::char\_traits<char>::eof();}
+\DoxyCodeLine{01397\ }
+\DoxyCodeLine{01398\ \ \ static\ auto\ lookahead(std::string\_view\ s)\ -\/>\ int\ \{}
+\DoxyCodeLine{01399\ \ \ \ \ if\ (s.empty())\ \{}
+\DoxyCodeLine{01400\ \ \ \ \ \ \ return\ eof;}
+\DoxyCodeLine{01401\ \ \ \ \ \}}
+\DoxyCodeLine{01402\ \ \ \ \ return\ static\_cast<int>(static\_cast<unsigned\ char>(s[0]));}
+\DoxyCodeLine{01403\ \ \ \}}
+\DoxyCodeLine{01404\ }
+\DoxyCodeLine{01405\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{01406\ \textcolor{comment}{\ \ \ *\ decimal-\/literal:}}
+\DoxyCodeLine{01407\ \textcolor{comment}{\ \ \ *\ \ \ \ '0'}}
+\DoxyCodeLine{01408\ \textcolor{comment}{\ \ \ *\ \ \ \ nonzero-\/digit\ digit-\/sequence\_opt}}
+\DoxyCodeLine{01409\ \textcolor{comment}{\ \ \ *\ \ \ \ integer-\/part\ fractional-\/part}}
+\DoxyCodeLine{01410\ \textcolor{comment}{\ \ \ *\ \ \ \ fractional-\/part}}
+\DoxyCodeLine{01411\ \textcolor{comment}{\ \ \ *\ \ \ \ integer-\/part\ '.'\ exponent-\/part\_opt}}
+\DoxyCodeLine{01412\ \textcolor{comment}{\ \ \ *\ \ \ \ integer-\/part\ exponent-\/part}}
+\DoxyCodeLine{01413\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{01414\ \textcolor{comment}{\ \ \ *\ integer-\/part:}}
+\DoxyCodeLine{01415\ \textcolor{comment}{\ \ \ *\ \ \ \ digit-\/sequence}}
+\DoxyCodeLine{01416\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{01417\ \textcolor{comment}{\ \ \ *\ fractional-\/part:}}
+\DoxyCodeLine{01418\ \textcolor{comment}{\ \ \ *\ \ \ \ '.'\ post-\/decimal-\/point}}
+\DoxyCodeLine{01419\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{01420\ \textcolor{comment}{\ \ \ *\ post-\/decimal-\/point:}}
+\DoxyCodeLine{01421\ \textcolor{comment}{\ \ \ *\ \ \ \ digit-\/sequence\ exponent-\/part\_opt}}
+\DoxyCodeLine{01422\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{01423\ \textcolor{comment}{\ \ \ *\ exponent-\/part:}}
+\DoxyCodeLine{01424\ \textcolor{comment}{\ \ \ *\ \ \ \ 'e'\ post-\/e}}
+\DoxyCodeLine{01425\ \textcolor{comment}{\ \ \ *\ \ \ \ 'E'\ post-\/e}}
+\DoxyCodeLine{01426\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{01427\ \textcolor{comment}{\ \ \ *\ post-\/e:}}
+\DoxyCodeLine{01428\ \textcolor{comment}{\ \ \ *\ \ \ \ sign\_opt\ digit-\/sequence}}
+\DoxyCodeLine{01429\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{01430\ \textcolor{comment}{\ \ \ *\ sign:\ one\ of}}
+\DoxyCodeLine{01431\ \textcolor{comment}{\ \ \ *\ \ \ \ '+'\ '-\/'}}
+\DoxyCodeLine{01432\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01433\ \ \ static\ bool\ is\_decimal\_literal(std::string\_view\ s)\ \{}
+\DoxyCodeLine{01434\ \ \ \ \ auto\ is\_digit\ =\ [](auto\ c)\ constexpr\ \{}
+\DoxyCodeLine{01435\ \ \ \ \ \ \ switch\ (c)\ \{}
+\DoxyCodeLine{01436\ \ \ \ \ \ \ case\ '0':}
+\DoxyCodeLine{01437\ \ \ \ \ \ \ case\ '1':}
+\DoxyCodeLine{01438\ \ \ \ \ \ \ case\ '2':}
+\DoxyCodeLine{01439\ \ \ \ \ \ \ case\ '3':}
+\DoxyCodeLine{01440\ \ \ \ \ \ \ case\ '4':}
+\DoxyCodeLine{01441\ \ \ \ \ \ \ case\ '5':}
+\DoxyCodeLine{01442\ \ \ \ \ \ \ case\ '6':}
+\DoxyCodeLine{01443\ \ \ \ \ \ \ case\ '7':}
+\DoxyCodeLine{01444\ \ \ \ \ \ \ case\ '8':}
+\DoxyCodeLine{01445\ \ \ \ \ \ \ case\ '9':}
+\DoxyCodeLine{01446\ \ \ \ \ \ \ \ \ return\ true;}
+\DoxyCodeLine{01447\ \ \ \ \ \ \ default:}
+\DoxyCodeLine{01448\ \ \ \ \ \ \ \ \ return\ false;}
+\DoxyCodeLine{01449\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01450\ \ \ \ \ \};}
+\DoxyCodeLine{01451\ }
+\DoxyCodeLine{01452\ \ \ \ \ \textcolor{comment}{//\ precondition:\ we\ have\ consumed\ or\ will\ consume\ at\ least\ one\ digit}}
+\DoxyCodeLine{01453\ \ \ \ \ auto\ consume\_digits\ =\ [=](std::string\_view\ sd)\ \{}
+\DoxyCodeLine{01454\ \ \ \ \ \ \ \textcolor{comment}{//\ NOLINTNEXTLINE(readability-\/qualified-\/auto)}}
+\DoxyCodeLine{01455\ \ \ \ \ \ \ auto\ it\ =\ std::find\_if\_not(std::begin(sd),\ std::end(sd),\ is\_digit);}
+\DoxyCodeLine{01456\ \ \ \ \ \ \ return\ sd.substr(static\_cast<std::size\_t>(it\ -\/\ std::begin(sd)));}
+\DoxyCodeLine{01457\ \ \ \ \ \};}
+\DoxyCodeLine{01458\ }
+\DoxyCodeLine{01459\ \ \ \ \ switch\ (lookahead(s))\ \{}
+\DoxyCodeLine{01460\ \ \ \ \ case\ '0':\ \{}
+\DoxyCodeLine{01461\ \ \ \ \ \ \ s.remove\_prefix(1);}
+\DoxyCodeLine{01462\ \ \ \ \ \ \ if\ (s.empty())\ \{}
+\DoxyCodeLine{01463\ \ \ \ \ \ \ \ \ return\ true;}
+\DoxyCodeLine{01464\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01465\ \ \ \ \ \ \ goto\ integer\_part;}
+\DoxyCodeLine{01466\ \ \ \ \ \}}
+\DoxyCodeLine{01467\ \ \ \ \ case\ '1':}
+\DoxyCodeLine{01468\ \ \ \ \ case\ '2':}
+\DoxyCodeLine{01469\ \ \ \ \ case\ '3':}
+\DoxyCodeLine{01470\ \ \ \ \ case\ '4':}
+\DoxyCodeLine{01471\ \ \ \ \ case\ '5':}
+\DoxyCodeLine{01472\ \ \ \ \ case\ '6':}
+\DoxyCodeLine{01473\ \ \ \ \ case\ '7':}
+\DoxyCodeLine{01474\ \ \ \ \ case\ '8':}
+\DoxyCodeLine{01475\ \ \ \ \ case\ '9':\ \{}
+\DoxyCodeLine{01476\ \ \ \ \ \ \ s\ =\ consume\_digits(s);}
+\DoxyCodeLine{01477\ \ \ \ \ \ \ if\ (s.empty())\ \{}
+\DoxyCodeLine{01478\ \ \ \ \ \ \ \ \ return\ true;}
+\DoxyCodeLine{01479\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01480\ \ \ \ \ \ \ goto\ integer\_part\_consumed;}
+\DoxyCodeLine{01481\ \ \ \ \ \}}
+\DoxyCodeLine{01482\ \ \ \ \ case\ '.':\ \{}
+\DoxyCodeLine{01483\ \ \ \ \ \ \ s.remove\_prefix(1);}
+\DoxyCodeLine{01484\ \ \ \ \ \ \ goto\ post\_decimal\_point;}
+\DoxyCodeLine{01485\ \ \ \ \ \}}
+\DoxyCodeLine{01486\ \ \ \ \ default:}
+\DoxyCodeLine{01487\ \ \ \ \ \ \ return\ false;}
+\DoxyCodeLine{01488\ \ \ \ \ \}}
+\DoxyCodeLine{01489\ }
+\DoxyCodeLine{01490\ \ \ integer\_part:}
+\DoxyCodeLine{01491\ \ \ \ \ s\ =\ consume\_digits(s);}
+\DoxyCodeLine{01492\ \ \ integer\_part\_consumed:}
+\DoxyCodeLine{01493\ \ \ \ \ switch\ (lookahead(s))\ \{}
+\DoxyCodeLine{01494\ \ \ \ \ case\ '.':\ \{}
+\DoxyCodeLine{01495\ \ \ \ \ \ \ s.remove\_prefix(1);}
+\DoxyCodeLine{01496\ \ \ \ \ \ \ if\ (is\_digit(lookahead(s)))\ \{}
+\DoxyCodeLine{01497\ \ \ \ \ \ \ \ \ goto\ post\_decimal\_point;}
+\DoxyCodeLine{01498\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01499\ \ \ \ \ \ \ \ \ goto\ exponent\_part\_opt;}
+\DoxyCodeLine{01500\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01501\ \ \ \ \ \}}
+\DoxyCodeLine{01502\ \ \ \ \ case\ 'e':}
+\DoxyCodeLine{01503\ \ \ \ \ case\ 'E':\ \{}
+\DoxyCodeLine{01504\ \ \ \ \ \ \ s.remove\_prefix(1);}
+\DoxyCodeLine{01505\ \ \ \ \ \ \ goto\ post\_e;}
+\DoxyCodeLine{01506\ \ \ \ \ \}}
+\DoxyCodeLine{01507\ \ \ \ \ default:}
+\DoxyCodeLine{01508\ \ \ \ \ \ \ return\ false;}
+\DoxyCodeLine{01509\ \ \ \ \ \}}
+\DoxyCodeLine{01510\ }
+\DoxyCodeLine{01511\ \ \ post\_decimal\_point:}
+\DoxyCodeLine{01512\ \ \ \ \ if\ (is\_digit(lookahead(s)))\ \{}
+\DoxyCodeLine{01513\ \ \ \ \ \ \ s\ =\ consume\_digits(s);}
+\DoxyCodeLine{01514\ \ \ \ \ \ \ goto\ exponent\_part\_opt;}
+\DoxyCodeLine{01515\ \ \ \ \ \}}
+\DoxyCodeLine{01516\ \ \ \ \ return\ false;}
+\DoxyCodeLine{01517\ }
+\DoxyCodeLine{01518\ \ \ exponent\_part\_opt:}
+\DoxyCodeLine{01519\ \ \ \ \ switch\ (lookahead(s))\ \{}
+\DoxyCodeLine{01520\ \ \ \ \ case\ eof:}
+\DoxyCodeLine{01521\ \ \ \ \ \ \ return\ true;}
+\DoxyCodeLine{01522\ \ \ \ \ case\ 'e':}
+\DoxyCodeLine{01523\ \ \ \ \ case\ 'E':\ \{}
+\DoxyCodeLine{01524\ \ \ \ \ \ \ s.remove\_prefix(1);}
+\DoxyCodeLine{01525\ \ \ \ \ \ \ goto\ post\_e;}
+\DoxyCodeLine{01526\ \ \ \ \ \}}
+\DoxyCodeLine{01527\ \ \ \ \ default:}
+\DoxyCodeLine{01528\ \ \ \ \ \ \ return\ false;}
+\DoxyCodeLine{01529\ \ \ \ \ \}}
+\DoxyCodeLine{01530\ }
+\DoxyCodeLine{01531\ \ \ post\_e:}
+\DoxyCodeLine{01532\ \ \ \ \ switch\ (lookahead(s))\ \{}
+\DoxyCodeLine{01533\ \ \ \ \ case\ '-\/':}
+\DoxyCodeLine{01534\ \ \ \ \ case\ '+':}
+\DoxyCodeLine{01535\ \ \ \ \ \ \ s.remove\_prefix(1);}
+\DoxyCodeLine{01536\ \ \ \ \ \}}
+\DoxyCodeLine{01537\ \ \ \ \ if\ (is\_digit(lookahead(s)))\ \{}
+\DoxyCodeLine{01538\ \ \ \ \ \ \ s\ =\ consume\_digits(s);}
+\DoxyCodeLine{01539\ \ \ \ \ \ \ return\ s.empty();}
+\DoxyCodeLine{01540\ \ \ \ \ \}}
+\DoxyCodeLine{01541\ \ \ \ \ return\ false;}
+\DoxyCodeLine{01542\ \ \ \}}
+\DoxyCodeLine{01543\ }
+\DoxyCodeLine{01544\ \ \ static\ bool\ is\_optional(std::string\_view\ name,}
+\DoxyCodeLine{01545\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\_view\ prefix\_chars)\ \{}
+\DoxyCodeLine{01546\ \ \ \ \ return\ !is\_positional(name,\ prefix\_chars);}
+\DoxyCodeLine{01547\ \ \ \}}
+\DoxyCodeLine{01548\ }
+\DoxyCodeLine{01549\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{01550\ \textcolor{comment}{\ \ \ *\ Get\ argument\ value\ given\ a\ type}}
+\DoxyCodeLine{01551\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ in\ case\ of\ incompatible\ types}}
+\DoxyCodeLine{01552\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01553\ \ \ template\ <typename\ T>\ T\ get()\ const\ \{}
+\DoxyCodeLine{01554\ \ \ \ \ if\ (!m\_values.empty())\ \{}
+\DoxyCodeLine{01555\ \ \ \ \ \ \ if\ constexpr\ (details::IsContainer<T>)\ \{}
+\DoxyCodeLine{01556\ \ \ \ \ \ \ \ \ return\ any\_cast\_container<T>(m\_values);}
+\DoxyCodeLine{01557\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01558\ \ \ \ \ \ \ \ \ return\ std::any\_cast<T>(m\_values.front());}
+\DoxyCodeLine{01559\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01560\ \ \ \ \ \}}
+\DoxyCodeLine{01561\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{01562\ \ \ \ \ \ \ return\ std::any\_cast<T>(m\_default\_value);}
+\DoxyCodeLine{01563\ \ \ \ \ \}}
+\DoxyCodeLine{01564\ \ \ \ \ if\ constexpr\ (details::IsContainer<T>)\ \{}
+\DoxyCodeLine{01565\ \ \ \ \ \ \ if\ (!m\_accepts\_optional\_like\_value)\ \{}
+\DoxyCodeLine{01566\ \ \ \ \ \ \ \ \ return\ any\_cast\_container<T>(m\_values);}
+\DoxyCodeLine{01567\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01568\ \ \ \ \ \}}
+\DoxyCodeLine{01569\ }
+\DoxyCodeLine{01570\ \ \ \ \ throw\ std::logic\_error("{}No\ value\ provided\ for\ '"{}\ +\ m\_names.back()\ +\ "{}'."{});}
+\DoxyCodeLine{01571\ \ \ \}}
+\DoxyCodeLine{01572\ }
+\DoxyCodeLine{01573\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{01574\ \textcolor{comment}{\ \ \ *\ Get\ argument\ value\ given\ a\ type.}}
+\DoxyCodeLine{01575\ \textcolor{comment}{\ \ \ *\ @pre\ The\ object\ has\ no\ default\ value.}}
+\DoxyCodeLine{01576\ \textcolor{comment}{\ \ \ *\ @returns\ The\ stored\ value\ if\ any,\ std::nullopt\ otherwise.}}
+\DoxyCodeLine{01577\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01578\ \ \ template\ <typename\ T>\ auto\ present()\ const\ -\/>\ std::optional<T>\ \{}
+\DoxyCodeLine{01579\ \ \ \ \ if\ (m\_default\_value.has\_value())\ \{}
+\DoxyCodeLine{01580\ \ \ \ \ \ \ throw\ std::logic\_error("{}Argument\ with\ default\ value\ always\ presents"{});}
+\DoxyCodeLine{01581\ \ \ \ \ \}}
+\DoxyCodeLine{01582\ \ \ \ \ if\ (m\_values.empty())\ \{}
+\DoxyCodeLine{01583\ \ \ \ \ \ \ return\ std::nullopt;}
+\DoxyCodeLine{01584\ \ \ \ \ \}}
+\DoxyCodeLine{01585\ \ \ \ \ if\ constexpr\ (details::IsContainer<T>)\ \{}
+\DoxyCodeLine{01586\ \ \ \ \ \ \ return\ any\_cast\_container<T>(m\_values);}
+\DoxyCodeLine{01587\ \ \ \ \ \}}
+\DoxyCodeLine{01588\ \ \ \ \ return\ std::any\_cast<T>(m\_values.front());}
+\DoxyCodeLine{01589\ \ \ \}}
+\DoxyCodeLine{01590\ }
+\DoxyCodeLine{01591\ \ \ template\ <typename\ T>}
+\DoxyCodeLine{01592\ \ \ static\ auto\ any\_cast\_container(const\ std::vector<std::any>\ \&operand)\ -\/>\ T\ \{}
+\DoxyCodeLine{01593\ \ \ \ \ using\ ValueType\ =\ typename\ T::value\_type;}
+\DoxyCodeLine{01594\ }
+\DoxyCodeLine{01595\ \ \ \ \ T\ result;}
+\DoxyCodeLine{01596\ \ \ \ \ std::transform(}
+\DoxyCodeLine{01597\ \ \ \ \ \ \ \ \ std::begin(operand),\ std::end(operand),\ std::back\_inserter(result),}
+\DoxyCodeLine{01598\ \ \ \ \ \ \ \ \ [](const\ auto\ \&value)\ \{\ return\ std::any\_cast<ValueType>(value);\ \});}
+\DoxyCodeLine{01599\ \ \ \ \ return\ result;}
+\DoxyCodeLine{01600\ \ \ \}}
+\DoxyCodeLine{01601\ }
+\DoxyCodeLine{01602\ \ \ void\ set\_usage\_newline\_counter(int\ i)\ \{\ m\_usage\_newline\_counter\ =\ i;\ \}}
+\DoxyCodeLine{01603\ }
+\DoxyCodeLine{01604\ \ \ void\ set\_group\_idx(std::size\_t\ i)\ \{\ m\_group\_idx\ =\ i;\ \}}
+\DoxyCodeLine{01605\ }
+\DoxyCodeLine{01606\ \ \ std::vector<std::string>\ m\_names;}
+\DoxyCodeLine{01607\ \ \ std::string\_view\ m\_used\_name;}
+\DoxyCodeLine{01608\ \ \ std::string\ m\_help;}
+\DoxyCodeLine{01609\ \ \ std::string\ m\_metavar;}
+\DoxyCodeLine{01610\ \ \ std::any\ m\_default\_value;}
+\DoxyCodeLine{01611\ \ \ std::string\ m\_default\_value\_repr;}
+\DoxyCodeLine{01612\ \ \ std::optional<std::string>}
+\DoxyCodeLine{01613\ \ \ \ \ \ \ m\_default\_value\_str;\ \textcolor{comment}{//\ used\ for\ checking\ default\_value\ against\ choices}}
+\DoxyCodeLine{01614\ \ \ std::any\ m\_implicit\_value;}
+\DoxyCodeLine{01615\ \ \ std::optional<std::vector<std::string>>\ m\_choices\{std::nullopt\};}
+\DoxyCodeLine{01616\ \ \ using\ valued\_action\ =\ std::function<std::any(const\ std::string\ \&)>;}
+\DoxyCodeLine{01617\ \ \ using\ void\_action\ =\ std::function<void(const\ std::string\ \&)>;}
+\DoxyCodeLine{01618\ \ \ std::vector<std::variant<valued\_action,\ void\_action>>\ m\_actions;}
+\DoxyCodeLine{01619\ \ \ std::variant<valued\_action,\ void\_action>\ m\_default\_action\{}
+\DoxyCodeLine{01620\ \ \ \ \ std::in\_place\_type<valued\_action>,}
+\DoxyCodeLine{01621\ \ \ \ \ [](const\ std::string\ \&value)\ \{\ return\ value;\ \}\};}
+\DoxyCodeLine{01622\ \ \ std::vector<std::any>\ m\_values;}
+\DoxyCodeLine{01623\ \ \ NArgsRange\ m\_num\_args\_range\{1,\ 1\};}
+\DoxyCodeLine{01624\ \ \ \textcolor{comment}{//\ Bit\ field\ of\ bool\ values.\ Set\ default\ value\ in\ ctor.}}
+\DoxyCodeLine{01625\ \ \ bool\ m\_accepts\_optional\_like\_value\ :\ 1;}
+\DoxyCodeLine{01626\ \ \ bool\ m\_is\_optional\ :\ 1;}
+\DoxyCodeLine{01627\ \ \ bool\ m\_is\_required\ :\ 1;}
+\DoxyCodeLine{01628\ \ \ bool\ m\_is\_repeatable\ :\ 1;}
+\DoxyCodeLine{01629\ \ \ bool\ m\_is\_used\ :\ 1;}
+\DoxyCodeLine{01630\ \ \ bool\ m\_is\_hidden\ :\ 1;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ set,\ does\ not\ appear\ in\ usage\ or\ help}}
+\DoxyCodeLine{01631\ \ \ std::string\_view\ m\_prefix\_chars;\ \textcolor{comment}{//\ ArgumentParser\ has\ the\ prefix\_chars}}
+\DoxyCodeLine{01632\ \ \ int\ m\_usage\_newline\_counter\ =\ 0;}
+\DoxyCodeLine{01633\ \ \ std::size\_t\ m\_group\_idx\ =\ 0;}
+\DoxyCodeLine{01634\ \};}
+\DoxyCodeLine{01635\ }
+\DoxyCodeLine{01636\ class\ ArgumentParser\ \{}
+\DoxyCodeLine{01637\ public:}
+\DoxyCodeLine{01638\ \ \ explicit\ ArgumentParser(std::string\ program\_name\ =\ \{\},}
+\DoxyCodeLine{01639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ version\ =\ "{}1.0"{},}
+\DoxyCodeLine{01640\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ default\_arguments\ add\_args\ =\ default\_arguments::all,}
+\DoxyCodeLine{01641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bool\ exit\_on\_default\_arguments\ =\ true,}
+\DoxyCodeLine{01642\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::ostream\ \&os\ =\ std::cout)}
+\DoxyCodeLine{01643\ \ \ \ \ \ \ :\ m\_program\_name(std::move(program\_name)),\ m\_version(std::move(version)),}
+\DoxyCodeLine{01644\ \ \ \ \ \ \ \ \ m\_exit\_on\_default\_arguments(exit\_on\_default\_arguments),}
+\DoxyCodeLine{01645\ \ \ \ \ \ \ \ \ m\_parser\_path(m\_program\_name)\ \{}
+\DoxyCodeLine{01646\ \ \ \ \ if\ ((add\_args\ \&\ default\_arguments::help)\ ==\ default\_arguments::help)\ \{}
+\DoxyCodeLine{01647\ \ \ \ \ \ \ add\_argument("{}-\/h"{},\ "{}-\/-\/help"{})}
+\DoxyCodeLine{01648\ \ \ \ \ \ \ \ \ \ \ .action([\&](const\ auto\ \&\ \textcolor{comment}{/*unused*/})\ \{}
+\DoxyCodeLine{01649\ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ help().str();}
+\DoxyCodeLine{01650\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (m\_exit\_on\_default\_arguments)\ \{}
+\DoxyCodeLine{01651\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::exit(0);}
+\DoxyCodeLine{01652\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01653\ \ \ \ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{01654\ \ \ \ \ \ \ \ \ \ \ .default\_value(false)}
+\DoxyCodeLine{01655\ \ \ \ \ \ \ \ \ \ \ .help("{}shows\ help\ message\ and\ exits"{})}
+\DoxyCodeLine{01656\ \ \ \ \ \ \ \ \ \ \ .implicit\_value(true)}
+\DoxyCodeLine{01657\ \ \ \ \ \ \ \ \ \ \ .nargs(0);}
+\DoxyCodeLine{01658\ \ \ \ \ \}}
+\DoxyCodeLine{01659\ \ \ \ \ if\ ((add\_args\ \&\ default\_arguments::version)\ ==\ default\_arguments::version)\ \{}
+\DoxyCodeLine{01660\ \ \ \ \ \ \ add\_argument("{}-\/v"{},\ "{}-\/-\/version"{})}
+\DoxyCodeLine{01661\ \ \ \ \ \ \ \ \ \ \ .action([\&](const\ auto\ \&\ \textcolor{comment}{/*unused*/})\ \{}
+\DoxyCodeLine{01662\ \ \ \ \ \ \ \ \ \ \ \ \ os\ <<\ m\_version\ <<\ std::endl;}
+\DoxyCodeLine{01663\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (m\_exit\_on\_default\_arguments)\ \{}
+\DoxyCodeLine{01664\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::exit(0);}
+\DoxyCodeLine{01665\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01666\ \ \ \ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{01667\ \ \ \ \ \ \ \ \ \ \ .default\_value(false)}
+\DoxyCodeLine{01668\ \ \ \ \ \ \ \ \ \ \ .help("{}prints\ version\ information\ and\ exits"{})}
+\DoxyCodeLine{01669\ \ \ \ \ \ \ \ \ \ \ .implicit\_value(true)}
+\DoxyCodeLine{01670\ \ \ \ \ \ \ \ \ \ \ .nargs(0);}
+\DoxyCodeLine{01671\ \ \ \ \ \}}
+\DoxyCodeLine{01672\ \ \ \}}
+\DoxyCodeLine{01673\ }
+\DoxyCodeLine{01674\ \ \ \string~ArgumentParser()\ =\ default;}
+\DoxyCodeLine{01675\ }
+\DoxyCodeLine{01676\ \ \ \textcolor{comment}{//\ ArgumentParser\ is\ meant\ to\ be\ used\ in\ a\ single\ function.}}
+\DoxyCodeLine{01677\ \ \ \textcolor{comment}{//\ Setup\ everything\ and\ parse\ arguments\ in\ one\ place.}}
+\DoxyCodeLine{01678\ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{01679\ \ \ \textcolor{comment}{//\ ArgumentParser\ internally\ uses\ std::string\_views,}}
+\DoxyCodeLine{01680\ \ \ \textcolor{comment}{//\ references,\ iterators,\ etc.}}
+\DoxyCodeLine{01681\ \ \ \textcolor{comment}{//\ Many\ of\ these\ elements\ become\ invalidated\ after\ a\ copy\ or\ move.}}
+\DoxyCodeLine{01682\ \ \ ArgumentParser(const\ ArgumentParser\ \&other)\ =\ delete;}
+\DoxyCodeLine{01683\ \ \ ArgumentParser\ \&operator=(const\ ArgumentParser\ \&other)\ =\ delete;}
+\DoxyCodeLine{01684\ \ \ ArgumentParser(ArgumentParser\ \&\&)\ noexcept\ =\ delete;}
+\DoxyCodeLine{01685\ \ \ ArgumentParser\ \&operator=(ArgumentParser\ \&\&)\ =\ delete;}
+\DoxyCodeLine{01686\ }
+\DoxyCodeLine{01687\ \ \ explicit\ operator\ bool()\ const\ \{}
+\DoxyCodeLine{01688\ \ \ \ \ auto\ arg\_used\ =\ std::any\_of(m\_argument\_map.cbegin(),\ m\_argument\_map.cend(),}
+\DoxyCodeLine{01689\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](auto\ \&it)\ \{\ return\ it.second-\/>m\_is\_used;\ \});}
+\DoxyCodeLine{01690\ \ \ \ \ auto\ subparser\_used\ =}
+\DoxyCodeLine{01691\ \ \ \ \ \ \ \ \ std::any\_of(m\_subparser\_used.cbegin(),\ m\_subparser\_used.cend(),}
+\DoxyCodeLine{01692\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [](auto\ \&it)\ \{\ return\ it.second;\ \});}
+\DoxyCodeLine{01693\ }
+\DoxyCodeLine{01694\ \ \ \ \ return\ m\_is\_parsed\ \&\&\ (arg\_used\ ||\ subparser\_used);}
+\DoxyCodeLine{01695\ \ \ \}}
+\DoxyCodeLine{01696\ }
+\DoxyCodeLine{01697\ \ \ \textcolor{comment}{//\ Parameter\ packing}}
+\DoxyCodeLine{01698\ \ \ \textcolor{comment}{//\ Call\ add\_argument\ with\ variadic\ number\ of\ string\ arguments}}
+\DoxyCodeLine{01699\ \ \ template\ <typename...\ Targs>\ Argument\ \&add\_argument(Targs...\ f\_args)\ \{}
+\DoxyCodeLine{01700\ \ \ \ \ using\ array\_of\_sv\ =\ std::array<std::string\_view,\ sizeof...(Targs)>;}
+\DoxyCodeLine{01701\ \ \ \ \ auto\ argument\ =}
+\DoxyCodeLine{01702\ \ \ \ \ \ \ \ \ m\_optional\_arguments.emplace(std::cend(m\_optional\_arguments),}
+\DoxyCodeLine{01703\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_prefix\_chars,\ array\_of\_sv\{f\_args...\});}
+\DoxyCodeLine{01704\ }
+\DoxyCodeLine{01705\ \ \ \ \ if\ (!argument-\/>m\_is\_optional)\ \{}
+\DoxyCodeLine{01706\ \ \ \ \ \ \ m\_positional\_arguments.splice(std::cend(m\_positional\_arguments),}
+\DoxyCodeLine{01707\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_optional\_arguments,\ argument);}
+\DoxyCodeLine{01708\ \ \ \ \ \}}
+\DoxyCodeLine{01709\ \ \ \ \ argument-\/>set\_usage\_newline\_counter(m\_usage\_newline\_counter);}
+\DoxyCodeLine{01710\ \ \ \ \ argument-\/>set\_group\_idx(m\_group\_names.size());}
+\DoxyCodeLine{01711\ }
+\DoxyCodeLine{01712\ \ \ \ \ index\_argument(argument);}
+\DoxyCodeLine{01713\ \ \ \ \ return\ *argument;}
+\DoxyCodeLine{01714\ \ \ \}}
+\DoxyCodeLine{01715\ }
+\DoxyCodeLine{01716\ \ \ class\ MutuallyExclusiveGroup\ \{}
+\DoxyCodeLine{01717\ \ \ \ \ friend\ class\ ArgumentParser;}
+\DoxyCodeLine{01718\ }
+\DoxyCodeLine{01719\ \ \ public:}
+\DoxyCodeLine{01720\ \ \ \ \ MutuallyExclusiveGroup()\ =\ delete;}
+\DoxyCodeLine{01721\ }
+\DoxyCodeLine{01722\ \ \ \ \ explicit\ MutuallyExclusiveGroup(ArgumentParser\ \&parent,}
+\DoxyCodeLine{01723\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bool\ required\ =\ false)}
+\DoxyCodeLine{01724\ \ \ \ \ \ \ \ \ :\ m\_parent(parent),\ m\_required(required),\ m\_elements(\{\})\ \{\}}
+\DoxyCodeLine{01725\ }
+\DoxyCodeLine{01726\ \ \ \ \ MutuallyExclusiveGroup(const\ MutuallyExclusiveGroup\ \&other)\ =\ delete;}
+\DoxyCodeLine{01727\ \ \ \ \ MutuallyExclusiveGroup\ \&}
+\DoxyCodeLine{01728\ \ \ \ \ operator=(const\ MutuallyExclusiveGroup\ \&other)\ =\ delete;}
+\DoxyCodeLine{01729\ }
+\DoxyCodeLine{01730\ \ \ \ \ MutuallyExclusiveGroup(MutuallyExclusiveGroup\ \&\&other)\ noexcept}
+\DoxyCodeLine{01731\ \ \ \ \ \ \ \ \ :\ m\_parent(other.m\_parent),\ m\_required(other.m\_required),}
+\DoxyCodeLine{01732\ \ \ \ \ \ \ \ \ \ \ m\_elements(std::move(other.m\_elements))\ \{}
+\DoxyCodeLine{01733\ \ \ \ \ \ \ other.m\_elements.clear();}
+\DoxyCodeLine{01734\ \ \ \ \ \}}
+\DoxyCodeLine{01735\ }
+\DoxyCodeLine{01736\ \ \ \ \ template\ <typename...\ Targs>\ Argument\ \&add\_argument(Targs...\ f\_args)\ \{}
+\DoxyCodeLine{01737\ \ \ \ \ \ \ auto\ \&argument\ =\ m\_parent.add\_argument(std::forward<Targs>(f\_args)...);}
+\DoxyCodeLine{01738\ \ \ \ \ \ \ m\_elements.push\_back(\&argument);}
+\DoxyCodeLine{01739\ \ \ \ \ \ \ argument.set\_usage\_newline\_counter(m\_parent.m\_usage\_newline\_counter);}
+\DoxyCodeLine{01740\ \ \ \ \ \ \ argument.set\_group\_idx(m\_parent.m\_group\_names.size());}
+\DoxyCodeLine{01741\ \ \ \ \ \ \ return\ argument;}
+\DoxyCodeLine{01742\ \ \ \ \ \}}
+\DoxyCodeLine{01743\ }
+\DoxyCodeLine{01744\ \ \ private:}
+\DoxyCodeLine{01745\ \ \ \ \ ArgumentParser\ \&m\_parent;}
+\DoxyCodeLine{01746\ \ \ \ \ bool\ m\_required\{false\};}
+\DoxyCodeLine{01747\ \ \ \ \ std::vector<Argument\ *>\ m\_elements\{\};}
+\DoxyCodeLine{01748\ \ \ \};}
+\DoxyCodeLine{01749\ }
+\DoxyCodeLine{01750\ \ \ MutuallyExclusiveGroup\ \&add\_mutually\_exclusive\_group(bool\ required\ =\ false)\ \{}
+\DoxyCodeLine{01751\ \ \ \ \ m\_mutually\_exclusive\_groups.emplace\_back(*this,\ required);}
+\DoxyCodeLine{01752\ \ \ \ \ return\ m\_mutually\_exclusive\_groups.back();}
+\DoxyCodeLine{01753\ \ \ \}}
+\DoxyCodeLine{01754\ }
+\DoxyCodeLine{01755\ \ \ \textcolor{comment}{//\ Parameter\ packed\ add\_parents\ method}}
+\DoxyCodeLine{01756\ \ \ \textcolor{comment}{//\ Accepts\ a\ variadic\ number\ of\ ArgumentParser\ objects}}
+\DoxyCodeLine{01757\ \ \ template\ <typename...\ Targs>}
+\DoxyCodeLine{01758\ \ \ ArgumentParser\ \&add\_parents(const\ Targs\ \&...\ f\_args)\ \{}
+\DoxyCodeLine{01759\ \ \ \ \ for\ (const\ ArgumentParser\ \&parent\_parser\ :\ \{std::ref(f\_args)...\})\ \{}
+\DoxyCodeLine{01760\ \ \ \ \ \ \ for\ (const\ auto\ \&argument\ :\ parent\_parser.m\_positional\_arguments)\ \{}
+\DoxyCodeLine{01761\ \ \ \ \ \ \ \ \ auto\ it\ =\ m\_positional\_arguments.insert(}
+\DoxyCodeLine{01762\ \ \ \ \ \ \ \ \ \ \ \ \ std::cend(m\_positional\_arguments),\ argument);}
+\DoxyCodeLine{01763\ \ \ \ \ \ \ \ \ index\_argument(it);}
+\DoxyCodeLine{01764\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01765\ \ \ \ \ \ \ for\ (const\ auto\ \&argument\ :\ parent\_parser.m\_optional\_arguments)\ \{}
+\DoxyCodeLine{01766\ \ \ \ \ \ \ \ \ auto\ it\ =\ m\_optional\_arguments.insert(std::cend(m\_optional\_arguments),}
+\DoxyCodeLine{01767\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ argument);}
+\DoxyCodeLine{01768\ \ \ \ \ \ \ \ \ index\_argument(it);}
+\DoxyCodeLine{01769\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01770\ \ \ \ \ \}}
+\DoxyCodeLine{01771\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01772\ \ \ \}}
+\DoxyCodeLine{01773\ }
+\DoxyCodeLine{01774\ \ \ \textcolor{comment}{//\ Ask\ for\ the\ next\ optional\ arguments\ to\ be\ displayed\ on\ a\ separate}}
+\DoxyCodeLine{01775\ \ \ \textcolor{comment}{//\ line\ in\ usage()\ output.\ Only\ effective\ if\ set\_usage\_max\_line\_width()\ is}}
+\DoxyCodeLine{01776\ \ \ \textcolor{comment}{//\ also\ used.}}
+\DoxyCodeLine{01777\ \ \ ArgumentParser\ \&add\_usage\_newline()\ \{}
+\DoxyCodeLine{01778\ \ \ \ \ ++m\_usage\_newline\_counter;}
+\DoxyCodeLine{01779\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01780\ \ \ \}}
+\DoxyCodeLine{01781\ }
+\DoxyCodeLine{01782\ \ \ \textcolor{comment}{//\ Ask\ for\ the\ next\ optional\ arguments\ to\ be\ displayed\ in\ a\ separate\ section}}
+\DoxyCodeLine{01783\ \ \ \textcolor{comment}{//\ in\ usage()\ and\ help\ (<<\ *this)\ output.}}
+\DoxyCodeLine{01784\ \ \ \textcolor{comment}{//\ For\ usage(),\ this\ is\ only\ effective\ if\ set\_usage\_max\_line\_width()\ is}}
+\DoxyCodeLine{01785\ \ \ \textcolor{comment}{//\ also\ used.}}
+\DoxyCodeLine{01786\ \ \ ArgumentParser\ \&add\_group(std::string\ group\_name)\ \{}
+\DoxyCodeLine{01787\ \ \ \ \ m\_group\_names.emplace\_back(std::move(group\_name));}
+\DoxyCodeLine{01788\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01789\ \ \ \}}
+\DoxyCodeLine{01790\ }
+\DoxyCodeLine{01791\ \ \ ArgumentParser\ \&add\_description(std::string\ description)\ \{}
+\DoxyCodeLine{01792\ \ \ \ \ m\_description\ =\ std::move(description);}
+\DoxyCodeLine{01793\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01794\ \ \ \}}
+\DoxyCodeLine{01795\ }
+\DoxyCodeLine{01796\ \ \ ArgumentParser\ \&add\_epilog(std::string\ epilog)\ \{}
+\DoxyCodeLine{01797\ \ \ \ \ m\_epilog\ =\ std::move(epilog);}
+\DoxyCodeLine{01798\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01799\ \ \ \}}
+\DoxyCodeLine{01800\ }
+\DoxyCodeLine{01801\ \ \ \textcolor{comment}{//\ Add\ a\ un-\/documented/hidden\ alias\ for\ an\ argument.}}
+\DoxyCodeLine{01802\ \ \ \textcolor{comment}{//\ Ideally\ we'd\ want\ this\ to\ be\ a\ method\ of\ Argument,\ but\ Argument}}
+\DoxyCodeLine{01803\ \ \ \textcolor{comment}{//\ does\ not\ own\ its\ owing\ ArgumentParser.}}
+\DoxyCodeLine{01804\ \ \ ArgumentParser\ \&add\_hidden\_alias\_for(Argument\ \&arg,\ std::string\_view\ alias)\ \{}
+\DoxyCodeLine{01805\ \ \ \ \ for\ (auto\ it\ =\ m\_optional\_arguments.begin();}
+\DoxyCodeLine{01806\ \ \ \ \ \ \ \ \ \ it\ !=\ m\_optional\_arguments.end();\ ++it)\ \{}
+\DoxyCodeLine{01807\ \ \ \ \ \ \ if\ (\&(*it)\ ==\ \&arg)\ \{}
+\DoxyCodeLine{01808\ \ \ \ \ \ \ \ \ m\_argument\_map.insert\_or\_assign(std::string(alias),\ it);}
+\DoxyCodeLine{01809\ \ \ \ \ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01810\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01811\ \ \ \ \ \}}
+\DoxyCodeLine{01812\ \ \ \ \ throw\ std::logic\_error(}
+\DoxyCodeLine{01813\ \ \ \ \ \ \ \ \ "{}Argument\ is\ not\ an\ optional\ argument\ of\ this\ parser"{});}
+\DoxyCodeLine{01814\ \ \ \}}
+\DoxyCodeLine{01815\ }
+\DoxyCodeLine{01816\ \ \ \textcolor{comment}{/*\ Getter\ for\ arguments\ and\ subparsers.}}
+\DoxyCodeLine{01817\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ in\ case\ of\ an\ invalid\ argument\ or\ subparser\ name}}
+\DoxyCodeLine{01818\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01819\ \ \ template\ <typename\ T\ =\ Argument>\ T\ \&at(std::string\_view\ name)\ \{}
+\DoxyCodeLine{01820\ \ \ \ \ if\ constexpr\ (std::is\_same\_v<T,\ Argument>)\ \{}
+\DoxyCodeLine{01821\ \ \ \ \ \ \ return\ (*this)[name];}
+\DoxyCodeLine{01822\ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01823\ \ \ \ \ \ \ std::string\ str\_name(name);}
+\DoxyCodeLine{01824\ \ \ \ \ \ \ auto\ subparser\_it\ =\ m\_subparser\_map.find(str\_name);}
+\DoxyCodeLine{01825\ \ \ \ \ \ \ if\ (subparser\_it\ !=\ m\_subparser\_map.end())\ \{}
+\DoxyCodeLine{01826\ \ \ \ \ \ \ \ \ return\ subparser\_it-\/>second-\/>get();}
+\DoxyCodeLine{01827\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01828\ \ \ \ \ \ \ throw\ std::logic\_error("{}No\ such\ subparser:\ "{}\ +\ str\_name);}
+\DoxyCodeLine{01829\ \ \ \ \ \}}
+\DoxyCodeLine{01830\ \ \ \}}
+\DoxyCodeLine{01831\ }
+\DoxyCodeLine{01832\ \ \ ArgumentParser\ \&set\_prefix\_chars(std::string\ prefix\_chars)\ \{}
+\DoxyCodeLine{01833\ \ \ \ \ m\_prefix\_chars\ =\ std::move(prefix\_chars);}
+\DoxyCodeLine{01834\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01835\ \ \ \}}
+\DoxyCodeLine{01836\ }
+\DoxyCodeLine{01837\ \ \ ArgumentParser\ \&set\_assign\_chars(std::string\ assign\_chars)\ \{}
+\DoxyCodeLine{01838\ \ \ \ \ m\_assign\_chars\ =\ std::move(assign\_chars);}
+\DoxyCodeLine{01839\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{01840\ \ \ \}}
+\DoxyCodeLine{01841\ }
+\DoxyCodeLine{01842\ \ \ \textcolor{comment}{/*\ Call\ parse\_args\_internal\ -\/\ which\ does\ all\ the\ work}}
+\DoxyCodeLine{01843\ \textcolor{comment}{\ \ \ *\ Then,\ validate\ the\ parsed\ arguments}}
+\DoxyCodeLine{01844\ \textcolor{comment}{\ \ \ *\ This\ variant\ is\ used\ mainly\ for\ testing}}
+\DoxyCodeLine{01845\ \textcolor{comment}{\ \ \ *\ @throws\ std::runtime\_error\ in\ case\ of\ any\ invalid\ argument}}
+\DoxyCodeLine{01846\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01847\ \ \ void\ parse\_args(const\ std::vector<std::string>\ \&arguments)\ \{}
+\DoxyCodeLine{01848\ \ \ \ \ parse\_args\_internal(arguments);}
+\DoxyCodeLine{01849\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ all\ arguments\ are\ parsed}}
+\DoxyCodeLine{01850\ \ \ \ \ for\ ([[maybe\_unused]]\ const\ auto\ \&[unused,\ argument]\ :\ m\_argument\_map)\ \{}
+\DoxyCodeLine{01851\ \ \ \ \ \ \ argument-\/>validate();}
+\DoxyCodeLine{01852\ \ \ \ \ \}}
+\DoxyCodeLine{01853\ }
+\DoxyCodeLine{01854\ \ \ \ \ \textcolor{comment}{//\ Check\ each\ mutually\ exclusive\ group\ and\ make\ sure}}
+\DoxyCodeLine{01855\ \ \ \ \ \textcolor{comment}{//\ there\ are\ no\ constraint\ violations}}
+\DoxyCodeLine{01856\ \ \ \ \ for\ (const\ auto\ \&group\ :\ m\_mutually\_exclusive\_groups)\ \{}
+\DoxyCodeLine{01857\ \ \ \ \ \ \ auto\ mutex\_argument\_used\{false\};}
+\DoxyCodeLine{01858\ \ \ \ \ \ \ Argument\ *mutex\_argument\_it\{nullptr\};}
+\DoxyCodeLine{01859\ \ \ \ \ \ \ for\ (Argument\ *arg\ :\ group.m\_elements)\ \{}
+\DoxyCodeLine{01860\ \ \ \ \ \ \ \ \ if\ (!mutex\_argument\_used\ \&\&\ arg-\/>m\_is\_used)\ \{}
+\DoxyCodeLine{01861\ \ \ \ \ \ \ \ \ \ \ mutex\_argument\_used\ =\ true;}
+\DoxyCodeLine{01862\ \ \ \ \ \ \ \ \ \ \ mutex\_argument\_it\ =\ arg;}
+\DoxyCodeLine{01863\ \ \ \ \ \ \ \ \ \}\ else\ if\ (mutex\_argument\_used\ \&\&\ arg-\/>m\_is\_used)\ \{}
+\DoxyCodeLine{01864\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Violation}}
+\DoxyCodeLine{01865\ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Argument\ '"{}\ +\ arg-\/>get\_usage\_full()\ +}
+\DoxyCodeLine{01866\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'\ not\ allowed\ with\ '"{}\ +}
+\DoxyCodeLine{01867\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutex\_argument\_it-\/>get\_usage\_full()\ +\ "{}'"{});}
+\DoxyCodeLine{01868\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01869\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01870\ }
+\DoxyCodeLine{01871\ \ \ \ \ \ \ if\ (!mutex\_argument\_used\ \&\&\ group.m\_required)\ \{}
+\DoxyCodeLine{01872\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ at\ least\ one\ argument\ from\ the\ group\ is}}
+\DoxyCodeLine{01873\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ required}}
+\DoxyCodeLine{01874\ \ \ \ \ \ \ \ \ std::string\ argument\_names\{\};}
+\DoxyCodeLine{01875\ \ \ \ \ \ \ \ \ std::size\_t\ i\ =\ 0;}
+\DoxyCodeLine{01876\ \ \ \ \ \ \ \ \ std::size\_t\ size\ =\ group.m\_elements.size();}
+\DoxyCodeLine{01877\ \ \ \ \ \ \ \ \ for\ (Argument\ *arg\ :\ group.m\_elements)\ \{}
+\DoxyCodeLine{01878\ \ \ \ \ \ \ \ \ \ \ if\ (i\ +\ 1\ ==\ size)\ \{}
+\DoxyCodeLine{01879\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ last}}
+\DoxyCodeLine{01880\ \ \ \ \ \ \ \ \ \ \ \ \ argument\_names\ +=\ std::string("{}'"{})\ +\ arg-\/>get\_usage\_full()\ +\ std::string("{}'\ "{});}
+\DoxyCodeLine{01881\ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{01882\ \ \ \ \ \ \ \ \ \ \ \ \ argument\_names\ +=\ std::string("{}'"{})\ +\ arg-\/>get\_usage\_full()\ +\ std::string("{}'\ or\ "{});}
+\DoxyCodeLine{01883\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01884\ \ \ \ \ \ \ \ \ \ \ i\ +=\ 1;}
+\DoxyCodeLine{01885\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01886\ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}One\ of\ the\ arguments\ "{}\ +\ argument\_names\ +}
+\DoxyCodeLine{01887\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}is\ required"{});}
+\DoxyCodeLine{01888\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01889\ \ \ \ \ \}}
+\DoxyCodeLine{01890\ \ \ \}}
+\DoxyCodeLine{01891\ }
+\DoxyCodeLine{01892\ \ \ \textcolor{comment}{/*\ Call\ parse\_known\_args\_internal\ -\/\ which\ does\ all\ the\ work}}
+\DoxyCodeLine{01893\ \textcolor{comment}{\ \ \ *\ Then,\ validate\ the\ parsed\ arguments}}
+\DoxyCodeLine{01894\ \textcolor{comment}{\ \ \ *\ This\ variant\ is\ used\ mainly\ for\ testing}}
+\DoxyCodeLine{01895\ \textcolor{comment}{\ \ \ *\ @throws\ std::runtime\_error\ in\ case\ of\ any\ invalid\ argument}}
+\DoxyCodeLine{01896\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01897\ \ \ std::vector<std::string>}
+\DoxyCodeLine{01898\ \ \ parse\_known\_args(const\ std::vector<std::string>\ \&arguments)\ \{}
+\DoxyCodeLine{01899\ \ \ \ \ auto\ unknown\_arguments\ =\ parse\_known\_args\_internal(arguments);}
+\DoxyCodeLine{01900\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ all\ arguments\ are\ parsed}}
+\DoxyCodeLine{01901\ \ \ \ \ for\ ([[maybe\_unused]]\ const\ auto\ \&[unused,\ argument]\ :\ m\_argument\_map)\ \{}
+\DoxyCodeLine{01902\ \ \ \ \ \ \ argument-\/>validate();}
+\DoxyCodeLine{01903\ \ \ \ \ \}}
+\DoxyCodeLine{01904\ \ \ \ \ return\ unknown\_arguments;}
+\DoxyCodeLine{01905\ \ \ \}}
+\DoxyCodeLine{01906\ }
+\DoxyCodeLine{01907\ \ \ \textcolor{comment}{/*\ Main\ entry\ point\ for\ parsing\ command-\/line\ arguments\ using\ this}}
+\DoxyCodeLine{01908\ \textcolor{comment}{\ \ \ *\ ArgumentParser}}
+\DoxyCodeLine{01909\ \textcolor{comment}{\ \ \ *\ @throws\ std::runtime\_error\ in\ case\ of\ any\ invalid\ argument}}
+\DoxyCodeLine{01910\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01911\ \ \ \textcolor{comment}{//\ NOLINTNEXTLINE(cppcoreguidelines-\/avoid-\/c-\/arrays)}}
+\DoxyCodeLine{01912\ \ \ void\ parse\_args(int\ argc,\ const\ char\ *const\ argv[])\ \{}
+\DoxyCodeLine{01913\ \ \ \ \ parse\_args(\{argv,\ argv\ +\ argc\});}
+\DoxyCodeLine{01914\ \ \ \}}
+\DoxyCodeLine{01915\ }
+\DoxyCodeLine{01916\ \ \ \textcolor{comment}{/*\ Main\ entry\ point\ for\ parsing\ command-\/line\ arguments\ using\ this}}
+\DoxyCodeLine{01917\ \textcolor{comment}{\ \ \ *\ ArgumentParser}}
+\DoxyCodeLine{01918\ \textcolor{comment}{\ \ \ *\ @throws\ std::runtime\_error\ in\ case\ of\ any\ invalid\ argument}}
+\DoxyCodeLine{01919\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01920\ \ \ \textcolor{comment}{//\ NOLINTNEXTLINE(cppcoreguidelines-\/avoid-\/c-\/arrays)}}
+\DoxyCodeLine{01921\ \ \ auto\ parse\_known\_args(int\ argc,\ const\ char\ *const\ argv[])\ \{}
+\DoxyCodeLine{01922\ \ \ \ \ return\ parse\_known\_args(\{argv,\ argv\ +\ argc\});}
+\DoxyCodeLine{01923\ \ \ \}}
+\DoxyCodeLine{01924\ }
+\DoxyCodeLine{01925\ \ \ \textcolor{comment}{/*\ Getter\ for\ options\ with\ default\ values.}}
+\DoxyCodeLine{01926\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ if\ parse\_args()\ has\ not\ been\ previously\ called}}
+\DoxyCodeLine{01927\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ if\ there\ is\ no\ such\ option}}
+\DoxyCodeLine{01928\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ if\ the\ option\ has\ no\ value}}
+\DoxyCodeLine{01929\ \textcolor{comment}{\ \ \ *\ @throws\ std::bad\_any\_cast\ if\ the\ option\ is\ not\ of\ type\ T}}
+\DoxyCodeLine{01930\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01931\ \ \ template\ <typename\ T\ =\ std::string>\ T\ get(std::string\_view\ arg\_name)\ const\ \{}
+\DoxyCodeLine{01932\ \ \ \ \ if\ (!m\_is\_parsed)\ \{}
+\DoxyCodeLine{01933\ \ \ \ \ \ \ throw\ std::logic\_error("{}Nothing\ parsed,\ no\ arguments\ are\ available."{});}
+\DoxyCodeLine{01934\ \ \ \ \ \}}
+\DoxyCodeLine{01935\ \ \ \ \ return\ (*this)[arg\_name].get<T>();}
+\DoxyCodeLine{01936\ \ \ \}}
+\DoxyCodeLine{01937\ }
+\DoxyCodeLine{01938\ \ \ \textcolor{comment}{/*\ Getter\ for\ options\ without\ default\ values.}}
+\DoxyCodeLine{01939\ \textcolor{comment}{\ \ \ *\ @pre\ The\ option\ has\ no\ default\ value.}}
+\DoxyCodeLine{01940\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ if\ there\ is\ no\ such\ option}}
+\DoxyCodeLine{01941\ \textcolor{comment}{\ \ \ *\ @throws\ std::bad\_any\_cast\ if\ the\ option\ is\ not\ of\ type\ T}}
+\DoxyCodeLine{01942\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01943\ \ \ template\ <typename\ T\ =\ std::string>}
+\DoxyCodeLine{01944\ \ \ auto\ present(std::string\_view\ arg\_name)\ const\ -\/>\ std::optional<T>\ \{}
+\DoxyCodeLine{01945\ \ \ \ \ return\ (*this)[arg\_name].present<T>();}
+\DoxyCodeLine{01946\ \ \ \}}
+\DoxyCodeLine{01947\ }
+\DoxyCodeLine{01948\ \ \ \textcolor{comment}{/*\ Getter\ that\ returns\ true\ for\ user-\/supplied\ options.\ Returns\ false\ if\ not}}
+\DoxyCodeLine{01949\ \textcolor{comment}{\ \ \ *\ user-\/supplied,\ even\ with\ a\ default\ value.}}
+\DoxyCodeLine{01950\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01951\ \ \ auto\ is\_used(std::string\_view\ arg\_name)\ const\ \{}
+\DoxyCodeLine{01952\ \ \ \ \ return\ (*this)[arg\_name].m\_is\_used;}
+\DoxyCodeLine{01953\ \ \ \}}
+\DoxyCodeLine{01954\ }
+\DoxyCodeLine{01955\ \ \ \textcolor{comment}{/*\ Getter\ that\ returns\ true\ if\ a\ subcommand\ is\ used.}}
+\DoxyCodeLine{01956\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01957\ \ \ auto\ is\_subcommand\_used(std::string\_view\ subcommand\_name)\ const\ \{}
+\DoxyCodeLine{01958\ \ \ \ \ return\ m\_subparser\_used.at(std::string(subcommand\_name));}
+\DoxyCodeLine{01959\ \ \ \}}
+\DoxyCodeLine{01960\ }
+\DoxyCodeLine{01961\ \ \ \textcolor{comment}{/*\ Getter\ that\ returns\ true\ if\ a\ subcommand\ is\ used.}}
+\DoxyCodeLine{01962\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01963\ \ \ auto\ is\_subcommand\_used(const\ ArgumentParser\ \&subparser)\ const\ \{}
+\DoxyCodeLine{01964\ \ \ \ \ return\ is\_subcommand\_used(subparser.m\_program\_name);}
+\DoxyCodeLine{01965\ \ \ \}}
+\DoxyCodeLine{01966\ }
+\DoxyCodeLine{01967\ \ \ \textcolor{comment}{/*\ Indexing\ operator.\ Return\ a\ reference\ to\ an\ Argument\ object}}
+\DoxyCodeLine{01968\ \textcolor{comment}{\ \ \ *\ Used\ in\ conjunction\ with\ Argument.operator==\ e.g.,\ parser["{}foo"{}]\ ==\ true}}
+\DoxyCodeLine{01969\ \textcolor{comment}{\ \ \ *\ @throws\ std::logic\_error\ in\ case\ of\ an\ invalid\ argument\ name}}
+\DoxyCodeLine{01970\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{01971\ \ \ Argument\ \&operator[](std::string\_view\ arg\_name)\ const\ \{}
+\DoxyCodeLine{01972\ \ \ \ \ std::string\ name(arg\_name);}
+\DoxyCodeLine{01973\ \ \ \ \ auto\ it\ =\ m\_argument\_map.find(name);}
+\DoxyCodeLine{01974\ \ \ \ \ if\ (it\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{01975\ \ \ \ \ \ \ return\ *(it-\/>second);}
+\DoxyCodeLine{01976\ \ \ \ \ \}}
+\DoxyCodeLine{01977\ \ \ \ \ if\ (!is\_valid\_prefix\_char(arg\_name.front()))\ \{}
+\DoxyCodeLine{01978\ \ \ \ \ \ \ const\ auto\ legal\_prefix\_char\ =\ get\_any\_valid\_prefix\_char();}
+\DoxyCodeLine{01979\ \ \ \ \ \ \ const\ auto\ prefix\ =\ std::string(1,\ legal\_prefix\_char);}
+\DoxyCodeLine{01980\ }
+\DoxyCodeLine{01981\ \ \ \ \ \ \ \textcolor{comment}{//\ "{}-\/"{}\ +\ arg\_name}}
+\DoxyCodeLine{01982\ \ \ \ \ \ \ name\ =\ prefix\ +\ name;}
+\DoxyCodeLine{01983\ \ \ \ \ \ \ it\ =\ m\_argument\_map.find(name);}
+\DoxyCodeLine{01984\ \ \ \ \ \ \ if\ (it\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{01985\ \ \ \ \ \ \ \ \ return\ *(it-\/>second);}
+\DoxyCodeLine{01986\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01987\ \ \ \ \ \ \ \textcolor{comment}{//\ "{}-\/-\/"{}\ +\ arg\_name}}
+\DoxyCodeLine{01988\ \ \ \ \ \ \ name\ =\ prefix\ +\ name;}
+\DoxyCodeLine{01989\ \ \ \ \ \ \ it\ =\ m\_argument\_map.find(name);}
+\DoxyCodeLine{01990\ \ \ \ \ \ \ if\ (it\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{01991\ \ \ \ \ \ \ \ \ return\ *(it-\/>second);}
+\DoxyCodeLine{01992\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01993\ \ \ \ \ \}}
+\DoxyCodeLine{01994\ \ \ \ \ throw\ std::logic\_error("{}No\ such\ argument:\ "{}\ +\ std::string(arg\_name));}
+\DoxyCodeLine{01995\ \ \ \}}
+\DoxyCodeLine{01996\ }
+\DoxyCodeLine{01997\ \ \ \textcolor{comment}{//\ Print\ help\ message}}
+\DoxyCodeLine{01998\ \ \ friend\ auto\ operator<<(std::ostream\ \&stream,\ const\ ArgumentParser\ \&parser)}
+\DoxyCodeLine{01999\ \ \ \ \ \ \ -\/>\ std::ostream\ \&\ \{}
+\DoxyCodeLine{02000\ \ \ \ \ stream.setf(std::ios\_base::left);}
+\DoxyCodeLine{02001\ }
+\DoxyCodeLine{02002\ \ \ \ \ auto\ longest\_arg\_length\ =\ parser.get\_length\_of\_longest\_argument();}
+\DoxyCodeLine{02003\ }
+\DoxyCodeLine{02004\ \ \ \ \ stream\ <<\ parser.usage()\ <<\ "{}\(\backslash\)n\(\backslash\)n"{};}
+\DoxyCodeLine{02005\ }
+\DoxyCodeLine{02006\ \ \ \ \ if\ (!parser.m\_description.empty())\ \{}
+\DoxyCodeLine{02007\ \ \ \ \ \ \ stream\ <<\ parser.m\_description\ <<\ "{}\(\backslash\)n\(\backslash\)n"{};}
+\DoxyCodeLine{02008\ \ \ \ \ \}}
+\DoxyCodeLine{02009\ }
+\DoxyCodeLine{02010\ \ \ \ \ const\ bool\ has\_visible\_positional\_args\ =\ std::find\_if(}
+\DoxyCodeLine{02011\ \ \ \ \ \ \ parser.m\_positional\_arguments.begin(),}
+\DoxyCodeLine{02012\ \ \ \ \ \ \ parser.m\_positional\_arguments.end(),}
+\DoxyCodeLine{02013\ \ \ \ \ \ \ [](const\ auto\ \&argument)\ \{}
+\DoxyCodeLine{02014\ \ \ \ \ \ \ return\ !argument.m\_is\_hidden;\ \})\ !=}
+\DoxyCodeLine{02015\ \ \ \ \ \ \ parser.m\_positional\_arguments.end();}
+\DoxyCodeLine{02016\ \ \ \ \ if\ (has\_visible\_positional\_args)\ \{}
+\DoxyCodeLine{02017\ \ \ \ \ \ \ stream\ <<\ "{}Positional\ arguments:\(\backslash\)n"{};}
+\DoxyCodeLine{02018\ \ \ \ \ \}}
+\DoxyCodeLine{02019\ }
+\DoxyCodeLine{02020\ \ \ \ \ for\ (const\ auto\ \&argument\ :\ parser.m\_positional\_arguments)\ \{}
+\DoxyCodeLine{02021\ \ \ \ \ \ \ if\ (!argument.m\_is\_hidden)\ \{}
+\DoxyCodeLine{02022\ \ \ \ \ \ \ \ \ stream.width(static\_cast<std::streamsize>(longest\_arg\_length));}
+\DoxyCodeLine{02023\ \ \ \ \ \ \ \ \ stream\ <<\ argument;}
+\DoxyCodeLine{02024\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02025\ \ \ \ \ \}}
+\DoxyCodeLine{02026\ }
+\DoxyCodeLine{02027\ \ \ \ \ if\ (!parser.m\_optional\_arguments.empty())\ \{}
+\DoxyCodeLine{02028\ \ \ \ \ \ \ stream\ <<\ (!has\_visible\_positional\_args\ ?\ "{}"{}\ :\ "{}\(\backslash\)n"{})}
+\DoxyCodeLine{02029\ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ "{}Optional\ arguments:\(\backslash\)n"{};}
+\DoxyCodeLine{02030\ \ \ \ \ \}}
+\DoxyCodeLine{02031\ }
+\DoxyCodeLine{02032\ \ \ \ \ for\ (const\ auto\ \&argument\ :\ parser.m\_optional\_arguments)\ \{}
+\DoxyCodeLine{02033\ \ \ \ \ \ \ if\ (argument.m\_group\_idx\ ==\ 0\ \&\&\ !argument.m\_is\_hidden)\ \{}
+\DoxyCodeLine{02034\ \ \ \ \ \ \ \ \ stream.width(static\_cast<std::streamsize>(longest\_arg\_length));}
+\DoxyCodeLine{02035\ \ \ \ \ \ \ \ \ stream\ <<\ argument;}
+\DoxyCodeLine{02036\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02037\ \ \ \ \ \}}
+\DoxyCodeLine{02038\ }
+\DoxyCodeLine{02039\ \ \ \ \ for\ (size\_t\ i\_group\ =\ 0;\ i\_group\ <\ parser.m\_group\_names.size();\ ++i\_group)\ \{}
+\DoxyCodeLine{02040\ \ \ \ \ \ \ stream\ <<\ "{}\(\backslash\)n"{}\ <<\ parser.m\_group\_names[i\_group]\ <<\ "{}\ (detailed\ usage):\(\backslash\)n"{};}
+\DoxyCodeLine{02041\ \ \ \ \ \ \ for\ (const\ auto\ \&argument\ :\ parser.m\_optional\_arguments)\ \{}
+\DoxyCodeLine{02042\ \ \ \ \ \ \ \ \ if\ (argument.m\_group\_idx\ ==\ i\_group\ +\ 1\ \&\&\ !argument.m\_is\_hidden)\ \{}
+\DoxyCodeLine{02043\ \ \ \ \ \ \ \ \ \ \ stream.width(static\_cast<std::streamsize>(longest\_arg\_length));}
+\DoxyCodeLine{02044\ \ \ \ \ \ \ \ \ \ \ stream\ <<\ argument;}
+\DoxyCodeLine{02045\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02046\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02047\ \ \ \ \ \}}
+\DoxyCodeLine{02048\ }
+\DoxyCodeLine{02049\ \ \ \ \ bool\ has\_visible\_subcommands\ =\ std::any\_of(}
+\DoxyCodeLine{02050\ \ \ \ \ \ \ \ \ parser.m\_subparser\_map.begin(),\ parser.m\_subparser\_map.end(),}
+\DoxyCodeLine{02051\ \ \ \ \ \ \ \ \ [](auto\ \&p)\ \{\ return\ !p.second-\/>get().m\_suppress;\ \});}
+\DoxyCodeLine{02052\ }
+\DoxyCodeLine{02053\ \ \ \ \ if\ (has\_visible\_subcommands)\ \{}
+\DoxyCodeLine{02054\ \ \ \ \ \ \ stream\ <<\ (parser.m\_positional\_arguments.empty()}
+\DoxyCodeLine{02055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ (parser.m\_optional\_arguments.empty()\ ?\ "{}"{}\ :\ "{}\(\backslash\)n"{})}
+\DoxyCodeLine{02056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ "{}\(\backslash\)n"{})}
+\DoxyCodeLine{02057\ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ "{}Subcommands:\(\backslash\)n"{};}
+\DoxyCodeLine{02058\ \ \ \ \ \ \ for\ (const\ auto\ \&[command,\ subparser]\ :\ parser.m\_subparser\_map)\ \{}
+\DoxyCodeLine{02059\ \ \ \ \ \ \ \ \ if\ (subparser-\/>get().m\_suppress)\ \{}
+\DoxyCodeLine{02060\ \ \ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02062\ }
+\DoxyCodeLine{02063\ \ \ \ \ \ \ \ \ stream\ <<\ std::setw(2)\ <<\ "{}\ "{};}
+\DoxyCodeLine{02064\ \ \ \ \ \ \ \ \ stream\ <<\ std::setw(static\_cast<int>(longest\_arg\_length\ -\/\ 2))}
+\DoxyCodeLine{02065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ command;}
+\DoxyCodeLine{02066\ \ \ \ \ \ \ \ \ stream\ <<\ "{}\ "{}\ <<\ subparser-\/>get().m\_description\ <<\ "{}\(\backslash\)n"{};}
+\DoxyCodeLine{02067\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02068\ \ \ \ \ \}}
+\DoxyCodeLine{02069\ }
+\DoxyCodeLine{02070\ \ \ \ \ if\ (!parser.m\_epilog.empty())\ \{}
+\DoxyCodeLine{02071\ \ \ \ \ \ \ stream\ <<\ '\(\backslash\)n';}
+\DoxyCodeLine{02072\ \ \ \ \ \ \ stream\ <<\ parser.m\_epilog\ <<\ "{}\(\backslash\)n\(\backslash\)n"{};}
+\DoxyCodeLine{02073\ \ \ \ \ \}}
+\DoxyCodeLine{02074\ }
+\DoxyCodeLine{02075\ \ \ \ \ return\ stream;}
+\DoxyCodeLine{02076\ \ \ \}}
+\DoxyCodeLine{02077\ }
+\DoxyCodeLine{02078\ \ \ \textcolor{comment}{//\ Format\ help\ message}}
+\DoxyCodeLine{02079\ \ \ auto\ help()\ const\ -\/>\ std::stringstream\ \{}
+\DoxyCodeLine{02080\ \ \ \ \ std::stringstream\ out;}
+\DoxyCodeLine{02081\ \ \ \ \ out\ <<\ *this;}
+\DoxyCodeLine{02082\ \ \ \ \ return\ out;}
+\DoxyCodeLine{02083\ \ \ \}}
+\DoxyCodeLine{02084\ }
+\DoxyCodeLine{02085\ \ \ \textcolor{comment}{//\ Sets\ the\ maximum\ width\ for\ a\ line\ of\ the\ Usage\ message}}
+\DoxyCodeLine{02086\ \ \ ArgumentParser\ \&set\_usage\_max\_line\_width(size\_t\ w)\ \{}
+\DoxyCodeLine{02087\ \ \ \ \ this-\/>m\_usage\_max\_line\_width\ =\ w;}
+\DoxyCodeLine{02088\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{02089\ \ \ \}}
+\DoxyCodeLine{02090\ }
+\DoxyCodeLine{02091\ \ \ \textcolor{comment}{//\ Asks\ to\ display\ arguments\ of\ mutually\ exclusive\ group\ on\ separate\ lines\ in}}
+\DoxyCodeLine{02092\ \ \ \textcolor{comment}{//\ the\ Usage\ message}}
+\DoxyCodeLine{02093\ \ \ ArgumentParser\ \&set\_usage\_break\_on\_mutex()\ \{}
+\DoxyCodeLine{02094\ \ \ \ \ this-\/>m\_usage\_break\_on\_mutex\ =\ true;}
+\DoxyCodeLine{02095\ \ \ \ \ return\ *this;}
+\DoxyCodeLine{02096\ \ \ \}}
+\DoxyCodeLine{02097\ }
+\DoxyCodeLine{02098\ \ \ \textcolor{comment}{//\ Format\ usage\ part\ of\ help\ only}}
+\DoxyCodeLine{02099\ \ \ auto\ usage()\ const\ -\/>\ std::string\ \{}
+\DoxyCodeLine{02100\ \ \ \ \ std::stringstream\ stream;}
+\DoxyCodeLine{02101\ }
+\DoxyCodeLine{02102\ \ \ \ \ std::string\ curline("{}Usage:\ "{});}
+\DoxyCodeLine{02103\ \ \ \ \ curline\ +=\ this-\/>m\_parser\_path;}
+\DoxyCodeLine{02104\ \ \ \ \ const\ bool\ multiline\_usage\ =}
+\DoxyCodeLine{02105\ \ \ \ \ \ \ \ \ this-\/>m\_usage\_max\_line\_width\ <\ (std::numeric\_limits<std::size\_t>::max)();}
+\DoxyCodeLine{02106\ \ \ \ \ const\ size\_t\ indent\_size\ =\ curline.size();}
+\DoxyCodeLine{02107\ }
+\DoxyCodeLine{02108\ \ \ \ \ const\ auto\ deal\_with\_options\_of\_group\ =\ [\&](std::size\_t\ group\_idx)\ \{}
+\DoxyCodeLine{02109\ \ \ \ \ \ \ bool\ found\_options\ =\ false;}
+\DoxyCodeLine{02110\ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ any\ options\ inline\ here}}
+\DoxyCodeLine{02111\ \ \ \ \ \ \ const\ MutuallyExclusiveGroup\ *cur\_mutex\ =\ nullptr;}
+\DoxyCodeLine{02112\ \ \ \ \ \ \ int\ usage\_newline\_counter\ =\ -\/1;}
+\DoxyCodeLine{02113\ \ \ \ \ \ \ for\ (const\ auto\ \&argument\ :\ this-\/>m\_optional\_arguments)\ \{}
+\DoxyCodeLine{02114\ \ \ \ \ \ \ \ \ if\ (argument.m\_is\_hidden)\ \{}
+\DoxyCodeLine{02115\ \ \ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02116\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02117\ \ \ \ \ \ \ \ \ if\ (multiline\_usage)\ \{}
+\DoxyCodeLine{02118\ \ \ \ \ \ \ \ \ \ \ if\ (argument.m\_group\_idx\ !=\ group\_idx)\ \{}
+\DoxyCodeLine{02119\ \ \ \ \ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02120\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02121\ \ \ \ \ \ \ \ \ \ \ if\ (usage\_newline\_counter\ !=\ argument.m\_usage\_newline\_counter)\ \{}
+\DoxyCodeLine{02122\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (usage\_newline\_counter\ >=\ 0)\ \{}
+\DoxyCodeLine{02123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (curline.size()\ >\ indent\_size)\ \{}
+\DoxyCodeLine{02124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl;}
+\DoxyCodeLine{02125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02127\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02128\ \ \ \ \ \ \ \ \ \ \ \ \ usage\_newline\_counter\ =\ argument.m\_usage\_newline\_counter;}
+\DoxyCodeLine{02129\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02130\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02131\ \ \ \ \ \ \ \ \ found\_options\ =\ true;}
+\DoxyCodeLine{02132\ \ \ \ \ \ \ \ \ const\ std::string\ arg\_inline\_usage\ =\ argument.get\_inline\_usage();}
+\DoxyCodeLine{02133\ \ \ \ \ \ \ \ \ const\ MutuallyExclusiveGroup\ *arg\_mutex\ =}
+\DoxyCodeLine{02134\ \ \ \ \ \ \ \ \ \ \ \ \ get\_belonging\_mutex(\&argument);}
+\DoxyCodeLine{02135\ \ \ \ \ \ \ \ \ if\ ((cur\_mutex\ !=\ nullptr)\ \&\&\ (arg\_mutex\ ==\ nullptr))\ \{}
+\DoxyCodeLine{02136\ \ \ \ \ \ \ \ \ \ \ curline\ +=\ ']';}
+\DoxyCodeLine{02137\ \ \ \ \ \ \ \ \ \ \ if\ (this-\/>m\_usage\_break\_on\_mutex)\ \{}
+\DoxyCodeLine{02138\ \ \ \ \ \ \ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl;}
+\DoxyCodeLine{02139\ \ \ \ \ \ \ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02140\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02141\ \ \ \ \ \ \ \ \ \}\ else\ if\ ((cur\_mutex\ ==\ nullptr)\ \&\&\ (arg\_mutex\ !=\ nullptr))\ \{}
+\DoxyCodeLine{02142\ \ \ \ \ \ \ \ \ \ \ if\ ((this-\/>m\_usage\_break\_on\_mutex\ \&\&\ curline.size()\ >\ indent\_size)\ ||}
+\DoxyCodeLine{02143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curline.size()\ +\ 3\ +\ arg\_inline\_usage.size()\ >}
+\DoxyCodeLine{02144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>m\_usage\_max\_line\_width)\ \{}
+\DoxyCodeLine{02145\ \ \ \ \ \ \ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl;}
+\DoxyCodeLine{02146\ \ \ \ \ \ \ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02147\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02148\ \ \ \ \ \ \ \ \ \ \ curline\ +=\ "{}\ ["{};}
+\DoxyCodeLine{02149\ \ \ \ \ \ \ \ \ \}\ else\ if\ ((cur\_mutex\ !=\ nullptr)\ \&\&\ (arg\_mutex\ !=\ nullptr))\ \{}
+\DoxyCodeLine{02150\ \ \ \ \ \ \ \ \ \ \ if\ (cur\_mutex\ !=\ arg\_mutex)\ \{}
+\DoxyCodeLine{02151\ \ \ \ \ \ \ \ \ \ \ \ \ curline\ +=\ ']';}
+\DoxyCodeLine{02152\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (this-\/>m\_usage\_break\_on\_mutex\ ||}
+\DoxyCodeLine{02153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curline.size()\ +\ 3\ +\ arg\_inline\_usage.size()\ >}
+\DoxyCodeLine{02154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>m\_usage\_max\_line\_width)\ \{}
+\DoxyCodeLine{02155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl;}
+\DoxyCodeLine{02156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02157\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02158\ \ \ \ \ \ \ \ \ \ \ \ \ curline\ +=\ "{}\ ["{};}
+\DoxyCodeLine{02159\ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02160\ \ \ \ \ \ \ \ \ \ \ \ \ curline\ +=\ '|';}
+\DoxyCodeLine{02161\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02162\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02163\ \ \ \ \ \ \ \ \ cur\_mutex\ =\ arg\_mutex;}
+\DoxyCodeLine{02164\ \ \ \ \ \ \ \ \ if\ (curline.size()\ !=\ indent\_size\ \&\&}
+\DoxyCodeLine{02165\ \ \ \ \ \ \ \ \ \ \ \ \ curline.size()\ +\ 1\ +\ arg\_inline\_usage.size()\ >}
+\DoxyCodeLine{02166\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>m\_usage\_max\_line\_width)\ \{}
+\DoxyCodeLine{02167\ \ \ \ \ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl;}
+\DoxyCodeLine{02168\ \ \ \ \ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02169\ \ \ \ \ \ \ \ \ \ \ curline\ +=\ "{}\ "{};}
+\DoxyCodeLine{02170\ \ \ \ \ \ \ \ \ \}\ else\ if\ (cur\_mutex\ ==\ nullptr)\ \{}
+\DoxyCodeLine{02171\ \ \ \ \ \ \ \ \ \ \ curline\ +=\ "{}\ "{};}
+\DoxyCodeLine{02172\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02173\ \ \ \ \ \ \ \ \ curline\ +=\ arg\_inline\_usage;}
+\DoxyCodeLine{02174\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02175\ \ \ \ \ \ \ if\ (cur\_mutex\ !=\ nullptr)\ \{}
+\DoxyCodeLine{02176\ \ \ \ \ \ \ \ \ curline\ +=\ ']';}
+\DoxyCodeLine{02177\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02178\ \ \ \ \ \ \ return\ found\_options;}
+\DoxyCodeLine{02179\ \ \ \ \ \};}
+\DoxyCodeLine{02180\ }
+\DoxyCodeLine{02181\ \ \ \ \ const\ bool\ found\_options\ =\ deal\_with\_options\_of\_group(0);}
+\DoxyCodeLine{02182\ }
+\DoxyCodeLine{02183\ \ \ \ \ if\ (found\_options\ \&\&\ multiline\_usage\ \&\&}
+\DoxyCodeLine{02184\ \ \ \ \ \ \ \ \ !this-\/>m\_positional\_arguments.empty())\ \{}
+\DoxyCodeLine{02185\ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl;}
+\DoxyCodeLine{02186\ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02187\ \ \ \ \ \}}
+\DoxyCodeLine{02188\ \ \ \ \ \textcolor{comment}{//\ Put\ positional\ arguments\ after\ the\ optionals}}
+\DoxyCodeLine{02189\ \ \ \ \ for\ (const\ auto\ \&argument\ :\ this-\/>m\_positional\_arguments)\ \{}
+\DoxyCodeLine{02190\ \ \ \ \ \ \ if\ (argument.m\_is\_hidden)\ \{}
+\DoxyCodeLine{02191\ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02192\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02193\ \ \ \ \ \ \ const\ std::string\ pos\_arg\ =\ !argument.m\_metavar.empty()}
+\DoxyCodeLine{02194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ?\ argument.m\_metavar}
+\DoxyCodeLine{02195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ argument.m\_names.front();}
+\DoxyCodeLine{02196\ \ \ \ \ \ \ if\ (curline.size()\ +\ 1\ +\ pos\_arg.size()\ >\ this-\/>m\_usage\_max\_line\_width)\ \{}
+\DoxyCodeLine{02197\ \ \ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl;}
+\DoxyCodeLine{02198\ \ \ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02199\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02200\ \ \ \ \ \ \ curline\ +=\ "{}\ "{};}
+\DoxyCodeLine{02201\ \ \ \ \ \ \ if\ (argument.m\_num\_args\_range.get\_min()\ ==\ 0\ \&\&}
+\DoxyCodeLine{02202\ \ \ \ \ \ \ \ \ \ \ !argument.m\_num\_args\_range.is\_right\_bounded())\ \{}
+\DoxyCodeLine{02203\ \ \ \ \ \ \ \ \ curline\ +=\ "{}["{};}
+\DoxyCodeLine{02204\ \ \ \ \ \ \ \ \ curline\ +=\ pos\_arg;}
+\DoxyCodeLine{02205\ \ \ \ \ \ \ \ \ curline\ +=\ "{}]..."{};}
+\DoxyCodeLine{02206\ \ \ \ \ \ \ \}\ else\ if\ (argument.m\_num\_args\_range.get\_min()\ ==\ 1\ \&\&}
+\DoxyCodeLine{02207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !argument.m\_num\_args\_range.is\_right\_bounded())\ \{}
+\DoxyCodeLine{02208\ \ \ \ \ \ \ \ \ curline\ +=\ pos\_arg;}
+\DoxyCodeLine{02209\ \ \ \ \ \ \ \ \ curline\ +=\ "{}..."{};}
+\DoxyCodeLine{02210\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02211\ \ \ \ \ \ \ \ \ curline\ +=\ pos\_arg;}
+\DoxyCodeLine{02212\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02213\ \ \ \ \ \}}
+\DoxyCodeLine{02214\ }
+\DoxyCodeLine{02215\ \ \ \ \ if\ (multiline\_usage)\ \{}
+\DoxyCodeLine{02216\ \ \ \ \ \ \ \textcolor{comment}{//\ Display\ options\ of\ other\ groups}}
+\DoxyCodeLine{02217\ \ \ \ \ \ \ for\ (std::size\_t\ i\ =\ 0;\ i\ <\ m\_group\_names.size();\ ++i)\ \{}
+\DoxyCodeLine{02218\ \ \ \ \ \ \ \ \ stream\ <<\ curline\ <<\ std::endl\ <<\ std::endl;}
+\DoxyCodeLine{02219\ \ \ \ \ \ \ \ \ stream\ <<\ m\_group\_names[i]\ <<\ "{}:"{}\ <<\ std::endl;}
+\DoxyCodeLine{02220\ \ \ \ \ \ \ \ \ curline\ =\ std::string(indent\_size,\ '\ ');}
+\DoxyCodeLine{02221\ \ \ \ \ \ \ \ \ deal\_with\_options\_of\_group(i\ +\ 1);}
+\DoxyCodeLine{02222\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02223\ \ \ \ \ \}}
+\DoxyCodeLine{02224\ }
+\DoxyCodeLine{02225\ \ \ \ \ stream\ <<\ curline;}
+\DoxyCodeLine{02226\ }
+\DoxyCodeLine{02227\ \ \ \ \ \textcolor{comment}{//\ Put\ subcommands\ after\ positional\ arguments}}
+\DoxyCodeLine{02228\ \ \ \ \ if\ (!m\_subparser\_map.empty())\ \{}
+\DoxyCodeLine{02229\ \ \ \ \ \ \ stream\ <<\ "{}\ \{"{};}
+\DoxyCodeLine{02230\ \ \ \ \ \ \ std::size\_t\ i\{0\};}
+\DoxyCodeLine{02231\ \ \ \ \ \ \ for\ (const\ auto\ \&[command,\ subparser]\ :\ m\_subparser\_map)\ \{}
+\DoxyCodeLine{02232\ \ \ \ \ \ \ \ \ if\ (subparser-\/>get().m\_suppress)\ \{}
+\DoxyCodeLine{02233\ \ \ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02234\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02235\ }
+\DoxyCodeLine{02236\ \ \ \ \ \ \ \ \ if\ (i\ ==\ 0)\ \{}
+\DoxyCodeLine{02237\ \ \ \ \ \ \ \ \ \ \ stream\ <<\ command;}
+\DoxyCodeLine{02238\ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02239\ \ \ \ \ \ \ \ \ \ \ stream\ <<\ "{},"{}\ <<\ command;}
+\DoxyCodeLine{02240\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02241\ \ \ \ \ \ \ \ \ ++i;}
+\DoxyCodeLine{02242\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02243\ \ \ \ \ \ \ stream\ <<\ "{}\}"{};}
+\DoxyCodeLine{02244\ \ \ \ \ \}}
+\DoxyCodeLine{02245\ }
+\DoxyCodeLine{02246\ \ \ \ \ return\ stream.str();}
+\DoxyCodeLine{02247\ \ \ \}}
+\DoxyCodeLine{02248\ }
+\DoxyCodeLine{02249\ \ \ \textcolor{comment}{//\ Printing\ the\ one\ and\ only\ help\ message}}
+\DoxyCodeLine{02250\ \ \ \textcolor{comment}{//\ I've\ stuck\ with\ a\ simple\ message\ format,\ nothing\ fancy.}}
+\DoxyCodeLine{02251\ \ \ [[deprecated("{}Use\ cout\ <<\ program;\ instead.\ \ See\ also\ help()."{})]]\ std::string}
+\DoxyCodeLine{02252\ \ \ print\_help()\ const\ \{}
+\DoxyCodeLine{02253\ \ \ \ \ auto\ out\ =\ help();}
+\DoxyCodeLine{02254\ \ \ \ \ std::cout\ <<\ out.rdbuf();}
+\DoxyCodeLine{02255\ \ \ \ \ return\ out.str();}
+\DoxyCodeLine{02256\ \ \ \}}
+\DoxyCodeLine{02257\ }
+\DoxyCodeLine{02258\ \ \ void\ add\_subparser(ArgumentParser\ \&parser)\ \{}
+\DoxyCodeLine{02259\ \ \ \ \ parser.m\_parser\_path\ =\ m\_program\_name\ +\ "{}\ "{}\ +\ parser.m\_program\_name;}
+\DoxyCodeLine{02260\ \ \ \ \ auto\ it\ =\ m\_subparsers.emplace(std::cend(m\_subparsers),\ parser);}
+\DoxyCodeLine{02261\ \ \ \ \ m\_subparser\_map.insert\_or\_assign(parser.m\_program\_name,\ it);}
+\DoxyCodeLine{02262\ \ \ \ \ m\_subparser\_used.insert\_or\_assign(parser.m\_program\_name,\ false);}
+\DoxyCodeLine{02263\ \ \ \}}
+\DoxyCodeLine{02264\ }
+\DoxyCodeLine{02265\ \ \ void\ set\_suppress(bool\ suppress)\ \{\ m\_suppress\ =\ suppress;\ \}}
+\DoxyCodeLine{02266\ }
+\DoxyCodeLine{02267\ protected:}
+\DoxyCodeLine{02268\ \ \ const\ MutuallyExclusiveGroup\ *get\_belonging\_mutex(const\ Argument\ *arg)\ const\ \{}
+\DoxyCodeLine{02269\ \ \ \ \ for\ (const\ auto\ \&mutex\ :\ m\_mutually\_exclusive\_groups)\ \{}
+\DoxyCodeLine{02270\ \ \ \ \ \ \ if\ (std::find(mutex.m\_elements.begin(),\ mutex.m\_elements.end(),\ arg)\ !=}
+\DoxyCodeLine{02271\ \ \ \ \ \ \ \ \ \ \ mutex.m\_elements.end())\ \{}
+\DoxyCodeLine{02272\ \ \ \ \ \ \ \ \ return\ \&mutex;}
+\DoxyCodeLine{02273\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02274\ \ \ \ \ \}}
+\DoxyCodeLine{02275\ \ \ \ \ return\ nullptr;}
+\DoxyCodeLine{02276\ \ \ \}}
+\DoxyCodeLine{02277\ }
+\DoxyCodeLine{02278\ \ \ bool\ is\_valid\_prefix\_char(char\ c)\ const\ \{}
+\DoxyCodeLine{02279\ \ \ \ \ return\ m\_prefix\_chars.find(c)\ !=\ std::string::npos;}
+\DoxyCodeLine{02280\ \ \ \}}
+\DoxyCodeLine{02281\ }
+\DoxyCodeLine{02282\ \ \ char\ get\_any\_valid\_prefix\_char()\ const\ \{\ return\ m\_prefix\_chars[0];\ \}}
+\DoxyCodeLine{02283\ }
+\DoxyCodeLine{02284\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{02285\ \textcolor{comment}{\ \ \ *\ Pre-\/process\ this\ argument\ list.\ Anything\ starting\ with\ "{}-\/-\/"{},\ that}}
+\DoxyCodeLine{02286\ \textcolor{comment}{\ \ \ *\ contains\ an\ =,\ where\ the\ prefix\ before\ the\ =\ has\ an\ entry\ in\ the}}
+\DoxyCodeLine{02287\ \textcolor{comment}{\ \ \ *\ options\ table,\ should\ be\ split.}}
+\DoxyCodeLine{02288\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{02289\ \ \ std::vector<std::string>}
+\DoxyCodeLine{02290\ \ \ preprocess\_arguments(const\ std::vector<std::string>\ \&raw\_arguments)\ const\ \{}
+\DoxyCodeLine{02291\ \ \ \ \ std::vector<std::string>\ arguments\{\};}
+\DoxyCodeLine{02292\ \ \ \ \ for\ (const\ auto\ \&arg\ :\ raw\_arguments)\ \{}
+\DoxyCodeLine{02293\ }
+\DoxyCodeLine{02294\ \ \ \ \ \ \ const\ auto\ argument\_starts\_with\_prefix\_chars\ =}
+\DoxyCodeLine{02295\ \ \ \ \ \ \ \ \ \ \ [this](const\ std::string\ \&a)\ -\/>\ bool\ \{}
+\DoxyCodeLine{02296\ \ \ \ \ \ \ \ \ if\ (!a.empty())\ \{}
+\DoxyCodeLine{02297\ }
+\DoxyCodeLine{02298\ \ \ \ \ \ \ \ \ \ \ const\ auto\ legal\_prefix\ =\ [this](char\ c)\ -\/>\ bool\ \{}
+\DoxyCodeLine{02299\ \ \ \ \ \ \ \ \ \ \ \ \ return\ m\_prefix\_chars.find(c)\ !=\ std::string::npos;}
+\DoxyCodeLine{02300\ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{02301\ }
+\DoxyCodeLine{02302\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Windows-\/style}}
+\DoxyCodeLine{02303\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ '/'\ is\ a\ legal\ prefix\ char}}
+\DoxyCodeLine{02304\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ then\ allow\ single\ '/'\ followed\ by\ argument\ name,\ followed\ by\ an}}
+\DoxyCodeLine{02305\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ assign\ char,\ e.g.,\ ':'\ e.g.,\ 'test.exe\ /A:Foo'}}
+\DoxyCodeLine{02306\ \ \ \ \ \ \ \ \ \ \ const\ auto\ windows\_style\ =\ legal\_prefix('/');}
+\DoxyCodeLine{02307\ }
+\DoxyCodeLine{02308\ \ \ \ \ \ \ \ \ \ \ if\ (windows\_style)\ \{}
+\DoxyCodeLine{02309\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (legal\_prefix(a[0]))\ \{}
+\DoxyCodeLine{02310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ true;}
+\DoxyCodeLine{02311\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02312\ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02313\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Slash\ '/'\ is\ not\ a\ legal\ prefix\ char}}
+\DoxyCodeLine{02314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ For\ all\ other\ characters,\ only\ support\ long\ arguments}}
+\DoxyCodeLine{02315\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ i.e.,\ the\ argument\ must\ start\ with\ 2\ prefix\ chars,\ e.g,}}
+\DoxyCodeLine{02316\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ '-\/-\/foo'\ e,g,\ './test\ -\/-\/foo=Bar\ -\/DARG=yes'}}
+\DoxyCodeLine{02317\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (a.size()\ >\ 1)\ \{}
+\DoxyCodeLine{02318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ (legal\_prefix(a[0])\ \&\&\ legal\_prefix(a[1]));}
+\DoxyCodeLine{02319\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02320\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02321\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02322\ \ \ \ \ \ \ \ \ return\ false;}
+\DoxyCodeLine{02323\ \ \ \ \ \ \ \};}
+\DoxyCodeLine{02324\ }
+\DoxyCodeLine{02325\ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ that:}}
+\DoxyCodeLine{02326\ \ \ \ \ \ \ \textcolor{comment}{//\ -\/\ We\ don't\ have\ an\ argument\ named\ exactly\ this}}
+\DoxyCodeLine{02327\ \ \ \ \ \ \ \textcolor{comment}{//\ -\/\ The\ argument\ starts\ with\ a\ prefix\ char,\ e.g.,\ "{}-\/-\/"{}}}
+\DoxyCodeLine{02328\ \ \ \ \ \ \ \textcolor{comment}{//\ -\/\ The\ argument\ contains\ an\ assign\ char,\ e.g.,\ "{}="{}}}
+\DoxyCodeLine{02329\ \ \ \ \ \ \ auto\ assign\_char\_pos\ =\ arg.find\_first\_of(m\_assign\_chars);}
+\DoxyCodeLine{02330\ }
+\DoxyCodeLine{02331\ \ \ \ \ \ \ if\ (m\_argument\_map.find(arg)\ ==\ m\_argument\_map.end()\ \&\&}
+\DoxyCodeLine{02332\ \ \ \ \ \ \ \ \ \ \ argument\_starts\_with\_prefix\_chars(arg)\ \&\&}
+\DoxyCodeLine{02333\ \ \ \ \ \ \ \ \ \ \ assign\_char\_pos\ !=\ std::string::npos)\ \{}
+\DoxyCodeLine{02334\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ name\ of\ the\ potential\ option,\ and\ check\ it\ exists}}
+\DoxyCodeLine{02335\ \ \ \ \ \ \ \ \ std::string\ opt\_name\ =\ arg.substr(0,\ assign\_char\_pos);}
+\DoxyCodeLine{02336\ \ \ \ \ \ \ \ \ if\ (m\_argument\_map.find(opt\_name)\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{02337\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ is\ the\ name\ of\ an\ option!\ Split\ it\ into\ two\ parts}}
+\DoxyCodeLine{02338\ \ \ \ \ \ \ \ \ \ \ arguments.push\_back(std::move(opt\_name));}
+\DoxyCodeLine{02339\ \ \ \ \ \ \ \ \ \ \ arguments.push\_back(arg.substr(assign\_char\_pos\ +\ 1));}
+\DoxyCodeLine{02340\ \ \ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02341\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02342\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02343\ \ \ \ \ \ \ \textcolor{comment}{//\ If\ we've\ fallen\ through\ to\ here,\ then\ it's\ a\ standard\ argument}}
+\DoxyCodeLine{02344\ \ \ \ \ \ \ arguments.push\_back(arg);}
+\DoxyCodeLine{02345\ \ \ \ \ \}}
+\DoxyCodeLine{02346\ \ \ \ \ return\ arguments;}
+\DoxyCodeLine{02347\ \ \ \}}
+\DoxyCodeLine{02348\ }
+\DoxyCodeLine{02349\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{02350\ \textcolor{comment}{\ \ \ *\ @throws\ std::runtime\_error\ in\ case\ of\ any\ invalid\ argument}}
+\DoxyCodeLine{02351\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{02352\ \ \ void\ parse\_args\_internal(const\ std::vector<std::string>\ \&raw\_arguments)\ \{}
+\DoxyCodeLine{02353\ \ \ \ \ auto\ arguments\ =\ preprocess\_arguments(raw\_arguments);}
+\DoxyCodeLine{02354\ \ \ \ \ if\ (m\_program\_name.empty()\ \&\&\ !arguments.empty())\ \{}
+\DoxyCodeLine{02355\ \ \ \ \ \ \ m\_program\_name\ =\ arguments.front();}
+\DoxyCodeLine{02356\ \ \ \ \ \}}
+\DoxyCodeLine{02357\ \ \ \ \ auto\ end\ =\ std::end(arguments);}
+\DoxyCodeLine{02358\ \ \ \ \ auto\ positional\_argument\_it\ =\ std::begin(m\_positional\_arguments);}
+\DoxyCodeLine{02359\ \ \ \ \ for\ (auto\ it\ =\ std::next(std::begin(arguments));\ it\ !=\ end;)\ \{}
+\DoxyCodeLine{02360\ \ \ \ \ \ \ const\ auto\ \&current\_argument\ =\ *it;}
+\DoxyCodeLine{02361\ \ \ \ \ \ \ if\ (Argument::is\_positional(current\_argument,\ m\_prefix\_chars))\ \{}
+\DoxyCodeLine{02362\ \ \ \ \ \ \ \ \ if\ (positional\_argument\_it\ ==\ std::end(m\_positional\_arguments))\ \{}
+\DoxyCodeLine{02363\ }
+\DoxyCodeLine{02364\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ sub-\/parsers}}
+\DoxyCodeLine{02365\ \ \ \ \ \ \ \ \ \ \ auto\ subparser\_it\ =\ m\_subparser\_map.find(current\_argument);}
+\DoxyCodeLine{02366\ \ \ \ \ \ \ \ \ \ \ if\ (subparser\_it\ !=\ m\_subparser\_map.end())\ \{}
+\DoxyCodeLine{02367\ }
+\DoxyCodeLine{02368\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ build\ list\ of\ remaining\ args}}
+\DoxyCodeLine{02369\ \ \ \ \ \ \ \ \ \ \ \ \ const\ auto\ unprocessed\_arguments\ =}
+\DoxyCodeLine{02370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>(it,\ end);}
+\DoxyCodeLine{02371\ }
+\DoxyCodeLine{02372\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ invoke\ subparser}}
+\DoxyCodeLine{02373\ \ \ \ \ \ \ \ \ \ \ \ \ m\_is\_parsed\ =\ true;}
+\DoxyCodeLine{02374\ \ \ \ \ \ \ \ \ \ \ \ \ m\_subparser\_used[current\_argument]\ =\ true;}
+\DoxyCodeLine{02375\ \ \ \ \ \ \ \ \ \ \ \ \ return\ subparser\_it-\/>second-\/>get().parse\_args(}
+\DoxyCodeLine{02376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ unprocessed\_arguments);}
+\DoxyCodeLine{02377\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02378\ }
+\DoxyCodeLine{02379\ \ \ \ \ \ \ \ \ \ \ if\ (m\_positional\_arguments.empty())\ \{}
+\DoxyCodeLine{02380\ }
+\DoxyCodeLine{02381\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ask\ the\ user\ if\ they\ argument\ they\ provided\ was\ a\ typo}}
+\DoxyCodeLine{02382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ for\ some\ sub-\/parser,}}
+\DoxyCodeLine{02383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ e.g.,\ user\ provided\ \`{}git\ totes`\ instead\ of\ \`{}git\ notes`}}
+\DoxyCodeLine{02384\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (!m\_subparser\_map.empty())\ \{}
+\DoxyCodeLine{02385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(}
+\DoxyCodeLine{02386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}Failed\ to\ parse\ '"{}\ +\ current\_argument\ +\ "{}',\ did\ you\ mean\ '"{}\ +}
+\DoxyCodeLine{02387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\{details::get\_most\_similar\_string(}
+\DoxyCodeLine{02388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_subparser\_map,\ current\_argument)\}\ +}
+\DoxyCodeLine{02389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}'"{});}
+\DoxyCodeLine{02390\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02391\ }
+\DoxyCodeLine{02392\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ask\ the\ user\ if\ they\ meant\ to\ use\ a\ specific\ optional\ argument}}
+\DoxyCodeLine{02393\ \ \ \ \ \ \ \ \ \ \ \ \ if\ (!m\_optional\_arguments.empty())\ \{}
+\DoxyCodeLine{02394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ for\ (const\ auto\ \&opt\ :\ m\_optional\_arguments)\ \{}
+\DoxyCodeLine{02395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (!opt.m\_implicit\_value.has\_value())\ \{}
+\DoxyCodeLine{02396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ not\ a\ flag,\ requires\ a\ value}}
+\DoxyCodeLine{02397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (!opt.m\_is\_used)\ \{}
+\DoxyCodeLine{02398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(}
+\DoxyCodeLine{02399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}Zero\ positional\ arguments\ expected,\ did\ you\ mean\ "{}\ +}
+\DoxyCodeLine{02400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ opt.get\_usage\_full());}
+\DoxyCodeLine{02401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02404\ }
+\DoxyCodeLine{02405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Zero\ positional\ arguments\ expected"{});}
+\DoxyCodeLine{02406\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Zero\ positional\ arguments\ expected"{});}
+\DoxyCodeLine{02408\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02409\ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02410\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Maximum\ number\ of\ positional\ arguments\ "{}}
+\DoxyCodeLine{02411\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}exceeded,\ failed\ to\ parse\ '"{}\ +}
+\DoxyCodeLine{02412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_argument\ +\ "{}'"{});}
+\DoxyCodeLine{02413\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02414\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02415\ \ \ \ \ \ \ \ \ auto\ argument\ =\ positional\_argument\_it++;}
+\DoxyCodeLine{02416\ }
+\DoxyCodeLine{02417\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Deal\ with\ the\ situation\ of\ <positional\_arg1>...\ <positional\_arg2>}}
+\DoxyCodeLine{02418\ \ \ \ \ \ \ \ \ if\ (argument-\/>m\_num\_args\_range.get\_min()\ ==\ 1\ \&\&}
+\DoxyCodeLine{02419\ \ \ \ \ \ \ \ \ \ \ \ \ argument-\/>m\_num\_args\_range.get\_max()\ ==\ (std::numeric\_limits<std::size\_t>::max)()\ \&\&}
+\DoxyCodeLine{02420\ \ \ \ \ \ \ \ \ \ \ \ \ positional\_argument\_it\ !=\ std::end(m\_positional\_arguments)\ \&\&}
+\DoxyCodeLine{02421\ \ \ \ \ \ \ \ \ \ \ \ \ std::next(positional\_argument\_it)\ ==\ std::end(m\_positional\_arguments)\ \&\&}
+\DoxyCodeLine{02422\ \ \ \ \ \ \ \ \ \ \ \ \ positional\_argument\_it-\/>m\_num\_args\_range.get\_min()\ ==\ 1\ \&\&}
+\DoxyCodeLine{02423\ \ \ \ \ \ \ \ \ \ \ \ \ positional\_argument\_it-\/>m\_num\_args\_range.get\_max()\ ==\ 1\ )\ \{}
+\DoxyCodeLine{02424\ \ \ \ \ \ \ \ \ \ \ if\ (std::next(it)\ !=\ end)\ \{}
+\DoxyCodeLine{02425\ \ \ \ \ \ \ \ \ \ \ \ \ positional\_argument\_it-\/>consume(std::prev(end),\ end);}
+\DoxyCodeLine{02426\ \ \ \ \ \ \ \ \ \ \ \ \ end\ =\ std::prev(end);}
+\DoxyCodeLine{02427\ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02428\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Missing\ "{}\ +\ positional\_argument\_it-\/>m\_names.front());}
+\DoxyCodeLine{02429\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02430\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02431\ }
+\DoxyCodeLine{02432\ \ \ \ \ \ \ \ \ it\ =\ argument-\/>consume(it,\ end);}
+\DoxyCodeLine{02433\ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02434\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02435\ }
+\DoxyCodeLine{02436\ \ \ \ \ \ \ auto\ arg\_map\_it\ =\ m\_argument\_map.find(current\_argument);}
+\DoxyCodeLine{02437\ \ \ \ \ \ \ if\ (arg\_map\_it\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{02438\ \ \ \ \ \ \ \ \ auto\ argument\ =\ arg\_map\_it-\/>second;}
+\DoxyCodeLine{02439\ \ \ \ \ \ \ \ \ it\ =\ argument-\/>consume(std::next(it),\ end,\ arg\_map\_it-\/>first);}
+\DoxyCodeLine{02440\ \ \ \ \ \ \ \}\ else\ if\ (const\ auto\ \&compound\_arg\ =\ current\_argument;}
+\DoxyCodeLine{02441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ compound\_arg.size()\ >\ 1\ \&\&}
+\DoxyCodeLine{02442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_valid\_prefix\_char(compound\_arg[0])\ \&\&}
+\DoxyCodeLine{02443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !is\_valid\_prefix\_char(compound\_arg[1]))\ \{}
+\DoxyCodeLine{02444\ \ \ \ \ \ \ \ \ ++it;}
+\DoxyCodeLine{02445\ \ \ \ \ \ \ \ \ for\ (std::size\_t\ j\ =\ 1;\ j\ <\ compound\_arg.size();\ j++)\ \{}
+\DoxyCodeLine{02446\ \ \ \ \ \ \ \ \ \ \ auto\ hypothetical\_arg\ =\ std::string\{'-\/',\ compound\_arg[j]\};}
+\DoxyCodeLine{02447\ \ \ \ \ \ \ \ \ \ \ auto\ arg\_map\_it2\ =\ m\_argument\_map.find(hypothetical\_arg);}
+\DoxyCodeLine{02448\ \ \ \ \ \ \ \ \ \ \ if\ (arg\_map\_it2\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{02449\ \ \ \ \ \ \ \ \ \ \ \ \ auto\ argument\ =\ arg\_map\_it2-\/>second;}
+\DoxyCodeLine{02450\ \ \ \ \ \ \ \ \ \ \ \ \ it\ =\ argument-\/>consume(it,\ end,\ arg\_map\_it2-\/>first);}
+\DoxyCodeLine{02451\ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02452\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Unknown\ argument:\ "{}\ +\ current\_argument);}
+\DoxyCodeLine{02453\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02454\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02455\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02456\ \ \ \ \ \ \ \ \ throw\ std::runtime\_error("{}Unknown\ argument:\ "{}\ +\ current\_argument);}
+\DoxyCodeLine{02457\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02458\ \ \ \ \ \}}
+\DoxyCodeLine{02459\ \ \ \ \ m\_is\_parsed\ =\ true;}
+\DoxyCodeLine{02460\ \ \ \}}
+\DoxyCodeLine{02461\ }
+\DoxyCodeLine{02462\ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{02463\ \textcolor{comment}{\ \ \ *\ Like\ parse\_args\_internal\ but\ collects\ unused\ args\ into\ a\ vector<string>}}
+\DoxyCodeLine{02464\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{02465\ \ \ std::vector<std::string>}
+\DoxyCodeLine{02466\ \ \ parse\_known\_args\_internal(const\ std::vector<std::string>\ \&raw\_arguments)\ \{}
+\DoxyCodeLine{02467\ \ \ \ \ auto\ arguments\ =\ preprocess\_arguments(raw\_arguments);}
+\DoxyCodeLine{02468\ }
+\DoxyCodeLine{02469\ \ \ \ \ std::vector<std::string>\ unknown\_arguments\{\};}
+\DoxyCodeLine{02470\ }
+\DoxyCodeLine{02471\ \ \ \ \ if\ (m\_program\_name.empty()\ \&\&\ !arguments.empty())\ \{}
+\DoxyCodeLine{02472\ \ \ \ \ \ \ m\_program\_name\ =\ arguments.front();}
+\DoxyCodeLine{02473\ \ \ \ \ \}}
+\DoxyCodeLine{02474\ \ \ \ \ auto\ end\ =\ std::end(arguments);}
+\DoxyCodeLine{02475\ \ \ \ \ auto\ positional\_argument\_it\ =\ std::begin(m\_positional\_arguments);}
+\DoxyCodeLine{02476\ \ \ \ \ for\ (auto\ it\ =\ std::next(std::begin(arguments));\ it\ !=\ end;)\ \{}
+\DoxyCodeLine{02477\ \ \ \ \ \ \ const\ auto\ \&current\_argument\ =\ *it;}
+\DoxyCodeLine{02478\ \ \ \ \ \ \ if\ (Argument::is\_positional(current\_argument,\ m\_prefix\_chars))\ \{}
+\DoxyCodeLine{02479\ \ \ \ \ \ \ \ \ if\ (positional\_argument\_it\ ==\ std::end(m\_positional\_arguments))\ \{}
+\DoxyCodeLine{02480\ }
+\DoxyCodeLine{02481\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ sub-\/parsers}}
+\DoxyCodeLine{02482\ \ \ \ \ \ \ \ \ \ \ auto\ subparser\_it\ =\ m\_subparser\_map.find(current\_argument);}
+\DoxyCodeLine{02483\ \ \ \ \ \ \ \ \ \ \ if\ (subparser\_it\ !=\ m\_subparser\_map.end())\ \{}
+\DoxyCodeLine{02484\ }
+\DoxyCodeLine{02485\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ build\ list\ of\ remaining\ args}}
+\DoxyCodeLine{02486\ \ \ \ \ \ \ \ \ \ \ \ \ const\ auto\ unprocessed\_arguments\ =}
+\DoxyCodeLine{02487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>(it,\ end);}
+\DoxyCodeLine{02488\ }
+\DoxyCodeLine{02489\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ invoke\ subparser}}
+\DoxyCodeLine{02490\ \ \ \ \ \ \ \ \ \ \ \ \ m\_is\_parsed\ =\ true;}
+\DoxyCodeLine{02491\ \ \ \ \ \ \ \ \ \ \ \ \ m\_subparser\_used[current\_argument]\ =\ true;}
+\DoxyCodeLine{02492\ \ \ \ \ \ \ \ \ \ \ \ \ return\ subparser\_it-\/>second-\/>get().parse\_known\_args\_internal(}
+\DoxyCodeLine{02493\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ unprocessed\_arguments);}
+\DoxyCodeLine{02494\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02495\ }
+\DoxyCodeLine{02496\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ save\ current\ argument\ as\ unknown\ and\ go\ to\ next\ argument}}
+\DoxyCodeLine{02497\ \ \ \ \ \ \ \ \ \ \ unknown\_arguments.push\_back(current\_argument);}
+\DoxyCodeLine{02498\ \ \ \ \ \ \ \ \ \ \ ++it;}
+\DoxyCodeLine{02499\ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02500\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ current\ argument\ is\ the\ value\ of\ a\ positional\ argument}}
+\DoxyCodeLine{02501\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ consume\ it}}
+\DoxyCodeLine{02502\ \ \ \ \ \ \ \ \ \ \ auto\ argument\ =\ positional\_argument\_it++;}
+\DoxyCodeLine{02503\ \ \ \ \ \ \ \ \ \ \ it\ =\ argument-\/>consume(it,\ end);}
+\DoxyCodeLine{02504\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02505\ \ \ \ \ \ \ \ \ continue;}
+\DoxyCodeLine{02506\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02507\ }
+\DoxyCodeLine{02508\ \ \ \ \ \ \ auto\ arg\_map\_it\ =\ m\_argument\_map.find(current\_argument);}
+\DoxyCodeLine{02509\ \ \ \ \ \ \ if\ (arg\_map\_it\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{02510\ \ \ \ \ \ \ \ \ auto\ argument\ =\ arg\_map\_it-\/>second;}
+\DoxyCodeLine{02511\ \ \ \ \ \ \ \ \ it\ =\ argument-\/>consume(std::next(it),\ end,\ arg\_map\_it-\/>first);}
+\DoxyCodeLine{02512\ \ \ \ \ \ \ \}\ else\ if\ (const\ auto\ \&compound\_arg\ =\ current\_argument;}
+\DoxyCodeLine{02513\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ compound\_arg.size()\ >\ 1\ \&\&}
+\DoxyCodeLine{02514\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_valid\_prefix\_char(compound\_arg[0])\ \&\&}
+\DoxyCodeLine{02515\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !is\_valid\_prefix\_char(compound\_arg[1]))\ \{}
+\DoxyCodeLine{02516\ \ \ \ \ \ \ \ \ ++it;}
+\DoxyCodeLine{02517\ \ \ \ \ \ \ \ \ for\ (std::size\_t\ j\ =\ 1;\ j\ <\ compound\_arg.size();\ j++)\ \{}
+\DoxyCodeLine{02518\ \ \ \ \ \ \ \ \ \ \ auto\ hypothetical\_arg\ =\ std::string\{'-\/',\ compound\_arg[j]\};}
+\DoxyCodeLine{02519\ \ \ \ \ \ \ \ \ \ \ auto\ arg\_map\_it2\ =\ m\_argument\_map.find(hypothetical\_arg);}
+\DoxyCodeLine{02520\ \ \ \ \ \ \ \ \ \ \ if\ (arg\_map\_it2\ !=\ m\_argument\_map.end())\ \{}
+\DoxyCodeLine{02521\ \ \ \ \ \ \ \ \ \ \ \ \ auto\ argument\ =\ arg\_map\_it2-\/>second;}
+\DoxyCodeLine{02522\ \ \ \ \ \ \ \ \ \ \ \ \ it\ =\ argument-\/>consume(it,\ end,\ arg\_map\_it2-\/>first);}
+\DoxyCodeLine{02523\ \ \ \ \ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02524\ \ \ \ \ \ \ \ \ \ \ \ \ unknown\_arguments.push\_back(current\_argument);}
+\DoxyCodeLine{02525\ \ \ \ \ \ \ \ \ \ \ \ \ break;}
+\DoxyCodeLine{02526\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02527\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02528\ \ \ \ \ \ \ \}\ else\ \{}
+\DoxyCodeLine{02529\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ current\ argument\ is\ an\ optional-\/like\ argument\ that\ is\ unknown}}
+\DoxyCodeLine{02530\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ save\ it\ and\ move\ to\ next\ argument}}
+\DoxyCodeLine{02531\ \ \ \ \ \ \ \ \ unknown\_arguments.push\_back(current\_argument);}
+\DoxyCodeLine{02532\ \ \ \ \ \ \ \ \ ++it;}
+\DoxyCodeLine{02533\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02534\ \ \ \ \ \}}
+\DoxyCodeLine{02535\ \ \ \ \ m\_is\_parsed\ =\ true;}
+\DoxyCodeLine{02536\ \ \ \ \ return\ unknown\_arguments;}
+\DoxyCodeLine{02537\ \ \ \}}
+\DoxyCodeLine{02538\ }
+\DoxyCodeLine{02539\ \ \ \textcolor{comment}{//\ Used\ by\ print\_help.}}
+\DoxyCodeLine{02540\ \ \ std::size\_t\ get\_length\_of\_longest\_argument()\ const\ \{}
+\DoxyCodeLine{02541\ \ \ \ \ if\ (m\_argument\_map.empty())\ \{}
+\DoxyCodeLine{02542\ \ \ \ \ \ \ return\ 0;}
+\DoxyCodeLine{02543\ \ \ \ \ \}}
+\DoxyCodeLine{02544\ \ \ \ \ std::size\_t\ max\_size\ =\ 0;}
+\DoxyCodeLine{02545\ \ \ \ \ for\ ([[maybe\_unused]]\ const\ auto\ \&[unused,\ argument]\ :\ m\_argument\_map)\ \{}
+\DoxyCodeLine{02546\ \ \ \ \ \ \ max\_size\ =}
+\DoxyCodeLine{02547\ \ \ \ \ \ \ \ \ \ \ std::max<std::size\_t>(max\_size,\ argument-\/>get\_arguments\_length());}
+\DoxyCodeLine{02548\ \ \ \ \ \}}
+\DoxyCodeLine{02549\ \ \ \ \ for\ ([[maybe\_unused]]\ const\ auto\ \&[command,\ unused]\ :\ m\_subparser\_map)\ \{}
+\DoxyCodeLine{02550\ \ \ \ \ \ \ max\_size\ =\ std::max<std::size\_t>(max\_size,\ command.size());}
+\DoxyCodeLine{02551\ \ \ \ \ \}}
+\DoxyCodeLine{02552\ \ \ \ \ return\ max\_size;}
+\DoxyCodeLine{02553\ \ \ \}}
+\DoxyCodeLine{02554\ }
+\DoxyCodeLine{02555\ \ \ using\ argument\_it\ =\ std::list<Argument>::iterator;}
+\DoxyCodeLine{02556\ \ \ using\ mutex\_group\_it\ =\ std::vector<MutuallyExclusiveGroup>::iterator;}
+\DoxyCodeLine{02557\ \ \ using\ argument\_parser\_it\ =}
+\DoxyCodeLine{02558\ \ \ \ \ \ \ std::list<std::reference\_wrapper<ArgumentParser>>::iterator;}
+\DoxyCodeLine{02559\ }
+\DoxyCodeLine{02560\ \ \ void\ index\_argument(argument\_it\ it)\ \{}
+\DoxyCodeLine{02561\ \ \ \ \ for\ (const\ auto\ \&name\ :\ std::as\_const(it-\/>m\_names))\ \{}
+\DoxyCodeLine{02562\ \ \ \ \ \ \ m\_argument\_map.insert\_or\_assign(name,\ it);}
+\DoxyCodeLine{02563\ \ \ \ \ \}}
+\DoxyCodeLine{02564\ \ \ \}}
+\DoxyCodeLine{02565\ }
+\DoxyCodeLine{02566\ \ \ std::string\ m\_program\_name;}
+\DoxyCodeLine{02567\ \ \ std::string\ m\_version;}
+\DoxyCodeLine{02568\ \ \ std::string\ m\_description;}
+\DoxyCodeLine{02569\ \ \ std::string\ m\_epilog;}
+\DoxyCodeLine{02570\ \ \ bool\ m\_exit\_on\_default\_arguments\ =\ true;}
+\DoxyCodeLine{02571\ \ \ std::string\ m\_prefix\_chars\{"{}-\/"{}\};}
+\DoxyCodeLine{02572\ \ \ std::string\ m\_assign\_chars\{"{}="{}\};}
+\DoxyCodeLine{02573\ \ \ bool\ m\_is\_parsed\ =\ false;}
+\DoxyCodeLine{02574\ \ \ std::list<Argument>\ m\_positional\_arguments;}
+\DoxyCodeLine{02575\ \ \ std::list<Argument>\ m\_optional\_arguments;}
+\DoxyCodeLine{02576\ \ \ std::map<std::string,\ argument\_it>\ m\_argument\_map;}
+\DoxyCodeLine{02577\ \ \ std::string\ m\_parser\_path;}
+\DoxyCodeLine{02578\ \ \ std::list<std::reference\_wrapper<ArgumentParser>>\ m\_subparsers;}
+\DoxyCodeLine{02579\ \ \ std::map<std::string,\ argument\_parser\_it>\ m\_subparser\_map;}
+\DoxyCodeLine{02580\ \ \ std::map<std::string,\ bool>\ m\_subparser\_used;}
+\DoxyCodeLine{02581\ \ \ std::vector<MutuallyExclusiveGroup>\ m\_mutually\_exclusive\_groups;}
+\DoxyCodeLine{02582\ \ \ bool\ m\_suppress\ =\ false;}
+\DoxyCodeLine{02583\ \ \ std::size\_t\ m\_usage\_max\_line\_width\ =\ (std::numeric\_limits<std::size\_t>::max)();}
+\DoxyCodeLine{02584\ \ \ bool\ m\_usage\_break\_on\_mutex\ =\ false;}
+\DoxyCodeLine{02585\ \ \ int\ m\_usage\_newline\_counter\ =\ 0;}
+\DoxyCodeLine{02586\ \ \ std::vector<std::string>\ m\_group\_names;}
+\DoxyCodeLine{02587\ \};}
+\DoxyCodeLine{02588\ }
+\DoxyCodeLine{02589\ \}\ \textcolor{comment}{//\ namespace\ argparse}}
+
+\end{DoxyCode}

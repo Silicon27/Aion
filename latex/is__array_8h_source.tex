@@ -1,0 +1,27 @@
+\doxysection{is\+\_\+array.\+h}
+\hypertarget{is__array_8h_source}{}\label{is__array_8h_source}\index{core/include/support/si/include/impl/type\_traits/is\_array.h@{core/include/support/si/include/impl/type\_traits/is\_array.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/01-\/13.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_IS\_ARRAY\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_IS\_ARRAY\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../../impl/stddef/size\_t.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}integral\_constant.h"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__array}{is\_array}}\ :\ false\_type\ \{\};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__array}{is\_array}}<T[]>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keywordtype}{size\_t}\ N>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__array}{is\_array}}<T[N]>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_array\_v\ =\ is\_array<T>::value;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_IS\_ARRAY\_H}}
+
+\end{DoxyCode}

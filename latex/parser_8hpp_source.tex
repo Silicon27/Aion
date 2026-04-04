@@ -1,0 +1,165 @@
+\doxysection{parser.\+hpp}
+\hypertarget{parser_8hpp_source}{}\label{parser_8hpp_source}\index{core/include/parser/parser.hpp@{core/include/parser/parser.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/10-\/18.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ PARSER\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ PARSER\_HPP}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cstdarg>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <ast/ast.hpp>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <lexer/lexer.hpp>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <error/error.hpp>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <cli/compiler\_config.hpp>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <ast/ASTContext.hpp>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <support/iris/src/iris.hpp>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace\ }aion::parse\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using\ namespace\ }aion::compiler\_config;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1parse_1_1_parser_snapshot}{ParserSnapshot}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{MatchToken}};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{class\ }Parse;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{using\ namespace\ }aion::ast;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using\ namespace\ }aion::lexer;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1parse_1_1_parser_snapshot}{ParserSnapshot}}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ capped\_pos;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<Token>\&\ tokens;}
+\DoxyCodeLine{00032\ \ \ \ \ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{struct\ }MatchToken\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ TokenType\ token;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ MatchToken(\textcolor{keyword}{const}\ TokenType\ token)\ :\ token(token)\ \{\}}
+\DoxyCodeLine{00039\ \ \ \ \ \};}
+\DoxyCodeLine{00040\ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{class\ }Parser\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ ParserContext\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ top\_level,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ namespace\_scope,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ function\_scope,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ statement\_scope,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}\&\ diagnostics;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}}\&\ context;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ std::vector<Token>\ tokens;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_flags}{Flags}}\ flags;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ ParserContext\ parser\_context;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ FileId\ file\_id;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ pos\ =\ 0;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Token\ checking\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a9caac9500b9e63343bd2f8a2afb87256}{peek}}(\textcolor{keywordtype}{int}\ n\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a042334ba321d0e279f4acc4be0083621}{previous}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a9caac9500b9e63343bd2f8a2afb87256}{peek}}(-\/1);\ \}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_afe17446743d5560ff869edc0ad75e806}{blind\_consume}}(\textcolor{keywordtype}{int}\ n\ =\ 1);}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Reporting\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ match\_type(\textcolor{keywordtype}{bool}\ is\_mut);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ NOTE\ most\ non-\/tolerating\ function,\ it\ would\ instantly\ terminate\ the\ program\ if\ the\ match\ fails}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_ad4472d6254f931867c72f04274e50c17}{diffuse\_match}}(\textcolor{keyword}{const}\ TokenType\ exp,\ \textcolor{keyword}{const}\ TokenType\ curr,\ \textcolor{keyword}{const}\ std::string\&\ sigabrt\_message);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Non-\/reporting\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a969d5adb73b328db7245a8a2ade3b5fe}{silent\_probe}}(TokenType\ exp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\&\ curr);}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a969d5adb73b328db7245a8a2ade3b5fe}{silent\_probe}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{MatchToken}}\&\ token);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_aff994936e99cedc285352f53de433982}{silent\_consume}}(TokenType\ exp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\&\ curr);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_aff994936e99cedc285352f53de433982}{silent\_consume}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{MatchToken}}\&\ token);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_ac22dda0a8e93807d3ab6a34d510b8049}{attempt}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{MatchToken}}\&\ token)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_aff994936e99cedc285352f53de433982}{silent\_consume}}(token);\ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Recovery\ functions\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}{skip\_until}}(\textcolor{keyword}{const}\ std::string\&\ lexeme);}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}{skip\_until}}(TokenType\ type);}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}{skip\_until}}(TokenType\ type,\ \textcolor{keyword}{const}\ std::string\&\ lexeme);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_ae467bbcbbd0db8b49d437028bdafe18d}{attempt\_to\_skip\_until\_familiar}}();}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ EOF/token\ stream\ check}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_at\_end()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Entry\ point\ is\ parse()}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ parse();}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ will\ be\ called\ in\ a\ loop\ from\ parse()\ until\ we\ reach\ the\ end\ of\ the\ token\ stream.}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ parse\_top\_level\_decl();}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ We\ also\ thereby\ create\ a\ specialized\ first\ top\ level\ declaration}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ parser,\ which\ is\ responsible\ mainly\ for\ parsing\ module\ declarations\ and\ imports}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ parse\_first\_top\_level\_decl();}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ statement\ parsers}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ declaration\ parsers}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ parse\_variable\_decl();}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_aa21996ac237279bc1690de08ea21906a}{parse\_expression}}(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ delim);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ null\ denotation:\ what\ to\ do\ when\ this\ token\ appears\ with\ no\ left\ context\ (prefix\ position)}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ nud(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ tok);}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ left\ denotation:\ what\ to\ do\ when\ this\ token\ appears\ with\ the\ left\ expression\ already\ parsed\ (infix/suffix\ position)}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ led(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ op,\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ left);}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ left\ binding\ power:\ how\ strongly\ this\ token\ binds\ to\ whatever\ is\ to\ its\ left.}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ lbp(\textcolor{keyword}{const}\ TokenType\ token)\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (token)\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::equal:}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 10;\ \textcolor{comment}{//\ assignment}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::double\_dot:}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::triple\_dot:}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 20;\ \textcolor{comment}{//\ ranges}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::equal\_equal:}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::bang\_equal:}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 30;\ \textcolor{comment}{//\ equality}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::less:}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::less\_equal:}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::greater:}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::greater\_equal:}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 40;\ \textcolor{comment}{//\ comparisons}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::plus:}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::minus:}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 50;\ \textcolor{comment}{//\ additive}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::star:}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::slash:}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 60;\ \textcolor{comment}{//\ multiplicative}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::lparen:}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 70;\ \textcolor{comment}{//\ function\ call\ —\ binds\ tighter\ than\ arithmetic,\ looser\ than\ ::}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::bang:}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 75;\ \textcolor{comment}{//\ postfix\ !}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::dot:}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TokenType::double\_colon:}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 80;\ \textcolor{comment}{//\ member/scope\ access}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;\ \textcolor{comment}{//\ not\ an\ infix\ operator\ (Pratt:\ no\ binding\ power)}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Parser(FileId\ file\_id,\ \textcolor{keyword}{const}\ std::vector<Token>\ \&tokens,\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_flags}{Flags}}\ flag,\ \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}}\ \&context,\ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}\&\ diag);}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \string~Parser()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00173\ \ \ \ \ \};}
+\DoxyCodeLine{00174\ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//PARSER\_HPP}}
+
+\end{DoxyCode}

@@ -1,0 +1,123 @@
+\doxysection{ios\+\_\+base.\+h}
+\hypertarget{ios__base_8h_source}{}\label{ios__base_8h_source}\index{core/include/support/si/include/impl/ios\_base/ios\_base.h@{core/include/support/si/include/impl/ios\_base/ios\_base.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/06-\/11.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_IOS\_BASE\_IOS\_BASE\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_IOS\_BASE\_IOS\_BASE\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../stddef/ptrdiff\_t.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{using\ }streamsize\ =\ si::ptrdiff\_t;}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }ios\_base\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{using\ }fmtflags\ =\ \textcolor{keywordtype}{unsigned}\ int;}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using\ }iostate\ \ =\ \textcolor{keywordtype}{unsigned}\ char;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using\ }openmode\ =\ \textcolor{keywordtype}{unsigned}\ char;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{using\ }seekdir\ \ =\ \textcolor{keywordtype}{unsigned}\ char;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\ basefield}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ dec\ =\ 0x0001;\ \textcolor{comment}{//\ decimal}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ oct\ =\ 0x0002;\ \textcolor{comment}{//\ octal}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ hex\ =\ 0x0004;\ \textcolor{comment}{//\ hexadecimal}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ basefield\ =\ dec\ |\ oct\ |\ hex;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ floatfield}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ scientific\ =\ 0x0008;\ \textcolor{comment}{//\ scientific\ notation}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ fixed\ =\ 0x0010;\ \textcolor{comment}{//\ fixed-\/point\ notation}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ floatfield\ =\ scientific\ |\ fixed;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{//\ adjustment}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ left\ =\ 0x0020;\ \textcolor{comment}{//\ left\ adjustment}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ right\ =\ 0x0040;\ \textcolor{comment}{//\ right\ adjustment}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ internal\ =\ 0x0080;\ \textcolor{comment}{//\ internal\ adjustment}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ adjustfield\ =\ left\ |\ right\ |\ internal;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ formatting\ options}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ showbase\ =\ 0x0100;\ \textcolor{comment}{//\ show\ base\ prefix}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ showpoint\ =\ 0x0200;\ \textcolor{comment}{//\ show\ decimal\ point}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ showpos\ =\ 0x0400;\ \textcolor{comment}{//\ show\ positive\ sign}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ skipws\ =\ 0x0800;\ \textcolor{comment}{//\ skip\ whitespace}}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ unitbuf\ =\ 0x1000;\ \textcolor{comment}{//\ flush\ output\ buffer\ after\ each\ output\ operation}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ uppercase\ =\ 0x2000;\ \textcolor{comment}{//\ use\ uppercase\ letters\ for\ hexadecimal\ digits}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ fmtflags\ boolalpha\ =\ 0x4000;\ \textcolor{comment}{//\ use\ "{}true"{}\ and\ "{}false"{}\ for\ boolean\ values}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ error\ state\ bits}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ iostate\ goodbit\ =\ 0x00;}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ iostate\ eofbit\ =\ 0x01;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ iostate\ failbit\ =\ 0x02;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ SI\_CONSTEXPR\ iostate\ badbit\ =\ 0x04;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ formatting\ Methods}}
+\DoxyCodeLine{00056\ \ \ \ \ [[nodiscard]]\ fmtflags\ flags()\textcolor{keyword}{\ const\ }\{\textcolor{keywordflow}{return}\ \_fmt\_flags;\}}
+\DoxyCodeLine{00057\ \ \ \ \ fmtflags\ flags(\textcolor{keyword}{const}\ fmtflags\ fmt)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ fmtflags\ old\ =\ \_fmt\_flags;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \_fmt\_flags\ =\ fmt;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ old;}
+\DoxyCodeLine{00061\ \ \ \ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{//\ setf(hex)\ -\/>\ adds\ a\ flag}}
+\DoxyCodeLine{00064\ \ \ \ \ fmtflags\ setf(\textcolor{keyword}{const}\ fmtflags\ fmt)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ fmtflags\ old\ =\ \_fmt\_flags;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \_fmt\_flags\ |=\ fmt;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ old;}
+\DoxyCodeLine{00068\ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ setf(hex,\ basefield)\ -\/>\ clears\ the\ basefield}}
+\DoxyCodeLine{00071\ \ \ \ \ fmtflags\ setf(\textcolor{keyword}{const}\ fmtflags\ fmt,\ \textcolor{keyword}{const}\ fmtflags\ mask)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ fmtflags\ old\ =\ \_fmt\_flags;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \_fmt\_flags\ =\ (\_fmt\_flags\ \&\ \string~mask)\ |\ (fmt\ \&\ mask);}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ old;}
+\DoxyCodeLine{00075\ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ unsetf(\textcolor{keyword}{const}\ fmtflags\ mask)\ \{\ \_fmt\_flags\ \&=\ \string~mask;\}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ [[nodiscard]]\ streamsize\ precision()\textcolor{keyword}{\ const\ }\{\textcolor{keywordflow}{return}\ \_precision;\}}
+\DoxyCodeLine{00080\ \ \ \ \ streamsize\ precision(\textcolor{keyword}{const}\ streamsize\ prec)\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ streamsize\ old\ =\ \_precision;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \_precision\ =\ prec;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ old;}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ [[nodiscard]]\ streamsize\ width()\textcolor{keyword}{\ const\ }\{\textcolor{keywordflow}{return}\ \_width;\}}
+\DoxyCodeLine{00087\ \ \ \ \ streamsize\ width(\textcolor{keyword}{const}\ streamsize\ wid)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ streamsize\ old\ =\ \_width;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \_width\ =\ wid;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ old;}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{class\ }Init\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ Init();}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \string~Init();}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \_init\_count;}
+\DoxyCodeLine{00099\ \ \ \ \ \};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{int}\ rdstate()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_state;\ \}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ setstate(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ state)\ \{\ \_state\ |=\ state;\ \}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ clear(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ s\ =\ goodbit)\ \{\_state\ =\ s;\}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00106\ \ \ \ \ ios\_base()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{virtual}\ \string~ios\_base()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00108\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00109\ \ \ \ \ fmtflags\ \_fmt\_flags\ \ \ \ \ =\ dec\ |\ skipws;}
+\DoxyCodeLine{00110\ \ \ \ \ streamsize\ \_precision\ \ \ =\ 6;}
+\DoxyCodeLine{00111\ \ \ \ \ streamsize\ \_width\ \ \ \ \ \ \ =\ 0;}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{int}\ \_state\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ goodbit;}
+\DoxyCodeLine{00113\ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_IOS\_BASE\_IOS\_BASE\_H}}
+
+\end{DoxyCode}

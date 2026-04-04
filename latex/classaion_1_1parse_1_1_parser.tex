@@ -1,0 +1,116 @@
+\doxysection{aion\+::parse\+::Parser Class Reference}
+\hypertarget{classaion_1_1parse_1_1_parser}{}\label{classaion_1_1parse_1_1_parser}\index{aion::parse::Parser@{aion::parse::Parser}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_aaf7a93413c6e6e6a761f056d370ec4c7}\label{classaion_1_1parse_1_1_parser_aaf7a93413c6e6e6a761f056d370ec4c7} 
+enum class {\bfseries Parser\+Context} \{ {\bfseries top\+\_\+level}
+, {\bfseries namespace\+\_\+scope}
+, {\bfseries function\+\_\+scope}
+, {\bfseries statement\+\_\+scope}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a9caac9500b9e63343bd2f8a2afb87256}\label{classaion_1_1parse_1_1_parser_a9caac9500b9e63343bd2f8a2afb87256} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries peek} (int n=0) const
+\begin{DoxyCompactList}\small\item\em peek at the current token without consuming it, n=0 means current token, n=1 means next token, etc. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a042334ba321d0e279f4acc4be0083621}\label{classaion_1_1parse_1_1_parser_a042334ba321d0e279f4acc4be0083621} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries previous} () const
+\begin{DoxyCompactList}\small\item\em alias for peek(-\/1) \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_afe17446743d5560ff869edc0ad75e806}\label{classaion_1_1parse_1_1_parser_afe17446743d5560ff869edc0ad75e806} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries blind\+\_\+consume} (int n=1)
+\begin{DoxyCompactList}\small\item\em blind consumation of tokens, no checking, move the pointer n steps and return the \doxylink{structaion_1_1lexer_1_1_token}{Token} at the original position \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_aa8dc05f352a42c66c0f0918cb9c16636}\label{classaion_1_1parse_1_1_parser_aa8dc05f352a42c66c0f0918cb9c16636} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries match\+\_\+type} (bool is\+\_\+mut)
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_ad4472d6254f931867c72f04274e50c17}\label{classaion_1_1parse_1_1_parser_ad4472d6254f931867c72f04274e50c17} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries diffuse\+\_\+match} (const Token\+Type exp, const Token\+Type curr, const std\+::string \&sigabrt\+\_\+message)
+\begin{DoxyCompactList}\small\item\em usage examples would be tokens that if not matched, would indicate memory corruption during program runtime \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a969d5adb73b328db7245a8a2ade3b5fe}\label{classaion_1_1parse_1_1_parser_a969d5adb73b328db7245a8a2ade3b5fe} 
+bool {\bfseries silent\+\_\+probe} (Token\+Type exp, const \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} \&curr)
+\begin{DoxyCompactList}\small\item\em would silently probe, this is, would return whether the curr == exp \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a4507b2b1a7249bd5e77eaab03a9140c0}\label{classaion_1_1parse_1_1_parser_a4507b2b1a7249bd5e77eaab03a9140c0} 
+bool {\bfseries silent\+\_\+probe} (const \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{Match\+Token}} \&token)
+\begin{DoxyCompactList}\small\item\em alias for \doxylink{classaion_1_1parse_1_1_parser_a969d5adb73b328db7245a8a2ade3b5fe}{silent\+\_\+probe(\+Token\+Type, const Token\&)} \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_aff994936e99cedc285352f53de433982}\label{classaion_1_1parse_1_1_parser_aff994936e99cedc285352f53de433982} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries silent\+\_\+consume} (Token\+Type exp, const \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} \&curr)
+\begin{DoxyCompactList}\small\item\em would either progress or hold, does not throw \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a11a474f2f36a97cefbf11fb9b6275a41}\label{classaion_1_1parse_1_1_parser_a11a474f2f36a97cefbf11fb9b6275a41} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries silent\+\_\+consume} (const \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{Match\+Token}} \&token)
+\begin{DoxyCompactList}\small\item\em alias for \doxylink{classaion_1_1parse_1_1_parser_aff994936e99cedc285352f53de433982}{silent\+\_\+consume(\+Token\+Type, const Token\&)} \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_ac22dda0a8e93807d3ab6a34d510b8049}\label{classaion_1_1parse_1_1_parser_ac22dda0a8e93807d3ab6a34d510b8049} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries attempt} (const \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{Match\+Token}} \&token)
+\begin{DoxyCompactList}\small\item\em alias for \doxylink{classaion_1_1parse_1_1_parser_a11a474f2f36a97cefbf11fb9b6275a41}{silent\+\_\+consume(const Match\+Token\&)} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}{skip\+\_\+until}} (const std\+::string \&lexeme)
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_af0f95f1a683559ffc1fd2cfd30da680d}\label{classaion_1_1parse_1_1_parser_af0f95f1a683559ffc1fd2cfd30da680d} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries skip\+\_\+until} (Token\+Type type)
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a5a42131bfb66f077ddacb8a27457f3c8}\label{classaion_1_1parse_1_1_parser_a5a42131bfb66f077ddacb8a27457f3c8} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries skip\+\_\+until} (Token\+Type type, const std\+::string \&lexeme)
+\begin{DoxyCompactList}\small\item\em skip\+\_\+until overload that skips until it either finds a matching lexeme or type \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} \mbox{\hyperlink{classaion_1_1parse_1_1_parser_ae467bbcbbd0db8b49d437028bdafe18d}{attempt\+\_\+to\+\_\+skip\+\_\+until\+\_\+familiar}} ()
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_afc736175c96945400992182912fa7885}\label{classaion_1_1parse_1_1_parser_afc736175c96945400992182912fa7885} 
+bool {\bfseries is\+\_\+at\+\_\+end} () const
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a2be63981aa34d7d234c514ebaea380ee}\label{classaion_1_1parse_1_1_parser_a2be63981aa34d7d234c514ebaea380ee} 
+void {\bfseries parse} ()
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a4c159cfa37819b2e90c557c6d5b17677}\label{classaion_1_1parse_1_1_parser_a4c159cfa37819b2e90c557c6d5b17677} 
+void {\bfseries parse\+\_\+top\+\_\+level\+\_\+decl} ()
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a5d368ea02a6547ff849b1394341cb77d}\label{classaion_1_1parse_1_1_parser_a5d368ea02a6547ff849b1394341cb77d} 
+bool {\bfseries parse\+\_\+first\+\_\+top\+\_\+level\+\_\+decl} ()
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_ae23b8d54ec5688e70ee5bab05d21ab1c}\label{classaion_1_1parse_1_1_parser_ae23b8d54ec5688e70ee5bab05d21ab1c} 
+void {\bfseries parse\+\_\+variable\+\_\+decl} ()
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_aa21996ac237279bc1690de08ea21906a}\label{classaion_1_1parse_1_1_parser_aa21996ac237279bc1690de08ea21906a} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries parse\+\_\+expression} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} delim)
+\begin{DoxyCompactList}\small\item\em entry point for expression parsing \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_ae6645b8a2c58c5a83eb0a3be62cc1d78}\label{classaion_1_1parse_1_1_parser_ae6645b8a2c58c5a83eb0a3be62cc1d78} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries nud} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} tok)
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_ab4424c44ec9836f668815b1f6837a4b9}\label{classaion_1_1parse_1_1_parser_ab4424c44ec9836f668815b1f6837a4b9} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries led} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} op, \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}left)
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_acd06b93ef6bced80b6dcaa9a90f4bde1}\label{classaion_1_1parse_1_1_parser_acd06b93ef6bced80b6dcaa9a90f4bde1} 
+{\bfseries Parser} (File\+Id file\+\_\+id, const std\+::vector$<$ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} $>$ \&tokens, \mbox{\hyperlink{structaion_1_1compiler__config_1_1_flags}{Flags}} flag, \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}} \&context, \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag\+::\+Diagnostics\+Engine}} \&diag)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_ae0ae91715e10fab17b65ed3d0237368b}\label{classaion_1_1parse_1_1_parser_ae0ae91715e10fab17b65ed3d0237368b} 
+static int {\bfseries lbp} (const Token\+Type token)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classaion_1_1parse_1_1_parser_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classaion_1_1parse_1_1_parser_ae467bbcbbd0db8b49d437028bdafe18d}\index{aion::parse::Parser@{aion::parse::Parser}!attempt\_to\_skip\_until\_familiar@{attempt\_to\_skip\_until\_familiar}}
+\index{attempt\_to\_skip\_until\_familiar@{attempt\_to\_skip\_until\_familiar}!aion::parse::Parser@{aion::parse::Parser}}
+\doxysubsubsection{\texorpdfstring{attempt\_to\_skip\_until\_familiar()}{attempt\_to\_skip\_until\_familiar()}}
+{\footnotesize\ttfamily \label{classaion_1_1parse_1_1_parser_ae467bbcbbd0db8b49d437028bdafe18d} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} aion\+::parse\+::\+Parser\+::attempt\+\_\+to\+\_\+skip\+\_\+until\+\_\+familiar (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+the error would have to be first emitted before we attempt to end the parsing function (the caller to this function); return is to be written explicitly in the branch calling this function (that is, it is the caller\textquotesingle{}s responsibility to write return after calling this function) \Hypertarget{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}\index{aion::parse::Parser@{aion::parse::Parser}!skip\_until@{skip\_until}}
+\index{skip\_until@{skip\_until}!aion::parse::Parser@{aion::parse::Parser}}
+\doxysubsubsection{\texorpdfstring{skip\_until()}{skip\_until()}}
+{\footnotesize\ttfamily \label{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} aion\+::parse\+::\+Parser\+::skip\+\_\+until (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{lexeme}{}\end{DoxyParamCaption})}
+
+skip\+\_\+until overload \begin{DoxyReturn}{Returns}
+the matched token (the token it should\textquotesingle{}ve skipped to), aka \doxylink{classaion_1_1parse_1_1_parser_a042334ba321d0e279f4acc4be0083621}{previous()}, after {\ttfamily pos} increment 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/parser/parser.\+hpp\item 
+core/src/parser/parser.\+cpp\item 
+core/src/parser/parser\+\_\+decl.\+cpp\item 
+core/src/parser/parser\+\_\+expression.\+cpp\end{DoxyCompactItemize}

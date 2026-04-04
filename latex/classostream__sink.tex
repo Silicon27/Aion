@@ -1,0 +1,63 @@
+\doxysection{ostream\+\_\+sink Class Reference}
+\hypertarget{classostream__sink}{}\label{classostream__sink}\index{ostream\_sink@{ostream\_sink}}
+Inheritance diagram for ostream\+\_\+sink\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classostream__sink}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classostream__sink_aa39434004b8003c20288a0fd08caa881}\label{classostream__sink_aa39434004b8003c20288a0fd08caa881} 
+{\bfseries ostream\+\_\+sink} (std\+::ostream \&os)
+\item 
+void \mbox{\hyperlink{classostream__sink_a8187712162d37f34eafe6027abd345fb}{log}} (log\+\_\+level level, const char \texorpdfstring{$\ast$}{*}message) override
+\item 
+void \mbox{\hyperlink{classostream__sink_a59c459e5bd988bf2ba6bb07fcbc5d003}{flush}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries set\+\_\+level} (log\+\_\+level level)
+\item 
+log\+\_\+level {\bfseries get\+\_\+level} () const
+\item 
+bool {\bfseries should\+\_\+log} (log\+\_\+level level) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}}
+\begin{DoxyCompactItemize}
+\item 
+log\+\_\+level {\bfseries level\+\_\+} = log\+\_\+level\+::\+TRACE
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classostream__sink_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classostream__sink_a59c459e5bd988bf2ba6bb07fcbc5d003}\index{ostream\_sink@{ostream\_sink}!flush@{flush}}
+\index{flush@{flush}!ostream\_sink@{ostream\_sink}}
+\doxysubsubsection{\texorpdfstring{flush()}{flush()}}
+{\footnotesize\ttfamily \label{classostream__sink_a59c459e5bd988bf2ba6bb07fcbc5d003} 
+void ostream\+\_\+sink\+::flush (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}.
+
+\Hypertarget{classostream__sink_a8187712162d37f34eafe6027abd345fb}\index{ostream\_sink@{ostream\_sink}!log@{log}}
+\index{log@{log}!ostream\_sink@{ostream\_sink}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}}
+{\footnotesize\ttfamily \label{classostream__sink_a8187712162d37f34eafe6027abd345fb} 
+void ostream\+\_\+sink\+::log (\begin{DoxyParamCaption}\item[{log\+\_\+level}]{level}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{message}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/log/ostream\+\_\+sink.\+h\end{DoxyCompactItemize}

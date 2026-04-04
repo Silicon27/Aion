@@ -1,0 +1,82 @@
+\doxysection{lexer.\+hpp}
+\hypertarget{lexer_8hpp_source}{}\label{lexer_8hpp_source}\index{core/include/lexer/lexer.hpp@{core/include/lexer/lexer.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/10-\/18.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ LEXER\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ LEXER\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <istream>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <ranges>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <support/global\_constants.hpp>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace\ }aion::lexer\ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{struct\ }Token\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ TokenType\ type;}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ uint8\_t\ flags\ =\ 0;\ \textcolor{comment}{//\ fbrc\ bits}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ std::string\ lexeme;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ line;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ column;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ Token()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ Token(TokenType\ t,\ std::string\ l,\ \textcolor{keywordtype}{int}\ ln,\ \textcolor{keywordtype}{int}\ col,\ uint8\_t\ f\ =\ 0)}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ :\ type(t),\ flags(f),\ lexeme(std::move(l)),\ line(ln),\ column(col)\ \{\}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Token(\textcolor{keyword}{const}\ TokenType\ t)}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ :\ type(t),\ line(0),\ column(0)\ \{\}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ TokenType\ get\_type()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ type;\ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ get\_lexeme()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ lexeme;\ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ get\_line()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ line;\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ get\_column()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ column;\ \}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ uint8\_t\ get\_flags()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ flags;\ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ string\ prefix\ specific}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_string\_prefix\_flags()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ flags\ \&\ 0b1111;\ \}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ format\_flag\_set()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ flags\ \&\ 0b0001;\ \}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ binary\_flag\_set()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ flags\ \&\ 0b0010;\ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ raw\_flag\_set()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ flags\ \&\ 0b0100;\ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ cstr\_flag\_set()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ flags\ \&\ 0b1000;\ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{class\ }Lexer\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Lexer(std::istream\ \&input\_stream);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ std::tuple<std::vector<Token>,\ std::vector<Token>,\ std::map<int,\ std::string>>\ \mbox{\hyperlink{classaion_1_1lexer_1_1_lexer_a5d527daacde0c4423428fbe3396d6bc5}{tokenize}}();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ std::istream\ \&input;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::string\ current\_line;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ std::size\_t\ current\_pos;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ line\_number;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ std::map<int,\ std::string>\ unfiltered\_lines;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::string>\&\ symbols;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ std::string\ spaces;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ std::vector<Token>\ unfiltered\_tokens;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ tokenize\_number();}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ tokenize\_identifier();}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ tokenize\_symbol();}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ record\_token(TokenType\ type,\ \textcolor{keyword}{const}\ std::string\&\ full\_lexeme,\ \textcolor{keywordtype}{int}\ column,\ uint8\_t\ flags\ =\ 0);}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ try\_consume\_line\_comment(std::optional<Token>\ \&out\_token);}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ try\_consume\_special\_string(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ \&out\_token);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ is\_symbol\_start(\textcolor{keywordtype}{char}\ c)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ \ \ \ \ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \}\ \textcolor{comment}{//\ namespace\ aion::lexer}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LEXER\_HPP}}
+\DoxyCodeLine{00076\ }
+
+\end{DoxyCode}

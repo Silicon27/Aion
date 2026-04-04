@@ -1,0 +1,51 @@
+\doxysection{aion\+::diag\+::Fix\+It\+Hint Class Reference}
+\hypertarget{classaion_1_1diag_1_1_fix_it_hint}{}\label{classaion_1_1diag_1_1_fix_it_hint}\index{aion::diag::FixItHint@{aion::diag::FixItHint}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_a9ea2e6558ebd15633418cf878eca56f0}\label{classaion_1_1diag_1_1_fix_it_hint_a9ea2e6558ebd15633418cf878eca56f0} 
+bool {\bfseries is\+\_\+null} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_aca1eab7045eeef857ed023448af75bb4}\label{classaion_1_1diag_1_1_fix_it_hint_aca1eab7045eeef857ed023448af75bb4} 
+static \mbox{\hyperlink{classaion_1_1diag_1_1_fix_it_hint}{Fix\+It\+Hint}} {\bfseries create\+\_\+insertion} (\mbox{\hyperlink{structaion_1_1_source_location}{Source\+\_\+\+Location}} loc, const std\+::string \&code, bool before\+\_\+previous=false)
+\begin{DoxyCompactList}\small\item\em Create a code modification hint that inserts the given code at a location. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_ab29fec3208b69da2852c6552ec251243}\label{classaion_1_1diag_1_1_fix_it_hint_ab29fec3208b69da2852c6552ec251243} 
+static \mbox{\hyperlink{classaion_1_1diag_1_1_fix_it_hint}{Fix\+It\+Hint}} {\bfseries create\+\_\+removal} (\mbox{\hyperlink{structaion_1_1diag_1_1_char_source_range}{Char\+Source\+Range}} range)
+\begin{DoxyCompactList}\small\item\em Create a code modification hint that removes the given source range. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_af967f1dc715c7dfd9b34a917e897f364}\label{classaion_1_1diag_1_1_fix_it_hint_af967f1dc715c7dfd9b34a917e897f364} 
+static \mbox{\hyperlink{classaion_1_1diag_1_1_fix_it_hint}{Fix\+It\+Hint}} {\bfseries create\+\_\+replacement} (\mbox{\hyperlink{structaion_1_1diag_1_1_char_source_range}{Char\+Source\+Range}} range, const std\+::string \&code)
+\begin{DoxyCompactList}\small\item\em Create a code modification hint that replaces the given source range. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structaion_1_1diag_1_1_char_source_range}{Char\+Source\+Range}} \mbox{\hyperlink{classaion_1_1diag_1_1_fix_it_hint_a9acb4cce1005baed738b1809ca01c8b0}{remove\+\_\+range}}
+\item 
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_ab92aaf4609ba019b7e5051bf741ec13d}\label{classaion_1_1diag_1_1_fix_it_hint_ab92aaf4609ba019b7e5051bf741ec13d} 
+\mbox{\hyperlink{structaion_1_1diag_1_1_char_source_range}{Char\+Source\+Range}} {\bfseries insert\+\_\+from\+\_\+range}
+\begin{DoxyCompactList}\small\item\em Code in a specific range that should be inserted. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_a762e53380b4dda1933af8a1ee7b198b0}\label{classaion_1_1diag_1_1_fix_it_hint_a762e53380b4dda1933af8a1ee7b198b0} 
+std\+::string {\bfseries code\+\_\+to\+\_\+insert}
+\begin{DoxyCompactList}\small\item\em The actual code to insert at the insertion location. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_a474c64537dd6225c42b541a921dfc6c5}\label{classaion_1_1diag_1_1_fix_it_hint_a474c64537dd6225c42b541a921dfc6c5} 
+bool {\bfseries before\+\_\+previous\+\_\+insertions} = false
+\end{DoxyCompactItemize}
+
+
+\label{doc-variable-members}
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classaion_1_1diag_1_1_fix_it_hint_a9acb4cce1005baed738b1809ca01c8b0}\index{aion::diag::FixItHint@{aion::diag::FixItHint}!remove\_range@{remove\_range}}
+\index{remove\_range@{remove\_range}!aion::diag::FixItHint@{aion::diag::FixItHint}}
+\doxysubsubsection{\texorpdfstring{remove\_range}{remove\_range}}
+{\footnotesize\ttfamily \label{classaion_1_1diag_1_1_fix_it_hint_a9acb4cce1005baed738b1809ca01c8b0} 
+\mbox{\hyperlink{structaion_1_1diag_1_1_char_source_range}{Char\+Source\+Range}} aion\+::diag\+::\+Fix\+It\+Hint\+::remove\+\_\+range}
+
+Code that should be replaced to correct the error. Empty for an insertion hint. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/error/error.\+hpp\item 
+core/src/error/error.\+cpp\end{DoxyCompactItemize}

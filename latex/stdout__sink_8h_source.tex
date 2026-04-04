@@ -1,0 +1,45 @@
+\doxysection{stdout\+\_\+sink.\+h}
+\hypertarget{stdout__sink_8h_source}{}\label{stdout__sink_8h_source}\index{core/include/support/si/include/impl/log/stdout\_sink.h@{core/include/support/si/include/impl/log/stdout\_sink.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/03-\/17.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_LOG\_STDOUT\_SINK\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_LOG\_STDOUT\_SINK\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}sink.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}color.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <cstdio>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classstdout__sink}{stdout\_sink}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classlog__sink}{log\_sink}}\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ log(log\_level\ level,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message)\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!should\_log(level))\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ color\_code\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (level)\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ log\_level::TRACE:\ color\_code\ =\ log\_color\_to\_ansi(log\_color::WHITE);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ log\_level::DEBUG:\ color\_code\ =\ log\_color\_to\_ansi(log\_color::CYAN);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ log\_level::INFO:\ \ color\_code\ =\ log\_color\_to\_ansi(log\_color::GREEN);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ log\_level::WARN:\ \ color\_code\ =\ log\_color\_to\_ansi(log\_color::YELLOW);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ log\_level::ERROR:\ color\_code\ =\ log\_color\_to\_ansi(log\_color::RED);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ log\_level::FATAL:\ color\_code\ =\ log\_color\_to\_ansi(log\_color::BRIGHT\_RED);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ std::printf(\textcolor{stringliteral}{"{}\%s[\%-\/5s]\%s\ \%s\(\backslash\)n"{}},\ color\_code,\ log\_level\_to\_string(level),\ log\_color\_to\_ansi(log\_color::RESET),\ message);}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ flush()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ std::fflush(stdout);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \};}
+\DoxyCodeLine{00037\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_LOG\_STDOUT\_SINK\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,53 @@
+\doxysection{aion\+::ast\+::Stmt Class Reference}
+\hypertarget{classaion_1_1ast_1_1_stmt}{}\label{classaion_1_1ast_1_1_stmt}\index{aion::ast::Stmt@{aion::ast::Stmt}}
+
+
+Base class for all statements.  
+
+
+
+
+{\ttfamily \#include $<$ast.\+hpp$>$}
+
+Inheritance diagram for aion\+::ast\+::Stmt\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1ast_1_1_stmt}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_stmt_a5d7f6c265f7de6cb51f1cd160a23786a}\label{classaion_1_1ast_1_1_stmt_a5d7f6c265f7de6cb51f1cd160a23786a} 
+enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
+{\bfseries compound\+\_\+stmt}
+, {\bfseries if\+\_\+stmt}
+, {\bfseries while\+\_\+stmt}
+, {\bfseries for\+\_\+stmt}
+, \newline
+{\bfseries return\+\_\+stmt}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_stmt_aad97f6cfc352086447ec6ddd4d5a306d}\label{classaion_1_1ast_1_1_stmt_aad97f6cfc352086447ec6ddd4d5a306d} 
+{\bfseries Stmt} (const Kind K)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_stmt_a08de52abdc830fa690ab688f70162466}\label{classaion_1_1ast_1_1_stmt_a08de52abdc830fa690ab688f70162466} 
+Kind {\bfseries get\+\_\+kind} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_stmt_a81992f52dc601812ba88cecd0da65c8c}\label{classaion_1_1ast_1_1_stmt_a81992f52dc601812ba88cecd0da65c8c} 
+class {\bfseries ASTContext}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Base class for all statements. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/ast.\+hpp\end{DoxyCompactItemize}

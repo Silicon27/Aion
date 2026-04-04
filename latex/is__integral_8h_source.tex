@@ -1,0 +1,47 @@
+\doxysection{is\+\_\+integral.\+h}
+\hypertarget{is__integral_8h_source}{}\label{is__integral_8h_source}\index{core/include/support/si/include/impl/type\_traits/is\_integral.h@{core/include/support/si/include/impl/type\_traits/is\_integral.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/01-\/13.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_IS\_INTEGRAL\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_IS\_INTEGRAL\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}integral\_constant.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}\ :\ false\_type\ \{\};\ \textcolor{comment}{//\ base\ case,\ always\ false\ unless\ specified\ below}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<int>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<bool>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<char>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<wchar\_t>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifdef\ SI\_CPP20}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<char8\_t>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<char16\_t>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<char32\_t>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<short>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<long>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<long\ long>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<unsigned\ int>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<unsigned\ char>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<unsigned\ short>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<unsigned\ long>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<unsigned\ long\ long>\ :\ true\_type\ \{\};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ these\ three\ cases\ are\ for\ if\ the\ type\ is\ cv-\/qualified}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<const\ T>\ :\ \mbox{\hyperlink{structis__integral}{is\_integral}}<T>\ \{\};}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<volatile\ T>\ :\ \mbox{\hyperlink{structis__integral}{is\_integral}}<T>\ \{\};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__integral}{is\_integral}}<const\ volatile\ T>\ :\ \mbox{\hyperlink{structis__integral}{is\_integral}}<T>\ \{\};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integral\_v\ =\ is\_integral<T>::value;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_IS\_INTEGRAL\_H}}
+
+\end{DoxyCode}

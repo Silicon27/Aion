@@ -1,0 +1,48 @@
+\doxysection{allocator\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classallocator}{}\label{classallocator}\index{allocator$<$ T $>$@{allocator$<$ T $>$}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structallocator_1_1rebind}{rebind}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classallocator_a05458a82c60f6ca6402f278ec6396e97}\label{classallocator_a05458a82c60f6ca6402f278ec6396e97} 
+using {\bfseries value\+\_\+type} = T
+\item 
+\Hypertarget{classallocator_a3d9e7e78705797b6463ffb6f5a0f3192}\label{classallocator_a3d9e7e78705797b6463ffb6f5a0f3192} 
+using {\bfseries pointer} = T\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classallocator_a4a6023151578a684a5d6259482abca95}\label{classallocator_a4a6023151578a684a5d6259482abca95} 
+using {\bfseries const\+\_\+pointer} = const T\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classallocator_af9696ed3547ed4fca2fd64fe5d7112c8}\label{classallocator_af9696ed3547ed4fca2fd64fe5d7112c8} 
+using {\bfseries void\+\_\+pointer} = void\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classallocator_a7ec5cd45041392d5ca5c18a9a5a053bd}\label{classallocator_a7ec5cd45041392d5ca5c18a9a5a053bd} 
+using {\bfseries const\+\_\+void\+\_\+pointer} = const void\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classallocator_aebd1266613d4d8294dc59e3c435127d3}\label{classallocator_aebd1266613d4d8294dc59e3c435127d3} 
+using {\bfseries size\+\_\+type} = size\+\_\+t
+\item 
+\Hypertarget{classallocator_a93a97cee2950b929069d6a6a96e89809}\label{classallocator_a93a97cee2950b929069d6a6a96e89809} 
+using {\bfseries difference\+\_\+type} = ptrdiff\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classallocator_aaf10d17a39f382288b8231583fb18448}\label{classallocator_aaf10d17a39f382288b8231583fb18448} 
+{\footnotesize template$<$typename U$>$ }\\{\bfseries allocator} (const \mbox{\hyperlink{classallocator}{allocator}}$<$ U $>$ \&)
+\item 
+\Hypertarget{classallocator_a0d69257168887e09ce735a4f58f95b8c}\label{classallocator_a0d69257168887e09ce735a4f58f95b8c} 
+T \texorpdfstring{$\ast$}{*} {\bfseries allocate} (size\+\_\+t n)
+\item 
+\Hypertarget{classallocator_ac338bf5e66d7ed8661aaab29d337d288}\label{classallocator_ac338bf5e66d7ed8661aaab29d337d288} 
+void {\bfseries deallocate} (value\+\_\+type \texorpdfstring{$\ast$}{*}p, size\+\_\+t n) noexcept
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/memory/allocator.\+h\end{DoxyCompactItemize}

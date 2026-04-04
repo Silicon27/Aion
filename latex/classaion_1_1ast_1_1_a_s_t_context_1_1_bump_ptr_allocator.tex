@@ -1,0 +1,66 @@
+\doxysection{aion\+::ast\+::ASTContext\+::Bump\+Ptr\+Allocator\texorpdfstring{$<$}{<} Vec\+Alloc \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator}{}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator}\index{aion::ast::ASTContext::BumpPtrAllocator$<$ VecAlloc $>$@{aion::ast::ASTContext::BumpPtrAllocator$<$ VecAlloc $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a8c139f9e683149ab8039bbca924019ad}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a8c139f9e683149ab8039bbca924019ad} 
+{\bfseries Bump\+Ptr\+Allocator} (std\+::size\+\_\+t initial\+\_\+slab\+\_\+size=1024 \texorpdfstring{$\ast$}{*}1024)
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_add22f725a1e59d95da9d4f69e58e19cb}{allocate}} (std\+::size\+\_\+t size, std\+::size\+\_\+t alignment=alignof(std\+::max\+\_\+align\+\_\+t), std\+::size\+\_\+t size\+\_\+of\+\_\+new\+\_\+slab=0, bool reuse\+\_\+free\+\_\+slab=true)
+\begin{DoxyCompactList}\small\item\em Allocates storage of at least the size (may allocate more than requested due to cache line alignment) and returns a pointer to it. If the current slab does not have enough space, a new slab is allocated. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a2c3d4355fd32d191ba7913b9951ce0fd}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a2c3d4355fd32d191ba7913b9951ce0fd} 
+void {\bfseries reset\+\_\+slab} (std\+::size\+\_\+t idx)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a5847a8f3becd9a14bc0f5cfcc218d3e5}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a5847a8f3becd9a14bc0f5cfcc218d3e5} 
+int {\bfseries current\+\_\+slab\+\_\+index} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a152140b44cd865369d7d5b8e88bcc7fb}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a152140b44cd865369d7d5b8e88bcc7fb} 
+std\+::size\+\_\+t {\bfseries num\+\_\+slabs} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a14a79b07c20f77da15db3d887d4929c3}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a14a79b07c20f77da15db3d887d4929c3} 
+std\+::size\+\_\+t {\bfseries num\+\_\+partially\+\_\+used\+\_\+slabs} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a544a0d36605283b74c75b64d638294ea}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_a544a0d36605283b74c75b64d638294ea} 
+std\+::size\+\_\+t {\bfseries num\+\_\+allocated\+\_\+bytes} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_ae1cec3c544e1f98470ff62cdc33a14cf}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_ae1cec3c544e1f98470ff62cdc33a14cf} 
+std\+::size\+\_\+t {\bfseries num\+\_\+allocated\+\_\+bytes\+\_\+used} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_ad687e6fd3b912abbca7ceb25c2e87637}\label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_ad687e6fd3b912abbca7ceb25c2e87637} 
+std\+::size\+\_\+t {\bfseries slab\+\_\+sizes} () const
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_add22f725a1e59d95da9d4f69e58e19cb}\index{aion::ast::ASTContext::BumpPtrAllocator$<$ VecAlloc $>$@{aion::ast::ASTContext::BumpPtrAllocator$<$ VecAlloc $>$}!allocate@{allocate}}
+\index{allocate@{allocate}!aion::ast::ASTContext::BumpPtrAllocator$<$ VecAlloc $>$@{aion::ast::ASTContext::BumpPtrAllocator$<$ VecAlloc $>$}}
+\doxysubsubsection{\texorpdfstring{allocate()}{allocate()}}
+{\footnotesize\ttfamily \label{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_add22f725a1e59d95da9d4f69e58e19cb} 
+template$<$typename Vec\+Alloc = std\+::allocator$<$\+Slab$>$$>$ \\
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator}{aion\+::ast\+::\+ASTContext\+::\+Bump\+Ptr\+Allocator}}$<$ Vec\+Alloc $>$\+::allocate (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{size}{, }\item[{std\+::size\+\_\+t}]{alignment}{ = {\ttfamily alignof(std\+:\+:max\+\_\+align\+\_\+t)}, }\item[{std\+::size\+\_\+t}]{size\+\_\+of\+\_\+new\+\_\+slab}{ = {\ttfamily 0}, }\item[{bool}]{reuse\+\_\+free\+\_\+slab}{ = {\ttfamily true}}\end{DoxyParamCaption})}
+
+
+
+Allocates storage of at least the size (may allocate more than requested due to cache line alignment) and returns a pointer to it. If the current slab does not have enough space, a new slab is allocated. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & the size of the memory chunk being allocated \\
+\hline
+{\em alignment} & alignment of chunk within the slab \\
+\hline
+{\em size\+\_\+of\+\_\+new\+\_\+slab} & size of the new slab to be allocated if the current slab is full, a value \texorpdfstring{$<$}{<}0 means to use member slab\+\_\+size to construct the new slab \\
+\hline
+{\em reuse\+\_\+free\+\_\+slab} & if true, the allocator would try to reuse the slab that was cast aside in favor of a new bigger slab when allocating storage more than the available amount in the current slab.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to the allocated memory chunk, or nullptr if allocation fails (e.\+g. if even a new slab cannot accommodate the requested size -\/ fix\+: increase size\+\_\+of\+\_\+new\+\_\+slab to allocate a new slab of a custom size) 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/ASTContext.\+hpp\end{DoxyCompactItemize}

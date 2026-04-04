@@ -1,0 +1,108 @@
+\doxysection{basic\+\_\+ios\texorpdfstring{$<$}{<} CharT, Traits \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structbasic__ios}{}\label{structbasic__ios}\index{basic\_ios$<$ CharT, Traits $>$@{basic\_ios$<$ CharT, Traits $>$}}
+Inheritance diagram for basic\+\_\+ios\texorpdfstring{$<$}{<} CharT, Traits \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structbasic__ios}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structbasic__ios_a4e42d892ff48181c1ddbd34f0ff8b2a0}\label{structbasic__ios_a4e42d892ff48181c1ddbd34f0ff8b2a0} 
+using {\bfseries char\+\_\+type} = CharT
+\item 
+\Hypertarget{structbasic__ios_a8b106a83744d0768ba89613ba7234d55}\label{structbasic__ios_a8b106a83744d0768ba89613ba7234d55} 
+using {\bfseries traits\+\_\+type} = Traits
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classios__base}{ios\+\_\+base}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries fmtflags} = unsigned int
+\item 
+using {\bfseries iostate} = unsigned char
+\item 
+using {\bfseries openmode} = unsigned char
+\item 
+using {\bfseries seekdir} = unsigned char
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classios__base}{ios\+\_\+base}}}
+\begin{DoxyCompactItemize}
+\item 
+fmtflags {\bfseries flags} () const
+\item 
+fmtflags {\bfseries flags} (const fmtflags fmt)
+\item 
+fmtflags {\bfseries setf} (const fmtflags fmt)
+\item 
+fmtflags {\bfseries setf} (const fmtflags fmt, const fmtflags mask)
+\item 
+void {\bfseries unsetf} (const fmtflags mask)
+\item 
+streamsize {\bfseries precision} () const
+\item 
+streamsize {\bfseries precision} (const streamsize prec)
+\item 
+streamsize {\bfseries width} () const
+\item 
+streamsize {\bfseries width} (const streamsize wid)
+\item 
+int {\bfseries rdstate} () const
+\item 
+void {\bfseries setstate} (const int state)
+\item 
+void {\bfseries clear} (const int s=goodbit)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes inherited from \mbox{\hyperlink{classios__base}{ios\+\_\+base}}}
+\begin{DoxyCompactItemize}
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries dec} = 0x0001
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries oct} = 0x0002
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries hex} = 0x0004
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries basefield} = dec \texorpdfstring{$\vert$}{|} oct \texorpdfstring{$\vert$}{|} hex
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries scientific} = 0x0008
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries fixed} = 0x0010
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries floatfield} = scientific \texorpdfstring{$\vert$}{|} fixed
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries left} = 0x0020
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries right} = 0x0040
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries internal} = 0x0080
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries adjustfield} = left \texorpdfstring{$\vert$}{|} right \texorpdfstring{$\vert$}{|} internal
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries showbase} = 0x0100
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries showpoint} = 0x0200
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries showpos} = 0x0400
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries skipws} = 0x0800
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries unitbuf} = 0x1000
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries uppercase} = 0x2000
+\item 
+static SI\+\_\+\+CONSTEXPR fmtflags {\bfseries boolalpha} = 0x4000
+\item 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries goodbit} = 0x00
+\item 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries eofbit} = 0x01
+\item 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries failbit} = 0x02
+\item 
+static SI\+\_\+\+CONSTEXPR iostate {\bfseries badbit} = 0x04
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/ios\+\_\+base/basic\+\_\+ios.\+hpp\end{DoxyCompactItemize}

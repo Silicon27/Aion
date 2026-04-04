@@ -1,0 +1,36 @@
+\doxysection{uintptr\+\_\+t.\+h}
+\hypertarget{uintptr__t_8h_source}{}\label{uintptr__t_8h_source}\index{core/include/support/si/include/impl/stddef/uintptr\_t.h@{core/include/support/si/include/impl/stddef/uintptr\_t.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/02-\/20.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_STDDEF\_UINTPTR\_T\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_STDDEF\_UINTPTR\_T\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}size\_t.h"{}}}
+\DoxyCodeLine{00010\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#if\ defined(\_\_UINTPTR\_TYPE\_\_)}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{using\ }uintptr\_t\ =\ \_\_UINTPTR\_TYPE\_\_;}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#elif\ defined(SI\_ARCH\_BITS)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#\ \ \ if\ SI\_ARCH\_BITS\ ==\ 64}}
+\DoxyCodeLine{00016\ \textcolor{keyword}{using\ }uintptr\_t\ =\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ long;}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#\ \ \ elif\ SI\_ARCH\_BITS\ ==\ 32}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{using\ }uintptr\_t\ =\ \textcolor{keywordtype}{unsigned}\ int;}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#\ \ \ elif\ SI\_ARCH\_BITS\ ==\ 16}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{using\ }uintptr\_t\ =\ \textcolor{keywordtype}{unsigned}\ short;}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#\ \ \ else}}
+\DoxyCodeLine{00022\ \textcolor{keyword}{using\ }uintptr\_t\ =\ \textcolor{keywordtype}{unsigned}\ int;}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00025\ \textcolor{keyword}{using\ }uintptr\_t\ =\ \textcolor{keywordtype}{unsigned}\ int;}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_STDDEF\_UINTPTR\_T\_HPP}}
+
+\end{DoxyCode}

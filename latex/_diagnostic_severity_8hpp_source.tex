@@ -1,0 +1,60 @@
+\doxysection{Diagnostic\+Severity.\+hpp}
+\hypertarget{_diagnostic_severity_8hpp_source}{}\label{_diagnostic_severity_8hpp_source}\index{core/include/error/DiagnosticSeverity.hpp@{core/include/error/DiagnosticSeverity.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/12-\/09.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ DiagnosticSeverity.hpp\ -\/\ Severity\ enum\ for\ diagnostics}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ This\ file\ is\ separated\ to\ avoid\ circular\ dependencies\ between}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ error.hpp,\ diagid.hpp,\ and\ source\_manager.hpp}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ DIAGNOSTIC\_SEVERITY\_HPP}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ DIAGNOSTIC\_SEVERITY\_HPP}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }aion::diag\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{enum\ class}\ Severity\ :\ uint8\_t\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\ NOTE:\ 0\ means\ "{}uncomputed"{}\ internally}}
+\DoxyCodeLine{00023\ \ \ \ \ ignored\ =\ 1,\ \ \ \ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ note\ =\ 2,\ \ \ \ \ \ \ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ remark\ =\ 3,\ \ \ \ \ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ warning\ =\ 4,\ \ \ \ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ error\ =\ 5,\ \ \ \ \ \ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ fatal\ =\ 6\ \ \ \ \ \ \ }
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{enum\ class}\ Flavor\ :\ uint8\_t\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ warning\_or\_error,\ }
+\DoxyCodeLine{00045\ \ \ \ \ remark\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ is\_error\_or\_fatal(Severity\ S)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{return}\ S\ ==\ Severity::error\ ||\ S\ ==\ Severity::fatal;}
+\DoxyCodeLine{00051\ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00054\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ get\_severity\_name(Severity\ S)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordflow}{switch}\ (S)\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Severity::ignored:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}ignored"{}};}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Severity::note:\ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}note"{}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Severity::remark:\ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}remark"{}};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Severity::warning:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}warning"{}};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Severity::error:\ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}error"{}};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Severity::fatal:\ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}fatal\ error"{}};}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}unknown"{}};}
+\DoxyCodeLine{00064\ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \}\ \textcolor{comment}{//\ namespace\ aion::diag}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ DIAGNOSTIC\_SEVERITY\_HPP}}
+
+\end{DoxyCode}

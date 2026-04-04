@@ -1,0 +1,37 @@
+\doxysection{log\+\_\+sink Class Reference}
+\hypertarget{classlog__sink}{}\label{classlog__sink}\index{log\_sink@{log\_sink}}
+Inheritance diagram for log\+\_\+sink\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classlog__sink}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlog__sink_affe55a72f26da41ccb1e4e03e3edfcbe}\label{classlog__sink_affe55a72f26da41ccb1e4e03e3edfcbe} 
+virtual void {\bfseries log} (log\+\_\+level level, const char \texorpdfstring{$\ast$}{*}message)=0
+\item 
+\Hypertarget{classlog__sink_adb79b71ac6d34d43d31a708d9c46f599}\label{classlog__sink_adb79b71ac6d34d43d31a708d9c46f599} 
+virtual void {\bfseries flush} ()=0
+\item 
+\Hypertarget{classlog__sink_a2f88a17a520e6356fd20a6c7ac44b01e}\label{classlog__sink_a2f88a17a520e6356fd20a6c7ac44b01e} 
+void {\bfseries set\+\_\+level} (log\+\_\+level level)
+\item 
+\Hypertarget{classlog__sink_acfea234f80d56a0503ac19c365a9c173}\label{classlog__sink_acfea234f80d56a0503ac19c365a9c173} 
+log\+\_\+level {\bfseries get\+\_\+level} () const
+\item 
+\Hypertarget{classlog__sink_ab19b659e73c7cc0f1c1971dd4b652c53}\label{classlog__sink_ab19b659e73c7cc0f1c1971dd4b652c53} 
+bool {\bfseries should\+\_\+log} (log\+\_\+level level) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlog__sink_a021e6e792820dfb4df6b5c95a04abca4}\label{classlog__sink_a021e6e792820dfb4df6b5c95a04abca4} 
+log\+\_\+level {\bfseries level\+\_\+} = log\+\_\+level\+::\+TRACE
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/log/sink.\+h\end{DoxyCompactItemize}

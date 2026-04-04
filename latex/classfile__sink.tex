@@ -1,0 +1,66 @@
+\doxysection{file\+\_\+sink Class Reference}
+\hypertarget{classfile__sink}{}\label{classfile__sink}\index{file\_sink@{file\_sink}}
+Inheritance diagram for file\+\_\+sink\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classfile__sink}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classfile__sink_a0c77a6b233194bbe42337036b8b963c3}\label{classfile__sink_a0c77a6b233194bbe42337036b8b963c3} 
+{\bfseries file\+\_\+sink} (const char \texorpdfstring{$\ast$}{*}filename)
+\item 
+void \mbox{\hyperlink{classfile__sink_a6a1d12b1a3915402d1577aab052aaaa8}{log}} (log\+\_\+level level, const char \texorpdfstring{$\ast$}{*}message) override
+\item 
+void \mbox{\hyperlink{classfile__sink_a664527322116a172e817afa7b0766fa6}{flush}} () override
+\item 
+\Hypertarget{classfile__sink_ac03c96b34960efc3be692c208e9fc39f}\label{classfile__sink_ac03c96b34960efc3be692c208e9fc39f} 
+bool {\bfseries is\+\_\+open} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries set\+\_\+level} (log\+\_\+level level)
+\item 
+log\+\_\+level {\bfseries get\+\_\+level} () const
+\item 
+bool {\bfseries should\+\_\+log} (log\+\_\+level level) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}}
+\begin{DoxyCompactItemize}
+\item 
+log\+\_\+level {\bfseries level\+\_\+} = log\+\_\+level\+::\+TRACE
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classfile__sink_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classfile__sink_a664527322116a172e817afa7b0766fa6}\index{file\_sink@{file\_sink}!flush@{flush}}
+\index{flush@{flush}!file\_sink@{file\_sink}}
+\doxysubsubsection{\texorpdfstring{flush()}{flush()}}
+{\footnotesize\ttfamily \label{classfile__sink_a664527322116a172e817afa7b0766fa6} 
+void file\+\_\+sink\+::flush (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}.
+
+\Hypertarget{classfile__sink_a6a1d12b1a3915402d1577aab052aaaa8}\index{file\_sink@{file\_sink}!log@{log}}
+\index{log@{log}!file\_sink@{file\_sink}}
+\doxysubsubsection{\texorpdfstring{log()}{log()}}
+{\footnotesize\ttfamily \label{classfile__sink_a6a1d12b1a3915402d1577aab052aaaa8} 
+void file\+\_\+sink\+::log (\begin{DoxyParamCaption}\item[{log\+\_\+level}]{level}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{message}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classlog__sink}{log\+\_\+sink}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/log/file\+\_\+sink.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,79 @@
+\doxysection{aion\+::ast\+::String\+Literal\+Expr Class Reference}
+\hypertarget{classaion_1_1ast_1_1_string_literal_expr}{}\label{classaion_1_1ast_1_1_string_literal_expr}\index{aion::ast::StringLiteralExpr@{aion::ast::StringLiteralExpr}}
+
+
+any string literal (e. "{}this string"{}, f"{}this\{x\}"{}, etc.)  
+
+
+
+
+{\ttfamily \#include $<$expr.\+hpp$>$}
+
+Inheritance diagram for aion\+::ast\+::String\+Literal\+Expr\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classaion_1_1ast_1_1_string_literal_expr}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_literal_expr_a2c2dfcf1a6e58799eb1e6cbccd8e4f92}\label{classaion_1_1ast_1_1_string_literal_expr_a2c2dfcf1a6e58799eb1e6cbccd8e4f92} 
+{\bfseries String\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const std\+::string\+\_\+view v, const std\+::uint8\+\_\+t flags, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr=\{\})
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} {\bfseries get\+\_\+type\+\_\+kind} () const
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+type} () const
+\item 
+void {\bfseries set\+\_\+type} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}new\+\_\+type)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Expr} (const Expr\+Kind k, const Value\+Category v, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} sr)
+\item 
+Expr\+Kind {\bfseries get\+\_\+kind} () const
+\item 
+Value\+Category {\bfseries get\+\_\+category} () const
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+\_\+source\+\_\+range} () const
+\item 
+void {\bfseries set\+\_\+source\+\_\+range} (const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_literal_expr_a8d91b0670fdc32e0c726f1bdedafdb23}\label{classaion_1_1ast_1_1_string_literal_expr_a8d91b0670fdc32e0c726f1bdedafdb23} 
+std\+::string\+\_\+view {\bfseries value}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_literal_expr_a218d2f1f13346d5855e0a6adba05bf59}\label{classaion_1_1ast_1_1_string_literal_expr_a218d2f1f13346d5855e0a6adba05bf59} 
+std\+::uint8\+\_\+t {\bfseries prefix\+\_\+flags}
+\begin{DoxyCompactList}\small\item\em carry the lexer flags through \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} \+: std\+::uint8\+\_\+t \{ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{atom\+\_\+type}}
+, \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{common\+\_\+type}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8}\label{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8} 
+enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\_\+expr}
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+any string literal (e. "{}this string"{}, f"{}this\{x\}"{}, etc.) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/expr.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,29 @@
+\doxysection{is\+\_\+class.\+h}
+\hypertarget{is__class_8h_source}{}\label{is__class_8h_source}\index{core/include/support/si/include/impl/type\_traits/is\_class.h@{core/include/support/si/include/impl/type\_traits/is\_class.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Junie\ on\ 2026-\/01-\/13.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_IS\_CLASS\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_IS\_CLASS\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}integral\_constant.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#if\ SI\_HAS\_BUILTIN(\_\_is\_class)}}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__class}{is\_class}}\ :\ \mbox{\hyperlink{structintegral__constant}{integral\_constant}}<bool,\ \_\_is\_class(T)>\ \{\};}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\ \ \ \ \#include\ <type\_traits>}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structis__class}{is\_class}}\ :\ \mbox{\hyperlink{structintegral__constant}{integral\_constant}}<bool,\ std::is\_class\_v<T>>\ \{\};}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_class\_v\ =\ is\_class<T>::value;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_IS\_CLASS\_H}}
+
+\end{DoxyCode}

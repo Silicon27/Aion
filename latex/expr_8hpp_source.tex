@@ -1,0 +1,199 @@
+\doxysection{expr.\+hpp}
+\hypertarget{expr_8hpp_source}{}\label{expr_8hpp_source}\index{core/include/ast/expr.hpp@{core/include/ast/expr.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/03-\/29.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ AION\_EXPR\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ AION\_EXPR\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string\_view>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}ast.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}type.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{class\ }ValueExpr;}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{BinaryExpr}};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_resolved_identifier_expr}{ResolvedIdentifierExpr}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{class\ }TypedExpr\ :\ \textcolor{keyword}{public}\ Expr\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{TypeKind}}\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{atom\_type}},}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{common\_type}},}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{TypedExpr}}(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{TypeKind}}\ tk,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,\ \textcolor{keyword}{const}\ ValueCategory\ category,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ \&sr)}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}(ExprKind::typed\_expr,\ category,\ sr),\ tk(tk),\ type(type)\ \{\}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{TypeKind}}\ get\_type\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ tk;\ \}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ [[nodiscard]]\ MutableType*\ get\_type()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ type;\ \}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_type(MutableType*\ new\_type)\ \{\ type\ =\ new\_type;\ \}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{TypeKind}}\ tk;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ MutableType*\ type;}
+\DoxyCodeLine{00037\ \ \ \ \ \};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<TypedExpr>);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{class\ }BinaryExpr\ :\ \textcolor{keyword}{public}\ TypedExpr\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ BinaryOp\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ add,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ sub,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ mul,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ div,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ mod,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ pow,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ equal,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ not\_equal,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ less,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ less\_equal,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ greater,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ greater\_equal,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ logical\_and,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ logical\_or,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ bit\_and,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ bit\_or,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ bit\_xor,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ lshift,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ rshift,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ assign,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ add\_assign,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ sub\_assign,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ mul\_assign,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ div\_assign,}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ mod\_assign,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ and\_assign,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ or\_assign,}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ xor\_assign,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ lshift\_assign,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ rshift\_assign,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ dot,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ arrow,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ scope\_resolution,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ range,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ inclusive\_range,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ fat\_arrow,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ as,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ BinaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ lhs,\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ rhs,\ \textcolor{keyword}{const}\ BinaryOp\ op,\ \textcolor{keyword}{const}\ ValueCategory\ v,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ is\_comp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ \&sr\ =\ \{\})}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ :\ TypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{TypeKind::common\_type}},\ type,\ v,\ sr),\ lhs(lhs),\ rhs(rhs),\ op(op),\ is\_comp(is\_comp)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ get\_lhs()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ lhs;\ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ get\_rhs()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rhs;\ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ [[nodiscard]]\ BinaryOp\ get\_op()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ op;\ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ is\_compile\_time\_computable()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ is\_comp;\ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_lhs(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ new\_lhs)\ \{\ lhs\ =\ new\_lhs;\ \}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_rhs(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ new\_rhs)\ \{\ rhs\ =\ new\_rhs;\ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_op(\textcolor{keyword}{const}\ BinaryOp\ new\_op)\ \{\ op\ =\ new\_op;\ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_compile\_time\_computable(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ new\_is\_comp)\ \{\ is\_comp\ =\ new\_is\_comp;\ \}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ lhs;}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ rhs;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ BinaryOp\ op;}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_comp\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00103\ \ \ \ \ \};}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<BinaryExpr>);}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{class\ }UnaryExpr\ :\ \textcolor{keyword}{public}\ TypedExpr\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ UnaryOp\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ plus,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ minus,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ logical\_not,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ bit\_not,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ address\_of,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ deref,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ UnaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ operand,\ \textcolor{keyword}{const}\ UnaryOp\ op,\ \textcolor{keyword}{const}\ ValueCategory\ v,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_comp,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ \&sr\ =\ \{\})}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ :\ TypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{TypeKind::common\_type}},\ type,\ v,\ sr),\ operand(operand),\ op(op),\ is\_comp(is\_comp)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ get\_operand()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ operand;\ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ [[nodiscard]]\ UnaryOp\ get\_op()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ op;\ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ is\_compile\_time\_computable()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ is\_comp;\ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_operand(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ new\_operand)\ \{\ operand\ =\ new\_operand;\ \}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_op(\textcolor{keyword}{const}\ UnaryOp\ new\_op)\ \{\ op\ =\ new\_op;\ \}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_compile\_time\_computable(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ new\_is\_comp)\ \{\ is\_comp\ =\ new\_is\_comp;\ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ operand;\ \textcolor{comment}{//\ would\ be\ a\ ResolvedIdentifierExpr}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ UnaryOp\ op;}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_comp\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00135\ \ \ \ \ \};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{class\ }ResolvedIdentifierExpr\ :\ \textcolor{keyword}{public}\ TypedExpr\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ IdentifierKind\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ variable,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ function,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ enum\_,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ ResolvedIdentifierExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,\ \textcolor{keyword}{const}\ IdentifierKind\ k,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\&\ sr\ =\ \{\})}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ :\ TypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{TypeKind::atom\_type}},\ type,\ ValueCategory::named,\ sr),\ name(name),\ kind(k)\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name;}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ IdentifierKind\ kind;}
+\DoxyCodeLine{00155\ \ \ \ \ \};}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<ResolvedIdentifierExpr>);}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{class\ }NumberLiteralExpr\ :\ \textcolor{keyword}{public}\ TypedExpr\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Avoid\ storing\ as\ a\ float\ or\ int\ here\ –\ actual}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ integer\ syntax\ is\ already\ parsed\ as\ one\ lexeme}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ by\ the\ lexer.\ Store\ as\ a\ std::string\_view\ and}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ let\ sema\ handle\ the\ rest}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ std::string\_view\ value;}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ NumberLiteralExpr(\textcolor{keyword}{const}\ TypedExpr\ te,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,\ \textcolor{keyword}{const}\ std::string\_view\ v,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\&\ sr\ =\ \{\})}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ :\ TypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{TypeKind::atom\_type}},\ type,\ ValueCategory::unnamed,\ sr),\ value(v)\ \{\}}
+\DoxyCodeLine{00170\ \ \ \ \ \};}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<NumberLiteralExpr>);}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{class\ }StringLiteralExpr\ :\ \textcolor{keyword}{public}\ TypedExpr\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ std::string\_view\ value;}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ std::uint8\_t\ \mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr_a218d2f1f13346d5855e0a6adba05bf59}{prefix\_flags}};}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ StringLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,\ \textcolor{keyword}{const}\ std::string\_view\ v,\ \textcolor{keyword}{const}\ std::uint8\_t\ flags,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\&\ sr\ =\ \{\})}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{TypedExpr}}(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{TypeKind}}::\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{atom\_type}},\ type,\ ValueCategory::unnamed,\ sr),\ value(v),\ \mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr_a218d2f1f13346d5855e0a6adba05bf59}{prefix\_flags}}(flags)\ \{\}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \};}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<StringLiteralExpr>);}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keyword}{class\ }CallExpr\ :\ \textcolor{keyword}{public}\ ResolvedIdentifierExpr\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ callee;}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}**\ args;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ num\_args;}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ CallExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ callee,\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}**\ args,\ \textcolor{keywordtype}{unsigned}\ num\_args,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\&\ sr\ =\ \{\})}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ :\ ResolvedIdentifierExpr(name,\ type,\ IdentifierKind::function,\ sr),}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ callee(callee),\ args(args),\ num\_args(num\_args)\ \{\}}
+\DoxyCodeLine{00198\ \ \ \ \ \};}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<CallExpr>);}
+\DoxyCodeLine{00200\ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_EXPR\_HPP}}
+
+\end{DoxyCode}

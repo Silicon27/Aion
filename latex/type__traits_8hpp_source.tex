@@ -1,0 +1,61 @@
+\doxysection{type\+\_\+traits.\+hpp}
+\hypertarget{type__traits_8hpp_source}{}\label{type__traits_8hpp_source}\index{core/include/support/si/include/si/type\_traits.hpp@{core/include/support/si/include/si/type\_traits.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2025-\/05-\/30.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_TYPE\_TRAITS\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_TYPE\_TRAITS\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}stddef.hpp"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ include\ implementations}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_referenceable.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/remove\_reference.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/remove\_const.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/remove\_volatile.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/remove\_cv.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/remove\_extent.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/add\_const.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/add\_volatile.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/add\_lvalue\_reference.h"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/add\_rvalue\_reference.h"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/add\_pointer.h"{}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/conditional.h"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/enable\_if.h"{}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/integral\_constant.h"{}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_integral.h"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_floating\_point.h"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_arithmetic.h"{}}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_enum.h"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_union.h"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_class.h"{}}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_array.h"{}}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_same.h"{}}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_const.h"{}}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_reference.h"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_function.h"{}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_void.h"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_null\_pointer.h"{}}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_pointer.h"{}}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_member\_pointer.h"{}}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_member\_object\_pointer.h"{}}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_member\_function\_pointer.h"{}}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_lvalue\_reference.h"{}}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_rvalue\_reference.h"{}}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/is\_trivially\_copyable.h"{}}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ "{}../impl/type\_traits/decay.h"{}}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ explicitly\ include\ size\_t\ from\ stddef.hpp}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{using\ }si::size\_t;}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{using\ }si::void\_t;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{using\ }si::nullptr\_t;}
+\DoxyCodeLine{00053\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_TYPE\_TRAITS\_HPP}}
+
+\end{DoxyCode}

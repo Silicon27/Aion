@@ -88,6 +88,7 @@ namespace aion::ast {
 
         std::string_view get_name() const { return name; }
     };
+    static_assert(std::is_trivially_destructible_v<UserDefinedType>);
 }
 
 #endif //AION_TYPE_HPP

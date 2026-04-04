@@ -33,6 +33,7 @@ namespace aion::ast {
         TypeKind tk;
         MutableType* type;
     };
+    static_assert(std::is_trivially_destructible_v<TypedExpr>);
 
     class BinaryExpr : public TypedExpr {
     public:
@@ -98,6 +99,7 @@ namespace aion::ast {
 
         bool is_comp = false;
     };
+    static_assert(std::is_trivially_destructible_v<BinaryExpr>);
 
     class UnaryExpr : public TypedExpr {
     public:
@@ -149,7 +151,7 @@ namespace aion::ast {
         IdentifierInfo* name;
         IdentifierKind kind;
     };
-
+    static_assert(std::is_trivially_destructible_v<ResolvedIdentifierExpr>);
 
     /// Any unnamed literal value would be represented by this node (or inherit this node)
     /// ex: "some string", 324, 241u, etc.
@@ -168,6 +170,7 @@ namespace aion::ast {
     private:
         UnnamedKind kind;
     };
+    static_assert(std::is_trivially_destructible_v<UnnamedExpr>);
 
     class NumberLiteralExpr : public UnnamedExpr {
     public:
@@ -181,6 +184,7 @@ namespace aion::ast {
         NumberLiteralExpr(const UnnamedKind k, MutableType* type, const std::string_view v, const SourceRange& sr = {})
             : UnnamedExpr(k, type, sr), value(v) {}
     };
+    static_assert(std::is_trivially_destructible_v<NumberLiteralExpr>);
 
     class StringLiteralExpr : public UnnamedExpr {
     public:
@@ -194,6 +198,7 @@ namespace aion::ast {
             : UnnamedExpr(k, type, sr), value(v), prefix_flags(flags) {}
 
     };
+    static_assert(std::is_trivially_destructible_v<StringLiteralExpr>);
 
 }
 

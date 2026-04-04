@@ -151,7 +151,7 @@ namespace aion::ast {
     };
 
 
-    /// Any unnamed literal value would be represented by this node
+    /// Any unnamed literal value would be represented by this node (or inherit this node)
     /// ex: "some string", 324, 241u, etc.
     class UnnamedExpr : public TypedExpr {
     public:
@@ -168,6 +168,33 @@ namespace aion::ast {
     private:
         UnnamedKind kind;
     };
+
+    class NumberLiteralExpr : public UnnamedExpr {
+    public:
+
+        // Avoid storing as a float or int here – actual
+        // integer syntax is already parsed as one lexeme
+        // by the lexer. Store as a std::string_view and
+        // let sema handle the rest
+        std::string_view value;
+
+        NumberLiteralExpr(const UnnamedKind k, MutableType* type, const std::string_view v, const SourceRange& sr = {})
+            : UnnamedExpr(k, type, sr), value(v) {}
+    };
+
+    class StringLiteralExpr : public UnnamedExpr {
+    public:
+        std::string_view value;
+
+        /// carry the lexer flags through
+        std::uint8_t prefix_flags;
+
+
+        StringLiteralExpr(const UnnamedKind k, MutableType* type, const std::string_view v, const std::uint8_t flags, const SourceRange& sr = {})
+            : UnnamedExpr(k, type, sr), value(v), prefix_flags(flags) {}
+
+    };
+
 }
 
 #endif //AION_EXPR_HPP

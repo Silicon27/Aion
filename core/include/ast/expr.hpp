@@ -18,6 +18,7 @@ namespace aion::ast {
     class UnaryExpr;
     class NumberLiteralExpr;
     class StringLiteralExpr;
+    class VarExpr;
     class CallExpr;
 
     class TypedExpr : public Expr {
@@ -43,13 +44,18 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<TypedExpr>);
 
+    /// Declaration reference expression, used to refer to a declaration
+    /// in other words: a named, atom type.
     class DeclRefExpr : public TypedExpr {
     public:
-        ValueDecl* ref;
+        ValueDecl* decl;
+
+        /// Meaning depends on derived class, usually refers to
+        /// the far left of the identifier.
         SourceLocation loc;
 
-        DeclRefExpr(ValueDecl* ref, MutableType* type, const SourceLocation &loc)
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed), ref(ref), loc(loc) {}
+        DeclRefExpr(ValueDecl* decl, MutableType* type, const SourceLocation &loc)
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::named), decl(decl), loc(loc) {}
     };
     static_assert(std::is_trivially_destructible_v<DeclRefExpr>);
 
@@ -172,16 +178,23 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<StringLiteralExpr>);
 
-    class CallExpr : public TypedExpr {
+    /// Represents a function call:
+    /// bar(x, 12, "hello"), foo(x), etc.
+    class CallExpr : public DeclRefExpr {
     public:
+        /// Could be a case of immediate invocation of an
+        /// anonymous function; but usually a DeclRefExpr
         Expr* callee;
-        Expr** args;
-        unsigned num_args;
-        SourceRange source_range;
 
-        CallExpr(MutableType* type, Expr* callee, Expr** args, unsigned num_args, const SourceRange& sr = {})
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed),
-                callee(callee), args(args), num_args(num_args), source_range(sr) {}
+        /// arguments of the function call
+        Expr** args;
+
+        /// used to determine the amount of calling arguments
+        unsigned num_args;
+
+        CallExpr(ValueDecl* decl, MutableType* type, Expr* callee, Expr** args, unsigned num_args, const SourceLocation& loc)
+            : DeclRefExpr(decl, type, loc),
+                callee(callee), args(args), num_args(num_args) {}
     };
     static_assert(std::is_trivially_destructible_v<CallExpr>);
 }

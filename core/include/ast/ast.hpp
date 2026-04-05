@@ -65,7 +65,6 @@ namespace aion::ast {
     public:
         enum class Kind : std::uint8_t {
             translation_unit,
-            named_decl,
             variable,
             function,
             struct_,
@@ -118,19 +117,14 @@ namespace aion::ast {
             typed_expr,
         };
 
-        explicit Expr(const ExprKind k, const ValueCategory v, const SourceRange sr)
-            : expr_kind(k), category(v), source_range(sr) {}
+        explicit Expr(const ExprKind k, const ValueCategory v)
+            : expr_kind(k), category(v) {}
 
         [[nodiscard]] ExprKind get_kind() const { return expr_kind; }
         [[nodiscard]] ValueCategory get_category() const { return category; }
-        [[nodiscard]] SourceRange get_source_range() const { return source_range; }
-        void set_source_range(const SourceRange& sr) { source_range = sr; }
     private:
         ExprKind expr_kind;
         ValueCategory category;
-
-        // source info
-        SourceRange source_range;
 
         // add bitmask for is_comp, is_const and other qualifiers if needed
     };

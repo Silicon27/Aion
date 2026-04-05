@@ -10,9 +10,15 @@
 #include "type.hpp"
 
 namespace aion::ast {
-    class ValueExpr;
+    class ValueDecl;
+
+    class TypedExpr;
+    class DeclRefExpr;
     class BinaryExpr;
-    class ResolvedIdentifierExpr;
+    class UnaryExpr;
+    class NumberLiteralExpr;
+    class StringLiteralExpr;
+    class CallExpr;
 
     class TypedExpr : public Expr {
     public:
@@ -24,8 +30,8 @@ namespace aion::ast {
             common_type,
         };
 
-        TypedExpr(TypeKind tk, MutableType* type, const ValueCategory category, const SourceRange &sr)
-            : Expr(ExprKind::typed_expr, category, sr), tk(tk), type(type) {}
+        TypedExpr(TypeKind tk, MutableType* type, const ValueCategory category)
+            : Expr(ExprKind::typed_expr, category), tk(tk), type(type) {}
 
         [[nodiscard]] TypeKind get_type_kind() const { return tk; }
         [[nodiscard]] MutableType* get_type() const { return type; }
@@ -36,6 +42,16 @@ namespace aion::ast {
         MutableType* type;
     };
     static_assert(std::is_trivially_destructible_v<TypedExpr>);
+
+    class DeclRefExpr : public TypedExpr {
+    public:
+        ValueDecl* ref;
+        SourceLocation loc;
+
+        DeclRefExpr(ValueDecl* ref, MutableType* type, const SourceLocation &loc)
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed), ref(ref), loc(loc) {}
+    };
+    static_assert(std::is_trivially_destructible_v<DeclRefExpr>);
 
     class BinaryExpr : public TypedExpr {
     public:
@@ -80,26 +96,14 @@ namespace aion::ast {
         };
 
         BinaryExpr(Expr* lhs, Expr* rhs, const BinaryOp op, const ValueCategory v, MutableType* type,
-                   const bool is_comp, const SourceRange &sr = {})
-            : TypedExpr(TypeKind::common_type, type, v, sr), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp) {
-        }
+                   const bool is_comp, const SourceRange &range = {})
+            : TypedExpr(TypeKind::common_type, type, v), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp), range(range) {}
 
-        [[nodiscard]] Expr* get_lhs() const { return lhs; }
-        [[nodiscard]] Expr* get_rhs() const { return rhs; }
-        [[nodiscard]] BinaryOp get_op() const { return op; }
-        [[nodiscard]] bool is_compile_time_computable() const { return is_comp; }
-
-        void set_lhs(Expr* new_lhs) { lhs = new_lhs; }
-        void set_rhs(Expr* new_rhs) { rhs = new_rhs; }
-        void set_op(const BinaryOp new_op) { op = new_op; }
-        void set_compile_time_computable(const bool new_is_comp) { is_comp = new_is_comp; }
-
-    private:
         Expr* lhs;
         Expr* rhs;
         BinaryOp op;
-
         bool is_comp = false;
+        SourceRange range;
     };
     static_assert(std::is_trivially_destructible_v<BinaryExpr>);
 
@@ -112,11 +116,15 @@ namespace aion::ast {
             bit_not,
             address_of,
             deref,
+            preincrement,
+            postincrement,
+            predecrement,
+            postdecrement,
         };
 
         UnaryExpr(Expr* operand, const UnaryOp op, const ValueCategory v, MutableType* type,
-                   bool is_comp, const SourceRange &sr = {})
-            : TypedExpr(TypeKind::common_type, type, v, sr), operand(operand), op(op), is_comp(is_comp) {
+                   bool is_comp, const SourceLocation &loc = {})
+            : TypedExpr(TypeKind::common_type, type, v), operand(operand), op(op), is_comp(is_comp) {
         }
 
         [[nodiscard]] Expr* get_operand() const { return operand; }
@@ -127,33 +135,11 @@ namespace aion::ast {
         void set_op(const UnaryOp new_op) { op = new_op; }
         void set_compile_time_computable(const bool new_is_comp) { is_comp = new_is_comp; }
 
-    private:
-        Expr* operand; // would be a ResolvedIdentifierExpr
+        Expr* operand; // would be a DeclRefExpr
         UnaryOp op;
-
         bool is_comp = false;
+        SourceLocation loc;
     };
-
-    /// Represents any resolved identifier (named elements of an expression) at parse time that is part of an expression
-    ///
-    /// said node would represent variables, functions, and enums by which are resolved at parse time.
-    class ResolvedIdentifierExpr : public TypedExpr {
-    public:
-        enum class IdentifierKind : std::uint8_t {
-            variable,
-            function,
-            enum_,
-        };
-
-        ResolvedIdentifierExpr(IdentifierInfo* name, MutableType* type, const IdentifierKind k, const SourceRange& sr = {})
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::named, sr), name(name), kind(k) {
-        }
-
-    private:
-        IdentifierInfo* name;
-        IdentifierKind kind;
-    };
-    static_assert(std::is_trivially_destructible_v<ResolvedIdentifierExpr>);
 
     /// any number literal (integers, floats, doubles, etc.)
     class NumberLiteralExpr : public TypedExpr {
@@ -164,9 +150,10 @@ namespace aion::ast {
         // by the lexer. Store as a std::string_view and
         // let sema handle the rest
         std::string_view value;
+        SourceLocation loc;
 
-        NumberLiteralExpr(const TypedExpr te, MutableType* type, const std::string_view v, const SourceRange& sr = {})
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed, sr), value(v) {}
+        NumberLiteralExpr(const TypedExpr te, MutableType* type, const std::string_view v, const SourceLocation& loc)
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed), value(v), loc(loc) {}
     };
     static_assert(std::is_trivially_destructible_v<NumberLiteralExpr>);
 
@@ -174,27 +161,27 @@ namespace aion::ast {
     class StringLiteralExpr : public TypedExpr {
     public:
         std::string_view value;
-
         /// carry the lexer flags through
         std::uint8_t prefix_flags;
+        SourceLocation loc;
 
 
-        StringLiteralExpr(MutableType* type, const std::string_view v, const std::uint8_t flags, const SourceRange& sr = {})
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed, sr), value(v), prefix_flags(flags) {}
+        StringLiteralExpr(MutableType* type, const std::string_view v, const std::uint8_t flags, const SourceLocation& loc)
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed), value(v), prefix_flags(flags), loc(loc) {}
 
     };
     static_assert(std::is_trivially_destructible_v<StringLiteralExpr>);
 
-
-    class CallExpr : public ResolvedIdentifierExpr {
+    class CallExpr : public TypedExpr {
     public:
         Expr* callee;
         Expr** args;
         unsigned num_args;
+        SourceRange source_range;
 
-        CallExpr(IdentifierInfo* name, MutableType* type, Expr* callee, Expr** args, unsigned num_args, const SourceRange& sr = {})
-            : ResolvedIdentifierExpr(name, type, IdentifierKind::function, sr),
-                callee(callee), args(args), num_args(num_args) {}
+        CallExpr(MutableType* type, Expr* callee, Expr** args, unsigned num_args, const SourceRange& sr = {})
+            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed),
+                callee(callee), args(args), num_args(num_args), source_range(sr) {}
     };
     static_assert(std::is_trivially_destructible_v<CallExpr>);
 }

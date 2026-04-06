@@ -12,6 +12,7 @@
 namespace aion::ast {
     class ValueDecl;
 
+    class ErrorExpr;
     class TypedExpr;
     class DeclRefExpr;
     class BinaryExpr;
@@ -20,6 +21,16 @@ namespace aion::ast {
     class StringLiteralExpr;
     class VarExpr;
     class CallExpr;
+
+    class ErrorExpr : public Expr {
+    public:
+        SourceLocation loc;
+
+        /// by default, erroneous expressions should be invalid
+        /// if it is that the caller cannot determine its value category
+        explicit ErrorExpr(const SourceLocation &loc) : Expr(ExprKind::typed_expr, ValueCategory::invalid), loc(loc) {}
+        ErrorExpr(const SourceLocation &loc, const ValueCategory category) : Expr(ExprKind::typed_expr, category), loc(loc) {}
+    };
 
     class TypedExpr : public Expr {
     public:

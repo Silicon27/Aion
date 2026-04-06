@@ -295,8 +295,20 @@ namespace aion::ast {
     /// as being named or unnamed, by which the nature of
     /// the identifier is determined via this distinction
     enum class ValueCategory : std::uint8_t {
+        /// similar to C++'s lvalues, named and indexed by the
+        /// symbol table, directly assignable, however, re-assignability
+        /// is not guaranteed – mutability determines that factor.
         named,
+
+        /// similar to C++'s prvalues, unnamed, therefore,
+        /// assignable, however, not indexed by the symbol table,
+        /// implying the inability to be assigned to.
         unnamed,
+
+        /// exists as a way to represent an invalid state
+        /// in nodes such as ErrorExpr (if the category
+        /// of the expression is indeterminate at the call site).
+        invalid,
     };
 }
 

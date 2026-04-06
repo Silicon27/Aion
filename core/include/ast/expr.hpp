@@ -54,7 +54,7 @@ namespace aion::ast {
         /// the far left of the identifier.
         SourceLocation loc;
 
-        DeclRefExpr(ValueDecl* decl, MutableType* type, const SourceLocation &loc)
+        DeclRefExpr(ValueDecl* decl, MutableType* type, const SourceLocation &loc = {})
             : TypedExpr(TypeKind::atom_type, type, ValueCategory::named), decl(decl), loc(loc) {}
     };
     static_assert(std::is_trivially_destructible_v<DeclRefExpr>);

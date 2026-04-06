@@ -18,14 +18,14 @@ namespace aion::ast {
     class TranslationUnitDecl : public Decl, public DeclContext {
     public:
         TranslationUnitDecl()
-            : Decl(Kind::translation_unit) {}
+            : Decl(DeclKind::translation_unit) {}
     };
     static_assert(std::is_trivially_destructible_v<TranslationUnitDecl>);
 
     class NamedDecl : public Decl {
         IdentifierInfo* name;
     public:
-        NamedDecl(Kind declaration_kind, IdentifierInfo* name)
+        NamedDecl(DeclKind declaration_kind, IdentifierInfo* name)
         : Decl(declaration_kind), name(name) {}
 
         [[nodiscard]] IdentifierInfo* get_name() const { return name; }
@@ -35,13 +35,13 @@ namespace aion::ast {
     static_assert(std::is_trivially_destructible_v<NamedDecl>);
 
     class ValueDecl : public NamedDecl {
-        MutableType type;
+        MutableType* type;
     public:
-        ValueDecl(const Kind declaration_kind, IdentifierInfo* name, MutableType type)
+        ValueDecl(const DeclKind declaration_kind, IdentifierInfo* name, MutableType* type)
         : NamedDecl(declaration_kind, name), type(type) {}
 
-        [[nodiscard]] MutableType get_type() const { return type; }
-        void set_type(const MutableType& new_type) { type = new_type; }
+        [[nodiscard]] MutableType* get_type() const { return type; }
+        void set_type(MutableType* new_type) { type = new_type; }
     };
     static_assert(std::is_trivially_destructible_v<ValueDecl>);
 
@@ -51,10 +51,10 @@ namespace aion::ast {
         SourceRange id_range;
 
     public:
-        VarDecl(IdentifierInfo* name, const MutableType &type,
+        VarDecl(IdentifierInfo* name, MutableType* type,
             StorageClass storage_class, const SourceRange &range,
             Expr* init = nullptr)
-            : ValueDecl(Kind::variable, name, type), init(init),
+            : ValueDecl(DeclKind::variable, name, type), init(init),
         storage_class(storage_class), id_range(range) {}
 
         Expr* get_init() const { return init; }

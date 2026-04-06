@@ -15,7 +15,16 @@ namespace aion::parse {
         switch (tok.get_type()) {
             case TokenType::identifier: {
                 if (IdentifierInfo* id = context.get_identifier(tok.lexeme); id != nullptr) {
-                    
+                    // since the nature of the identifier is indeterminate, we let its
+                    // DeclKind be unresolved; resolution work is operated by sema later on
+                    return context.create<DeclRefExpr>(
+                        context.create<ValueDecl>(Decl::DeclKind::unresolved, id, nullptr),
+                        nullptr,
+                        diagnostics.get_source_manager()->get_location(file_id, tok.line, tok.column)
+                        );
+                } else {
+                    // the identifier is unknown, emit an error node
+                    // TODO
                 }
             }
         }

@@ -54,8 +54,8 @@ void register_ast_tests(TestRunner& runner) {
         ASTContext context;
         TranslationUnitDecl* tu = context.get_translation_unit_decl();
 
-        Decl* d1 = context.create<Decl>(Decl::Kind::variable);
-        Decl* d2 = context.create<Decl>(Decl::Kind::function);
+        Decl* d1 = context.create<Decl>(Decl::DeclKind::variable);
+        Decl* d2 = context.create<Decl>(Decl::DeclKind::function);
 
         tu->add_decl(d1);
         tu->add_decl(d2);
@@ -75,7 +75,7 @@ void register_ast_tests(TestRunner& runner) {
         BuiltinType* bt = context.create<BuiltinType>(BuiltinType::Kind::i32);
         MutableType* type = context.create<MutableType>(bt, false);
         IdentifierInfo* ii = context.emplace_or_get_identifier("x");
-        VarDecl* vd = context.create<VarDecl>(ii, *type,
+        VarDecl* vd = context.create<VarDecl>(ii, type,
             StorageClass::stack,
             SourceRange(SourceLocation(fid, offset), SourceLocation(fid, offset + 4)));
 

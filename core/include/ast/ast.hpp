@@ -63,7 +63,8 @@ namespace aion::ast {
     class Decl {
         friend class ASTContext;
     public:
-        enum class Kind : std::uint8_t {
+        enum class DeclKind : std::uint8_t {
+            unresolved,
             translation_unit,
             variable,
             function,
@@ -73,13 +74,13 @@ namespace aion::ast {
         };
 
     private:
-        Kind decl_kind;
+        DeclKind decl_kind;
 
     public:
-        explicit Decl(const Kind K) : decl_kind(K) {}
+        explicit Decl(const DeclKind K) : decl_kind(K) {}
 
     public:
-        [[nodiscard]] Kind get_kind() const { return decl_kind; }
+        [[nodiscard]] DeclKind get_kind() const { return decl_kind; }
 
         Decl* next = nullptr;
 

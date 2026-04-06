@@ -41,6 +41,14 @@ namespace aion::parse {
 
                 return context.create<NumberLiteralExpr>(type_creator(tok.type), tok.lexeme, diagnostics.get_token_location(file_id, tok));
             }
+            case TokenType::string_literal: {
+                return context.create<StringLiteralExpr>(
+                    context.create<MutableType>(context.create<BuiltinType>(BuiltinType::Kind::string_literal), false),
+                    tok.lexeme,
+                    tok.flags,
+                    diagnostics.get_token_location(file_id, tok)
+                    );
+            }
         }
     }
 }

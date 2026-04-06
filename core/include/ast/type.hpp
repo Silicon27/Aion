@@ -31,6 +31,7 @@ namespace aion::ast {
             f128,
             char_,
             bool_,
+            string_literal,
         };
 
         static Kind get_kind(const lexer::TokenType type) {
@@ -51,6 +52,7 @@ namespace aion::ast {
                 case lexer::TokenType::kw_bool: return Kind::bool_;
                 case lexer::TokenType::int_literal: return Kind::i32; // TODO make this platform dependent, make it the size of the platforms word size
                 case lexer::TokenType::float_literal: return Kind::f32; // todo this too
+                case lexer::TokenType::string_literal: return Kind::string_literal;
                 default:
                     // This should not happen if is_builtin_type_token(type) is true
                     return Kind::i32;

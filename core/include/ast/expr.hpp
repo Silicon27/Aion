@@ -31,6 +31,7 @@ namespace aion::ast {
         explicit ErrorExpr(const SourceLocation &loc) : Expr(ExprKind::typed_expr, ValueCategory::invalid), loc(loc) {}
         ErrorExpr(const SourceLocation &loc, const ValueCategory category) : Expr(ExprKind::typed_expr, category), loc(loc) {}
     };
+    static_assert(std::is_trivially_destructible_v<ErrorExpr>);
 
     class TypedExpr : public Expr {
     public:

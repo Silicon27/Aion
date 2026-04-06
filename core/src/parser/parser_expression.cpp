@@ -20,14 +20,17 @@ namespace aion::parse {
                     return context.create<DeclRefExpr>(
                         context.create<ValueDecl>(Decl::DeclKind::unresolved, id, nullptr),
                         nullptr,
-                        diagnostics.get_source_manager()->get_location(file_id, tok.line, tok.column)
+                        diagnostics.get_token_location(file_id, tok)
                         );
                 } else {
                     // the identifier is unknown, emit an error node
                     // TODO
+                    diagnostics.report(diagnostics.get_token_location(file_id, tok), diag::parse::err_unrecognized_identifier);
 
+                    return context.create<ErrorExpr>(diagnostics.get_token_location(file_id, tok), ValueCategory::named);
                 }
             }
+
         }
     }
 }

@@ -18,6 +18,7 @@
 #include "error/DiagnosticSeverity.hpp"
 #include "error/diagid.hpp"
 #include "support/source_manager.hpp"
+#include "lexer/lexer.hpp"
 
 namespace aion::diag {
 
@@ -355,6 +356,8 @@ public:
 
     /// Emit a fully-formed diagnostic.
     void emit_diagnostic(const Diagnostic& diag);
+
+    SourceLocation get_token_location(FileID fid, const lexer::Token& token) const;
 
 private:
     friend class DiagnosticBuilder;

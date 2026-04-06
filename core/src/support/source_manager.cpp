@@ -108,11 +108,15 @@ namespace aion {
         if (!buf) {
             return SourceLocation();
         }
-        return SourceLocation(file, const_cast<Buffer*>(buf)->get_offset(line, column));
+        return {file, const_cast<Buffer*>(buf)->get_offset(line, column)};
     }
 
     SourceLocation SourceManager::get_location(const FileId file, const lexer::Token& token) const {
-        return get_location(file, static_cast<Line>(token.get_line()), static_cast<Column>(token.get_column()));
+        const Buffer* buf = get_buffer(file);
+        if (!buf) {
+            return {};
+        }
+        return {file, const_cast<Buffer*>(buf)->get_offset(token.line, token.column)};
     }
 
     std::string SourceManager::get_line_text(SourceLocation loc) const {

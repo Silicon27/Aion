@@ -118,6 +118,7 @@ enum : DiagID {
     err_mismatched_brackets,
     err_untyped_uninitialized_variable_declaration,
     err_expected_initialization,
+    err_unrecognized_identifier,
     warn_empty_statement,
 };
 } // namespace parse

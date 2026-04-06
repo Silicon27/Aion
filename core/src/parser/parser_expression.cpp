@@ -30,7 +30,17 @@ namespace aion::parse {
                     return context.create<ErrorExpr>(diagnostics.get_token_location(file_id, tok), ValueCategory::named);
                 }
             }
+            case TokenType::int_literal:
+            case TokenType::float_literal: {
+                auto type_creator = [&](TokenType type) -> MutableType* {
+                    return context.create<MutableType>(
+                        context.create<BuiltinType>(BuiltinType::get_kind(type)),
+                        false
+                        );
+                };
 
+                return context.create<NumberLiteralExpr>(type_creator(tok.type), tok.lexeme, diagnostics.get_token_location(file_id, tok));
+            }
         }
     }
 }

@@ -170,7 +170,7 @@ namespace aion::ast {
         std::string_view value;
         SourceLocation loc;
 
-        NumberLiteralExpr(const TypedExpr te, MutableType* type, const std::string_view v, const SourceLocation& loc)
+        NumberLiteralExpr(MutableType* type, const std::string_view literal_value, const SourceLocation& loc)
             : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed), value(v), loc(loc) {}
     };
     static_assert(std::is_trivially_destructible_v<NumberLiteralExpr>);

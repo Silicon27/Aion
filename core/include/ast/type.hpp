@@ -49,6 +49,8 @@ namespace aion::ast {
                 case lexer::TokenType::kw_f128: return Kind::f128;
                 case lexer::TokenType::kw_char: return Kind::char_;
                 case lexer::TokenType::kw_bool: return Kind::bool_;
+                case lexer::TokenType::int_literal: return Kind::i32; // TODO make this platform dependent, make it the size of the platforms word size
+                case lexer::TokenType::float_literal: return Kind::f32; // todo this too
                 default:
                     // This should not happen if is_builtin_type_token(type) is true
                     return Kind::i32;

@@ -7,6 +7,7 @@
 #include <ast/ast.hpp>
 #include <ast/decl.hpp>
 #include <ast/stmt.hpp>
+#include <ast/StringMap.hpp>
 #include <ast/ASTContext.hpp>
 #include <global_constants.hpp>
 
@@ -148,8 +149,8 @@ void register_ast_tests(TestRunner& runner) {
         ASTContext context;
 
         // Use a small initial capacity to trigger rehash early
-        ASTContext::StringMap<int> map(context, 4);
-        
+        StringMap<int> map(context, 4);
+
         map.insert({"a", 1});
         map.insert({"b", 2});
         map.insert({"c", 3});
@@ -171,8 +172,8 @@ void register_ast_tests(TestRunner& runner) {
         using namespace aion::ast;
         ASTContext context;
 
-        ASTContext::StringMap<int> map(context, 4);
-        
+        StringMap<int> map(context, 4);
+
         for (int i = 0; i < 100; ++i) {
             std::string key = "key" + std::to_string(i);
             char* key_ptr = context.allocate_string(key);
@@ -190,7 +191,7 @@ void register_ast_tests(TestRunner& runner) {
         using namespace aion::ast;
         ASTContext context;
 
-        ASTContext::StringMap<int> map(context, 3);
+        StringMap<int> map(context, 3);
 
         AION_ASSERT_EQ(map.get_capacity(), 4);
 
@@ -222,7 +223,7 @@ void register_ast_tests(TestRunner& runner) {
         using namespace aion::ast;
         ASTContext context;
 
-        ASTContext::StringMap<int> map(context, 4);
+        StringMap<int> map(context, 4);
         map.set_max_load_factor(0.5f);
 
         AION_ASSERT_EQ(map.get_capacity(), 4);
@@ -327,7 +328,7 @@ void register_ast_tests(TestRunner& runner) {
     context_suite->add_test("string_map_comprehensive", [] {
         using namespace aion::ast;
         ASTContext context;
-        ASTContext::StringMap<int> map(context, 4);
+        StringMap<int> map(context, 4);
 
         // Test insertion and retrieval
         map["hello"] = 42;

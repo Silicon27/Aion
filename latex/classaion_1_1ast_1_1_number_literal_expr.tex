@@ -18,13 +18,13 @@ Inheritance diagram for aion\+::ast\+::Number\+Literal\+Expr\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_number_literal_expr_a8313d3aca665431397db1db7da48cfbb}\label{classaion_1_1ast_1_1_number_literal_expr_a8313d3aca665431397db1db7da48cfbb} 
-{\bfseries Number\+Literal\+Expr} (const \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{Typed\+Expr}} te, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const std\+::string\+\_\+view v, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr=\{\})
+\Hypertarget{classaion_1_1ast_1_1_number_literal_expr_a9bcf7855c97293dd3996095d54bf76ce}\label{classaion_1_1ast_1_1_number_literal_expr_a9bcf7855c97293dd3996095d54bf76ce} 
+{\bfseries Number\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const std\+::string\+\_\+view literal\+\_\+value, const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&loc)
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
+{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category)
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} {\bfseries get\+\_\+type\+\_\+kind} () const
 \item 
@@ -35,21 +35,20 @@ void {\bfseries set\+\_\+type} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_ty
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Expr} (const Expr\+Kind k, const Value\+Category v, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} sr)
+{\bfseries Expr} (const Expr\+Kind k, const Value\+Category v)
 \item 
 Expr\+Kind {\bfseries get\+\_\+kind} () const
 \item 
 Value\+Category {\bfseries get\+\_\+category} () const
-\item 
-\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+\_\+source\+\_\+range} () const
-\item 
-void {\bfseries set\+\_\+source\+\_\+range} (const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classaion_1_1ast_1_1_number_literal_expr_a5b6a5ff6b75e803bfea84a3e578c8780}\label{classaion_1_1ast_1_1_number_literal_expr_a5b6a5ff6b75e803bfea84a3e578c8780} 
 std\+::string\+\_\+view {\bfseries value}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_number_literal_expr_a51ef1183a711a2cbc6ff93ac2f5605f6}\label{classaion_1_1ast_1_1_number_literal_expr_a51ef1183a711a2cbc6ff93ac2f5605f6} 
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries loc}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}

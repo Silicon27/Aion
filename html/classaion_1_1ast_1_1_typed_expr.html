@@ -97,13 +97,13 @@ Inheritance diagram for aion::ast::TypedExpr:</div>
  <div class="center">
   <img src="classaion_1_1ast_1_1_typed_expr.png" usemap="#aion_3A_3Aast_3A_3ATypedExpr_map" alt=""/>
   <map id="aion_3A_3Aast_3A_3ATypedExpr_map" name="aion_3A_3Aast_3A_3ATypedExpr_map">
-<area href="classaion_1_1ast_1_1_expr.html" title="Base class for all expressions." alt="aion::ast::Expr" shape="rect" coords="402,0,593,24"/>
-<area href="classaion_1_1ast_1_1_binary_expr.html" alt="aion::ast::BinaryExpr" shape="rect" coords="0,112,191,136"/>
-<area href="classaion_1_1ast_1_1_number_literal_expr.html" title="any number literal (integers, floats, doubles, etc.)" alt="aion::ast::NumberLiteralExpr" shape="rect" coords="201,112,392,136"/>
-<area href="classaion_1_1ast_1_1_resolved_identifier_expr.html" alt="aion::ast::ResolvedIdentifierExpr" shape="rect" coords="402,112,593,136"/>
-<area href="classaion_1_1ast_1_1_string_literal_expr.html" title="any string literal (e. &quot;this string&quot;, f&quot;this{x}&quot;, etc.)" alt="aion::ast::StringLiteralExpr" shape="rect" coords="603,112,794,136"/>
-<area href="classaion_1_1ast_1_1_unary_expr.html" alt="aion::ast::UnaryExpr" shape="rect" coords="804,112,995,136"/>
-<area href="classaion_1_1ast_1_1_call_expr.html" alt="aion::ast::CallExpr" shape="rect" coords="402,168,593,192"/>
+<area href="classaion_1_1ast_1_1_expr.html" title="Base class for all expressions." alt="aion::ast::Expr" shape="rect" coords="358,0,527,24"/>
+<area href="classaion_1_1ast_1_1_binary_expr.html" alt="aion::ast::BinaryExpr" shape="rect" coords="0,112,169,136"/>
+<area href="classaion_1_1ast_1_1_decl_ref_expr.html" alt="aion::ast::DeclRefExpr" shape="rect" coords="179,112,348,136"/>
+<area href="classaion_1_1ast_1_1_number_literal_expr.html" title="any number literal (integers, floats, doubles, etc.)" alt="aion::ast::NumberLiteralExpr" shape="rect" coords="358,112,527,136"/>
+<area href="classaion_1_1ast_1_1_string_literal_expr.html" title="any string literal (e. &quot;this string&quot;, f&quot;this{x}&quot;, etc.)" alt="aion::ast::StringLiteralExpr" shape="rect" coords="537,112,706,136"/>
+<area href="classaion_1_1ast_1_1_unary_expr.html" alt="aion::ast::UnaryExpr" shape="rect" coords="716,112,885,136"/>
+<area href="classaion_1_1ast_1_1_call_expr.html" alt="aion::ast::CallExpr" shape="rect" coords="179,168,348,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -118,8 +118,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adb08b5e46c52c16c27e461c80f3be2a7" id="r_adb08b5e46c52c16c27e461c80f3be2a7"><td class="memItemLeft" align="right" valign="top"><a id="adb08b5e46c52c16c27e461c80f3be2a7" name="adb08b5e46c52c16c27e461c80f3be2a7"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TypedExpr</b> (<a class="el" href="#a1d52b2aa71875d76625852bd056972b0">TypeKind</a> tk, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, const ValueCategory category, const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> &amp;sr)</td></tr>
+<tr class="memitem:a9827ed947ef33fefe3471211df1c4243" id="r_a9827ed947ef33fefe3471211df1c4243"><td class="memItemLeft" align="right" valign="top"><a id="a9827ed947ef33fefe3471211df1c4243" name="a9827ed947ef33fefe3471211df1c4243"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TypedExpr</b> (<a class="el" href="#a1d52b2aa71875d76625852bd056972b0">TypeKind</a> tk, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, const ValueCategory category)</td></tr>
 <tr class="memitem:a9be7c126529344bad30c79ef6ee85250" id="r_a9be7c126529344bad30c79ef6ee85250"><td class="memItemLeft" align="right" valign="top"><a id="a9be7c126529344bad30c79ef6ee85250" name="a9be7c126529344bad30c79ef6ee85250"></a>
 <a class="el" href="#a1d52b2aa71875d76625852bd056972b0">TypeKind</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_type_kind</b> () const</td></tr>
 <tr class="memitem:a9581a9ab5183f64e4f45761a53ae1ec1" id="r_a9581a9ab5183f64e4f45761a53ae1ec1"><td class="memItemLeft" align="right" valign="top"><a id="a9581a9ab5183f64e4f45761a53ae1ec1" name="a9581a9ab5183f64e4f45761a53ae1ec1"></a>
@@ -127,16 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4af6e8ee98eea206843bfc75d28c5e8e" id="r_a4af6e8ee98eea206843bfc75d28c5e8e"><td class="memItemLeft" align="right" valign="top"><a id="a4af6e8ee98eea206843bfc75d28c5e8e" name="a4af6e8ee98eea206843bfc75d28c5e8e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_type</b> (<a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *new_type)</td></tr>
 <tr class="inherit_header pub_methods_classaion_1_1ast_1_1_expr"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classaion_1_1ast_1_1_expr')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classaion_1_1ast_1_1_expr.html">aion::ast::Expr</a></td></tr>
-<tr class="memitem:a86cd297e6629696395b76f108f3e1d4c inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_a86cd297e6629696395b76f108f3e1d4c"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>Expr</b> (const ExprKind k, const ValueCategory v, const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> sr)</td></tr>
+<tr class="memitem:a4367b8c05ef056eb7e12ce2bbdccad06 inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_a4367b8c05ef056eb7e12ce2bbdccad06"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>Expr</b> (const ExprKind k, const ValueCategory v)</td></tr>
 <tr class="memitem:aee1ac1677de171d729c4186f8e4f3fa8 inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_aee1ac1677de171d729c4186f8e4f3fa8"><td class="memItemLeft" align="right" valign="top">
 ExprKind&#160;</td><td class="memItemRight" valign="bottom"><b>get_kind</b> () const</td></tr>
 <tr class="memitem:afdde0075e5053e469d747b0377919b3d inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_afdde0075e5053e469d747b0377919b3d"><td class="memItemLeft" align="right" valign="top">
 ValueCategory&#160;</td><td class="memItemRight" valign="bottom"><b>get_category</b> () const</td></tr>
-<tr class="memitem:a9c83bd41865f9ba87c88c57c188f398e inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_a9c83bd41865f9ba87c88c57c188f398e"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="structaion_1_1_source_range.html">SourceRange</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_source_range</b> () const</td></tr>
-<tr class="memitem:abfec827b2fd4ad6f8d2ce106d7a1f3e6 inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_abfec827b2fd4ad6f8d2ce106d7a1f3e6"><td class="memItemLeft" align="right" valign="top">
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_source_range</b> (const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> &amp;sr)</td></tr>
 </table>
 <a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Member Enumeration Documentation</h2>
 <a id="a1d52b2aa71875d76625852bd056972b0" name="a1d52b2aa71875d76625852bd056972b0"></a>

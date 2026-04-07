@@ -120,86 +120,88 @@
 \DoxyCodeLine{00118\ \ \ \ \ err\_mismatched\_brackets,}
 \DoxyCodeLine{00119\ \ \ \ \ err\_untyped\_uninitialized\_variable\_declaration,}
 \DoxyCodeLine{00120\ \ \ \ \ err\_expected\_initialization,}
-\DoxyCodeLine{00121\ \ \ \ \ warn\_empty\_statement,}
-\DoxyCodeLine{00122\ \};}
-\DoxyCodeLine{00123\ \}\ \textcolor{comment}{//\ namespace\ parse}}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ \textcolor{keyword}{namespace\ }sema\ \{}
-\DoxyCodeLine{00126\ enum\ :\ DiagID\ \{}
-\DoxyCodeLine{00127\ \ \ \ \ err\_undeclared\_identifier\ =\ DIAG\_START\_SEMA,}
-\DoxyCodeLine{00128\ \ \ \ \ err\_redefinition,}
-\DoxyCodeLine{00129\ \ \ \ \ err\_type\_mismatch,}
-\DoxyCodeLine{00130\ \ \ \ \ err\_invalid\_operands,}
-\DoxyCodeLine{00131\ \ \ \ \ err\_cannot\_convert,}
-\DoxyCodeLine{00132\ \ \ \ \ err\_ambiguous\_call,}
-\DoxyCodeLine{00133\ \ \ \ \ err\_no\_matching\_function,}
-\DoxyCodeLine{00134\ \ \ \ \ err\_too\_many\_arguments,}
-\DoxyCodeLine{00135\ \ \ \ \ err\_too\_few\_arguments,}
-\DoxyCodeLine{00136\ \ \ \ \ warn\_implicit\_conversion,}
-\DoxyCodeLine{00137\ \ \ \ \ warn\_shadowed\_variable,}
-\DoxyCodeLine{00138\ \ \ \ \ note\_previous\_declaration,}
-\DoxyCodeLine{00139\ \};}
-\DoxyCodeLine{00140\ \}\ \textcolor{comment}{//\ namespace\ sema}}
-\DoxyCodeLine{00141\ }
-\DoxyCodeLine{00142\ \textcolor{comment}{//\ ============================================================================}}
-\DoxyCodeLine{00143\ \textcolor{comment}{//\ Diagnostic\ Info\ Structure}}
+\DoxyCodeLine{00121\ \ \ \ \ err\_unrecognized\_identifier,}
+\DoxyCodeLine{00122\ \ \ \ \ err\_unknown\_operator,}
+\DoxyCodeLine{00123\ \ \ \ \ warn\_empty\_statement,}
+\DoxyCodeLine{00124\ \};}
+\DoxyCodeLine{00125\ \}\ \textcolor{comment}{//\ namespace\ parse}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \textcolor{keyword}{namespace\ }sema\ \{}
+\DoxyCodeLine{00128\ enum\ :\ DiagID\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ err\_undeclared\_identifier\ =\ DIAG\_START\_SEMA,}
+\DoxyCodeLine{00130\ \ \ \ \ err\_redefinition,}
+\DoxyCodeLine{00131\ \ \ \ \ err\_type\_mismatch,}
+\DoxyCodeLine{00132\ \ \ \ \ err\_invalid\_operands,}
+\DoxyCodeLine{00133\ \ \ \ \ err\_cannot\_convert,}
+\DoxyCodeLine{00134\ \ \ \ \ err\_ambiguous\_call,}
+\DoxyCodeLine{00135\ \ \ \ \ err\_no\_matching\_function,}
+\DoxyCodeLine{00136\ \ \ \ \ err\_too\_many\_arguments,}
+\DoxyCodeLine{00137\ \ \ \ \ err\_too\_few\_arguments,}
+\DoxyCodeLine{00138\ \ \ \ \ warn\_implicit\_conversion,}
+\DoxyCodeLine{00139\ \ \ \ \ warn\_shadowed\_variable,}
+\DoxyCodeLine{00140\ \ \ \ \ note\_previous\_declaration,}
+\DoxyCodeLine{00141\ \};}
+\DoxyCodeLine{00142\ \}\ \textcolor{comment}{//\ namespace\ sema}}
+\DoxyCodeLine{00143\ }
 \DoxyCodeLine{00144\ \textcolor{comment}{//\ ============================================================================}}
-\DoxyCodeLine{00145\ \textcolor{comment}{//\ Stores\ static\ information\ about\ a\ diagnostic.}}
-\DoxyCodeLine{00146\ }
-\DoxyCodeLine{00147\ \textcolor{keyword}{struct\ }DiagnosticInfo\ \{}
-\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_acb778c88bf9ff37cca6924bb6e5b921c}{message\_template}};\ \ \ }
-\DoxyCodeLine{00149\ \ \ \ \ Severity\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a8365c007a01a1dbd1d6bfaa556cd911f}{default\_severity}};\ \ \ \ \ \ }
-\DoxyCodeLine{00150\ \ \ \ \ DiagClass\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a986439d636364fcf22dc1e6522c23093}{diag\_class}};\ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a2a1e955f6e0b2fe47944911a06d6b80d}{category}};\ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00152\ }
-\DoxyCodeLine{00153\ \ \ \ \ DiagnosticInfo(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ msg,\ Severity\ sev,\ DiagClass\ cls,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cat\ =\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_acb778c88bf9ff37cca6924bb6e5b921c}{message\_template}}(msg),\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a8365c007a01a1dbd1d6bfaa556cd911f}{default\_severity}}(sev),\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a986439d636364fcf22dc1e6522c23093}{diag\_class}}(cls),\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a2a1e955f6e0b2fe47944911a06d6b80d}{category}}(cat)\ \{\}}
-\DoxyCodeLine{00155\ \};}
-\DoxyCodeLine{00156\ }
-\DoxyCodeLine{00157\ \textcolor{comment}{//\ ============================================================================}}
-\DoxyCodeLine{00158\ \textcolor{comment}{//\ Diagnostic\ Mapping}}
+\DoxyCodeLine{00145\ \textcolor{comment}{//\ Diagnostic\ Info\ Structure}}
+\DoxyCodeLine{00146\ \textcolor{comment}{//\ ============================================================================}}
+\DoxyCodeLine{00147\ \textcolor{comment}{//\ Stores\ static\ information\ about\ a\ diagnostic.}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{keyword}{struct\ }DiagnosticInfo\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_acb778c88bf9ff37cca6924bb6e5b921c}{message\_template}};\ \ \ }
+\DoxyCodeLine{00151\ \ \ \ \ Severity\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a8365c007a01a1dbd1d6bfaa556cd911f}{default\_severity}};\ \ \ \ \ \ }
+\DoxyCodeLine{00152\ \ \ \ \ DiagClass\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a986439d636364fcf22dc1e6522c23093}{diag\_class}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a2a1e955f6e0b2fe47944911a06d6b80d}{category}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ DiagnosticInfo(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ msg,\ Severity\ sev,\ DiagClass\ cls,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cat\ =\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_acb778c88bf9ff37cca6924bb6e5b921c}{message\_template}}(msg),\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a8365c007a01a1dbd1d6bfaa556cd911f}{default\_severity}}(sev),\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a986439d636364fcf22dc1e6522c23093}{diag\_class}}(cls),\ \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic_info_a2a1e955f6e0b2fe47944911a06d6b80d}{category}}(cat)\ \{\}}
+\DoxyCodeLine{00157\ \};}
+\DoxyCodeLine{00158\ }
 \DoxyCodeLine{00159\ \textcolor{comment}{//\ ============================================================================}}
-\DoxyCodeLine{00160\ \textcolor{comment}{//\ Used\ to\ track\ how\ a\ diagnostic's\ severity\ has\ been\ modified.}}
-\DoxyCodeLine{00161\ }
-\DoxyCodeLine{00162\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_mapping}{DiagnosticMapping}}\ \{}
-\DoxyCodeLine{00163\ \ \ \ \ Severity\ severity\_\ :\ 4;}
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_user\_\ :\ 1;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ by\ user\ (command\ line)}}
-\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_pragma\_\ :\ 1;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ by\ pragma}}
-\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordtype}{bool}\ no\_warning\_as\_error\_\ :\ 1;}
-\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{bool}\ no\_error\_as\_fatal\_\ :\ 1;}
-\DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_mapping}{DiagnosticMapping}}\ make(Severity\ sev,\ \textcolor{keywordtype}{bool}\ is\_user\ =\ \textcolor{keyword}{false},\ \textcolor{keywordtype}{bool}\ is\_pragma\ =\ \textcolor{keyword}{false})\ \{}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_mapping}{DiagnosticMapping}}\ result;}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ result.severity\_\ =\ sev;}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ result.is\_user\_\ =\ is\_user;}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ result.is\_pragma\_\ =\ is\_pragma;}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ result.no\_warning\_as\_error\_\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ result.no\_error\_as\_fatal\_\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
-\DoxyCodeLine{00178\ \ \ \ \ \}}
-\DoxyCodeLine{00179\ }
-\DoxyCodeLine{00180\ \ \ \ \ Severity\ get\_severity()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ severity\_;\ \}}
-\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_severity(Severity\ sev)\ \{\ severity\_\ =\ sev;\ \}}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_user()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ is\_user\_;\ \}}
-\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_pragma()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ is\_pragma\_;\ \}}
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_no\_warning\_as\_error()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ no\_warning\_as\_error\_;\ \}}
-\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_no\_warning\_as\_error(\textcolor{keywordtype}{bool}\ val)\ \{\ no\_warning\_as\_error\_\ =\ val;\ \}}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_no\_error\_as\_fatal()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ no\_error\_as\_fatal\_;\ \}}
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_no\_error\_as\_fatal(\textcolor{keywordtype}{bool}\ val)\ \{\ no\_error\_as\_fatal\_\ =\ val;\ \}}
-\DoxyCodeLine{00191\ \};}
-\DoxyCodeLine{00192\ }
-\DoxyCodeLine{00193\ \}\ \textcolor{comment}{//\ namespace\ aion::diag}}
+\DoxyCodeLine{00160\ \textcolor{comment}{//\ Diagnostic\ Mapping}}
+\DoxyCodeLine{00161\ \textcolor{comment}{//\ ============================================================================}}
+\DoxyCodeLine{00162\ \textcolor{comment}{//\ Used\ to\ track\ how\ a\ diagnostic's\ severity\ has\ been\ modified.}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_mapping}{DiagnosticMapping}}\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ Severity\ severity\_\ :\ 4;}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_user\_\ :\ 1;\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ by\ user\ (command\ line)}}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_pragma\_\ :\ 1;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ by\ pragma}}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordtype}{bool}\ no\_warning\_as\_error\_\ :\ 1;}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{bool}\ no\_error\_as\_fatal\_\ :\ 1;}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_mapping}{DiagnosticMapping}}\ make(Severity\ sev,\ \textcolor{keywordtype}{bool}\ is\_user\ =\ \textcolor{keyword}{false},\ \textcolor{keywordtype}{bool}\ is\_pragma\ =\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_mapping}{DiagnosticMapping}}\ result;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ result.severity\_\ =\ sev;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ result.is\_user\_\ =\ is\_user;}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ result.is\_pragma\_\ =\ is\_pragma;}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ result.no\_warning\_as\_error\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ result.no\_error\_as\_fatal\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00180\ \ \ \ \ \}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ Severity\ get\_severity()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ severity\_;\ \}}
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_severity(Severity\ sev)\ \{\ severity\_\ =\ sev;\ \}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_user()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ is\_user\_;\ \}}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_pragma()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ is\_pragma\_;\ \}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_no\_warning\_as\_error()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ no\_warning\_as\_error\_;\ \}}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_no\_warning\_as\_error(\textcolor{keywordtype}{bool}\ val)\ \{\ no\_warning\_as\_error\_\ =\ val;\ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_no\_error\_as\_fatal()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ no\_error\_as\_fatal\_;\ \}}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_no\_error\_as\_fatal(\textcolor{keywordtype}{bool}\ val)\ \{\ no\_error\_as\_fatal\_\ =\ val;\ \}}
+\DoxyCodeLine{00193\ \};}
 \DoxyCodeLine{00194\ }
-\DoxyCodeLine{00195\ \textcolor{keyword}{namespace\ }diag\ \{}
-\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdiag_1_1_simple_error_message_pack}{SimpleErrorMessagePack}}\ \{}
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00198\ \ \ \ \ \};}
-\DoxyCodeLine{00199\ \}}
-\DoxyCodeLine{00200\ }
-\DoxyCodeLine{00201\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ DIAGID\_HPP}}
+\DoxyCodeLine{00195\ \}\ \textcolor{comment}{//\ namespace\ aion::diag}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \textcolor{keyword}{namespace\ }diag\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdiag_1_1_simple_error_message_pack}{SimpleErrorMessagePack}}\ \{}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \};}
+\DoxyCodeLine{00201\ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ DIAGID\_HPP}}
 
 \end{DoxyCode}

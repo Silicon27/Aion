@@ -19,6 +19,5 @@ var searchData=
   ['remove_5ftrailing_5fnull_5frecursive_3c_3e_16',['remove_trailing_null_recursive&lt;&gt;',['../structiris_1_1pgen_1_1remove__trailing__null__recursive_3_4.html',1,'iris::pgen']]],
   ['remove_5fvolatile_17',['remove_volatile',['../structremove__volatile.html',1,'']]],
   ['remove_5fvolatile_3c_20volatile_20t_20_3e_18',['remove_volatile&lt; volatile T &gt;',['../structremove__volatile_3_01volatile_01_t_01_4.html',1,'']]],
-  ['resolvedidentifierexpr_19',['ResolvedIdentifierExpr',['../classaion_1_1ast_1_1_resolved_identifier_expr.html',1,'aion::ast']]],
-  ['reverse_5fiterator_20',['reverse_iterator',['../classreverse__iterator.html',1,'']]]
+  ['reverse_5fiterator_19',['reverse_iterator',['../classreverse__iterator.html',1,'']]]
 ];

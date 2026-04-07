@@ -111,393 +111,396 @@ $(function(){initNavTree('error_8hpp_source.html','',''); });
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;error/DiagnosticSeverity.hpp&quot;</span></div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;error/diagid.hpp&quot;</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &quot;support/source_manager.hpp&quot;</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">namespace </span>aion::diag {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// Forward declarations</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_builder.html">DiagnosticBuilder</a>;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a>;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">// Source Range (for highlighting)</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_char_source_range.html">   33</a></span><span class="keyword">struct </span>CharSourceRange {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    Source_Location begin;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    Source_Location end;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">bool</span> is_token_range_ = <span class="keyword">true</span>;  <span class="comment">// true = token range, false = char range</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    CharSourceRange() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    CharSourceRange(Source_Location b, Source_Location e, <span class="keywordtype">bool</span> token = <span class="keyword">true</span>)</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        : begin(b), end(e), is_token_range_(token) {}</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">bool</span> is_valid() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">bool</span> is_token_range()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> is_token_range_; }</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">bool</span> is_char_range()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !is_token_range_; }</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">static</span> CharSourceRange get_token_range(Source_Location b, Source_Location e) {</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordflow">return</span> CharSourceRange(b, e, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    }</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">static</span> CharSourceRange get_char_range(Source_Location b, Source_Location e) {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordflow">return</span> CharSourceRange(b, e, <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    }</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>};</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &quot;lexer/lexer.hpp&quot;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">namespace </span>aion::diag {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">// Forward declarations</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_builder.html">DiagnosticBuilder</a>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">// Source Range (for highlighting)</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_char_source_range.html">   34</a></span><span class="keyword">struct </span>CharSourceRange {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    Source_Location begin;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    Source_Location end;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">bool</span> is_token_range_ = <span class="keyword">true</span>;  <span class="comment">// true = token range, false = char range</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    CharSourceRange() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    CharSourceRange(Source_Location b, Source_Location e, <span class="keywordtype">bool</span> token = <span class="keyword">true</span>)</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        : begin(b), end(e), is_token_range_(token) {}</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">bool</span> is_valid() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">bool</span> is_token_range()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> is_token_range_; }</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">bool</span> is_char_range()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !is_token_range_; }</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">static</span> CharSourceRange get_token_range(Source_Location b, Source_Location e) {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">return</span> CharSourceRange(b, e, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    }</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keyword">static</span> CharSourceRange get_char_range(Source_Location b, Source_Location e) {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">return</span> CharSourceRange(b, e, <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    }</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>};</div>
 </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">// FixItHint</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment">// Annotates a diagnostic with code that should be inserted, removed, or</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">// replaced to fix the problem.</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="foldopen" id="foldopen00061" data-start="{" data-end="};">
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html">   61</a></span><span class="keyword">class </span>FixItHint {</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">   65</a></span>    <a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> <a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">remove_range</a>;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html#ab92aaf4609ba019b7e5051bf741ec13d">   68</a></span>    <a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> <a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#ab92aaf4609ba019b7e5051bf741ec13d">insert_from_range</a>;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html#a762e53380b4dda1933af8a1ee7b198b0">   71</a></span>    std::string <a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#a762e53380b4dda1933af8a1ee7b198b0">code_to_insert</a>;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordtype">bool</span> before_previous_insertions = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    FixItHint() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">bool</span> is_null()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !<a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">remove_range</a>.is_valid(); }</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keyword">static</span> <a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> <a class="code hl_function" href="classaion_1_1diag_1_1_fix_it_hint.html#aca1eab7045eeef857ed023448af75bb4">create_insertion</a>(Source_Location loc, <span class="keyword">const</span> std::string&amp; code,</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                                     <span class="keywordtype">bool</span> before_previous = <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keyword">static</span> <a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> <a class="code hl_function" href="classaion_1_1diag_1_1_fix_it_hint.html#ab29fec3208b69da2852c6552ec251243">create_removal</a>(<a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> range);</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keyword">static</span> <a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> <a class="code hl_function" href="classaion_1_1diag_1_1_fix_it_hint.html#af967f1dc715c7dfd9b34a917e897f364">create_replacement</a>(<a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> range, <span class="keyword">const</span> std::string&amp; code);</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>};</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment">// FixItHint</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">// Annotates a diagnostic with code that should be inserted, removed, or</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">// replaced to fix the problem.</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="foldopen" id="foldopen00062" data-start="{" data-end="};">
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html">   62</a></span><span class="keyword">class </span>FixItHint {</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">   66</a></span>    <a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> <a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">remove_range</a>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html#ab92aaf4609ba019b7e5051bf741ec13d">   69</a></span>    <a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> <a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#ab92aaf4609ba019b7e5051bf741ec13d">insert_from_range</a>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_fix_it_hint.html#a762e53380b4dda1933af8a1ee7b198b0">   72</a></span>    std::string <a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#a762e53380b4dda1933af8a1ee7b198b0">code_to_insert</a>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">bool</span> before_previous_insertions = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    FixItHint() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">bool</span> is_null()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !<a class="code hl_variable" href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">remove_range</a>.is_valid(); }</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keyword">static</span> <a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> <a class="code hl_function" href="classaion_1_1diag_1_1_fix_it_hint.html#aca1eab7045eeef857ed023448af75bb4">create_insertion</a>(Source_Location loc, <span class="keyword">const</span> std::string&amp; code,</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                                     <span class="keywordtype">bool</span> before_previous = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keyword">static</span> <a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> <a class="code hl_function" href="classaion_1_1diag_1_1_fix_it_hint.html#ab29fec3208b69da2852c6552ec251243">create_removal</a>(<a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> range);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keyword">static</span> <a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> <a class="code hl_function" href="classaion_1_1diag_1_1_fix_it_hint.html#af967f1dc715c7dfd9b34a917e897f364">create_replacement</a>(<a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> range, <span class="keyword">const</span> std::string&amp; code);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>};</div>
 </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">// Diagnostic</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">// Represents a single diagnostic that has been emitted.</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="foldopen" id="foldopen00095" data-start="{" data-end="};">
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html">   95</a></span><span class="keyword">struct </span>Diagnostic {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">   96</a></span>    DiagID <span class="keywordtype">id</span> = 0;                          </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">   97</a></span>    Source_Location <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">location</a>;               </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a2df6fa018b964e0356a37b80e5629e89">   98</a></span>    std::vector&lt;Source_Location&gt; <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a2df6fa018b964e0356a37b80e5629e89">extra_locations</a>; </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">   99</a></span>    Severity <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">severity</a> = Severity::warning;  </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">  100</a></span>    std::string <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">message</a>;                    </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#aaf8f786236c2999288f205c69f24453c">  101</a></span>    std::vector&lt;CharSourceRange&gt; <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#aaf8f786236c2999288f205c69f24453c">ranges</a>;    </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a76bed357bdab6192201ee2516f97983b">  102</a></span>    std::vector&lt;FixItHint&gt; <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a76bed357bdab6192201ee2516f97983b">fixits</a>;          </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    Diagnostic() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    Diagnostic(DiagID <span class="keywordtype">id</span>, Source_Location loc, Severity sev, std::string msg)</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        : <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">id</a>(<a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">id</a>), <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">location</a>(loc), <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">severity</a>(sev), <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">message</a>(std::move(msg)) {}</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>};</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">// Diagnostic</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">// Represents a single diagnostic that has been emitted.</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="foldopen" id="foldopen00096" data-start="{" data-end="};">
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html">   96</a></span><span class="keyword">struct </span>Diagnostic {</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">   97</a></span>    DiagID <span class="keywordtype">id</span> = 0;                          </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">   98</a></span>    Source_Location <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">location</a>;               </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a2df6fa018b964e0356a37b80e5629e89">   99</a></span>    std::vector&lt;Source_Location&gt; <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a2df6fa018b964e0356a37b80e5629e89">extra_locations</a>; </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">  100</a></span>    Severity <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">severity</a> = Severity::warning;  </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">  101</a></span>    std::string <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">message</a>;                    </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#aaf8f786236c2999288f205c69f24453c">  102</a></span>    std::vector&lt;CharSourceRange&gt; <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#aaf8f786236c2999288f205c69f24453c">ranges</a>;    </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="structaion_1_1diag_1_1_diagnostic.html#a76bed357bdab6192201ee2516f97983b">  103</a></span>    std::vector&lt;FixItHint&gt; <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a76bed357bdab6192201ee2516f97983b">fixits</a>;          </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    Diagnostic() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    Diagnostic(DiagID <span class="keywordtype">id</span>, Source_Location loc, Severity sev, std::string msg)</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        : <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">id</a>(<a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">id</a>), <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">location</a>(loc), <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">severity</a>(sev), <a class="code hl_variable" href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">message</a>(std::move(msg)) {}</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>};</div>
 </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">// StoredDiagnostic</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">// A diagnostic that has been stored for later retrieval.</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="foldopen" id="foldopen00114" data-start="{" data-end="};">
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_stored_diagnostic.html">  114</a></span><span class="keyword">class </span>StoredDiagnostic {</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    DiagID id_ = 0;</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    Severity severity_ = Severity::warning;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    std::string message_;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="comment">// Full location info would be stored here</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    std::vector&lt;CharSourceRange&gt; ranges_;</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    std::vector&lt;FixItHint&gt; fixits_;</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    StoredDiagnostic() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    StoredDiagnostic(Severity sev, <span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    DiagID get_id()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> id_; }</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    Severity get_severity()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> severity_; }</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keyword">const</span> std::string&amp; get_message()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> message_; }</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keyword">using </span>range_iterator = std::vector&lt;CharSourceRange&gt;::const_iterator;</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    range_iterator range_begin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ranges_.begin(); }</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    range_iterator range_end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ranges_.end(); }</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordtype">unsigned</span> range_size()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ranges_.size(); }</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    <span class="keyword">using </span>fixit_iterator = std::vector&lt;FixItHint&gt;::const_iterator;</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    fixit_iterator fixit_begin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fixits_.begin(); }</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    fixit_iterator fixit_end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fixits_.end(); }</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <span class="keywordtype">unsigned</span> fixit_size()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fixits_.size(); }</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>};</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">// StoredDiagnostic</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">// A diagnostic that has been stored for later retrieval.</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
+<div class="foldopen" id="foldopen00115" data-start="{" data-end="};">
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_stored_diagnostic.html">  115</a></span><span class="keyword">class </span>StoredDiagnostic {</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    DiagID id_ = 0;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    Severity severity_ = Severity::warning;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    std::string message_;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <span class="comment">// Full location info would be stored here</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    std::vector&lt;CharSourceRange&gt; ranges_;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    std::vector&lt;FixItHint&gt; fixits_;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    StoredDiagnostic() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    StoredDiagnostic(Severity sev, <span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    DiagID get_id()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> id_; }</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    Severity get_severity()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> severity_; }</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keyword">const</span> std::string&amp; get_message()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> message_; }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keyword">using </span>range_iterator = std::vector&lt;CharSourceRange&gt;::const_iterator;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    range_iterator range_begin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ranges_.begin(); }</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    range_iterator range_end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ranges_.end(); }</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keywordtype">unsigned</span> range_size()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ranges_.size(); }</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keyword">using </span>fixit_iterator = std::vector&lt;FixItHint&gt;::const_iterator;</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    fixit_iterator fixit_begin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fixits_.begin(); }</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    fixit_iterator fixit_end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fixits_.end(); }</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="keywordtype">unsigned</span> fixit_size()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fixits_.size(); }</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>};</div>
 </div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">// DiagnosticConsumer</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">// Abstract interface for diagnostic consumers.</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="foldopen" id="foldopen00146" data-start="{" data-end="};">
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html">  146</a></span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a> {</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">~DiagnosticConsumer</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span></div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#ac535df0e8ee8c556ebafdce0da2c5901">  151</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#ac535df0e8ee8c556ebafdce0da2c5901">begin_source_file</a>() {}</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5ef230916c08743af934667a9ba8ba92">  154</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5ef230916c08743af934667a9ba8ba92">end_source_file</a>() {}</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5701220bccc309b7aface60292719235">  157</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5701220bccc309b7aface60292719235">handle_diagnostic</a>(Severity severity, <span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag) = 0;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a8f7dfa0c6d1c0da068aad58853472223">  160</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a8f7dfa0c6d1c0da068aad58853472223">get_num_errors</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_errors_; }</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a836d861af56807d14a2ba09971344062">  163</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a836d861af56807d14a2ba09971344062">get_num_warnings</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_warnings_; }</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span></div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a92edd8ab4d52eb267bd4f493b2c3ed75">  166</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a92edd8ab4d52eb267bd4f493b2c3ed75">clear</a>() { num_errors_ = 0; num_warnings_ = 0; }</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <span class="keywordtype">unsigned</span> num_errors_ = 0;</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keywordtype">unsigned</span> num_warnings_ = 0;</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>};</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">// DiagnosticConsumer</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">// Abstract interface for diagnostic consumers.</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="foldopen" id="foldopen00147" data-start="{" data-end="};">
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html">  147</a></span><span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a> {</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">~DiagnosticConsumer</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#ac535df0e8ee8c556ebafdce0da2c5901">  152</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#ac535df0e8ee8c556ebafdce0da2c5901">begin_source_file</a>() {}</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5ef230916c08743af934667a9ba8ba92">  155</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5ef230916c08743af934667a9ba8ba92">end_source_file</a>() {}</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5701220bccc309b7aface60292719235">  158</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5701220bccc309b7aface60292719235">handle_diagnostic</a>(Severity severity, <span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag) = 0;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a8f7dfa0c6d1c0da068aad58853472223">  161</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a8f7dfa0c6d1c0da068aad58853472223">get_num_errors</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_errors_; }</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a836d861af56807d14a2ba09971344062">  164</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a836d861af56807d14a2ba09971344062">get_num_warnings</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_warnings_; }</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a92edd8ab4d52eb267bd4f493b2c3ed75">  167</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_consumer.html#a92edd8ab4d52eb267bd4f493b2c3ed75">clear</a>() { num_errors_ = 0; num_warnings_ = 0; }</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keywordtype">unsigned</span> num_errors_ = 0;</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keywordtype">unsigned</span> num_warnings_ = 0;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>};</div>
 </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">// TextDiagnosticPrinter</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">// A diagnostic consumer that prints diagnostics to a stream.</span></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="foldopen" id="foldopen00178" data-start="{" data-end="};">
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_text_diagnostic_printer.html">  178</a></span><span class="keyword">class </span>TextDiagnosticPrinter : <span class="keyword">public</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a> {</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    std::ostream* os_;</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    Source_Manager* source_mgr_;</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <span class="keywordtype">bool</span> show_colors_;</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    TextDiagnosticPrinter(std::ostream&amp; os, Source_Manager* sm = <span class="keyword">nullptr</span>, <span class="keywordtype">bool</span> colors = <span class="keyword">true</span>)</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        : os_(&amp;os), source_mgr_(sm), show_colors_(colors) {}</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span> </div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_text_diagnostic_printer.html#a73a6274d1c6891d21867336f2102e7d2">handle_diagnostic</a>(Severity severity, <span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keywordtype">void</span> print_severity(Severity severity);</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="keywordtype">void</span> print_location(<span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordtype">void</span> print_source_line(<span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordtype">void</span> print_fixit_hints(<span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>};</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">// TextDiagnosticPrinter</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">// A diagnostic consumer that prints diagnostics to a stream.</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
+<div class="foldopen" id="foldopen00179" data-start="{" data-end="};">
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_text_diagnostic_printer.html">  179</a></span><span class="keyword">class </span>TextDiagnosticPrinter : <span class="keyword">public</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a> {</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    std::ostream* os_;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    Source_Manager* source_mgr_;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="keywordtype">bool</span> show_colors_;</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    TextDiagnosticPrinter(std::ostream&amp; os, Source_Manager* sm = <span class="keyword">nullptr</span>, <span class="keywordtype">bool</span> colors = <span class="keyword">true</span>)</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        : os_(&amp;os), source_mgr_(sm), show_colors_(colors) {}</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_text_diagnostic_printer.html#a73a6274d1c6891d21867336f2102e7d2">handle_diagnostic</a>(Severity severity, <span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="keywordtype">void</span> print_severity(Severity severity);</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordtype">void</span> print_location(<span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordtype">void</span> print_source_line(<span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keywordtype">void</span> print_fixit_hints(<span class="keyword">const</span> <a class="code hl_struct" href="structaion_1_1diag_1_1_diagnostic.html">Diagnostic</a>&amp; diag);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>};</div>
 </div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">// DiagnosticBuilder</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="comment">// Helper class for building diagnostics with a fluent interface.</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="foldopen" id="foldopen00201" data-start="{" data-end="};">
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_builder.html">  201</a></span><span class="keyword">class </span>DiagnosticBuilder {</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    DiagnosticsEngine* engine_;</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    DiagID diag_id_;</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">bool</span> is_active_ = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="comment">// Diagnostic arguments for formatting</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    std::vector&lt;std::string&gt; string_args_;</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    std::vector&lt;int64_t&gt; int_args_;</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    <span class="comment">// Source ranges, fixits and extra locations</span></div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    std::vector&lt;CharSourceRange&gt; ranges_;</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    std::vector&lt;FixItHint&gt; fixits_;</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    std::vector&lt;Source_Location&gt; extra_locations_;</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    DiagnosticBuilder(DiagnosticsEngine* engine, DiagID <span class="keywordtype">id</span>)</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        : engine_(engine), diag_id_(<span class="keywordtype">id</span>) {}</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    DiagnosticBuilder(<span class="keyword">const</span> DiagnosticBuilder&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    DiagnosticBuilder&amp; operator=(<span class="keyword">const</span> DiagnosticBuilder&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    DiagnosticBuilder(DiagnosticBuilder&amp;&amp; other) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    DiagnosticBuilder&amp; operator=(DiagnosticBuilder&amp;&amp; other) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    ~DiagnosticBuilder();</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span></div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keyword">const</span> std::string&amp; str);</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* str);</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keywordtype">int</span> val);</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keywordtype">unsigned</span> val);</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(int64_t val);</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span></div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> range);</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span></div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(Source_Location loc);</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span></div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> hint);</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#af5115b27bb3c15c3054ed6d83cc9f04c">emit</a>();</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_builder.html#a0906b48fa02347303baf9e5f33898b86">  249</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#a0906b48fa02347303baf9e5f33898b86">is_active</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> is_active_; }</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_builder.html#a7ece27b05c2a2ca12217cbdb065668e2">  252</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#a7ece27b05c2a2ca12217cbdb065668e2">clear</a>() { is_active_ = <span class="keyword">false</span>; }</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>;</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    std::string formatMessage(<span class="keyword">const</span> <span class="keywordtype">char</span>* format_str) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>};</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">// DiagnosticBuilder</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="comment">// Helper class for building diagnostics with a fluent interface.</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="foldopen" id="foldopen00202" data-start="{" data-end="};">
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_builder.html">  202</a></span><span class="keyword">class </span>DiagnosticBuilder {</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    DiagnosticsEngine* engine_;</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    DiagID diag_id_;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keywordtype">bool</span> is_active_ = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="comment">// Diagnostic arguments for formatting</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    std::vector&lt;std::string&gt; string_args_;</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    std::vector&lt;int64_t&gt; int_args_;</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    <span class="comment">// Source ranges, fixits and extra locations</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    std::vector&lt;CharSourceRange&gt; ranges_;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    std::vector&lt;FixItHint&gt; fixits_;</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    std::vector&lt;Source_Location&gt; extra_locations_;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    DiagnosticBuilder(DiagnosticsEngine* engine, DiagID <span class="keywordtype">id</span>)</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        : engine_(engine), diag_id_(<span class="keywordtype">id</span>) {}</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    DiagnosticBuilder(<span class="keyword">const</span> DiagnosticBuilder&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    DiagnosticBuilder&amp; operator=(<span class="keyword">const</span> DiagnosticBuilder&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    DiagnosticBuilder(DiagnosticBuilder&amp;&amp; other) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    DiagnosticBuilder&amp; operator=(DiagnosticBuilder&amp;&amp; other) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    ~DiagnosticBuilder();</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keyword">const</span> std::string&amp; str);</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* str);</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span></div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keywordtype">int</span> val);</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<span class="keywordtype">unsigned</span> val);</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(int64_t val);</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<a class="code hl_struct" href="structaion_1_1diag_1_1_char_source_range.html">CharSourceRange</a> range);</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(Source_Location loc);</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    DiagnosticBuilder&amp; <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">operator&lt;&lt;</a>(<a class="code hl_class" href="classaion_1_1diag_1_1_fix_it_hint.html">FixItHint</a> hint);</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#af5115b27bb3c15c3054ed6d83cc9f04c">emit</a>();</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_builder.html#a0906b48fa02347303baf9e5f33898b86">  250</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#a0906b48fa02347303baf9e5f33898b86">is_active</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> is_active_; }</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostic_builder.html#a7ece27b05c2a2ca12217cbdb065668e2">  253</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostic_builder.html#a7ece27b05c2a2ca12217cbdb065668e2">clear</a>() { is_active_ = <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>;</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    std::string formatMessage(<span class="keyword">const</span> <span class="keywordtype">char</span>* format_str) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>};</div>
 </div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="comment">// DiagnosticsEngine</span></div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="comment">// Main class for emitting diagnostics.</span></div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span> </div>
-<div class="foldopen" id="foldopen00264" data-start="{" data-end="};">
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostics_engine.html">  264</a></span><span class="keyword">class </span>DiagnosticsEngine {</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span><span class="keyword">public</span>:</div>
-<div class="foldopen" id="foldopen00267" data-start="{" data-end="};">
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8f116d5408249763b9b898a9be0f5818">  267</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8f116d5408249763b9b898a9be0f5818">Level</a> {</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        ignored = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::ignored),</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        note = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::note),</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        remark = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::remark),</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        warning = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::warning),</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        error = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::error),</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>        fatal = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::fatal)</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    };</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="comment">// DiagnosticsEngine</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="comment">// Main class for emitting diagnostics.</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
+<div class="foldopen" id="foldopen00265" data-start="{" data-end="};">
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostics_engine.html">  265</a></span><span class="keyword">class </span>DiagnosticsEngine {</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00268" data-start="{" data-end="};">
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno"><a class="line" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8f116d5408249763b9b898a9be0f5818">  268</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8f116d5408249763b9b898a9be0f5818">Level</a> {</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        ignored = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::ignored),</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        note = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::note),</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        remark = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::remark),</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        warning = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::warning),</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>        error = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::error),</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        fatal = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Severity::fatal)</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    };</div>
 </div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    Source_Manager* source_mgr_ = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a>* consumer_ = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keywordtype">bool</span> owns_consumer_ = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <span class="comment">// Current diagnostic state</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    Source_Location cur_diag_loc_;</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    DiagID cur_diag_id_ = 0;</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    <span class="comment">// Diagnostic counts</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="keywordtype">unsigned</span> num_errors_ = 0;</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    <span class="keywordtype">unsigned</span> num_warnings_ = 0;</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="comment">// Configuration</span></div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keywordtype">bool</span> warnings_as_errors_ = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    <span class="keywordtype">bool</span> errors_as_fatal_ = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="keywordtype">bool</span> suppress_all_diagnostics_ = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keywordtype">bool</span> show_colors_ = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    <span class="keywordtype">unsigned</span> error_limit_ = 0;  <span class="comment">// 0 = no limit</span></div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    <span class="comment">// Custom diagnostic mappings</span></div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    std::unordered_map&lt;DiagID, DiagnosticMapping&gt; diag_mappings_;</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>();</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>(Source_Manager* sm, <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a>* consumer, <span class="keywordtype">bool</span> owns = <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">~DiagnosticsEngine</a>();</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>(<span class="keyword">const</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>&amp; operator=(<span class="keyword">const</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span> </div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    <span class="comment">// ---- Configuration ----</span></div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    <span class="keywordtype">void</span> set_source_manager(Source_Manager* sm) { source_mgr_ = sm; }</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    Source_Manager* get_source_manager()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> source_mgr_; }</div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    <span class="keywordtype">void</span> set_client(DiagnosticConsumer* client, <span class="keywordtype">bool</span> owns = <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    DiagnosticConsumer* get_client()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> consumer_; }</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    <span class="keywordtype">void</span> set_warnings_as_errors(<span class="keywordtype">bool</span> val) { warnings_as_errors_ = val; }</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    <span class="keywordtype">bool</span> get_warnings_as_errors()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> warnings_as_errors_; }</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span> </div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    <span class="keywordtype">void</span> set_errors_as_fatal(<span class="keywordtype">bool</span> val) { errors_as_fatal_ = val; }</div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="keywordtype">bool</span> get_errors_as_fatal()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> errors_as_fatal_; }</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    <span class="keywordtype">void</span> set_suppress_all_diagnostics(<span class="keywordtype">bool</span> val) { suppress_all_diagnostics_ = val; }</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    <span class="keywordtype">bool</span> get_suppress_all_diagnostics()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> suppress_all_diagnostics_; }</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    <span class="keywordtype">void</span> set_show_colors(<span class="keywordtype">bool</span> val) { show_colors_ = val; }</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keywordtype">bool</span> get_show_colors()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> show_colors_; }</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    <span class="keywordtype">void</span> set_error_limit(<span class="keywordtype">unsigned</span> limit) { error_limit_ = limit; }</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="keywordtype">unsigned</span> get_error_limit()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> error_limit_; }</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    <span class="comment">// ---- Diagnostic Mapping ----</span></div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span></div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#abf717554cb77262fdf34ec82e42c106f">set_severity</a>(DiagID <span class="keywordtype">id</span>, Severity sev, <span class="keywordtype">bool</span> is_pragma = <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span></div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>    Severity <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#af1b1f1e4632dbc809c05293c60859a0a">get_severity</a>(DiagID <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>    <span class="comment">// ---- Diagnostic Counts ----</span></div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    <span class="keywordtype">unsigned</span> get_num_errors()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_errors_; }</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    <span class="keywordtype">unsigned</span> get_num_warnings()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_warnings_; }</div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    <span class="keywordtype">bool</span> has_error_occurred()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_errors_ &gt; 0; }</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    <span class="keywordtype">bool</span> has_fatal_error_occurred() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    <span class="keywordtype">void</span> reset();</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    <span class="comment">// ---- Diagnostic Emission ----</span></div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span></div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>    DiagnosticBuilder <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8982be99bd257c546f9a94cba306882b">report</a>(Source_Location loc, DiagID <span class="keywordtype">id</span>);</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span></div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    DiagnosticBuilder <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8982be99bd257c546f9a94cba306882b">report</a>(DiagID <span class="keywordtype">id</span>);</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span></div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#ac8b01a3b1c381c1e7518b474f11de77a">emit_diagnostic</a>(<span class="keyword">const</span> Diagnostic&amp; diag);</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keyword">friend</span> <span class="keyword">class </span>DiagnosticBuilder;</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span></div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    <span class="keywordtype">void</span> process_diag(DiagID <span class="keywordtype">id</span>, Source_Location loc,</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>                     <span class="keyword">const</span> std::string&amp; message,</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>                     <span class="keyword">const</span> std::vector&lt;CharSourceRange&gt;&amp; ranges,</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>                     <span class="keyword">const</span> std::vector&lt;FixItHint&gt;&amp; fixits,</div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>                     <span class="keyword">const</span> std::vector&lt;Source_Location&gt;&amp; extra_locations);</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span></div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>    Severity get_default_severity(DiagID <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    Source_Manager* source_mgr_ = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a>* consumer_ = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <span class="keywordtype">bool</span> owns_consumer_ = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="comment">// Current diagnostic state</span></div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    Source_Location cur_diag_loc_;</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    DiagID cur_diag_id_ = 0;</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="comment">// Diagnostic counts</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    <span class="keywordtype">unsigned</span> num_errors_ = 0;</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="keywordtype">unsigned</span> num_warnings_ = 0;</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="comment">// Configuration</span></div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    <span class="keywordtype">bool</span> warnings_as_errors_ = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="keywordtype">bool</span> errors_as_fatal_ = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keywordtype">bool</span> suppress_all_diagnostics_ = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    <span class="keywordtype">bool</span> show_colors_ = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keywordtype">unsigned</span> error_limit_ = 0;  <span class="comment">// 0 = no limit</span></div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <span class="comment">// Custom diagnostic mappings</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    std::unordered_map&lt;DiagID, DiagnosticMapping&gt; diag_mappings_;</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>();</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>(Source_Manager* sm, <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostic_consumer.html">DiagnosticConsumer</a>* consumer, <span class="keywordtype">bool</span> owns = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">~DiagnosticsEngine</a>();</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span> </div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>(<span class="keyword">const</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>&amp; operator=(<span class="keyword">const</span> <a class="code hl_class" href="classaion_1_1diag_1_1_diagnostics_engine.html">DiagnosticsEngine</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span> </div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    <span class="comment">// ---- Configuration ----</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span> </div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    <span class="keywordtype">void</span> set_source_manager(Source_Manager* sm) { source_mgr_ = sm; }</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    Source_Manager* get_source_manager()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> source_mgr_; }</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    <span class="keywordtype">void</span> set_client(DiagnosticConsumer* client, <span class="keywordtype">bool</span> owns = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    DiagnosticConsumer* get_client()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> consumer_; }</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span> </div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    <span class="keywordtype">void</span> set_warnings_as_errors(<span class="keywordtype">bool</span> val) { warnings_as_errors_ = val; }</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keywordtype">bool</span> get_warnings_as_errors()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> warnings_as_errors_; }</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="keywordtype">void</span> set_errors_as_fatal(<span class="keywordtype">bool</span> val) { errors_as_fatal_ = val; }</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    <span class="keywordtype">bool</span> get_errors_as_fatal()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> errors_as_fatal_; }</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span> </div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    <span class="keywordtype">void</span> set_suppress_all_diagnostics(<span class="keywordtype">bool</span> val) { suppress_all_diagnostics_ = val; }</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    <span class="keywordtype">bool</span> get_suppress_all_diagnostics()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> suppress_all_diagnostics_; }</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span> </div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keywordtype">void</span> set_show_colors(<span class="keywordtype">bool</span> val) { show_colors_ = val; }</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    <span class="keywordtype">bool</span> get_show_colors()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> show_colors_; }</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span> </div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="keywordtype">void</span> set_error_limit(<span class="keywordtype">unsigned</span> limit) { error_limit_ = limit; }</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    <span class="keywordtype">unsigned</span> get_error_limit()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> error_limit_; }</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>    <span class="comment">// ---- Diagnostic Mapping ----</span></div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span></div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#abf717554cb77262fdf34ec82e42c106f">set_severity</a>(DiagID <span class="keywordtype">id</span>, Severity sev, <span class="keywordtype">bool</span> is_pragma = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span></div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    Severity <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#af1b1f1e4632dbc809c05293c60859a0a">get_severity</a>(DiagID <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    <span class="comment">// ---- Diagnostic Counts ----</span></div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    <span class="keywordtype">unsigned</span> get_num_errors()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_errors_; }</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    <span class="keywordtype">unsigned</span> get_num_warnings()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_warnings_; }</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    <span class="keywordtype">bool</span> has_error_occurred()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_errors_ &gt; 0; }</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="keywordtype">bool</span> has_fatal_error_occurred() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <span class="keywordtype">void</span> reset();</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span> </div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>    <span class="comment">// ---- Diagnostic Emission ----</span></div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    DiagnosticBuilder <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8982be99bd257c546f9a94cba306882b">report</a>(Source_Location loc, DiagID <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span></div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    DiagnosticBuilder <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#a8982be99bd257c546f9a94cba306882b">report</a>(DiagID <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span></div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classaion_1_1diag_1_1_diagnostics_engine.html#ac8b01a3b1c381c1e7518b474f11de77a">emit_diagnostic</a>(<span class="keyword">const</span> Diagnostic&amp; diag);</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    SourceLocation get_token_location(FileID fid, <span class="keyword">const</span> lexer::Token&amp; token) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span> </div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    <span class="keyword">friend</span> <span class="keyword">class </span>DiagnosticBuilder;</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span></div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    <span class="keywordtype">void</span> process_diag(DiagID <span class="keywordtype">id</span>, Source_Location loc,</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>                     <span class="keyword">const</span> std::string&amp; message,</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>                     <span class="keyword">const</span> std::vector&lt;CharSourceRange&gt;&amp; ranges,</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>                     <span class="keyword">const</span> std::vector&lt;FixItHint&gt;&amp; fixits,</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>                     <span class="keyword">const</span> std::vector&lt;Source_Location&gt;&amp; extra_locations);</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span></div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* get_diagnostic_format_string(DiagID <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>};</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    Severity get_default_severity(DiagID <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span></div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* get_diagnostic_format_string(DiagID <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>};</div>
 </div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span> </div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span><span class="comment">// Convenience Functions</span></div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span><span class="comment">// ============================================================================</span></div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span></div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>std::unique_ptr&lt;DiagnosticsEngine&gt; create_diagnostics_engine(Source_Manager* sm = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>} <span class="comment">// namespace aion::diag</span></div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="preprocessor">#endif </span><span class="comment">// ERROR_HPP</span></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html">aion::diag::DiagnosticBuilder</a></div><div class="ttdef"><b>Definition</b> error.hpp:201</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html_a0906b48fa02347303baf9e5f33898b86"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html#a0906b48fa02347303baf9e5f33898b86">aion::diag::DiagnosticBuilder::is_active</a></div><div class="ttdeci">bool is_active() const</div><div class="ttdoc">Check if this builder is still active.</div><div class="ttdef"><b>Definition</b> error.hpp:249</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html_a7ece27b05c2a2ca12217cbdb065668e2"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html#a7ece27b05c2a2ca12217cbdb065668e2">aion::diag::DiagnosticBuilder::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Abandon this diagnostic without emitting.</div><div class="ttdef"><b>Definition</b> error.hpp:252</div></div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span> </div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span><span class="comment">// Convenience Functions</span></div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span><span class="comment">// ============================================================================</span></div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span></div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>std::unique_ptr&lt;DiagnosticsEngine&gt; create_diagnostics_engine(Source_Manager* sm = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span> </div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>} <span class="comment">// namespace aion::diag</span></div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span><span class="preprocessor">#endif </span><span class="comment">// ERROR_HPP</span></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html">aion::diag::DiagnosticBuilder</a></div><div class="ttdef"><b>Definition</b> error.hpp:202</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html_a0906b48fa02347303baf9e5f33898b86"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html#a0906b48fa02347303baf9e5f33898b86">aion::diag::DiagnosticBuilder::is_active</a></div><div class="ttdeci">bool is_active() const</div><div class="ttdoc">Check if this builder is still active.</div><div class="ttdef"><b>Definition</b> error.hpp:250</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html_a7ece27b05c2a2ca12217cbdb065668e2"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html#a7ece27b05c2a2ca12217cbdb065668e2">aion::diag::DiagnosticBuilder::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Abandon this diagnostic without emitting.</div><div class="ttdef"><b>Definition</b> error.hpp:253</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html_aa0db443f6df02bce59c6cb141cd798e4"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html#aa0db443f6df02bce59c6cb141cd798e4">aion::diag::DiagnosticBuilder::operator&lt;&lt;</a></div><div class="ttdeci">DiagnosticBuilder &amp; operator&lt;&lt;(const std::string &amp;str)</div><div class="ttdoc">Add a string argument.</div><div class="ttdef"><b>Definition</b> error.cpp:328</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_builder_html_af5115b27bb3c15c3054ed6d83cc9f04c"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_builder.html#af5115b27bb3c15c3054ed6d83cc9f04c">aion::diag::DiagnosticBuilder::emit</a></div><div class="ttdeci">void emit()</div><div class="ttdoc">Emit the diagnostic.</div><div class="ttdef"><b>Definition</b> error.cpp:402</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html">aion::diag::DiagnosticConsumer</a></div><div class="ttdef"><b>Definition</b> error.hpp:146</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html">aion::diag::DiagnosticConsumer</a></div><div class="ttdef"><b>Definition</b> error.hpp:147</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a5701220bccc309b7aface60292719235"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5701220bccc309b7aface60292719235">aion::diag::DiagnosticConsumer::handle_diagnostic</a></div><div class="ttdeci">virtual void handle_diagnostic(Severity severity, const Diagnostic &amp;diag)=0</div><div class="ttdoc">Callback for when a diagnostic is emitted.</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a5ef230916c08743af934667a9ba8ba92"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5ef230916c08743af934667a9ba8ba92">aion::diag::DiagnosticConsumer::end_source_file</a></div><div class="ttdeci">virtual void end_source_file()</div><div class="ttdoc">Called at the end of processing a source file.</div><div class="ttdef"><b>Definition</b> error.hpp:154</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a836d861af56807d14a2ba09971344062"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a836d861af56807d14a2ba09971344062">aion::diag::DiagnosticConsumer::get_num_warnings</a></div><div class="ttdeci">unsigned get_num_warnings() const</div><div class="ttdoc">Returns the number of warnings emitted.</div><div class="ttdef"><b>Definition</b> error.hpp:163</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a8f7dfa0c6d1c0da068aad58853472223"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a8f7dfa0c6d1c0da068aad58853472223">aion::diag::DiagnosticConsumer::get_num_errors</a></div><div class="ttdeci">unsigned get_num_errors() const</div><div class="ttdoc">Returns the number of errors emitted.</div><div class="ttdef"><b>Definition</b> error.hpp:160</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a92edd8ab4d52eb267bd4f493b2c3ed75"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a92edd8ab4d52eb267bd4f493b2c3ed75">aion::diag::DiagnosticConsumer::clear</a></div><div class="ttdeci">virtual void clear()</div><div class="ttdoc">Reset the error/warning counts.</div><div class="ttdef"><b>Definition</b> error.hpp:166</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_ac535df0e8ee8c556ebafdce0da2c5901"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#ac535df0e8ee8c556ebafdce0da2c5901">aion::diag::DiagnosticConsumer::begin_source_file</a></div><div class="ttdeci">virtual void begin_source_file()</div><div class="ttdoc">Called at the beginning of processing a source file.</div><div class="ttdef"><b>Definition</b> error.hpp:151</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html">aion::diag::DiagnosticsEngine</a></div><div class="ttdef"><b>Definition</b> error.hpp:264</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a5ef230916c08743af934667a9ba8ba92"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a5ef230916c08743af934667a9ba8ba92">aion::diag::DiagnosticConsumer::end_source_file</a></div><div class="ttdeci">virtual void end_source_file()</div><div class="ttdoc">Called at the end of processing a source file.</div><div class="ttdef"><b>Definition</b> error.hpp:155</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a836d861af56807d14a2ba09971344062"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a836d861af56807d14a2ba09971344062">aion::diag::DiagnosticConsumer::get_num_warnings</a></div><div class="ttdeci">unsigned get_num_warnings() const</div><div class="ttdoc">Returns the number of warnings emitted.</div><div class="ttdef"><b>Definition</b> error.hpp:164</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a8f7dfa0c6d1c0da068aad58853472223"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a8f7dfa0c6d1c0da068aad58853472223">aion::diag::DiagnosticConsumer::get_num_errors</a></div><div class="ttdeci">unsigned get_num_errors() const</div><div class="ttdoc">Returns the number of errors emitted.</div><div class="ttdef"><b>Definition</b> error.hpp:161</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_a92edd8ab4d52eb267bd4f493b2c3ed75"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#a92edd8ab4d52eb267bd4f493b2c3ed75">aion::diag::DiagnosticConsumer::clear</a></div><div class="ttdeci">virtual void clear()</div><div class="ttdoc">Reset the error/warning counts.</div><div class="ttdef"><b>Definition</b> error.hpp:167</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostic_consumer_html_ac535df0e8ee8c556ebafdce0da2c5901"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostic_consumer.html#ac535df0e8ee8c556ebafdce0da2c5901">aion::diag::DiagnosticConsumer::begin_source_file</a></div><div class="ttdeci">virtual void begin_source_file()</div><div class="ttdoc">Called at the beginning of processing a source file.</div><div class="ttdef"><b>Definition</b> error.hpp:152</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html">aion::diag::DiagnosticsEngine</a></div><div class="ttdef"><b>Definition</b> error.hpp:265</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html_a8982be99bd257c546f9a94cba306882b"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html#a8982be99bd257c546f9a94cba306882b">aion::diag::DiagnosticsEngine::report</a></div><div class="ttdeci">DiagnosticBuilder report(Source_Location loc, DiagID id)</div><div class="ttdoc">Report a diagnostic at the given location.</div><div class="ttdef"><b>Definition</b> error.cpp:514</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html_a8f116d5408249763b9b898a9be0f5818"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html#a8f116d5408249763b9b898a9be0f5818">aion::diag::DiagnosticsEngine::Level</a></div><div class="ttdeci">Level</div><div class="ttdoc">The level of a diagnostic after mapping.</div><div class="ttdef"><b>Definition</b> error.hpp:267</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html_a8f116d5408249763b9b898a9be0f5818"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html#a8f116d5408249763b9b898a9be0f5818">aion::diag::DiagnosticsEngine::Level</a></div><div class="ttdeci">Level</div><div class="ttdoc">The level of a diagnostic after mapping.</div><div class="ttdef"><b>Definition</b> error.hpp:268</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html_abf717554cb77262fdf34ec82e42c106f"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html#abf717554cb77262fdf34ec82e42c106f">aion::diag::DiagnosticsEngine::set_severity</a></div><div class="ttdeci">void set_severity(DiagID id, Severity sev, bool is_pragma=false)</div><div class="ttdoc">Set the severity for a specific diagnostic.</div><div class="ttdef"><b>Definition</b> error.cpp:453</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html_ac8b01a3b1c381c1e7518b474f11de77a"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html#ac8b01a3b1c381c1e7518b474f11de77a">aion::diag::DiagnosticsEngine::emit_diagnostic</a></div><div class="ttdeci">void emit_diagnostic(const Diagnostic &amp;diag)</div><div class="ttdoc">Emit a fully-formed diagnostic.</div><div class="ttdef"><b>Definition</b> error.cpp:525</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_diagnostics_engine_html_af1b1f1e4632dbc809c05293c60859a0a"><div class="ttname"><a href="classaion_1_1diag_1_1_diagnostics_engine.html#af1b1f1e4632dbc809c05293c60859a0a">aion::diag::DiagnosticsEngine::get_severity</a></div><div class="ttdeci">Severity get_severity(DiagID id) const</div><div class="ttdoc">Get the current severity for a diagnostic.</div><div class="ttdef"><b>Definition</b> error.cpp:457</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html">aion::diag::FixItHint</a></div><div class="ttdef"><b>Definition</b> error.hpp:61</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_a762e53380b4dda1933af8a1ee7b198b0"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#a762e53380b4dda1933af8a1ee7b198b0">aion::diag::FixItHint::code_to_insert</a></div><div class="ttdeci">std::string code_to_insert</div><div class="ttdoc">The actual code to insert at the insertion location.</div><div class="ttdef"><b>Definition</b> error.hpp:71</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_a9acb4cce1005baed738b1809ca01c8b0"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">aion::diag::FixItHint::remove_range</a></div><div class="ttdeci">CharSourceRange remove_range</div><div class="ttdef"><b>Definition</b> error.hpp:65</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html">aion::diag::FixItHint</a></div><div class="ttdef"><b>Definition</b> error.hpp:62</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_a762e53380b4dda1933af8a1ee7b198b0"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#a762e53380b4dda1933af8a1ee7b198b0">aion::diag::FixItHint::code_to_insert</a></div><div class="ttdeci">std::string code_to_insert</div><div class="ttdoc">The actual code to insert at the insertion location.</div><div class="ttdef"><b>Definition</b> error.hpp:72</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_a9acb4cce1005baed738b1809ca01c8b0"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#a9acb4cce1005baed738b1809ca01c8b0">aion::diag::FixItHint::remove_range</a></div><div class="ttdeci">CharSourceRange remove_range</div><div class="ttdef"><b>Definition</b> error.hpp:66</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_ab29fec3208b69da2852c6552ec251243"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#ab29fec3208b69da2852c6552ec251243">aion::diag::FixItHint::create_removal</a></div><div class="ttdeci">static FixItHint create_removal(CharSourceRange range)</div><div class="ttdoc">Create a code modification hint that removes the given source range.</div><div class="ttdef"><b>Definition</b> error.cpp:37</div></div>
-<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_ab92aaf4609ba019b7e5051bf741ec13d"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#ab92aaf4609ba019b7e5051bf741ec13d">aion::diag::FixItHint::insert_from_range</a></div><div class="ttdeci">CharSourceRange insert_from_range</div><div class="ttdoc">Code in a specific range that should be inserted.</div><div class="ttdef"><b>Definition</b> error.hpp:68</div></div>
+<div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_ab92aaf4609ba019b7e5051bf741ec13d"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#ab92aaf4609ba019b7e5051bf741ec13d">aion::diag::FixItHint::insert_from_range</a></div><div class="ttdeci">CharSourceRange insert_from_range</div><div class="ttdoc">Code in a specific range that should be inserted.</div><div class="ttdef"><b>Definition</b> error.hpp:69</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_aca1eab7045eeef857ed023448af75bb4"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#aca1eab7045eeef857ed023448af75bb4">aion::diag::FixItHint::create_insertion</a></div><div class="ttdeci">static FixItHint create_insertion(Source_Location loc, const std::string &amp;code, bool before_previous=false)</div><div class="ttdoc">Create a code modification hint that inserts the given code at a location.</div><div class="ttdef"><b>Definition</b> error.cpp:28</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_fix_it_hint_html_af967f1dc715c7dfd9b34a917e897f364"><div class="ttname"><a href="classaion_1_1diag_1_1_fix_it_hint.html#af967f1dc715c7dfd9b34a917e897f364">aion::diag::FixItHint::create_replacement</a></div><div class="ttdeci">static FixItHint create_replacement(CharSourceRange range, const std::string &amp;code)</div><div class="ttdoc">Create a code modification hint that replaces the given source range.</div><div class="ttdef"><b>Definition</b> error.cpp:43</div></div>
 <div class="ttc" id="aclassaion_1_1diag_1_1_text_diagnostic_printer_html_a73a6274d1c6891d21867336f2102e7d2"><div class="ttname"><a href="classaion_1_1diag_1_1_text_diagnostic_printer.html#a73a6274d1c6891d21867336f2102e7d2">aion::diag::TextDiagnosticPrinter::handle_diagnostic</a></div><div class="ttdeci">void handle_diagnostic(Severity severity, const Diagnostic &amp;diag) override</div><div class="ttdoc">Callback for when a diagnostic is emitted.</div><div class="ttdef"><b>Definition</b> error.cpp:65</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_char_source_range_html"><div class="ttname"><a href="structaion_1_1diag_1_1_char_source_range.html">aion::diag::CharSourceRange</a></div><div class="ttdef"><b>Definition</b> error.hpp:33</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html">aion::diag::Diagnostic</a></div><div class="ttdef"><b>Definition</b> error.hpp:95</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a2df6fa018b964e0356a37b80e5629e89"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a2df6fa018b964e0356a37b80e5629e89">aion::diag::Diagnostic::extra_locations</a></div><div class="ttdeci">std::vector&lt; Source_Location &gt; extra_locations</div><div class="ttdoc">Additional carets.</div><div class="ttdef"><b>Definition</b> error.hpp:98</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a3413439b09c35dc59d844f1fc0a8ac3f"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">aion::diag::Diagnostic::severity</a></div><div class="ttdeci">Severity severity</div><div class="ttdoc">Severity level.</div><div class="ttdef"><b>Definition</b> error.hpp:99</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a62698843a8df9e7917d8322ce379148f"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">aion::diag::Diagnostic::id</a></div><div class="ttdeci">DiagID id</div><div class="ttdoc">The diagnostic ID.</div><div class="ttdef"><b>Definition</b> error.hpp:96</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a76bed357bdab6192201ee2516f97983b"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a76bed357bdab6192201ee2516f97983b">aion::diag::Diagnostic::fixits</a></div><div class="ttdeci">std::vector&lt; FixItHint &gt; fixits</div><div class="ttdoc">Fix-it hints.</div><div class="ttdef"><b>Definition</b> error.hpp:102</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_aaf8f786236c2999288f205c69f24453c"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#aaf8f786236c2999288f205c69f24453c">aion::diag::Diagnostic::ranges</a></div><div class="ttdeci">std::vector&lt; CharSourceRange &gt; ranges</div><div class="ttdoc">Source ranges to highlight.</div><div class="ttdef"><b>Definition</b> error.hpp:101</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_ab6e241c294b9fec1427742a07300cbdc"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">aion::diag::Diagnostic::message</a></div><div class="ttdeci">std::string message</div><div class="ttdoc">Formatted message.</div><div class="ttdef"><b>Definition</b> error.hpp:100</div></div>
-<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_ac54923de9186851dc5207737156f0661"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">aion::diag::Diagnostic::location</a></div><div class="ttdeci">Source_Location location</div><div class="ttdoc">Primary location.</div><div class="ttdef"><b>Definition</b> error.hpp:97</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_char_source_range_html"><div class="ttname"><a href="structaion_1_1diag_1_1_char_source_range.html">aion::diag::CharSourceRange</a></div><div class="ttdef"><b>Definition</b> error.hpp:34</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html">aion::diag::Diagnostic</a></div><div class="ttdef"><b>Definition</b> error.hpp:96</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a2df6fa018b964e0356a37b80e5629e89"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a2df6fa018b964e0356a37b80e5629e89">aion::diag::Diagnostic::extra_locations</a></div><div class="ttdeci">std::vector&lt; Source_Location &gt; extra_locations</div><div class="ttdoc">Additional carets.</div><div class="ttdef"><b>Definition</b> error.hpp:99</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a3413439b09c35dc59d844f1fc0a8ac3f"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a3413439b09c35dc59d844f1fc0a8ac3f">aion::diag::Diagnostic::severity</a></div><div class="ttdeci">Severity severity</div><div class="ttdoc">Severity level.</div><div class="ttdef"><b>Definition</b> error.hpp:100</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a62698843a8df9e7917d8322ce379148f"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a62698843a8df9e7917d8322ce379148f">aion::diag::Diagnostic::id</a></div><div class="ttdeci">DiagID id</div><div class="ttdoc">The diagnostic ID.</div><div class="ttdef"><b>Definition</b> error.hpp:97</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_a76bed357bdab6192201ee2516f97983b"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#a76bed357bdab6192201ee2516f97983b">aion::diag::Diagnostic::fixits</a></div><div class="ttdeci">std::vector&lt; FixItHint &gt; fixits</div><div class="ttdoc">Fix-it hints.</div><div class="ttdef"><b>Definition</b> error.hpp:103</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_aaf8f786236c2999288f205c69f24453c"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#aaf8f786236c2999288f205c69f24453c">aion::diag::Diagnostic::ranges</a></div><div class="ttdeci">std::vector&lt; CharSourceRange &gt; ranges</div><div class="ttdoc">Source ranges to highlight.</div><div class="ttdef"><b>Definition</b> error.hpp:102</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_ab6e241c294b9fec1427742a07300cbdc"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#ab6e241c294b9fec1427742a07300cbdc">aion::diag::Diagnostic::message</a></div><div class="ttdeci">std::string message</div><div class="ttdoc">Formatted message.</div><div class="ttdef"><b>Definition</b> error.hpp:101</div></div>
+<div class="ttc" id="astructaion_1_1diag_1_1_diagnostic_html_ac54923de9186851dc5207737156f0661"><div class="ttname"><a href="structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661">aion::diag::Diagnostic::location</a></div><div class="ttdeci">Source_Location location</div><div class="ttdoc">Primary location.</div><div class="ttdef"><b>Definition</b> error.hpp:98</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

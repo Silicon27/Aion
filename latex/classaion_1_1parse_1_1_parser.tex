@@ -68,14 +68,13 @@ bool {\bfseries parse\+\_\+first\+\_\+top\+\_\+level\+\_\+decl} ()
 \Hypertarget{classaion_1_1parse_1_1_parser_ae23b8d54ec5688e70ee5bab05d21ab1c}\label{classaion_1_1parse_1_1_parser_ae23b8d54ec5688e70ee5bab05d21ab1c} 
 void {\bfseries parse\+\_\+variable\+\_\+decl} ()
 \item 
-\Hypertarget{classaion_1_1parse_1_1_parser_aa21996ac237279bc1690de08ea21906a}\label{classaion_1_1parse_1_1_parser_aa21996ac237279bc1690de08ea21906a} 
-\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries parse\+\_\+expression} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} delim)
+\Hypertarget{classaion_1_1parse_1_1_parser_a0c2aa356ad527b394344b1428dacbd2c}\label{classaion_1_1parse_1_1_parser_a0c2aa356ad527b394344b1428dacbd2c} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries parse\+\_\+expression} (int rbp, Token\+Type delim)
 \begin{DoxyCompactList}\small\item\em entry point for expression parsing \end{DoxyCompactList}\item 
-\Hypertarget{classaion_1_1parse_1_1_parser_ae6645b8a2c58c5a83eb0a3be62cc1d78}\label{classaion_1_1parse_1_1_parser_ae6645b8a2c58c5a83eb0a3be62cc1d78} 
-\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries nud} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} tok)
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a5cd9d3b88a18583795d4cb685ccaf0ae}{nud}} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} tok, Token\+Type delim)
 \item 
-\Hypertarget{classaion_1_1parse_1_1_parser_ab4424c44ec9836f668815b1f6837a4b9}\label{classaion_1_1parse_1_1_parser_ab4424c44ec9836f668815b1f6837a4b9} 
-\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries led} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} op, \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}left)
+\Hypertarget{classaion_1_1parse_1_1_parser_a4618edd50efd27a4ff48c0dd99595330}\label{classaion_1_1parse_1_1_parser_a4618edd50efd27a4ff48c0dd99595330} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries led} (\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} op, \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}left, Token\+Type delim)
 \item 
 \Hypertarget{classaion_1_1parse_1_1_parser_acd06b93ef6bced80b6dcaa9a90f4bde1}\label{classaion_1_1parse_1_1_parser_acd06b93ef6bced80b6dcaa9a90f4bde1} 
 {\bfseries Parser} (File\+Id file\+\_\+id, const std\+::vector$<$ \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} $>$ \&tokens, \mbox{\hyperlink{structaion_1_1compiler__config_1_1_flags}{Flags}} flag, \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}} \&context, \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag\+::\+Diagnostics\+Engine}} \&diag)
@@ -97,7 +96,15 @@ static int {\bfseries lbp} (const Token\+Type token)
 {\footnotesize\ttfamily \label{classaion_1_1parse_1_1_parser_ae467bbcbbd0db8b49d437028bdafe18d} 
 \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} aion\+::parse\+::\+Parser\+::attempt\+\_\+to\+\_\+skip\+\_\+until\+\_\+familiar (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-the error would have to be first emitted before we attempt to end the parsing function (the caller to this function); return is to be written explicitly in the branch calling this function (that is, it is the caller\textquotesingle{}s responsibility to write return after calling this function) \Hypertarget{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}\index{aion::parse::Parser@{aion::parse::Parser}!skip\_until@{skip\_until}}
+the error would have to be first emitted before we attempt to end the parsing function (the caller to this function); return is to be written explicitly in the branch calling this function (that is, it is the caller\textquotesingle{}s responsibility to write return after calling this function) \Hypertarget{classaion_1_1parse_1_1_parser_a5cd9d3b88a18583795d4cb685ccaf0ae}\index{aion::parse::Parser@{aion::parse::Parser}!nud@{nud}}
+\index{nud@{nud}!aion::parse::Parser@{aion::parse::Parser}}
+\doxysubsubsection{\texorpdfstring{nud()}{nud()}}
+{\footnotesize\ttfamily \label{classaion_1_1parse_1_1_parser_a5cd9d3b88a18583795d4cb685ccaf0ae} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} aion\+::parse\+::\+Parser\+::nud (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}}]{tok}{, }\item[{Token\+Type}]{delim}{}\end{DoxyParamCaption})}
+
+we want to use an precedence level high than the additive lbp
+
+NOTE is\+\_\+comp is set to false, as of currently we are unable to deduce the type of the operand, and therefore its computation model – that we leave to sema\Hypertarget{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}\index{aion::parse::Parser@{aion::parse::Parser}!skip\_until@{skip\_until}}
 \index{skip\_until@{skip\_until}!aion::parse::Parser@{aion::parse::Parser}}
 \doxysubsubsection{\texorpdfstring{skip\_until()}{skip\_until()}}
 {\footnotesize\ttfamily \label{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28} 

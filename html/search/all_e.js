@@ -22,7 +22,6 @@ var searchData=
   ['remove_5fvolatile_19',['remove_volatile',['../structremove__volatile.html',1,'']]],
   ['remove_5fvolatile_3c_20volatile_20t_20_3e_20',['remove_volatile&lt; volatile T &gt;',['../structremove__volatile_3_01volatile_01_t_01_4.html',1,'']]],
   ['report_21',['report',['../classaion_1_1diag_1_1_diagnostics_engine.html#a8982be99bd257c546f9a94cba306882b',1,'aion::diag::DiagnosticsEngine::report(Source_Location loc, DiagID id)'],['../classaion_1_1diag_1_1_diagnostics_engine.html#a62547d87f89753ebc219f4478e8d2e60',1,'aion::diag::DiagnosticsEngine::report(DiagID id)']]],
-  ['resolvedidentifierexpr_22',['ResolvedIdentifierExpr',['../classaion_1_1ast_1_1_resolved_identifier_expr.html',1,'aion::ast']]],
-  ['reverse_5fiterator_23',['reverse_iterator',['../classreverse__iterator.html',1,'']]],
-  ['run_24',['run',['../class_compiler___invocation.html#afc9be16758738546db9ba14fba3ab108',1,'Compiler_Invocation']]]
+  ['reverse_5fiterator_22',['reverse_iterator',['../classreverse__iterator.html',1,'']]],
+  ['run_23',['run',['../class_compiler___invocation.html#afc9be16758738546db9ba14fba3ab108',1,'Compiler_Invocation']]]
 ];

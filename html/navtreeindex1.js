@@ -1,5 +1,12 @@
 var NAVTREEINDEX1 =
 {
+"group___x_x_h64__family.html#ga8cf987b6f8910fea00aa458b6a513e01":[3,0,1,10],
+"group___x_x_h64__family.html#ga964952da5970b334e217412a05d869ca":[3,0,1,6],
+"group___x_x_h64__family.html#gad10695b225a47b31a9952545547f9f81":[3,0,1,5],
+"group___x_x_h64__family.html#gae490ef51db9c960da09189c2774cf82e":[3,0,1,7],
+"group__public.html":[3,0],
+"group__public.html#ga5020905455674b8c83c1dbc73f0d3534":[3,0,6],
+"group__public.html#ga5832897ed49938aefa629a76034b36b1":[3,0,3],
 "group__public.html#ga5832897ed49938aefa629a76034b36b1":[3,0,4],
 "group__public.html#gacc66393fff091acefc0e2a00ec5462c4":[3,0,5],
 "group__public.html#gadf8ac1d89269912199b1c63dd2e5ae50":[3,0,7],
@@ -242,12 +249,5 @@ var NAVTREEINDEX1 =
 "structis__trivially__copyable_3_01_t_01_5_01_4.html":[5,0,109],
 "structis__trivially__copyable_3_01_t_0f_n_0e_4.html":[5,0,110],
 "structis__trivially__copyable_3_01bool_01_4.html":[5,0,95],
-"structis__trivially__copyable_3_01char16__t_01_4.html":[5,0,97],
-"structis__trivially__copyable_3_01char32__t_01_4.html":[5,0,98],
-"structis__trivially__copyable_3_01char_01_4.html":[5,0,96],
-"structis__trivially__copyable_3_01const_01_t_01_4.html":[5,0,99],
-"structis__trivially__copyable_3_01const_01volatile_01_t_01_4.html":[5,0,100],
-"structis__trivially__copyable_3_01double_01_4.html":[5,0,101],
-"structis__trivially__copyable_3_01float_01_4.html":[5,0,102],
-"structis__trivially__copyable_3_01int_01_4.html":[5,0,103]
+"structis__trivially__copyable_3_01char16__t_01_4.html":[5,0,97]
 };

@@ -1,5 +1,12 @@
 var NAVTREEINDEX2 =
 {
+"structis__trivially__copyable_3_01char32__t_01_4.html":[5,0,98],
+"structis__trivially__copyable_3_01char_01_4.html":[5,0,96],
+"structis__trivially__copyable_3_01const_01_t_01_4.html":[5,0,99],
+"structis__trivially__copyable_3_01const_01volatile_01_t_01_4.html":[5,0,100],
+"structis__trivially__copyable_3_01double_01_4.html":[5,0,101],
+"structis__trivially__copyable_3_01float_01_4.html":[5,0,102],
+"structis__trivially__copyable_3_01int_01_4.html":[5,0,103],
 "structis__trivially__copyable_3_01long_01_4.html":[5,0,104],
 "structis__trivially__copyable_3_01long_01double_01_4.html":[5,0,105],
 "structis__trivially__copyable_3_01long_01long_01_4.html":[5,0,106],

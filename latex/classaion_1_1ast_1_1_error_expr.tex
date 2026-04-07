@@ -1,0 +1,55 @@
+\doxysection{aion\+::ast\+::Error\+Expr Class Reference}
+\hypertarget{classaion_1_1ast_1_1_error_expr}{}\label{classaion_1_1ast_1_1_error_expr}\index{aion::ast::ErrorExpr@{aion::ast::ErrorExpr}}
+Inheritance diagram for aion\+::ast\+::Error\+Expr\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1ast_1_1_error_expr}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr_a1f43b369ddfdb423bdc7ea3d36b70c32}{Error\+Expr}} (const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&loc)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_error_expr_aed29fa3d8d2df9f400c45456642450c5}\label{classaion_1_1ast_1_1_error_expr_aed29fa3d8d2df9f400c45456642450c5} 
+{\bfseries Error\+Expr} (const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&loc, const Value\+Category category)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Expr} (const Expr\+Kind k, const Value\+Category v)
+\item 
+Expr\+Kind {\bfseries get\+\_\+kind} () const
+\item 
+Value\+Category {\bfseries get\+\_\+category} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_error_expr_a268ef14ab0bb9a820dcb6a897fcd1031}\label{classaion_1_1ast_1_1_error_expr_a268ef14ab0bb9a820dcb6a897fcd1031} 
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries loc}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8}\label{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8} 
+enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\_\+expr}
+ \}
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classaion_1_1ast_1_1_error_expr_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classaion_1_1ast_1_1_error_expr_a1f43b369ddfdb423bdc7ea3d36b70c32}\index{aion::ast::ErrorExpr@{aion::ast::ErrorExpr}!ErrorExpr@{ErrorExpr}}
+\index{ErrorExpr@{ErrorExpr}!aion::ast::ErrorExpr@{aion::ast::ErrorExpr}}
+\doxysubsubsection{\texorpdfstring{ErrorExpr()}{ErrorExpr()}}
+{\footnotesize\ttfamily \label{classaion_1_1ast_1_1_error_expr_a1f43b369ddfdb423bdc7ea3d36b70c32} 
+aion\+::ast\+::\+Error\+Expr\+::\+Error\+Expr (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&}]{loc}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+by default, erroneous expressions should be invalid if it is that the caller cannot determine its value category 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/expr.\+hpp\end{DoxyCompactItemize}

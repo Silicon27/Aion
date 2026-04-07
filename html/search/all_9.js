@@ -6,9 +6,10 @@ var searchData=
   ['lexer_5finvoke_3',['Lexer_Invoke',['../structaion_1_1compiler__config_1_1_lexer___invoke.html',1,'aion::compiler_config']]],
   ['library_20for_20all_20my_20projects_4',['Template support library for all my projects',['..//Users/silicon/CLionProjects/aion/core/include/support/iris/README.md#autotoc_md1',1,'']]],
   ['linker_5finvoke_5',['Linker_Invoke',['../structaion_1_1compiler__config_1_1_linker___invoke.html',1,'aion::compiler_config']]],
-  ['location_6',['location',['../structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661',1,'aion::diag::Diagnostic']]],
-  ['log_5fbuilder_7',['log_builder',['../classlog__builder.html',1,'']]],
-  ['log_5fsink_8',['log_sink',['../classlog__sink.html',1,'']]],
-  ['logger_9',['logger',['../classlogger.html',1,'']]],
-  ['low64_10',['low64',['../struct_x_x_h128__hash__t.html#a706323c9b3e76414ec77f8f93e8644ef',1,'XXH128_hash_t']]]
+  ['loc_6',['loc',['../classaion_1_1ast_1_1_decl_ref_expr.html#ae5f9aa8b75c53918bd998594020e1384',1,'aion::ast::DeclRefExpr']]],
+  ['location_7',['location',['../structaion_1_1diag_1_1_diagnostic.html#ac54923de9186851dc5207737156f0661',1,'aion::diag::Diagnostic']]],
+  ['log_5fbuilder_8',['log_builder',['../classlog__builder.html',1,'']]],
+  ['log_5fsink_9',['log_sink',['../classlog__sink.html',1,'']]],
+  ['logger_10',['logger',['../classlogger.html',1,'']]],
+  ['low64_11',['low64',['../struct_x_x_h128__hash__t.html#a706323c9b3e76414ec77f8f93e8644ef',1,'XXH128_hash_t']]]
 ];

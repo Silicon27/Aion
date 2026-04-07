@@ -18,6 +18,11 @@ enum class {\bfseries Unary\+Op} \+: std\+::uint8\+\_\+t \{ \newline
 , \newline
 {\bfseries address\+\_\+of}
 , {\bfseries deref}
+, {\bfseries preincrement}
+, {\bfseries postincrement}
+, \newline
+{\bfseries predecrement}
+, {\bfseries postdecrement}
  \}
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
@@ -37,8 +42,8 @@ enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_unary_expr_a5950d886c5f4a95e174161ec0015afd4}\label{classaion_1_1ast_1_1_unary_expr_a5950d886c5f4a95e174161ec0015afd4} 
-{\bfseries Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}operand, const Unary\+Op op, const Value\+Category v, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, bool is\+\_\+comp, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr=\{\})
+\Hypertarget{classaion_1_1ast_1_1_unary_expr_a9d7186ce0fbfcabad8b783b6893b92f5}\label{classaion_1_1ast_1_1_unary_expr_a9d7186ce0fbfcabad8b783b6893b92f5} 
+{\bfseries Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}operand, const Unary\+Op op, const Value\+Category v, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, bool is\+\_\+comp, const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&loc=\{\})
 \item 
 \Hypertarget{classaion_1_1ast_1_1_unary_expr_afee2dcf1a0193d9da10876f76533d219}\label{classaion_1_1ast_1_1_unary_expr_afee2dcf1a0193d9da10876f76533d219} 
 \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+operand} () const
@@ -61,7 +66,7 @@ void {\bfseries set\+\_\+compile\+\_\+time\+\_\+computable} (const bool new\+\_\
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
+{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category)
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} {\bfseries get\+\_\+type\+\_\+kind} () const
 \item 
@@ -72,15 +77,26 @@ void {\bfseries set\+\_\+type} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_ty
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Expr} (const Expr\+Kind k, const Value\+Category v, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} sr)
+{\bfseries Expr} (const Expr\+Kind k, const Value\+Category v)
 \item 
 Expr\+Kind {\bfseries get\+\_\+kind} () const
 \item 
 Value\+Category {\bfseries get\+\_\+category} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+\_\+source\+\_\+range} () const
+\Hypertarget{classaion_1_1ast_1_1_unary_expr_ac957543c35f195af6ab8d522ea990522}\label{classaion_1_1ast_1_1_unary_expr_ac957543c35f195af6ab8d522ea990522} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries operand}
 \item 
-void {\bfseries set\+\_\+source\+\_\+range} (const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&sr)
+\Hypertarget{classaion_1_1ast_1_1_unary_expr_a10a749a1b9e8bfba6efe8adc4212e48d}\label{classaion_1_1ast_1_1_unary_expr_a10a749a1b9e8bfba6efe8adc4212e48d} 
+Unary\+Op {\bfseries op}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_unary_expr_a8e306971daeb50efb8769b0f2e3b46c8}\label{classaion_1_1ast_1_1_unary_expr_a8e306971daeb50efb8769b0f2e3b46c8} 
+bool {\bfseries is\+\_\+comp} = false
+\item 
+\Hypertarget{classaion_1_1ast_1_1_unary_expr_a19cce2b8f486cef673a4ec743eef3581}\label{classaion_1_1ast_1_1_unary_expr_a19cce2b8f486cef673a4ec743eef3581} 
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries loc}
 \end{DoxyCompactItemize}
 
 

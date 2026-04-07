@@ -110,9 +110,9 @@ Inheritance diagram for aion::ast::TranslationUnitDecl:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_types_classaion_1_1ast_1_1_decl"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_classaion_1_1ast_1_1_decl')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Types inherited from <a class="el" href="classaion_1_1ast_1_1_decl.html">aion::ast::Decl</a></td></tr>
-<tr class="memitem:aacc1cd067a70ff1c040abdbadf512145 inherit pub_types_classaion_1_1ast_1_1_decl" id="r_aacc1cd067a70ff1c040abdbadf512145"><td class="memItemLeft" align="right" valign="top"><a id="aacc1cd067a70ff1c040abdbadf512145" name="aacc1cd067a70ff1c040abdbadf512145"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>Kind</b> : std::uint8_t { <br />
-&#160;&#160;<b>translation_unit</b>
-, <b>named_decl</b>
+<tr class="memitem:acba52ee22dd85ec56e01b42e6629cc67 inherit pub_types_classaion_1_1ast_1_1_decl" id="r_acba52ee22dd85ec56e01b42e6629cc67"><td class="memItemLeft" align="right" valign="top"><a id="acba52ee22dd85ec56e01b42e6629cc67" name="acba52ee22dd85ec56e01b42e6629cc67"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>DeclKind</b> : std::uint8_t { <br />
+&#160;&#160;<b>unresolved</b>
+, <b>translation_unit</b>
 , <b>variable</b>
 , <b>function</b>
 , <br />
@@ -122,10 +122,10 @@ Additional Inherited Members</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="inherit_header pub_methods_classaion_1_1ast_1_1_decl"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classaion_1_1ast_1_1_decl')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classaion_1_1ast_1_1_decl.html">aion::ast::Decl</a></td></tr>
-<tr class="memitem:aac02e69eab9328dcd6e9a2223d15458b inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_aac02e69eab9328dcd6e9a2223d15458b"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>Decl</b> (const Kind K)</td></tr>
-<tr class="memitem:ac3fab25744de783783365881bf30ff59 inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_ac3fab25744de783783365881bf30ff59"><td class="memItemLeft" align="right" valign="top">
-Kind&#160;</td><td class="memItemRight" valign="bottom"><b>get_kind</b> () const</td></tr>
+<tr class="memitem:a7c069e94d72288880db50e5f177f31be inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_a7c069e94d72288880db50e5f177f31be"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>Decl</b> (const DeclKind K)</td></tr>
+<tr class="memitem:abe748113daa5c4e81ac53786f564768b inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_abe748113daa5c4e81ac53786f564768b"><td class="memItemLeft" align="right" valign="top">
+DeclKind&#160;</td><td class="memItemRight" valign="bottom"><b>get_kind</b> () const</td></tr>
 <tr class="inherit_header pub_methods_classaion_1_1ast_1_1_decl_context"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classaion_1_1ast_1_1_decl_context')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classaion_1_1ast_1_1_decl_context.html">aion::ast::DeclContext</a></td></tr>
 <tr class="memitem:a4ebc44e2056a2e5ff5cde7a3fa85873e inherit pub_methods_classaion_1_1ast_1_1_decl_context" id="r_a4ebc44e2056a2e5ff5cde7a3fa85873e"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add_decl</b> (<a class="el" href="classaion_1_1ast_1_1_decl.html">Decl</a> *decl)</td></tr>

@@ -120,11 +120,11 @@ namespace aion::parse {
         void parse_variable_decl();
 
         /// entry point for expression parsing
-        Expr* parse_expression(Token delim);
+        Expr* parse_expression(int rbp, TokenType delim);
         // null denotation: what to do when this token appears with no left context (prefix position)
-        Expr* nud(Token tok);
+        Expr* nud(Token tok, TokenType delim);
         // left denotation: what to do when this token appears with the left expression already parsed (infix/suffix position)
-        Expr* led(Token op, Expr* left);
+        Expr* led(Token op, Expr* left, TokenType delim);
 
         // left binding power: how strongly this token binds to whatever is to its left.
         static int lbp(const TokenType token) {

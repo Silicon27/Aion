@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['default_5fseverity_0',['default_severity',['../structaion_1_1diag_1_1_diagnostic_info.html#a8365c007a01a1dbd1d6bfaa556cd911f',1,'aion::diag::DiagnosticInfo']]],
-  ['diag_5fclass_1',['diag_class',['../structaion_1_1diag_1_1_diagnostic_info.html#a986439d636364fcf22dc1e6522c23093',1,'aion::diag::DiagnosticInfo']]],
-  ['digest_2',['digest',['../struct_x_x_h32__canonical__t.html#a85a83578344a5dd1c7a6cc0472230f30',1,'XXH32_canonical_t']]]
+  ['callee_0',['callee',['../classaion_1_1ast_1_1_call_expr.html#a9a4aa04595cbf85d5d8cd597ca9e702e',1,'aion::ast::CallExpr']]],
+  ['category_1',['category',['../structaion_1_1diag_1_1_diagnostic_info.html#a2a1e955f6e0b2fe47944911a06d6b80d',1,'aion::diag::DiagnosticInfo']]],
+  ['code_5fto_5finsert_2',['code_to_insert',['../classaion_1_1diag_1_1_fix_it_hint.html#a762e53380b4dda1933af8a1ee7b198b0',1,'aion::diag::FixItHint']]]
 ];

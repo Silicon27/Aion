@@ -9,8 +9,8 @@ Inheritance diagram for aion\+::ast\+::Var\+Decl\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_var_decl_a5dafaa4fe93e4dcd7ca668aa3eb2205c}\label{classaion_1_1ast_1_1_var_decl_a5dafaa4fe93e4dcd7ca668aa3eb2205c} 
-{\bfseries Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, const \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \&type, Storage\+Class storage\+\_\+class, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range, \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}init=nullptr)
+\Hypertarget{classaion_1_1ast_1_1_var_decl_a26ff944502a96286cb6153f709293e5d}\label{classaion_1_1ast_1_1_var_decl_a26ff944502a96286cb6153f709293e5d} 
+{\bfseries Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, Storage\+Class storage\+\_\+class, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range, \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}init=nullptr)
 \item 
 \Hypertarget{classaion_1_1ast_1_1_var_decl_af930545b5847b20cca9d017e453cb741}\label{classaion_1_1ast_1_1_var_decl_af930545b5847b20cca9d017e453cb741} 
 \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+init} () const
@@ -30,16 +30,16 @@ void {\bfseries set\+\_\+storage\+\_\+class} (const Storage\+Class storage\+\_\+
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{aion\+::ast\+::\+Value\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Value\+Decl} (const Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} type)
+{\bfseries Value\+Decl} (const Decl\+Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type)
 \item 
-\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} {\bfseries get\+\_\+type} () const
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+type} () const
 \item 
-void {\bfseries set\+\_\+type} (const \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \&new\+\_\+type)
+void {\bfseries set\+\_\+type} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}new\+\_\+type)
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{aion\+::ast\+::\+Named\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Named\+Decl} (Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name)
+{\bfseries Named\+Decl} (Decl\+Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name)
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+name} () const
 \item 
@@ -50,18 +50,18 @@ void {\bfseries set\+\_\+name} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Decl} (const Kind K)
+{\bfseries Decl} (const Decl\+Kind K)
 \item 
-Kind {\bfseries get\+\_\+kind} () const
+Decl\+Kind {\bfseries get\+\_\+kind} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145}\label{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145} 
-enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
-{\bfseries translation\+\_\+unit}
-, {\bfseries named\+\_\+decl}
+\Hypertarget{classaion_1_1ast_1_1_decl_acba52ee22dd85ec56e01b42e6629cc67}\label{classaion_1_1ast_1_1_decl_acba52ee22dd85ec56e01b42e6629cc67} 
+enum class {\bfseries Decl\+Kind} \+: std\+::uint8\+\_\+t \{ \newline
+{\bfseries unresolved}
+, {\bfseries translation\+\_\+unit}
 , {\bfseries variable}
 , {\bfseries function}
 , \newline

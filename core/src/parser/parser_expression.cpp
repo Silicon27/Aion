@@ -6,12 +6,21 @@
 #include <ast/expr.hpp>
 
 namespace aion::parse {
-    Expr* Parser::parse_expression(const Token delim) {
+    Expr* Parser::parse_expression(const int rbp, const TokenType delim) {
         Token tok = blind_consume();
-        // Expr* left = nud(tok);
+        Expr* left = nud(tok, delim);
+
+        while (peek().type != delim && lbp(peek().type) > rbp) {
+            Token op = blind_consume();
+            left = led(op, left, delim);
+        }
+
+        return left;
     }
 
-    Expr* Parser::nud(Token tok) {
+    Expr* Parser::nud(Token tok, const TokenType delim) {
+        const SourceLocation loc = diagnostics.get_token_location(file_id, tok);
+
         switch (tok.get_type()) {
             case TokenType::identifier: {
                 if (IdentifierInfo* id = context.get_identifier(tok.lexeme); id != nullptr) {
@@ -20,14 +29,14 @@ namespace aion::parse {
                     return context.create<DeclRefExpr>(
                         context.create<ValueDecl>(Decl::DeclKind::unresolved, id, nullptr),
                         nullptr,
-                        diagnostics.get_token_location(file_id, tok)
+                        loc
                         );
                 } else {
                     // the identifier is unknown, emit an error node
                     // TODO
-                    diagnostics.report(diagnostics.get_token_location(file_id, tok), diag::parse::err_unrecognized_identifier);
+                    diagnostics.report(loc, diag::parse::err_unrecognized_identifier);
 
-                    return context.create<ErrorExpr>(diagnostics.get_token_location(file_id, tok), ValueCategory::named);
+                    return context.create<ErrorExpr>(loc, ValueCategory::named);
                 }
             }
             case TokenType::int_literal:
@@ -39,15 +48,76 @@ namespace aion::parse {
                         );
                 };
 
-                return context.create<NumberLiteralExpr>(type_creator(tok.type), tok.lexeme, diagnostics.get_token_location(file_id, tok));
+                return context.create<NumberLiteralExpr>(type_creator(tok.type), context.allocate_string(tok.lexeme), loc);
             }
             case TokenType::string_literal: {
                 return context.create<StringLiteralExpr>(
                     context.create<MutableType>(context.create<BuiltinType>(BuiltinType::Kind::string_literal), false),
-                    tok.lexeme,
+                    context.allocate_string(tok.lexeme),
                     tok.flags,
-                    diagnostics.get_token_location(file_id, tok)
+                    loc
                     );
+            }
+            // unary cases
+            case TokenType::minus: {
+                /// we want to use an precedence level high than the additive lbp
+                Expr* operand = parse_expression(55, delim);
+
+                /// NOTE is_comp is set to false, as of currently we are unable to deduce the type of the operand,
+                /// and therefore its computation model – that we leave to sema
+                return context.create<UnaryExpr>(operand, UnaryExpr::UnaryOp::minus, ValueCategory::unnamed,
+                    nullptr, false, loc);
+            }
+            case TokenType::plus: {
+                Expr* operand = parse_expression(55, delim);
+                return context.create<UnaryExpr>(operand, UnaryExpr::UnaryOp::plus, ValueCategory::unnamed,
+                    nullptr, false, loc);
+
+            }
+            case TokenType::bang: {
+                Expr* operand = parse_expression(55, delim);
+                return context.create<UnaryExpr>(operand, UnaryExpr::UnaryOp::logical_not, ValueCategory::unnamed,
+                    nullptr, false, loc);
+            }
+            case TokenType::lparen: {
+                Expr* inner = parse_expression(0, TokenType::rparen);
+                silent_consume(TokenType::rparen);
+                return inner;
+            }
+            default: {
+                // we don't know what it is, just emit a diagnostic for god’s sake
+                diagnostics.report(loc, diag::parse::err_unknown_operator);
+                return context.create<ErrorExpr>(loc, ValueCategory::unnamed);
+            }
+        }
+    }
+
+    Expr* Parser::led(Token op, Expr* left, const TokenType delim) {
+        const SourceLocation loc = diagnostics.get_token_location(file_id, op);
+
+        switch (op.type) {
+
+            case TokenType::plus:
+            case TokenType::minus:
+            case TokenType::star:
+            case TokenType::slash: {
+                Expr* right = parse_expression(lbp(op.type), delim);
+                return context.create<BinaryExpr>(left, right,
+                    BinaryExpr::BinaryOp::add, ValueCategory::unnamed,
+                    nullptr, false,
+                    SourceRange(loc, diagnostics.get_token_location(file_id, peek())));
+            }
+            case TokenType::equal: {
+                Expr* right = parse_expression(lbp(op.type), delim);
+                return context.create<BinaryExpr>(left, right,
+                    BinaryExpr::BinaryOp::assign, ValueCategory::unnamed,
+                    nullptr, false,
+                    SourceRange(loc, diagnostics.get_token_location(file_id, peek()))
+                );
+            }
+            case TokenType::lparen: {
+                // function call - new context, delimiter switches to , between args and ) at end
+                // TODO implement SmallVec first
             }
         }
     }

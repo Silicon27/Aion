@@ -107,11 +107,11 @@
 \DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ declaration\ parsers}}
 \DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ parse\_variable\_decl();}
 \DoxyCodeLine{00121\ }
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_aa21996ac237279bc1690de08ea21906a}{parse\_expression}}(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ delim);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a0c2aa356ad527b394344b1428dacbd2c}{parse\_expression}}(\textcolor{keywordtype}{int}\ rbp,\ TokenType\ delim);}
 \DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ null\ denotation:\ what\ to\ do\ when\ this\ token\ appears\ with\ no\ left\ context\ (prefix\ position)}}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ nud(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ tok);}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a5cd9d3b88a18583795d4cb685ccaf0ae}{nud}}(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ tok,\ TokenType\ delim);}
 \DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ left\ denotation:\ what\ to\ do\ when\ this\ token\ appears\ with\ the\ left\ expression\ already\ parsed\ (infix/suffix\ position)}}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ led(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ op,\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ left);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ led(\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}}\ op,\ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ left,\ TokenType\ delim);}
 \DoxyCodeLine{00128\ }
 \DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ left\ binding\ power:\ how\ strongly\ this\ token\ binds\ to\ whatever\ is\ to\ its\ left.}}
 \DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ lbp(\textcolor{keyword}{const}\ TokenType\ token)\ \{}

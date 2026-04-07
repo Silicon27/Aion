@@ -70,12 +70,13 @@ var hierarchy =
     [ "enable_if< Cond, T >", "structenable__if.html", null ],
     [ "enable_if< true, T >", "structenable__if_3_01true_00_01_t_01_4.html", null ],
     [ "aion::ast::Expr", "classaion_1_1ast_1_1_expr.html", [
+      [ "aion::ast::ErrorExpr", "classaion_1_1ast_1_1_error_expr.html", null ],
       [ "aion::ast::TypedExpr", "classaion_1_1ast_1_1_typed_expr.html", [
         [ "aion::ast::BinaryExpr", "classaion_1_1ast_1_1_binary_expr.html", null ],
-        [ "aion::ast::NumberLiteralExpr", "classaion_1_1ast_1_1_number_literal_expr.html", null ],
-        [ "aion::ast::ResolvedIdentifierExpr", "classaion_1_1ast_1_1_resolved_identifier_expr.html", [
+        [ "aion::ast::DeclRefExpr", "classaion_1_1ast_1_1_decl_ref_expr.html", [
           [ "aion::ast::CallExpr", "classaion_1_1ast_1_1_call_expr.html", null ]
         ] ],
+        [ "aion::ast::NumberLiteralExpr", "classaion_1_1ast_1_1_number_literal_expr.html", null ],
         [ "aion::ast::StringLiteralExpr", "classaion_1_1ast_1_1_string_literal_expr.html", null ],
         [ "aion::ast::UnaryExpr", "classaion_1_1ast_1_1_unary_expr.html", null ]
       ] ]

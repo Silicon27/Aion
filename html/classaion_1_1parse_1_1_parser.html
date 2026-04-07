@@ -148,13 +148,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>parse_top_level_decl<
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>parse_first_top_level_decl</b> ()</td></tr>
 <tr class="memitem:ae23b8d54ec5688e70ee5bab05d21ab1c" id="r_ae23b8d54ec5688e70ee5bab05d21ab1c"><td class="memItemLeft" align="right" valign="top"><a id="ae23b8d54ec5688e70ee5bab05d21ab1c" name="ae23b8d54ec5688e70ee5bab05d21ab1c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>parse_variable_decl</b> ()</td></tr>
-<tr class="memitem:aa21996ac237279bc1690de08ea21906a" id="r_aa21996ac237279bc1690de08ea21906a"><td class="memItemLeft" align="right" valign="top"><a id="aa21996ac237279bc1690de08ea21906a" name="aa21996ac237279bc1690de08ea21906a"></a>
-<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parse_expression</b> (<a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a> delim)</td></tr>
-<tr class="memdesc:aa21996ac237279bc1690de08ea21906a"><td class="mdescLeft">&#160;</td><td class="mdescRight">entry point for expression parsing <br /></td></tr>
-<tr class="memitem:ae6645b8a2c58c5a83eb0a3be62cc1d78" id="r_ae6645b8a2c58c5a83eb0a3be62cc1d78"><td class="memItemLeft" align="right" valign="top"><a id="ae6645b8a2c58c5a83eb0a3be62cc1d78" name="ae6645b8a2c58c5a83eb0a3be62cc1d78"></a>
-<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>nud</b> (<a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a> tok)</td></tr>
-<tr class="memitem:ab4424c44ec9836f668815b1f6837a4b9" id="r_ab4424c44ec9836f668815b1f6837a4b9"><td class="memItemLeft" align="right" valign="top"><a id="ab4424c44ec9836f668815b1f6837a4b9" name="ab4424c44ec9836f668815b1f6837a4b9"></a>
-<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>led</b> (<a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a> op, <a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *left)</td></tr>
+<tr class="memitem:a0c2aa356ad527b394344b1428dacbd2c" id="r_a0c2aa356ad527b394344b1428dacbd2c"><td class="memItemLeft" align="right" valign="top"><a id="a0c2aa356ad527b394344b1428dacbd2c" name="a0c2aa356ad527b394344b1428dacbd2c"></a>
+<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parse_expression</b> (int rbp, TokenType delim)</td></tr>
+<tr class="memdesc:a0c2aa356ad527b394344b1428dacbd2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">entry point for expression parsing <br /></td></tr>
+<tr class="memitem:a5cd9d3b88a18583795d4cb685ccaf0ae" id="r_a5cd9d3b88a18583795d4cb685ccaf0ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cd9d3b88a18583795d4cb685ccaf0ae">nud</a> (<a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a> tok, TokenType delim)</td></tr>
+<tr class="memitem:a4618edd50efd27a4ff48c0dd99595330" id="r_a4618edd50efd27a4ff48c0dd99595330"><td class="memItemLeft" align="right" valign="top"><a id="a4618edd50efd27a4ff48c0dd99595330" name="a4618edd50efd27a4ff48c0dd99595330"></a>
+<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>led</b> (<a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a> op, <a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *left, TokenType delim)</td></tr>
 <tr class="memitem:acd06b93ef6bced80b6dcaa9a90f4bde1" id="r_acd06b93ef6bced80b6dcaa9a90f4bde1"><td class="memItemLeft" align="right" valign="top"><a id="acd06b93ef6bced80b6dcaa9a90f4bde1" name="acd06b93ef6bced80b6dcaa9a90f4bde1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Parser</b> (FileId file_id, const std::vector&lt; <a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a> &gt; &amp;tokens, <a class="el" href="structaion_1_1compiler__config_1_1_flags.html">Flags</a> flag, <a class="el" href="classaion_1_1ast_1_1_a_s_t_context.html">ASTContext</a> &amp;context, <a class="el" href="classaion_1_1diag_1_1_diagnostics_engine.html">diag::DiagnosticsEngine</a> &amp;diag)</td></tr>
 </table><table class="memberdecls">
@@ -179,6 +178,29 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>lbp</b> (const 
       </table>
 </div><div class="memdoc">
 <p>the error would have to be first emitted before we attempt to end the parsing function (the caller to this function); return is to be written explicitly in the branch calling this function (that is, it is the caller's responsibility to write return after calling this function) </p>
+
+</div>
+</div>
+<a id="a5cd9d3b88a18583795d4cb685ccaf0ae" name="a5cd9d3b88a18583795d4cb685ccaf0ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cd9d3b88a18583795d4cb685ccaf0ae">&#9670;&#160;</a></span>nud()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> * aion::parse::Parser::nud </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a></td>          <td class="paramname"><span class="paramname"><em>tok</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TokenType</td>          <td class="paramname"><span class="paramname"><em>delim</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>we want to use an precedence level high than the additive lbp</p>
+<p>NOTE is_comp is set to false, as of currently we are unable to deduce the type of the operand, and therefore its computation model – that we leave to sema</p>
 
 </div>
 </div>

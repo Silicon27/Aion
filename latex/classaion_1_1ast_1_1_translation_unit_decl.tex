@@ -19,10 +19,10 @@ Inheritance diagram for aion\+::ast\+::Translation\+Unit\+Decl\+:\begin{figure}[
 \doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145}\label{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145} 
-enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
-{\bfseries translation\+\_\+unit}
-, {\bfseries named\+\_\+decl}
+\Hypertarget{classaion_1_1ast_1_1_decl_acba52ee22dd85ec56e01b42e6629cc67}\label{classaion_1_1ast_1_1_decl_acba52ee22dd85ec56e01b42e6629cc67} 
+enum class {\bfseries Decl\+Kind} \+: std\+::uint8\+\_\+t \{ \newline
+{\bfseries unresolved}
+, {\bfseries translation\+\_\+unit}
 , {\bfseries variable}
 , {\bfseries function}
 , \newline
@@ -34,9 +34,9 @@ enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Decl} (const Kind K)
+{\bfseries Decl} (const Decl\+Kind K)
 \item 
-Kind {\bfseries get\+\_\+kind} () const
+Decl\+Kind {\bfseries get\+\_\+kind} () const
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl_context}{aion\+::ast\+::\+Decl\+Context}}}
 \begin{DoxyCompactItemize}

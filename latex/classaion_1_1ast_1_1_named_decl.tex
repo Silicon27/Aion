@@ -9,8 +9,8 @@ Inheritance diagram for aion\+::ast\+::Named\+Decl\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_named_decl_a973ff6f115abb3654a23dc24e4a7ca2a}\label{classaion_1_1ast_1_1_named_decl_a973ff6f115abb3654a23dc24e4a7ca2a} 
-{\bfseries Named\+Decl} (Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name)
+\Hypertarget{classaion_1_1ast_1_1_named_decl_a7f2f5d6f5b8d9463b1151b2ebbe78db2}\label{classaion_1_1ast_1_1_named_decl_a7f2f5d6f5b8d9463b1151b2ebbe78db2} 
+{\bfseries Named\+Decl} (Decl\+Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name)
 \item 
 \Hypertarget{classaion_1_1ast_1_1_named_decl_a011199745776597fcfbe6f361b20d2a4}\label{classaion_1_1ast_1_1_named_decl_a011199745776597fcfbe6f361b20d2a4} 
 \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+name} () const
@@ -24,18 +24,18 @@ void {\bfseries set\+\_\+name} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Decl} (const Kind K)
+{\bfseries Decl} (const Decl\+Kind K)
 \item 
-Kind {\bfseries get\+\_\+kind} () const
+Decl\+Kind {\bfseries get\+\_\+kind} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145}\label{classaion_1_1ast_1_1_decl_aacc1cd067a70ff1c040abdbadf512145} 
-enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
-{\bfseries translation\+\_\+unit}
-, {\bfseries named\+\_\+decl}
+\Hypertarget{classaion_1_1ast_1_1_decl_acba52ee22dd85ec56e01b42e6629cc67}\label{classaion_1_1ast_1_1_decl_acba52ee22dd85ec56e01b42e6629cc67} 
+enum class {\bfseries Decl\+Kind} \+: std\+::uint8\+\_\+t \{ \newline
+{\bfseries unresolved}
+, {\bfseries translation\+\_\+unit}
 , {\bfseries variable}
 , {\bfseries function}
 , \newline

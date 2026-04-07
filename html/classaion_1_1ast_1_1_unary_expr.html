@@ -112,6 +112,11 @@ Public Types</h2></td></tr>
 , <br />
 &#160;&#160;<b>address_of</b>
 , <b>deref</b>
+, <b>preincrement</b>
+, <b>postincrement</b>
+, <br />
+&#160;&#160;<b>predecrement</b>
+, <b>postdecrement</b>
 <br />
  }</td></tr>
 <tr class="inherit_header pub_types_classaion_1_1ast_1_1_typed_expr"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_classaion_1_1ast_1_1_typed_expr')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Types inherited from <a class="el" href="classaion_1_1ast_1_1_typed_expr.html">aion::ast::TypedExpr</a></td></tr>
@@ -124,8 +129,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5950d886c5f4a95e174161ec0015afd4" id="r_a5950d886c5f4a95e174161ec0015afd4"><td class="memItemLeft" align="right" valign="top"><a id="a5950d886c5f4a95e174161ec0015afd4" name="a5950d886c5f4a95e174161ec0015afd4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>UnaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *operand, const UnaryOp op, const ValueCategory v, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, bool is_comp, const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> &amp;sr={})</td></tr>
+<tr class="memitem:a9d7186ce0fbfcabad8b783b6893b92f5" id="r_a9d7186ce0fbfcabad8b783b6893b92f5"><td class="memItemLeft" align="right" valign="top"><a id="a9d7186ce0fbfcabad8b783b6893b92f5" name="a9d7186ce0fbfcabad8b783b6893b92f5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>UnaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *operand, const UnaryOp op, const ValueCategory v, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, bool is_comp, const <a class="el" href="structaion_1_1_source_location.html">SourceLocation</a> &amp;loc={})</td></tr>
 <tr class="memitem:afee2dcf1a0193d9da10876f76533d219" id="r_afee2dcf1a0193d9da10876f76533d219"><td class="memItemLeft" align="right" valign="top"><a id="afee2dcf1a0193d9da10876f76533d219" name="afee2dcf1a0193d9da10876f76533d219"></a>
 <a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_operand</b> () const</td></tr>
 <tr class="memitem:af035826ceda07390140d6b8b7a0050c9" id="r_af035826ceda07390140d6b8b7a0050c9"><td class="memItemLeft" align="right" valign="top"><a id="af035826ceda07390140d6b8b7a0050c9" name="af035826ceda07390140d6b8b7a0050c9"></a>
@@ -139,8 +144,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_op</b> (const Una
 <tr class="memitem:ab584d3a76438da8133e783afe59c300d" id="r_ab584d3a76438da8133e783afe59c300d"><td class="memItemLeft" align="right" valign="top"><a id="ab584d3a76438da8133e783afe59c300d" name="ab584d3a76438da8133e783afe59c300d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_compile_time_computable</b> (const bool new_is_comp)</td></tr>
 <tr class="inherit_header pub_methods_classaion_1_1ast_1_1_typed_expr"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classaion_1_1ast_1_1_typed_expr')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classaion_1_1ast_1_1_typed_expr.html">aion::ast::TypedExpr</a></td></tr>
-<tr class="memitem:adb08b5e46c52c16c27e461c80f3be2a7 inherit pub_methods_classaion_1_1ast_1_1_typed_expr" id="r_adb08b5e46c52c16c27e461c80f3be2a7"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>TypedExpr</b> (<a class="el" href="classaion_1_1ast_1_1_typed_expr.html#a1d52b2aa71875d76625852bd056972b0">TypeKind</a> tk, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, const ValueCategory category, const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> &amp;sr)</td></tr>
+<tr class="memitem:a9827ed947ef33fefe3471211df1c4243 inherit pub_methods_classaion_1_1ast_1_1_typed_expr" id="r_a9827ed947ef33fefe3471211df1c4243"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>TypedExpr</b> (<a class="el" href="classaion_1_1ast_1_1_typed_expr.html#a1d52b2aa71875d76625852bd056972b0">TypeKind</a> tk, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, const ValueCategory category)</td></tr>
 <tr class="memitem:a9be7c126529344bad30c79ef6ee85250 inherit pub_methods_classaion_1_1ast_1_1_typed_expr" id="r_a9be7c126529344bad30c79ef6ee85250"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classaion_1_1ast_1_1_typed_expr.html#a1d52b2aa71875d76625852bd056972b0">TypeKind</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_type_kind</b> () const</td></tr>
 <tr class="memitem:a9581a9ab5183f64e4f45761a53ae1ec1 inherit pub_methods_classaion_1_1ast_1_1_typed_expr" id="r_a9581a9ab5183f64e4f45761a53ae1ec1"><td class="memItemLeft" align="right" valign="top">
@@ -148,16 +153,23 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_compile_time_comp
 <tr class="memitem:a4af6e8ee98eea206843bfc75d28c5e8e inherit pub_methods_classaion_1_1ast_1_1_typed_expr" id="r_a4af6e8ee98eea206843bfc75d28c5e8e"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_type</b> (<a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *new_type)</td></tr>
 <tr class="inherit_header pub_methods_classaion_1_1ast_1_1_expr"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classaion_1_1ast_1_1_expr')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classaion_1_1ast_1_1_expr.html">aion::ast::Expr</a></td></tr>
-<tr class="memitem:a86cd297e6629696395b76f108f3e1d4c inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_a86cd297e6629696395b76f108f3e1d4c"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>Expr</b> (const ExprKind k, const ValueCategory v, const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> sr)</td></tr>
+<tr class="memitem:a4367b8c05ef056eb7e12ce2bbdccad06 inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_a4367b8c05ef056eb7e12ce2bbdccad06"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>Expr</b> (const ExprKind k, const ValueCategory v)</td></tr>
 <tr class="memitem:aee1ac1677de171d729c4186f8e4f3fa8 inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_aee1ac1677de171d729c4186f8e4f3fa8"><td class="memItemLeft" align="right" valign="top">
 ExprKind&#160;</td><td class="memItemRight" valign="bottom"><b>get_kind</b> () const</td></tr>
 <tr class="memitem:afdde0075e5053e469d747b0377919b3d inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_afdde0075e5053e469d747b0377919b3d"><td class="memItemLeft" align="right" valign="top">
 ValueCategory&#160;</td><td class="memItemRight" valign="bottom"><b>get_category</b> () const</td></tr>
-<tr class="memitem:a9c83bd41865f9ba87c88c57c188f398e inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_a9c83bd41865f9ba87c88c57c188f398e"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="structaion_1_1_source_range.html">SourceRange</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_source_range</b> () const</td></tr>
-<tr class="memitem:abfec827b2fd4ad6f8d2ce106d7a1f3e6 inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_abfec827b2fd4ad6f8d2ce106d7a1f3e6"><td class="memItemLeft" align="right" valign="top">
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_source_range</b> (const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> &amp;sr)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:ac957543c35f195af6ab8d522ea990522" id="r_ac957543c35f195af6ab8d522ea990522"><td class="memItemLeft" align="right" valign="top"><a id="ac957543c35f195af6ab8d522ea990522" name="ac957543c35f195af6ab8d522ea990522"></a>
+<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>operand</b></td></tr>
+<tr class="memitem:a10a749a1b9e8bfba6efe8adc4212e48d" id="r_a10a749a1b9e8bfba6efe8adc4212e48d"><td class="memItemLeft" align="right" valign="top"><a id="a10a749a1b9e8bfba6efe8adc4212e48d" name="a10a749a1b9e8bfba6efe8adc4212e48d"></a>
+UnaryOp&#160;</td><td class="memItemRight" valign="bottom"><b>op</b></td></tr>
+<tr class="memitem:a8e306971daeb50efb8769b0f2e3b46c8" id="r_a8e306971daeb50efb8769b0f2e3b46c8"><td class="memItemLeft" align="right" valign="top"><a id="a8e306971daeb50efb8769b0f2e3b46c8" name="a8e306971daeb50efb8769b0f2e3b46c8"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_comp</b> = false</td></tr>
+<tr class="memitem:a19cce2b8f486cef673a4ec743eef3581" id="r_a19cce2b8f486cef673a4ec743eef3581"><td class="memItemLeft" align="right" valign="top"><a id="a19cce2b8f486cef673a4ec743eef3581" name="a19cce2b8f486cef673a4ec743eef3581"></a>
+<a class="el" href="structaion_1_1_source_location.html">SourceLocation</a>&#160;</td><td class="memItemRight" valign="bottom"><b>loc</b></td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>core/include/ast/<a class="el" href="expr_8hpp_source.html">expr.hpp</a></li>

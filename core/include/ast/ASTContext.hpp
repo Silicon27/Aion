@@ -14,6 +14,7 @@
 #include <string_view>
 #include <new>
 #include <ast/StringMap.hpp>
+#include <ast/ShortVec.hpp>
 #include <ast/ast.hpp>
 #include <ast/decl.hpp>
 #include <error/error.hpp>

@@ -15,25 +15,10 @@
 
 #define XXH_INLINE_ALL
 #include <support/xxhash.h>
+#include <si/memory.hpp>
 
 namespace aion::ast {
     class ASTContext;
-
-    template<typename T>
-    constexpr T next_power_of_two(T x) {
-        static_assert(std::is_unsigned_v<T>, "T must be unsigned");
-
-        if (x <= 1) return 1;
-
-        --x; // critical to handle exact powers of two
-
-        for (std::size_t i = 1; i < std::numeric_limits<T>::digits; i <<= 1) {
-            x |= x >> i;
-        }
-
-        return x + 1;
-    }
-
 
     /// Open addressing
     template<typename Value, typename Context = ASTContext>
@@ -83,7 +68,7 @@ namespace aion::ast {
         void set_max_load_factor(const float factor) { max_load_factor = factor; }
 
         explicit StringMap(Context &ctx, std::size_t initial_capacity = 64) : size(0), bytes_used(0), ctx(ctx) {
-            capacity = next_power_of_two(std::max<std::size_t>(initial_capacity, 4));
+            capacity = si::next_power_of_two(std::max<std::size_t>(initial_capacity, 4));
             std::size_t bytes = capacity * sizeof(Slot);
             slots = static_cast<Slot *>(ctx.allocate(bytes, alignof(Slot)));
             for (std::size_t i = 0; i < capacity; ++i) {
@@ -92,7 +77,7 @@ namespace aion::ast {
         }
 
         void rehash(size_type new_cap) {
-            new_cap = next_power_of_two(new_cap);
+            new_cap = si::next_power_of_two(new_cap);
             if (new_cap <= capacity) return;
 
             Slot *old_slots = slots;

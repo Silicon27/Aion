@@ -35,6 +35,14 @@ namespace aion::ast {
         using const_iterator = const_pointer;
 
         explicit ShortVec(Context& context) : data(nullptr), size(0), capacity(0), context(context) {}
+
+        ShortVec(Context& c, std::initializer_list<EleT> elements) : ShortVec(c) {
+            size = elements.size();
+
+        }
+
+        void reserve(std::size_t new_cap);
+
     };
 }
 

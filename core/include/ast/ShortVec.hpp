@@ -5,8 +5,12 @@
 #ifndef AION_SHORTVEC_HPP
 #define AION_SHORTVEC_HPP
 
-#include <utility>
+#include <algorithm>
+#include <cstddef>
 #include <initializer_list>
+#include <new>
+#include <type_traits>
+#include <utility>
 
 namespace aion::ast {
     class ASTContext;
@@ -46,8 +50,10 @@ namespace aion::ast {
         ShortVec(const ShortVec& other) : ShortVec(other.context_) {
             size_ = other.size_;
             capacity_ = other.capacity_;
-            data_ = new EleT[capacity_];
-            std::copy(other.data_, other.data_ + size_, data_);
+            if (capacity_ > 0) {
+                data_ = static_cast<EleT*>(context_.allocate(capacity_ * sizeof(EleT), alignof(EleT)));
+                std::copy(other.data_, other.data_ + size_, data_);
+            }
         }
 
         ShortVec(ShortVec&& other) noexcept
@@ -60,15 +66,21 @@ namespace aion::ast {
             other.capacity_ = 0;
         }
 
-        ~ShortVec() = delete;
+        /// No deallocation is required because Context owns the storage.
+        ~ShortVec() = default;
 
         ShortVec& operator=(const ShortVec& other) {
             if (this == &other) {
                 return *this;
             }
-            this->data_ = other.data_;
             this->size_ = other.size_;
             this->capacity_ = other.capacity_;
+            this->data_ = nullptr;
+
+            if (capacity_ > 0) {
+                this->data_ = static_cast<EleT*>(context_.allocate(capacity_ * sizeof(EleT), alignof(EleT)));
+                std::copy(other.data_, other.data_ + size_, this->data_);
+            }
             return *this;
         }
         ShortVec& operator=(ShortVec&& other) noexcept {
@@ -119,7 +131,7 @@ namespace aion::ast {
     template <typename EleT, typename Context>
     void ShortVec<EleT, Context>::push_back(const EleT& element) {
         if (size_ == capacity_) {
-            reserve(capacity_ * 2);
+            reserve(capacity_ == 0 ? 1 : capacity_ * 2);
         }
         data_[size_++] = element;
     }
@@ -128,7 +140,7 @@ namespace aion::ast {
     template<typename... Args> requires std::is_constructible_v<EleT, Args...>
     void ShortVec<EleT, Context>::emplace_back(Args... args) {
         if (size_ == capacity_) {
-            reserve(capacity_ * 2);
+            reserve(capacity_ == 0 ? 1 : capacity_ * 2);
         }
         new (data_ + size_) EleT(std::forward<Args>(args)...);
         size_++;

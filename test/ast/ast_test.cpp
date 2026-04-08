@@ -8,12 +8,206 @@
 #include <ast/decl.hpp>
 #include <ast/stmt.hpp>
 #include <ast/StringMap.hpp>
+#include <ast/ShortVec.hpp>
 #include <ast/ASTContext.hpp>
 #include <global_constants.hpp>
+#include <cstddef>
+#include <initializer_list>
+#include <utility>
 
 namespace aion::test {
 
+namespace {
+    template <typename T>
+    void assert_shortvec_contents(aion::ast::ShortVec<T>* vec, std::initializer_list<T> expected) {
+        AION_ASSERT_EQ(vec->size(), expected.size());
+
+        std::size_t index = 0;
+        for (const auto& value : expected) {
+            AION_ASSERT_EQ(vec->begin()[index], value);
+            ++index;
+        }
+    }
+}
+
 void register_ast_tests(TestRunner& runner) {
+
+    // ========================================================================
+    // ShortVec Tests
+    // ========================================================================
+
+    auto shortvec_suite = std::make_unique<TestSuite>("AST::ShortVec");
+
+    shortvec_suite->add_test("default_constructed_vector_starts_empty", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context);
+
+        AION_ASSERT_EQ(vec.size(), std::size_t{0});
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{0});
+        AION_ASSERT_NULL(vec.begin());
+        AION_ASSERT_EQ(vec.begin(), vec.end());
+    });
+
+    shortvec_suite->add_test("initializer_list_constructor_allocates_power_of_two_capacity", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context, {1, 2, 3});
+
+        AION_ASSERT_EQ(vec.size(), std::size_t{3});
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{4});
+        AION_ASSERT_NOT_NULL(vec.begin());
+        assert_shortvec_contents(&vec, {1, 2, 3});
+    });
+
+    shortvec_suite->add_test("empty_initializer_list_still_uses_minimum_storage", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context, {});
+
+        AION_ASSERT_EQ(vec.size(), std::size_t{0});
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{1});
+        AION_ASSERT_NOT_NULL(vec.begin());
+    });
+
+    shortvec_suite->add_test("reserve_rounds_up_and_preserves_values", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context, {10, 20});
+
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{2});
+        vec.reserve(3);
+
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{4});
+        assert_shortvec_contents(&vec, {10, 20});
+
+        vec.reserve(2);
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{4});
+        assert_shortvec_contents(&vec, {10, 20});
+    });
+
+    shortvec_suite->add_test("push_back_grows_across_capacity_boundaries", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context, {1});
+
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{1});
+
+        vec.push_back(2);
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{2});
+        assert_shortvec_contents(&vec, {1, 2});
+
+        vec.push_back(3);
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{4});
+        assert_shortvec_contents(&vec, {1, 2, 3});
+
+        vec.push_back(4);
+        assert_shortvec_contents(&vec, {1, 2, 3, 4});
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{4});
+    });
+
+    shortvec_suite->add_test("push_back_from_empty_vector_allocates_first_slot", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context);
+
+        vec.push_back(99);
+
+        AION_ASSERT_EQ(vec.size(), std::size_t{1});
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{1});
+        assert_shortvec_contents(&vec, {99});
+    });
+
+    shortvec_suite->add_test("emplace_back_appends_values_directly", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context, {5});
+
+        vec.emplace_back(6);
+        vec.emplace_back(7);
+
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{4});
+        assert_shortvec_contents(&vec, {5, 6, 7});
+    });
+
+    shortvec_suite->add_test("copy_constructor_creates_independent_storage", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> original(context, {8, 9});
+        ShortVec<int> copy(original);
+
+        AION_ASSERT_EQ(copy.size(), original.size());
+        AION_ASSERT_EQ(copy.capacity(), original.capacity());
+        AION_ASSERT_NE(copy.begin(), original.begin());
+        assert_shortvec_contents(&copy, {8, 9});
+
+        original.begin()[0] = 42;
+        AION_ASSERT_EQ(copy.begin()[0], 8);
+        AION_ASSERT_EQ(original.begin()[0], 42);
+    });
+
+    shortvec_suite->add_test("copy_assignment_creates_independent_storage", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> target(context, {1});
+        ShortVec<int> source(context, {2, 3});
+
+        target = source;
+
+        AION_ASSERT_EQ(target.size(), source.size());
+        AION_ASSERT_EQ(target.capacity(), source.capacity());
+        AION_ASSERT_NE(target.begin(), source.begin());
+        assert_shortvec_contents(&target, {2, 3});
+
+        source.begin()[0] = 99;
+        AION_ASSERT_EQ(target.begin()[0], 2);
+        AION_ASSERT_EQ(source.begin()[0], 99);
+    });
+
+    shortvec_suite->add_test("move_constructor_transfers_storage_and_resets_source", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> source(context, {11, 12});
+        ShortVec<int> moved(std::move(source));
+
+        AION_ASSERT_EQ(source.size(), std::size_t{0});
+        AION_ASSERT_EQ(source.capacity(), std::size_t{0});
+        AION_ASSERT_NULL(source.begin());
+
+        AION_ASSERT_EQ(moved.size(), std::size_t{2});
+        AION_ASSERT_EQ(moved.capacity(), std::size_t{2});
+        assert_shortvec_contents(&moved, {11, 12});
+    });
+
+    shortvec_suite->add_test("move_assignment_transfers_storage_and_resets_source", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> target(context, {1});
+        ShortVec<int> source(context, {2, 3});
+
+        target = std::move(source);
+
+        AION_ASSERT_EQ(target.size(), std::size_t{2});
+        AION_ASSERT_EQ(target.capacity(), std::size_t{2});
+        assert_shortvec_contents(&target, {2, 3});
+
+        AION_ASSERT_EQ(source.size(), std::size_t{0});
+        AION_ASSERT_EQ(source.capacity(), std::size_t{0});
+        AION_ASSERT_NULL(source.begin());
+    });
+
+    runner.add_suite(std::move(shortvec_suite));
 
     // ========================================================================
     // AST Node Creation Tests

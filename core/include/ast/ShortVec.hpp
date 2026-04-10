@@ -111,7 +111,7 @@ namespace aion::ast {
 
         [[nodiscard]] size_type size() const { return size_; }
         [[nodiscard]] size_type capacity() const { return capacity_; }
-
+        [[nodiscard]] pointer data() noexcept { return data_; }
     };
 
     template<typename EleT, typename Context>

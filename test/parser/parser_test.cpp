@@ -6,6 +6,8 @@
 #include "parser_test.hpp"
 #include <parser/parser.hpp>
 #include <lexer/lexer.hpp>
+#include <ast/expr.hpp>
+#include <ast/decl.hpp>
 #include <sstream>
 
 namespace aion::test {
@@ -20,6 +22,20 @@ static std::vector<Token> tokenize_for_parser(const std::string& input) {
     Lexer lexer(stream);
     auto [tokens, unfiltered, lines] = lexer.tokenize();
     return tokens;
+}
+
+static Parser make_expr_parser(const std::string& input,
+                               ASTContext& context,
+                               Source_Manager& sm,
+                               diag::DiagnosticsEngine& diags) {
+    FileID fid = sm.add_buffer(input, "test.aion");
+    std::vector<Token> tokens = tokenize_for_parser(input);
+    return Parser(fid, tokens, {}, context, diags);
+}
+
+template <typename T>
+static T* as_expr(Expr* expr) {
+    return static_cast<T*>(expr); // NOLINT(cppcoreguidelines-pro-type-static-cast-downcast)
 }
 
 void register_parser_tests(TestRunner& runner) {
@@ -105,9 +121,218 @@ void register_parser_tests(TestRunner& runner) {
 
     auto expr_suite = std::make_unique<TestSuite>("Parser::Expressions");
 
-    expr_suite->add_test("arithmetic_expression", []() {
-        // TODO: Add actual test when parser is ready
-        AION_ASSERT_TRUE(true);
+    expr_suite->add_test("arithmetic_expression_respects_precedence", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("1 + 2 * 3", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* root = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::add);
+
+        auto* rhs = as_expr<BinaryExpr>(root->rhs);
+        AION_ASSERT_ENUM_EQ(rhs->op, BinaryExpr::BinaryOp::mul);
+        AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
+    });
+
+    expr_suite->add_test("grouping_changes_binding", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("(1 + 2) * 3", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* root = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::mul);
+
+        auto* lhs = as_expr<BinaryExpr>(root->lhs);
+        AION_ASSERT_ENUM_EQ(lhs->op, BinaryExpr::BinaryOp::add);
+    });
+
+    expr_suite->add_test("unary_prefix_builds_unary_node", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("-1", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* unary = as_expr<UnaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(unary->op, UnaryExpr::UnaryOp::minus);
+        AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
+    });
+
+    expr_suite->add_test("known_identifier_parses_as_decl_ref", []() {
+        ASTContext context;
+        [[maybe_unused]] IdentifierInfo* id = context.emplace_or_get_identifier("x");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("x", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* ref = as_expr<DeclRefExpr>(expr);
+        AION_ASSERT_NOT_NULL(ref->decl);
+        AION_ASSERT_ENUM_EQ(ref->decl->get_kind(), Decl::DeclKind::unresolved);
+        AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::named);
+    });
+
+    expr_suite->add_test("call_expression_collects_arguments", []() {
+        ASTContext context;
+        [[maybe_unused]] IdentifierInfo* fn = context.emplace_or_get_identifier("foo");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("foo(1, 2 + 3)", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* call = as_expr<CallExpr>(expr);
+        AION_ASSERT_EQ(call->num_args, 2u);
+        AION_ASSERT_NOT_NULL(call->callee);
+
+        auto* arg1 = as_expr<BinaryExpr>(call->args[1]);
+        AION_ASSERT_ENUM_EQ(arg1->op, BinaryExpr::BinaryOp::add);
+    });
+
+    expr_suite->add_test("literal_nodes_have_unnamed_category", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        {
+            Parser parser = make_expr_parser("1.25", context, sm, diags);
+            Expr* expr = parser.parse_expression(0, TokenType::eof);
+            [[maybe_unused]] auto* num = as_expr<NumberLiteralExpr>(expr);
+            AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
+        }
+
+        {
+            Parser parser = make_expr_parser("\"abc\"", context, sm, diags);
+            Expr* expr = parser.parse_expression(0, TokenType::eof);
+            [[maybe_unused]] auto* str = as_expr<StringLiteralExpr>(expr);
+            AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
+        }
+    });
+
+    expr_suite->add_test("unknown_identifier_returns_error_expr", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("missing_name", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        [[maybe_unused]] auto* err = as_expr<ErrorExpr>(expr);
+        AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::named);
+    });
+
+    expr_suite->add_test("unary_precedence_binds_tighter_than_additive", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("-1 + 2", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* add = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(add->op, BinaryExpr::BinaryOp::add);
+
+        auto* lhs_unary = as_expr<UnaryExpr>(add->lhs);
+        AION_ASSERT_ENUM_EQ(lhs_unary->op, UnaryExpr::UnaryOp::minus);
+    });
+
+    expr_suite->add_test("binary_same_precedence_is_left_associative", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("9 - 4 - 1", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* root = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::sub);
+
+        auto* lhs = as_expr<BinaryExpr>(root->lhs);
+        AION_ASSERT_ENUM_EQ(lhs->op, BinaryExpr::BinaryOp::sub);
+    });
+
+    expr_suite->add_test("assignment_chain_currently_parses_left_associative", []() {
+        ASTContext context;
+        [[maybe_unused]] IdentifierInfo* a = context.emplace_or_get_identifier("a");
+        [[maybe_unused]] IdentifierInfo* b = context.emplace_or_get_identifier("b");
+        [[maybe_unused]] IdentifierInfo* c = context.emplace_or_get_identifier("c");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("a = b = c", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* root = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::assign);
+
+        auto* lhs = as_expr<BinaryExpr>(root->lhs);
+        AION_ASSERT_ENUM_EQ(lhs->op, BinaryExpr::BinaryOp::assign);
+    });
+
+    expr_suite->add_test("call_expression_supports_empty_argument_list", []() {
+        ASTContext context;
+        [[maybe_unused]] IdentifierInfo* fn = context.emplace_or_get_identifier("foo");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("foo()", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* call = as_expr<CallExpr>(expr);
+        AION_ASSERT_EQ(call->num_args, 0u);
+        AION_ASSERT_NOT_NULL(call->callee);
+    });
+
+    expr_suite->add_test("call_expression_supports_nested_calls_and_grouped_args", []() {
+        ASTContext context;
+        [[maybe_unused]] IdentifierInfo* foo = context.emplace_or_get_identifier("foo");
+        [[maybe_unused]] IdentifierInfo* bar = context.emplace_or_get_identifier("bar");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("foo(bar(1), (2 + 3))", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* outer = as_expr<CallExpr>(expr);
+        AION_ASSERT_EQ(outer->num_args, 2u);
+
+        [[maybe_unused]] auto* inner_call = as_expr<CallExpr>(outer->args[0]);
+        auto* grouped = as_expr<BinaryExpr>(outer->args[1]);
+        AION_ASSERT_ENUM_EQ(grouped->op, BinaryExpr::BinaryOp::add);
+    });
+
+    expr_suite->add_test("parse_expression_stops_at_delimiter", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("1 + 2, 3", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::comma);
+
+        auto* add = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(add->op, BinaryExpr::BinaryOp::add);
+        AION_ASSERT_ENUM_EQ(parser.peek().type, TokenType::comma);
     });
 
     runner.add_suite(std::move(expr_suite));

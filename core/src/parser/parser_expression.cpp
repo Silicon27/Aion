@@ -4,6 +4,7 @@
 
 #include <parser/parser.hpp>
 #include <ast/expr.hpp>
+#include <ast/ShortVec.hpp>
 
 namespace aion::parse {
     Expr* Parser::parse_expression(const int rbp, const TokenType delim) {
@@ -101,9 +102,22 @@ namespace aion::parse {
             case TokenType::minus:
             case TokenType::star:
             case TokenType::slash: {
+                auto get_op = [&](TokenType type) -> BinaryExpr::BinaryOp {
+                    switch (type) {
+                        case TokenType::plus: return BinaryExpr::BinaryOp::add;
+                            case TokenType::minus: return BinaryExpr::BinaryOp::sub;
+                            case TokenType::star: return BinaryExpr::BinaryOp::mul;
+                            case TokenType::slash: return BinaryExpr::BinaryOp::div;
+                            default: {
+                                diagnostics.report(loc, diag::parse::err_unknown_operator);
+                                return BinaryExpr::BinaryOp::add;
+                            }
+                    }
+                };
+
                 Expr* right = parse_expression(lbp(op.type), delim);
                 return context.create<BinaryExpr>(left, right,
-                    BinaryExpr::BinaryOp::add, ValueCategory::unnamed,
+                    get_op(op.type), ValueCategory::unnamed,
                     nullptr, false,
                     SourceRange(loc, diagnostics.get_token_location(file_id, peek())));
             }
@@ -117,7 +131,23 @@ namespace aion::parse {
             }
             case TokenType::lparen: {
                 // function call - new context, delimiter switches to , between args and ) at end
-                // TODO implement SmallVec first
+                ShortVec<Expr*> args(context);
+                while (peek().type != TokenType::rparen) {
+                    // parse_expression stops at the delimiter, so if we have not already met rparen, we would have to consume a comma.
+                    if (args.size() > 0) silent_consume(TokenType::comma);
+                    // each arg is its own expression - delimiter is , (stops prior to consuming it)
+                    args.emplace_back(parse_expression(0, TokenType::comma));
+                }
+                silent_consume(TokenType::rparen);
+                return context.create<CallExpr>(nullptr, nullptr, left, args.data(), args.size(), loc);
+
+            }
+            case TokenType::double_colon: {
+                // handle later
+            }
+            default: {
+                diagnostics.report(loc, diag::parse::err_unknown_operator);
+                return context.create<ErrorExpr>(loc, ValueCategory::unnamed);
             }
         }
     }

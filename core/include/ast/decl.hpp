@@ -67,6 +67,13 @@ namespace aion::ast {
         SourceRange get_id_loc() const { return id_range; }
     };
     static_assert(std::is_trivially_destructible_v<VarDecl>);
+
+    class ErrorDecl : public NamedDecl {
+    public:
+        ErrorDecl(const DeclKind declaration_kind, IdentifierInfo* name)
+        : NamedDecl(declaration_kind, name) {}
+    };
+    static_assert(std::is_trivially_destructible_v<ErrorDecl>);
 }
 
 #endif //AION_DECL_HPP

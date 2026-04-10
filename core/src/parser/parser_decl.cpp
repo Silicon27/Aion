@@ -7,20 +7,24 @@
 namespace aion::parse {
     void Parser::parse_top_level_decl() {
         switch (peek().get_type()) {
-            case TokenType::kw_let:
-                parse_variable_decl();
+            case TokenType::kw_let: {
+                translation_unit_decl->add_decl(parse_variable_decl());
                 break;
-            default:
-                blind_consume(); // skip unknown token
-                break;
+            }
+            default: {
+                diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token);
+                skip_until(TokenType::semicolon);
+                translation_unit_decl->add_decl(context.create<ErrorDecl>(Decl::DeclKind::variable, nullptr));
+            }
         }
     }
 
     bool Parser::parse_first_top_level_decl() {
+        /// TODO for module declaration
         return false;
     }
 
-    void Parser::parse_variable_decl() {
+    Decl* Parser::parse_variable_decl() {
         // TODO: improve grammar-driven recovery around optional type annotation and initializer.
 
         static auto initial_let = MatchToken(TokenType::kw_let); // should not error if not matched, if error it could mean memory corruption during program runtime
@@ -34,6 +38,7 @@ namespace aion::parse {
         SourceLocation decl_start_location = diagnostics.get_source_manager()->get_location(file_id, peek());
         Token variable_id_token;
         MutableType* type_annotation = nullptr;
+        // TODO assuming all variables are stack for now until heap allocation syntax is finalized
         StorageClass storage_class;
         bool need_auto_type_deduction = false;
         bool is_mut = false;
@@ -64,7 +69,7 @@ namespace aion::parse {
                 << fixit_hint;
 
             skip_until(TokenType::semicolon); // TODO integrate more advanced recovery functions
-            return;
+            return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
 
         // check for early semicolons placed before types are specified
@@ -92,7 +97,7 @@ namespace aion::parse {
                     << "expected type for variable declaration, none provided."
                     << fixit_hint;
                 skip_until(TokenType::semicolon);
-                return;
+                return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
             }
         }
 
@@ -106,7 +111,7 @@ namespace aion::parse {
                     << "expected initializer for variable attributed with comp, none provided."
                     << fixit_hint;
                 skip_until(TokenType::semicolon);
-                return;
+                return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
             }
             goto ast_construction;
         }
@@ -117,20 +122,21 @@ namespace aion::parse {
         }
 
         expression_matching:
-        // TODO create InitExpr
+        expression = parse_expression(0, TokenType::semicolon);
 
 
         ast_construction:
 
-        // auto allocated_name = context.create<IdentifierInfo>(variable_id_token.lexeme.c_str());
-        // auto allocated_storage_class = context.create<StorageClass>(storage_class);
-        // auto allocated_range = context.create<SourceRange>(decl_start_location, SourceLocation(diagnostics.get_source_manager()->get_location(file_id, peek())));
-        // auto variable = context.create<VarDecl>(allocated_name, *type_annotation, allocated_storage_class, allocated_range, expression);
+        auto allocated_name = context.create<IdentifierInfo>(variable_id_token.lexeme.c_str());
+        auto allocated_storage_class = context.create<StorageClass>(storage_class);
+        auto allocated_range = context.create<SourceRange>(decl_start_location, SourceLocation(diagnostics.get_source_manager()->get_location(file_id, peek())));
+        auto variable = context.create<VarDecl>(allocated_name, type_annotation, *allocated_storage_class, *allocated_range, expression);
 
-        if (silent_probe(semicolon)) {
-
-        } else {
-
+        if (!silent_probe(semicolon)) {
+            diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_expected_semicolon);
+            skip_until(TokenType::semicolon);
+            return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
+        return variable;
     }
 }

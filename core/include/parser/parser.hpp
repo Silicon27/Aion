@@ -55,6 +55,7 @@ namespace aion::parse {
         Flags flags;
         ParserContext parser_context;
         FileId file_id;
+        TranslationUnitDecl* translation_unit_decl = nullptr;
         int pos = 0;
 
     public:
@@ -103,21 +104,21 @@ namespace aion::parse {
         // EOF/token stream check
         bool is_at_end() const;
 
-        // Entry point is parse()
+        /// primary entry point is parse()
         void parse();
 
-        // This will be called in a loop from parse() until we reach the end of the token stream.
+        /// will be called in a loop from parse() until we reach the end of the token stream.
         void parse_top_level_decl();
 
-        // We also thereby create a specialized first top level declaration
-        // parser, which is responsible mainly for parsing module declarations and imports
-        // TODO
+        /// We also thereby create a specialized first top level declaration
+        /// parser, which is responsible mainly for parsing module declarations and imports
+        /// TODO
         bool parse_first_top_level_decl();
 
         // statement parsers
 
         // declaration parsers
-        void parse_variable_decl();
+        Decl* parse_variable_decl();
 
         /// entry point for expression parsing
         Expr* parse_expression(int rbp, TokenType delim);

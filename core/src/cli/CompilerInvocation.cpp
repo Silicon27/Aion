@@ -467,7 +467,7 @@ int CompilerInvocation::run() {
             std::get<0>(tokens),
             config.flags,});
         auto parser = parser_invoke.invoke();
-        parser->parse_top_level_decl();
+        parser->parse();
     }
 
     return 0;

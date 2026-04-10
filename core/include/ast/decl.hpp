@@ -23,8 +23,9 @@ namespace aion::ast {
     static_assert(std::is_trivially_destructible_v<TranslationUnitDecl>);
 
     class NamedDecl : public Decl {
-        IdentifierInfo* name;
     public:
+        IdentifierInfo* name;
+
         NamedDecl(DeclKind declaration_kind, IdentifierInfo* name)
         : Decl(declaration_kind), name(name) {}
 

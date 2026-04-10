@@ -213,6 +213,7 @@ void register_parser_tests(TestRunner& runner) {
             Expr* expr = parser.parse_expression(0, TokenType::eof);
             [[maybe_unused]] auto* num = as_expr<NumberLiteralExpr>(expr);
             AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
+            AION_DEBUG(std::string(num->value));
         }
 
         {
@@ -283,8 +284,22 @@ void register_parser_tests(TestRunner& runner) {
         auto* root = as_expr<BinaryExpr>(expr);
         AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::assign);
 
-        auto* lhs = as_expr<BinaryExpr>(root->lhs);
-        AION_ASSERT_ENUM_EQ(lhs->op, BinaryExpr::BinaryOp::assign);
+        auto* lhs_assign = as_expr<BinaryExpr>(root->lhs);
+        auto* rhs_ref = as_expr<DeclRefExpr>(root->rhs);
+
+        AION_ASSERT_ENUM_EQ(lhs_assign->op, BinaryExpr::BinaryOp::assign);
+        AION_ASSERT_ENUM_EQ(lhs_assign->get_category(), ValueCategory::unnamed);
+        AION_ASSERT_ENUM_EQ(rhs_ref->get_category(), ValueCategory::named);
+
+        auto* lhs_ref = as_expr<DeclRefExpr>(lhs_assign->lhs);
+        auto* mid_ref = as_expr<DeclRefExpr>(lhs_assign->rhs);
+
+        AION_ASSERT_ENUM_EQ(lhs_ref->get_category(), ValueCategory::named);
+        AION_ASSERT_ENUM_EQ(mid_ref->get_category(), ValueCategory::named);
+
+        AION_ASSERT_EQ(lhs_ref->decl->get_name(), a);
+        AION_ASSERT_EQ(mid_ref->decl->get_name(), b);
+        AION_ASSERT_EQ(rhs_ref->decl->get_name(), c);
     });
 
     expr_suite->add_test("call_expression_supports_empty_argument_list", []() {

@@ -55,8 +55,8 @@ namespace aion {
         return data.substr(start, end - start + 1);
     }
 
-    FileId SourceManager::add_buffer(std::string content, std::string path) {
-        Buffer b(std::move(content), std::move(path));
+    FileId SourceManager::add_buffer(const std::string& content, const std::string& path) {
+        Buffer b(content, path);
         b.compute_line_starts();
         FileId id = next_file_id_++;
         buffers[id] = std::move(b);
@@ -71,11 +71,11 @@ namespace aion {
             return SOURCE_MANAGER_INVALID_FILE_ID;
         }
 
-        std::string content((std::istreambuf_iterator<char>(file)),
+        const std::string content((std::istreambuf_iterator<char>(file)),
                             std::istreambuf_iterator<char>());
         file.close();
 
-        return add_buffer(std::move(content), path);
+        return add_buffer(content, path);
     }
 
     Buffer* SourceManager::get_buffer(FileId id) {

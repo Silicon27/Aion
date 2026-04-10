@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <optional>
 
-#include <cli/compiler_invocation.hpp>
+#include <cli/CompilerInvocation.hpp>
 #include "error/error.hpp"
 
 /// caion - Aion Compiler
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     auto config = compiler_config::parse(argc, argv);
     config.diag = diagnostics_engine.get();
 
-    Compiler_Invocation ci(config, *diagnostics_engine);
+    CompilerInvocation ci(config, *diagnostics_engine);
 
     return ci.run();
 }

@@ -1,4 +1,4 @@
-#include <cli/compiler_invocation.hpp>
+#include <cli/CompilerInvocation.hpp>
 #include <parser/parser.hpp>
 
 #include <filesystem>
@@ -45,7 +45,7 @@ std::string default_output_for_format(const std::string &input,
 // =====================
 namespace aion::compiler_config {
 
-Compiler_Config parse(int argc, char *argv[]) {
+CompilerConfig parse(int argc, char *argv[]) {
     std::vector<std::string> sources;
 
     bool verbose        = false;
@@ -349,7 +349,7 @@ Compiler_Config parse(int argc, char *argv[]) {
     flags.output_file     = o_output;
     flags.link            = link;
 
-    Compiler_Config config;
+    CompilerConfig config;
     config.sources = std::move(sources);
     config.flags   = flags;
     config.output  = resolved_output;
@@ -373,40 +373,40 @@ Compiler_Config parse(int argc, char *argv[]) {
 // you implement internals elsewhere)
 // =====================
 
-Preprocessor_Invoke::Preprocessor_Invoke(Param param) : param(param) {}
+PreprocessorInvoke::PreprocessorInvoke(Param param) : param(param) {}
 
 // Implemented as a stub; you can replace this with your own logic.
-Preprocessor Preprocessor_Invoke::invoke() const {
+Preprocessor PreprocessorInvoke::invoke() const {
     // Just construct from the file name for now.
     // Replace this body with your actual preprocessor pipeline.
     return Preprocessor(param.input_file);
 }
 
-Lexer_Invoke::Lexer_Invoke(const Param &param) : param(param) {}
+LexerInvoke::LexerInvoke(const Param &param) : param(param) {}
 
-std::unique_ptr<Lexer> Lexer_Invoke::invoke() const {
+std::unique_ptr<Lexer> LexerInvoke::invoke() const {
     // Minimal construction; you can add extra wiring where you actually use it.
     return std::make_unique<Lexer>(param.input_Stream);
 }
 
-Parser_Invoke::Parser_Invoke(const Param& param) : param(param) {}
+ParserInvoke::ParserInvoke(const Param& param) : param(param) {}
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-std::unique_ptr<parse::Parser> Parser_Invoke::invoke() const {
+std::unique_ptr<parse::Parser> ParserInvoke::invoke() const {
     // Minimal construction; real usage left to you.
     return std::make_unique<parse::Parser>(param.file_id, param.tokens, param.flags, param.context, param.diag);
 }
 
-Sema_Invoke::Sema_Invoke(Param param) : param(param) {}
+SemaInvoke::SemaInvoke(Param param) : param(param) {}
 
-void Sema_Invoke::invoke() const {
+void SemaInvoke::invoke() const {
     // No-op stub; you can call your real sema passes elsewhere.
     (void)param;
 }
 
-Linker_Invoke::Linker_Invoke(Param param) : param(param) {}
+LinkerInvoke::LinkerInvoke(Param param) : param(std::move(param)) {}
 
-void Linker_Invoke::invoke() const {
+void LinkerInvoke::invoke() const {
     if (!param.config.flags.link) {
         return; // nothing to do
     }
@@ -428,12 +428,12 @@ void Linker_Invoke::invoke() const {
 // Compiler_Invocation
 // =====================
 
-Compiler_Invocation::Compiler_Invocation(const Compiler_Config& config,
+CompilerInvocation::CompilerInvocation(CompilerConfig config,
                                          aion::diag::DiagnosticsEngine& diag)
-    : config(std::move(config)), diag_(diag), context_() {}
+    : config(std::move(config)), diag_(diag) {}
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-int Compiler_Invocation::run() {
+int CompilerInvocation::run() {
     using namespace compiler_config;
 
     // This is deliberately minimal:
@@ -444,6 +444,31 @@ int Compiler_Invocation::run() {
     // are left to you.
     // TODO
 
+    SourceManager sm;
+    diag_.set_source_manager(&sm);
+
+    std::vector<std::string> object_files;
+    bool has_errors = false;
+
+    for (const auto &source : config.sources) {
+        FileID id = sm.add_file_from_disk(source, diag_);
+        if (id == SOURCE_MANAGER_INVALID_FILE_ID) {
+            continue; // error already reported, avoid crashing whole batch
+        }
+        std::istringstream lexer_input(sm.get_buffer(id)->data);
+        LexerInvoke lexer_invoke = LexerInvoke({lexer_input, diag_});
+        // since source manager already manages source, unfiltered tokens and line map are unnecessary
+        auto lexer = lexer_invoke.invoke();
+        auto tokens = lexer->tokenize();
+
+        auto parser_invoke = ParserInvoke({id,
+            diag_,
+            context_,
+            std::get<0>(tokens),
+            config.flags,});
+        auto parser = parser_invoke.invoke();
+        parser->parse_top_level_decl();
+    }
 
     return 0;
 }

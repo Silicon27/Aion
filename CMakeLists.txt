@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(aion
         core/src/cli/main.cpp
-        core/src/cli/compiler_invocation.cpp
+        core/src/cli/CompilerInvocation.cpp
         core/src/lexer/lexer.cpp
         core/src/preprocessor/preprocessor.cpp
         core/src/parser/parser.cpp

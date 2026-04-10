@@ -25,7 +25,7 @@ namespace aion::compiler_config {
     using namespace aion::lexer;
 
     /// Necessary arguments
-    struct Compiler_Config {
+    struct CompilerConfig {
         std::vector<std::string> sources; // sources to compile from
         Flags flags;
         // Resolved output artifact (final exe or single file output).
@@ -36,16 +36,16 @@ namespace aion::compiler_config {
     };
 
     // takes argv and returns a fully-populated Compiler_Config
-    Compiler_Config parse(int argc, char *argv[]);
+    CompilerConfig parse(int argc, char *argv[]);
 
-    struct Preprocessor_Invoke {
+    struct PreprocessorInvoke {
         struct Param {
             std::string input_file;
             diag::DiagnosticsEngine& diag;
         };
 
         Param param;
-        explicit Preprocessor_Invoke(Param param);
+        explicit PreprocessorInvoke(Param param);
 
         /// Invoke the preprocessor and return its result.
         /// For now this just returns a Preprocessor instance.
@@ -53,7 +53,7 @@ namespace aion::compiler_config {
     };
 
     /// @brief Individual invocation for the Lexer and it's objects
-    struct Lexer_Invoke {
+    struct LexerInvoke {
         /// @brief calling parameters for invocation of the Lexer object
         struct Param {
             std::istream &input_Stream;
@@ -63,7 +63,7 @@ namespace aion::compiler_config {
         /// Mutable because Param.inputStream may be altered by Lexer constructor
         mutable Param param;
 
-        explicit Lexer_Invoke(const Param &param);
+        explicit LexerInvoke(const Param &param);
 
         /// @brief Initialize a Lexer object with Lexer constructor params
         /// @returns Lexer object
@@ -71,7 +71,7 @@ namespace aion::compiler_config {
     };
 
     /// @brief Individual invocation of Parser and it's objects
-    struct Parser_Invoke {
+    struct ParserInvoke {
         struct Param {
             FileId file_id;
             diag::DiagnosticsEngine& diag;
@@ -82,12 +82,12 @@ namespace aion::compiler_config {
 
         mutable Param param;
 
-        explicit Parser_Invoke(const Param& param);
+        explicit ParserInvoke(const Param& param);
 
         std::unique_ptr<parse::Parser> invoke() const;
     };
 
-    struct Sema_Invoke {
+    struct SemaInvoke {
         struct Param {
             ASTContext& context;
             int allowed_errors;
@@ -96,23 +96,23 @@ namespace aion::compiler_config {
 
         mutable Param param;
 
-        explicit Sema_Invoke(Param param);
+        explicit SemaInvoke(Param param);
 
         /// Run semantic analysis, mutate the AST in-place.
         /// For now this is a no-op stub.
         void invoke() const;
     };
 
-    struct Linker_Invoke {
+    struct LinkerInvoke {
         struct Param {
-            Compiler_Config &config;
+            CompilerConfig &config;
             std::vector<std::string> object_files; // input object files from all sources
             diag::DiagnosticsEngine& diag;
         };
 
         mutable Param param;
 
-        explicit Linker_Invoke(Param param);
+        explicit LinkerInvoke(Param param);
 
         /// Invoke the linker. For now this is a stub.
         void invoke() const;
@@ -121,13 +121,13 @@ namespace aion::compiler_config {
 } // namespace aion::compiler_config
 
 
-class Compiler_Invocation {
-    aion::compiler_config::Compiler_Config config;
+class CompilerInvocation {
+    aion::compiler_config::CompilerConfig config;
     aion::diag::DiagnosticsEngine& diag_;
     aion::ast::ASTContext context_;
 
 public:
-    explicit Compiler_Invocation(const aion::compiler_config::Compiler_Config& config,
+    explicit CompilerInvocation(aion::compiler_config::CompilerConfig config,
                                  aion::diag::DiagnosticsEngine& diag);
 
     /// Run the entire pipeline (preprocess, lex, parse, sema, codegen, link).

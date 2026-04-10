@@ -102,7 +102,7 @@ namespace aion {
         SourceManager() = default;
 
         /// add a file from a string (in-memory / virtual file). Returns a FileID
-        FileId add_buffer(std::string content, std::string path="");
+        FileId add_buffer(const std::string &content, const std::string &path = "");
 
         /// add a buffer from disk
         FileId add_file_from_disk(const std::string &path, aion::diag::DiagnosticsEngine &diag);

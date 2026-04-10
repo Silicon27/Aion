@@ -4,7 +4,7 @@
 [![macOS CI](https://github.com/Silicon27/Aion/actions/workflows/macos.yml/badge.svg)](https://github.com/Silicon27/Aion/actions/workflows/macos.yml)
 [![Windows CI](https://github.com/Silicon27/Aion/actions/workflows/windows.yml/badge.svg)](https://github.com/Silicon27/Aion/actions/workflows/windows.yml)
 
-Aion (pronounced "*ai - on*") exists as a language developed purely off *free will*. Justification for the application of this language is nonexistent, acting as a mere superfluous cog in a world filled with what could only be described as **selfsame compatriots**.
+Aion (pronounced "ai-on") is a language conceived purely as an exercise of free will. It serves no practical purpose, existing instead as a deliberately superfluous construct within a world populated by fundamentally indistinguishable counterparts.
 
 ## Downloading Kaion
 

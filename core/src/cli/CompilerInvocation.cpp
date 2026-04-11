@@ -474,5 +474,9 @@ int CompilerInvocation::run() {
         parser->parse();
     }
 
+    if (diag_.get_client()) {
+        diag_.get_client()->print_summary();
+    }
+
     return 0;
 }

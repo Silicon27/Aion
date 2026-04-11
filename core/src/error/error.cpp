@@ -10,6 +10,7 @@
 #include <sstream>
 #include <iomanip>
 #include <set>
+#include <algorithm>
 #include <cctype>
 
 #define ANSI_RESET          "\033[0m"
@@ -404,6 +405,31 @@ namespace aion::diag {
 
             if (primary_marks_printed) {
                 *os_ << "\n";
+            }
+
+            if (show_fixits_line_ && !line_fixits.empty()) {
+                std::string fixed_line = line_text;
+                // Sort fixits by starting column in descending order
+                auto sorted_fixits = line_fixits;
+                std::sort(sorted_fixits.begin(), sorted_fixits.end(), [&](const FixItHint* a, const FixItHint* b) {
+                    auto [_, a_col] = source_mgr_->get_line_column(a->remove_range.begin);
+                    auto [__, b_col] = source_mgr_->get_line_column(b->remove_range.begin);
+                    return a_col > b_col;
+                });
+
+                for (const auto* fixit : sorted_fixits) {
+                    auto [_, start_col] = source_mgr_->get_line_column(fixit->remove_range.begin);
+                    auto [__, end_col] = source_mgr_->get_line_column(fixit->remove_range.end);
+                    
+                    if (start_col > 0 && start_col <= fixed_line.size() + 1) {
+                        size_t start_idx = start_col - 1;
+                        size_t end_idx = (end_col > start_col) ? end_col - 1 : start_idx;
+                        if (end_idx > fixed_line.size()) end_idx = fixed_line.size();
+                        
+                        fixed_line.replace(start_idx, end_idx - start_idx, fixit->code_to_insert);
+                    }
+                }
+                *os_ << color_blue << padding << " | " << color_reset << highlight_line(fixed_line) << "\n";
             }
         }
     }

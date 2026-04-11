@@ -188,9 +188,10 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "test.aion:1:9: error: use of undeclared identifier 'y'");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:9: error:");
         AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
         AION_ASSERT_CONTAINS(output, "   |         ^");
+        AION_ASSERT_CONTAINS(output, "error: use of undeclared identifier 'y'");
         capture.finish();
     });
 
@@ -294,8 +295,8 @@ void register_error_tests(TestRunner& runner) {
         std::string output = capture.get_output();
         // The printer uses \033[1;31merror\033[0m: for Error
         AION_ASSERT_CONTAINS(output, "\033[1;31merror\033[0m: ");
-        AION_ASSERT_CONTAINS(output, "\033[1mcolored error\033[0m");
-        
+        AION_ASSERT_CONTAINS(output, "colored error");
+
         // Check for caret color too
         capture.get_stream().str("");
         FileID fid = sm.add_buffer("foo", "test.aion");
@@ -326,9 +327,36 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "test.aion:2:1: error: error on line 2");
+        AION_ASSERT_CONTAINS(output, "test.aion:2:1: error:");
         AION_ASSERT_CONTAINS(output, " 2 | line 2");
         AION_ASSERT_CONTAINS(output, "   | ^");
+        AION_ASSERT_CONTAINS(output, "error: error on line 2");
+        capture.finish();
+    });
+
+    printer_suite->add_test("MultilineRangePrinting", []() {
+        OutputCapture capture("MultilineRangePrinting");
+        Source_Manager sm;
+        FileID fid = sm.add_buffer("let x = foo(\n  1 +\n  2;\n", "test.aion");
+
+        diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
+
+        diag::Diagnostic d;
+        d.id = diag::parse::err_mismatched_brackets;
+        d.message = "expression spans multiple lines";
+        d.severity = diag::Severity::error;
+        d.location = Source_Location(fid, 8);
+        d.ranges.push_back(diag::CharSourceRange::get_char_range(Source_Location(fid, 8), Source_Location(fid, 21)));
+        d.extra_locations.push_back(Source_Location(fid, 21));
+
+        printer.handle_diagnostic(diag::Severity::error, d);
+
+        std::string output = capture.get_output();
+        AION_ASSERT_CONTAINS(output, " 1 | let x = foo(");
+        AION_ASSERT_CONTAINS(output, " 2 |   1 +");
+        AION_ASSERT_CONTAINS(output, " 3 |   2;");
+        AION_ASSERT_CONTAINS(output, "^~~");
+        AION_ASSERT_CONTAINS(output, "error: expression spans multiple lines");
         capture.finish();
     });
 

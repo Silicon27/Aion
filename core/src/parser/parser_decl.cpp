@@ -8,13 +8,21 @@ namespace aion::parse {
     void Parser::parse_top_level_decl() {
         switch (peek().get_type()) {
             case TokenType::kw_let: {
-                translation_unit_decl->add_decl(parse_variable_decl());
+                context.get_translation_unit_decl()->add_decl(parse_variable_decl());
+                break;
+            }
+            case TokenType::comment:
+            case TokenType::doc_comment: {
+                blind_consume();
+            }
+            case TokenType::newline: {
+                blind_consume();
                 break;
             }
             default: {
                 diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token);
                 skip_until(TokenType::semicolon);
-                translation_unit_decl->add_decl(context.create<ErrorDecl>(Decl::DeclKind::variable, nullptr));
+                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(Decl::DeclKind::variable, nullptr));
             }
         }
     }
@@ -33,7 +41,7 @@ namespace aion::parse {
         static auto variable_identifier = MatchToken(TokenType::identifier);
         static auto colon = MatchToken(TokenType::colon);
         static auto equal = MatchToken(TokenType::equal);
-        auto semicolon = MatchToken(TokenType::semicolon);
+        static auto semicolon = MatchToken(TokenType::semicolon);
 
         SourceLocation decl_start_location = diagnostics.get_source_manager()->get_location(file_id, peek());
         Token variable_id_token;
@@ -122,6 +130,15 @@ namespace aion::parse {
         }
 
         expression_matching:
+        if (silent_probe(semicolon)) {
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            auto fixit_hint = diag::FixItHint::create_insertion(loc, "<expr>");
+            diagnostics.report(loc, diag::parse::err_expected_expression)
+                << "expected initializer expression after '='."
+                << fixit_hint;
+            silent_consume(TokenType::semicolon);
+            return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
+        }
         expression = parse_expression(0, TokenType::semicolon);
 
 
@@ -137,6 +154,7 @@ namespace aion::parse {
             skip_until(TokenType::semicolon);
             return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
+        silent_consume(TokenType::semicolon);
         return variable;
     }
 }

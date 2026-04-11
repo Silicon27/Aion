@@ -190,7 +190,7 @@ public:
 private:
     void print_severity(Severity severity);
     void print_location(const Diagnostic& diag);
-    void print_source_line(const Diagnostic& diag);
+    void print_source_line(const Diagnostic& diag, Severity severity);
     void print_fixit_hints(const Diagnostic& diag);
 };
 

@@ -9,6 +9,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <set>
 
 namespace aion::diag {
 
@@ -70,28 +71,31 @@ namespace aion::diag {
             ++num_warnings_;
         }
 
-        // Print location and severity
-        print_location(diag);
+        Diagnostic rendered = diag;
+        if (rendered.message.empty()) {
+            rendered.message = "diagnostic emitted with no message";
+        }
+
+        // Print location and severity on the headline.
+        print_location(rendered);
         print_severity(severity);
-
-        // Print message in bold
-        if (show_colors_) {
-            *os_ << "\033[1m";
-        }
-        *os_ << diag.message;
-        if (show_colors_) {
-            *os_ << "\033[0m";
-        }
-        *os_ << "\n";
-
-        // Print source line if we have a source manager
-        if (source_mgr_) {
-            print_source_line(diag);
+        if (!source_mgr_ || !rendered.location.is_valid()) {
+            if (show_colors_) {
+                *os_ << "\033[1m";
+            }
+            *os_ << rendered.message;
+            if (show_colors_) {
+                *os_ << "\033[0m";
+            }
+            *os_ << "\n";
+        } else {
+            *os_ << "\n";
+            print_source_line(rendered, severity);
         }
 
         // Print fix-it hints
-        if (!diag.fixits.empty()) {
-            print_fixit_hints(diag);
+        if (!rendered.fixits.empty()) {
+            print_fixit_hints(rendered);
         }
 
         os_->flush();
@@ -151,87 +155,128 @@ namespace aion::diag {
         }
     }
 
-    void TextDiagnosticPrinter::print_source_line(const Diagnostic& diag) {
+    void TextDiagnosticPrinter::print_source_line(const Diagnostic& diag, const Severity severity) {
         if (!diag.location.is_valid()) {
             return;
         }
 
-        std::string line_text = source_mgr_->get_line_text(diag.location);
-        if (line_text.empty()) {
-            return;
+        const FileID fid = diag.location.file;
+        auto [primary_line, primary_col] = source_mgr_->get_line_column(diag.location);
+
+        std::set<Line> lines_to_render;
+        lines_to_render.insert(primary_line);
+        for (const auto& loc : diag.extra_locations) {
+            if (loc.file == fid) {
+                lines_to_render.insert(source_mgr_->get_line_column(loc).first);
+            }
+        }
+        for (const auto& range : diag.ranges) {
+            if (!range.is_valid() || range.begin.file != fid || range.end.file != fid) {
+                continue;
+            }
+            auto [b_line, _b_col] = source_mgr_->get_line_column(range.begin);
+            auto [e_line, _e_col] = source_mgr_->get_line_column(range.end);
+            if (b_line > e_line) {
+                std::swap(b_line, e_line);
+            }
+            for (Line line = b_line; line <= e_line; ++line) {
+                lines_to_render.insert(line);
+            }
         }
 
-        // Remove trailing newline
-        if (!line_text.empty() && line_text.back() == '\n') {
-            line_text.pop_back();
+        int line_num_width = std::to_string(*lines_to_render.rbegin()).length();
+        if (line_num_width < 2) {
+            line_num_width = 2;
         }
+        const std::string padding(line_num_width, ' ');
+        const std::string color_blue = show_colors_ ? "\033[1;34m" : "";
+        const std::string color_reset = show_colors_ ? "\033[0m" : "";
+        const std::string color_green = show_colors_ ? "\033[1;32m" : "";
+        const std::string color_msg = show_colors_ ? "\033[1;31m" : "";
 
-        auto [line_no, col_no] = source_mgr_->get_line_column(diag.location);
-
-        // Determine line number width for alignment
-        int line_num_width = std::to_string(line_no).length();
-        if (line_num_width < 2) line_num_width = 2; // Minimum width
-        std::string padding(line_num_width, ' ');
-
-        // Color codes
-        std::string color_blue = show_colors_ ? "\033[1;34m" : "";
-        std::string color_reset = show_colors_ ? "\033[0m" : "";
-        std::string color_green = show_colors_ ? "\033[1;32m" : "";
-
-        // Header pipe
         *os_ << color_blue << padding << " |\n" << color_reset;
 
-        // Source line with line number
-        *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset;
-        *os_ << line_text << "\n";
+        for (Line line_no : lines_to_render) {
+            SourceLocation line_loc = source_mgr_->get_location(fid, line_no, 1);
+            std::string line_text = source_mgr_->get_line_text(line_loc);
+            if (!line_text.empty() && line_text.back() == '\n') {
+                line_text.pop_back();
+            }
 
-        // Caret/Underline line
-        *os_ << color_blue << padding << " | " << color_reset;
+            *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset << line_text << "\n";
 
-        // Create a buffer for carets and underlines
-        std::string underlines(line_text.length() + 1, ' ');
+            std::string marks(std::max<size_t>(line_text.size(), 1), ' ');
+            auto mark_col = [&](Column col, char glyph) {
+                if (col == 0) {
+                    return;
+                }
+                size_t idx = static_cast<size_t>(col - 1);
+                if (idx >= marks.size()) {
+                    idx = marks.size() - 1;
+                }
+                marks[idx] = glyph;
+            };
 
-        // Helper to apply highlights to the buffer
-        auto apply_range = [&](const CharSourceRange& range) {
-            if (!range.is_valid()) return;
-            auto [b_line, b_col] = source_mgr_->get_line_column(range.begin);
-            auto [e_line, e_col] = source_mgr_->get_line_column(range.end);
+            for (const auto& range : diag.ranges) {
+                if (!range.is_valid() || range.begin.file != fid || range.end.file != fid) {
+                    continue;
+                }
+                auto [b_line, b_col] = source_mgr_->get_line_column(range.begin);
+                auto [e_line, e_col] = source_mgr_->get_line_column(range.end);
+                if (line_no < b_line || line_no > e_line) {
+                    continue;
+                }
 
-            if (b_line == line_no) {
-                size_t start = b_col - 1;
-                size_t end = (e_line == line_no) ? (e_col - (range.is_token_range() ? 0 : 1)) : line_text.length();
-                if (start < end) {
-                    for (size_t i = start; i < end && i < underlines.length(); ++i) {
-                        if (underlines[i] == ' ') underlines[i] = '~';
-                    }
-                } else if (start == end) {
-                    if (start < underlines.length() && underlines[start] == ' ') {
-                        underlines[start] = '^';
+                Column start_col = (line_no == b_line) ? b_col : 1;
+                Column end_col = (line_no == e_line) ? e_col : static_cast<Column>(line_text.size() + 1);
+                size_t start_idx = (start_col > 0) ? static_cast<size_t>(start_col - 1) : 0;
+                size_t end_idx_exclusive = (end_col > 0) ? static_cast<size_t>(end_col - (range.is_token_range() ? 0 : 1)) : 0;
+                if (end_idx_exclusive <= start_idx) {
+                    end_idx_exclusive = start_idx + 1;
+                }
+                end_idx_exclusive = std::min(end_idx_exclusive, marks.size());
+                for (size_t i = start_idx; i < end_idx_exclusive; ++i) {
+                    if (marks[i] == ' ') {
+                        marks[i] = '~';
                     }
                 }
             }
-        };
 
-        // Apply all ranges
-        for (const auto& range : diag.ranges) {
-            apply_range(range);
-        }
+            if (line_no == primary_line) {
+                mark_col(primary_col, '^');
+            }
+            for (const auto& loc : diag.extra_locations) {
+                if (loc.file != fid) {
+                    continue;
+                }
+                auto [caret_line, caret_col] = source_mgr_->get_line_column(loc);
+                if (caret_line == line_no) {
+                    mark_col(caret_col, '^');
+                }
+            }
 
-        // Apply primary caret
-        if (col_no > 0 && col_no <= underlines.length()) {
-            underlines[col_no - 1] = '^';
-        }
-
-        // Apply extra carets
-        for (const auto& loc : diag.extra_locations) {
-            auto [l_line, l_col] = source_mgr_->get_line_column(loc);
-            if (l_line == line_no && l_col > 0 && l_col <= underlines.length()) {
-                underlines[l_col - 1] = '^';
+            const bool has_marks = marks.find_first_not_of(' ') != std::string::npos;
+            if (has_marks) {
+                *os_ << color_blue << padding << " | " << color_green << marks << color_reset << "\n";
+                if (line_no == primary_line) {
+                    size_t anchor = marks.find('^');
+                    if (anchor == std::string::npos) {
+                        anchor = marks.find('~');
+                    }
+                    if (anchor == std::string::npos) {
+                        anchor = (primary_col > 0) ? static_cast<size_t>(primary_col - 1) : 0;
+                    }
+                    *os_ << color_blue << padding << " | " << color_reset
+                         << std::string(anchor, ' ') << color_msg;
+                    if (show_colors_) {
+                        print_severity(severity);
+                    } else {
+                        *os_ << get_severity_name(severity) << ": ";
+                    }
+                    *os_ << diag.message << color_reset << "\n";
+                }
             }
         }
-
-        // Print the underlines with color
-        *os_ << color_green << underlines << color_reset << "\n";
     }
 
     void TextDiagnosticPrinter::print_fixit_hints(const Diagnostic& diag) {
@@ -492,6 +537,9 @@ namespace aion::diag {
             case common::err_unknown_identifier: return "unknown identifier '%0'";
             case common::warn_unused_variable: return "unused variable '%0'";
             case parse::err_expected_semicolon: return "expected ';'";
+            case parse::err_expected_expression: return "expected expression";
+            case parse::err_unrecognized_identifier: return "unrecognized identifier";
+            case parse::err_unknown_operator: return "unexpected token in expression";
             case common::err_file_not_found: return "file not found: '%0'";
             default: return nullptr;
         }

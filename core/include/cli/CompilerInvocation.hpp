@@ -124,7 +124,6 @@ namespace aion::compiler_config {
 class CompilerInvocation {
     aion::compiler_config::CompilerConfig config;
     aion::diag::DiagnosticsEngine& diag_;
-    aion::ast::ASTContext context_;
 
 public:
     explicit CompilerInvocation(aion::compiler_config::CompilerConfig config,
@@ -136,9 +135,6 @@ public:
 
     /// Get the diagnostics engine
     aion::diag::DiagnosticsEngine& getDiagnostics() { return diag_; }
-
-    /// Get the AST context
-    aion::ast::ASTContext& getASTContext() { return context_; }
 };
 
 #endif //COMPILER_INVOCATION_HPP

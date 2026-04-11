@@ -113,14 +113,14 @@ namespace aion::parse {
     }
 
     Token Parser::skip_until(const TokenType type) {
-        while (peek().type != type) {
+        while (peek().type != type && peek().type != TokenType::eof) {
             blind_consume();
         }
         return previous();
     }
 
     Token Parser::skip_until(const TokenType type, const std::string& lexeme) {
-        while (peek().type != type || peek().lexeme != lexeme) {
+        while ((peek().type != type || peek().lexeme != lexeme) && peek().type != TokenType::eof) {
             blind_consume();
         }
         return previous();

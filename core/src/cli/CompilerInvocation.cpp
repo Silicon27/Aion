@@ -446,11 +446,15 @@ int CompilerInvocation::run() {
 
     SourceManager sm;
     diag_.set_source_manager(&sm);
+    auto *printer = new aion::diag::TextDiagnosticPrinter(std::cerr, &sm, diag_.get_show_colors());
+    diag_.set_client(printer, true);
 
     std::vector<std::string> object_files;
     bool has_errors = false;
 
     for (const auto &source : config.sources) {
+        ASTContext context;
+
         FileID id = sm.add_file_from_disk(source, diag_);
         if (id == SOURCE_MANAGER_INVALID_FILE_ID) {
             continue; // error already reported, avoid crashing whole batch
@@ -463,7 +467,7 @@ int CompilerInvocation::run() {
 
         auto parser_invoke = ParserInvoke({id,
             diag_,
-            context_,
+            context,
             std::get<0>(tokens),
             config.flags,});
         auto parser = parser_invoke.invoke();

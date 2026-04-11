@@ -55,7 +55,6 @@ namespace aion::parse {
         Flags flags;
         ParserContext parser_context;
         FileId file_id;
-        TranslationUnitDecl* translation_unit_decl = nullptr;
         int pos = 0;
 
     public:

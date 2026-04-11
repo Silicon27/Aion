@@ -96,51 +96,39 @@ namespace aion::diag {
             rendered.message = "diagnostic emitted with no message";
         }
 
-        // Print location and severity on the headline.
-        print_location(rendered);
+        // Header: severity: message
         print_severity(severity);
-        if (!source_mgr_ || !rendered.location.is_valid()) {
-            if (show_colors_) {
-                *os_ << "\033[1m";
-            }
-            *os_ << rendered.message;
-            if (show_colors_) {
-                *os_ << "\033[0m";
-            }
-            *os_ << "\n";
-        } else {
-            *os_ << "\n";
-            print_source_line(rendered, severity);
+        if (show_colors_) *os_ << ANSI_BOLD_WHITE;
+        *os_ << rendered.message << (show_colors_ ? ANSI_RESET : "") << "\n";
+
+        if (source_mgr_ && rendered.location.is_valid()) {
+            print_location(rendered, true);
+            print_source_line(rendered, severity, false);
         }
 
         for (const auto& note_entry : rendered.notes) {
             const bool has_note_loc = note_entry.location.is_valid();
             const bool has_note_range = note_entry.range.is_valid();
+
+            // Note Header
+            print_severity(Severity::note);
+            if (show_colors_) *os_ << ANSI_BOLD_WHITE;
+            *os_ << (note_entry.text.empty() ? "related location" : note_entry.text) << (show_colors_ ? ANSI_RESET : "") << "\n";
+
             if (!source_mgr_ || (!has_note_loc && !has_note_range)) {
-                if (show_colors_) {
-                    *os_ << ANSI_BOLD_CYAN;
-                }
-                *os_ << "note: ";
-                if (show_colors_) {
-                    *os_ << ANSI_RESET;
-                }
-                *os_ << note_entry.text << "\n";
                 continue;
             }
 
             Diagnostic note_diag;
             note_diag.id = rendered.id;
             note_diag.severity = Severity::note;
-            note_diag.message = note_entry.text.empty() ? "related location" : note_entry.text;
             note_diag.location = has_note_loc ? note_entry.location : note_entry.range.begin;
             if (has_note_range) {
                 note_diag.ranges.push_back(note_entry.range);
             }
 
-            print_location(note_diag);
-            print_severity(Severity::note);
-            *os_ << "\n";
-            print_source_line(note_diag, Severity::note);
+            print_location(note_diag, false);
+            print_source_line(note_diag, Severity::note, false);
         }
 
         // Print fix-it hints
@@ -172,14 +160,10 @@ namespace aion::diag {
             }
         }
 
-        *os_ << get_severity_name(severity) << ": ";
-
-        if (show_colors_) {
-            *os_ << ANSI_RESET;
-        }
+        *os_ << get_severity_name(severity) << (show_colors_ ? ANSI_RESET : "") << ": ";
     }
 
-    void TextDiagnosticPrinter::print_location(const Diagnostic& diag) {
+    void TextDiagnosticPrinter::print_location(const Diagnostic& diag, bool is_primary) {
         if (!source_mgr_) {
             return;
         }
@@ -188,23 +172,32 @@ namespace aion::diag {
         if (diag.location.is_valid()) {
             std::string path = source_mgr_->get_file_path(diag.location);
             auto [line, col] = source_mgr_->get_line_column(diag.location);
+            int line_num_width = std::max(2, (int)std::to_string(line).length());
+            std::string padding(line_num_width, ' ');
 
             if (show_colors_) {
-                *os_ << ANSI_BOLD_WHITE;
+                *os_ << ANSI_BOLD_CYAN;
+            }
+
+            *os_ << padding << (is_primary ? "--> " : "::: ");
+
+            if (show_colors_) {
+                *os_ << ANSI_RESET << ANSI_WHITE;
             }
 
             if (!path.empty()) {
                 *os_ << path << ":";
             }
-            *os_ << line << ":" << col << ": ";
+            *os_ << line << ":" << col;
 
             if (show_colors_) {
                 *os_ << ANSI_RESET;
             }
+            *os_ << "\n";
         }
     }
 
-    void TextDiagnosticPrinter::print_source_line(const Diagnostic& diag, const Severity severity) {
+    void TextDiagnosticPrinter::print_source_line(const Diagnostic& diag, const Severity severity, bool show_message) {
         if (!diag.location.is_valid()) {
             return;
         }
@@ -322,14 +315,8 @@ namespace aion::diag {
                     trimmed_marks.erase(last + 1);
                 }
                 *os_ << color_blue << padding << " | " << color_severity << trimmed_marks;
-                if (line_no == primary_line) {
-                    *os_ << " " << color_severity;
-                    if (show_colors_) {
-                        print_severity(severity);
-                    } else {
-                        *os_ << get_severity_name(severity) << ": ";
-                    }
-                    *os_ << (show_colors_ ? ANSI_BOLD_WHITE : "") << diag.message << color_reset << "\n";
+                if (show_message && line_no == primary_line) {
+                    *os_ << " " << color_severity << diag.message << color_reset << "\n";
                 } else {
                     *os_ << color_reset << "\n";
                 }

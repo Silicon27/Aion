@@ -96,13 +96,24 @@ namespace aion::diag {
             rendered.message = "diagnostic emitted with no message";
         }
 
-        // Header: severity: message
+        // Header: severity: location: message
         print_severity(severity);
+        
+        if (source_mgr_ && rendered.location.is_valid()) {
+            std::string path = source_mgr_->get_file_path(rendered.location);
+            auto [line, col] = source_mgr_->get_line_column(rendered.location);
+            
+            if (show_colors_) *os_ << ANSI_BOLD_CYAN;
+            if (!path.empty()) *os_ << path << ":";
+            *os_ << line << ":" << col << ": ";
+            if (show_colors_) *os_ << ANSI_RESET;
+        }
+
         if (show_colors_) *os_ << ANSI_BOLD_WHITE;
         *os_ << rendered.message << (show_colors_ ? ANSI_RESET : "") << "\n";
 
+        // Source snippet
         if (source_mgr_ && rendered.location.is_valid()) {
-            print_location(rendered, true);
             print_source_line(rendered, severity, false);
         }
 
@@ -112,6 +123,16 @@ namespace aion::diag {
 
             // Note Header
             print_severity(Severity::note);
+            
+            if (has_note_loc) {
+                std::string path = source_mgr_->get_file_path(note_entry.location);
+                auto [line, col] = source_mgr_->get_line_column(note_entry.location);
+                if (show_colors_) *os_ << ANSI_BOLD_CYAN;
+                if (!path.empty()) *os_ << path << ":";
+                *os_ << line << ":" << col << ": ";
+                if (show_colors_) *os_ << ANSI_RESET;
+            }
+
             if (show_colors_) *os_ << ANSI_BOLD_WHITE;
             *os_ << (note_entry.text.empty() ? "related location" : note_entry.text) << (show_colors_ ? ANSI_RESET : "") << "\n";
 
@@ -127,7 +148,6 @@ namespace aion::diag {
                 note_diag.ranges.push_back(note_entry.range);
             }
 
-            print_location(note_diag, false);
             print_source_line(note_diag, Severity::note, false);
         }
 
@@ -155,7 +175,10 @@ namespace aion::diag {
             }
         }
 
-        *os_ << get_severity_name(severity) << (show_colors_ ? ANSI_RESET : "") << ": ";
+        std::string name = get_severity_name(severity);
+        for (auto& c : name) c = std::toupper(c);
+        
+        *os_ << name << (show_colors_ ? ANSI_RESET : "") << ": ";
     }
 
     void TextDiagnosticPrinter::print_location(const Diagnostic& diag, bool is_primary) {
@@ -167,17 +190,15 @@ namespace aion::diag {
         if (diag.location.is_valid()) {
             std::string path = source_mgr_->get_file_path(diag.location);
             auto [line, col] = source_mgr_->get_line_column(diag.location);
-            int line_num_width = std::max(2, (int)std::to_string(line).length());
-            std::string padding(line_num_width, ' ');
-
+            
             if (show_colors_) {
                 *os_ << ANSI_BOLD_CYAN;
             }
 
-            *os_ << padding << (is_primary ? "--> " : "::: ");
+            *os_ << (is_primary ? "--> " : "::: ");
 
             if (show_colors_) {
-                *os_ << ANSI_RESET << ANSI_WHITE;
+                *os_ << ANSI_RESET << ANSI_GRAY;
             }
 
             if (!path.empty()) {

@@ -356,6 +356,10 @@ void register_error_tests(TestRunner& runner) {
         AION_ASSERT_CONTAINS(capture.get_output(), "\033[1;31m");
         AION_ASSERT_CONTAINS(capture.get_output(), "^");
         
+        // Check for white color in source line (for non-highlighted parts)
+        // \033[37m is ANSI_WHITE
+        AION_ASSERT_CONTAINS(capture.get_output(), "\033[37m");
+        
         capture.finish();
     });
 

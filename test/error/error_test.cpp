@@ -188,7 +188,8 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "test.aion:1:9: error:");
+        AION_ASSERT_CONTAINS(output, "error: use of undeclared identifier 'y'");
+        AION_ASSERT_CONTAINS(output, "--> test.aion:1:9");
         AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
         AION_ASSERT_CONTAINS(output, "   |         ^");
         AION_ASSERT_CONTAINS(output, "error: use of undeclared identifier 'y'");
@@ -342,8 +343,8 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        // The printer uses \033[1;31merror: \033[0m for Error
-        AION_ASSERT_CONTAINS(output, "\033[1;31merror: \033[0m");
+        // The printer uses \033[1;31merror\033[0m:  for Error
+        AION_ASSERT_CONTAINS(output, "\033[1;31merror\033[0m: ");
         AION_ASSERT_CONTAINS(output, "colored error");
 
         // Check for caret color too
@@ -376,7 +377,7 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "test.aion:2:1: error:");
+        AION_ASSERT_CONTAINS(output, "--> test.aion:2:1");
         AION_ASSERT_CONTAINS(output, " 2 | line 2");
         AION_ASSERT_CONTAINS(output, "   | ^");
         AION_ASSERT_CONTAINS(output, "error: error on line 2");

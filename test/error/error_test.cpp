@@ -259,8 +259,8 @@ void register_error_tests(TestRunner& runner) {
         
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "help: insert \";\"");
-        AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
-        AION_ASSERT_CONTAINS(output, "   |          ~");
+        AION_ASSERT_CONTAINS(output, " 1 | - int x = y");
+        AION_ASSERT_CONTAINS(output, " 1 | + int x = y;");
         capture.finish();
     });
     
@@ -277,8 +277,8 @@ void register_error_tests(TestRunner& runner) {
 
         std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "help: insert ';' to terminate the declaration");
-        AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
-        AION_ASSERT_CONTAINS(output, "   |          ~");
+        AION_ASSERT_CONTAINS(output, " 1 | - int x = y");
+        AION_ASSERT_CONTAINS(output, " 1 | + int x = y;");
         capture.finish();
     });
 

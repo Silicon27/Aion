@@ -64,10 +64,30 @@ namespace aion::parse {
         // check for attributes
         if (silent_probe(mut)) {
             is_mut = true;
-            blind_consume();
+            auto mut_tok = blind_consume();
+            if (silent_probe(comp)) {
+                auto comp_tok = peek();
+                SourceLocation mut_loc = diagnostics.get_token_location(file_id, mut_tok);
+                SourceLocation comp_loc = diagnostics.get_token_location(file_id, comp_tok);
+                diagnostics.report(mut_loc, diag::parse::err_unexpected_attribute)
+                    << comp_loc
+                    << "compile time variables cannot be attributed with mut"
+                    << diag::FixItHint::create_removal(diagnostics.token_range(mut_tok));
+                blind_consume();
+            }
         } else if (silent_probe(comp)) {
             is_comp = true;
-            blind_consume();
+            auto comp_tok = blind_consume();
+            if (silent_probe(mut)) {
+                auto mut_tok = peek();
+                SourceLocation mut_loc = diagnostics.get_token_location(file_id, mut_tok);
+                SourceLocation comp_loc = diagnostics.get_token_location(file_id, comp_tok);
+                diagnostics.report(mut_loc, diag::parse::err_unexpected_attribute)
+                    << comp_loc
+                    << "compile time variables cannot be attributed with mut"
+                    << diag::FixItHint::create_removal(diagnostics.token_range(mut_tok));
+                blind_consume();
+            }
         }
 
         // get the identifier
@@ -119,7 +139,6 @@ namespace aion::parse {
         }
 
         if (silent_probe(semicolon)) {
-            blind_consume();
             if (is_comp) {
                 // not initialized but is declared a comp -> constants cannot be uninitialized
                 SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());

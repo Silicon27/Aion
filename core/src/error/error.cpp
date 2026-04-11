@@ -176,7 +176,6 @@ namespace aion::diag {
         }
 
         std::string name = get_severity_name(severity);
-        for (auto& c : name) c = std::toupper(c);
         
         *os_ << name << (show_colors_ ? ANSI_RESET : "") << ": ";
     }

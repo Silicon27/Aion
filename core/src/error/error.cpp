@@ -591,6 +591,21 @@ namespace aion::diag {
         return *this;
     }
 
+    DiagnosticBuilder& DiagnosticBuilder::operator<<(const lexer::Token& token) {
+        if (!is_active_ || !engine_ || !engine_->get_source_manager()) return *this;
+    
+        // Use the engine's current diagnostic location's file ID
+        FileID fid = engine_->cur_diag_loc_.file;
+        Source_Location loc = engine_->get_source_manager()->get_location(fid, token);
+    
+        // Create a char range covering the token lexeme
+        Source_Location end_loc = loc;
+        end_loc.offset += token.lexeme.length();
+    
+        ranges_.push_back(CharSourceRange::get_char_range(loc, end_loc));
+        return *this;
+    }
+
     DiagnosticBuilder& DiagnosticBuilder::operator<<(Source_Location loc) {
         extra_locations_.push_back(loc);
         return *this;
@@ -867,6 +882,14 @@ namespace aion::diag {
         diag.extra_locations = extra_locations;
 
         emit_diagnostic(diag);
+    }
+
+    CharSourceRange DiagnosticsEngine::token_range(const lexer::Token &token) const {
+        FileID fid = cur_diag_loc_.file;
+        SourceLocation loc = get_token_location(fid, token);
+        SourceLocation end_loc = loc;
+        end_loc.offset += token.lexeme.length();
+        return CharSourceRange::get_char_range(loc, end_loc);
     }
 
     SourceLocation DiagnosticsEngine::get_token_location(const FileID fid, const lexer::Token &token) const {

@@ -59,6 +59,14 @@ struct CharSourceRange {
     }
 };
 
+inline CharSourceRange token_range(Source_Location b, Source_Location e) {
+    return CharSourceRange::get_token_range(b, e);
+}
+
+inline CharSourceRange char_range(Source_Location b, Source_Location e) {
+    return CharSourceRange::get_char_range(b, e);
+}
+
 inline bool range_contains_location(const CharSourceRange& range, Source_Location loc) {
     if (!range.is_valid() || !loc.is_valid()) {
         return false;
@@ -334,6 +342,9 @@ public:
     /// Add a source range with explicit display configuration.
     DiagnosticBuilder& operator<<(const RangeDisplay& styled_range);
 
+    /// Add a token range to highlight.
+    DiagnosticBuilder& operator<<(const lexer::Token& token);
+
     /// Add an extra location for a caret.
     DiagnosticBuilder& operator<<(Source_Location loc);
 
@@ -465,6 +476,9 @@ public:
 
     /// Emit a fully-formed diagnostic.
     void emit_diagnostic(const Diagnostic& diag);
+
+    /// Get a character range for a token.
+    CharSourceRange token_range(const lexer::Token& token) const;
 
     SourceLocation get_token_location(FileID fid, const lexer::Token& token) const;
 

@@ -48,6 +48,7 @@ namespace aion::compiler_config {
         // frontend flags
         bool verbose = false;
         int max_error_count = 20;
+        bool show_fixits = false;
 
         // backend flags
         Opt_Level     level        = Opt_Level::O1;

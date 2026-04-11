@@ -66,15 +66,15 @@ void register_error_tests(TestRunner& runner) {
         diag::DiagnosticsEngine engine(&sm, printer, true);
         
         engine.report(diag::common::err_unknown_identifier) << "my_var";
-        AION_ASSERT_CONTAINS(ss.str(), "ERROR: unknown identifier 'my_var'");
+        AION_ASSERT_CONTAINS(ss.str(), "error: unknown identifier 'my_var'");
         
         ss.str("");
         engine.report(diag::common::warn_unused_variable) << "unused_val";
-        AION_ASSERT_CONTAINS(ss.str(), "WARNING: unused variable 'unused_val'");
+        AION_ASSERT_CONTAINS(ss.str(), "warning: unused variable 'unused_val'");
 
         ss.str("");
         engine.report(diag::parse::err_expected_semicolon);
-        AION_ASSERT_CONTAINS(ss.str(), "ERROR: expected ';'");
+        AION_ASSERT_CONTAINS(ss.str(), "error: expected ';'");
     });
 
     runner.add_suite(std::move(format_suite));
@@ -168,7 +168,7 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "ERROR: unknown identifier 'x'");
+        AION_ASSERT_CONTAINS(output, "error: unknown identifier 'x'");
         capture.finish();
     });
 
@@ -188,7 +188,7 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "ERROR: test.aion:1:9: use of undeclared identifier 'y'");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:9\nerror: use of undeclared identifier 'y'");
         AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
         AION_ASSERT_CONTAINS(output, "   |         ^");
         capture.finish();
@@ -291,10 +291,10 @@ void register_error_tests(TestRunner& runner) {
             << diag::note("try: let x = 0;");
 
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "ERROR:");
+        AION_ASSERT_CONTAINS(output, "error:");
         AION_ASSERT_CONTAINS(output, "expected expression");
-        AION_ASSERT_CONTAINS(output, "NOTE: this expression cannot be empty");
-        AION_ASSERT_CONTAINS(output, "NOTE: try: let x = 0;");
+        AION_ASSERT_CONTAINS(output, "note: this expression cannot be empty");
+        AION_ASSERT_CONTAINS(output, "note: try: let x = 0;");
         capture.finish();
     });
 
@@ -317,7 +317,7 @@ void register_error_tests(TestRunner& runner) {
             << diag::with_range(open_to_end, diag::at(open_paren));
 
         const std::string output = capture.get_output();
-        size_t first_idx = output.find("NOTE:");
+        size_t first_idx = output.find("note:");
         size_t second_idx = output.find("to match this '('");
         size_t third_idx = output.find("spans this range");
         AION_ASSERT_TRUE(first_idx != std::string::npos);
@@ -341,8 +341,8 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        // The printer uses \033[1;31mERROR\033[0m:  for Error
-        AION_ASSERT_CONTAINS(output, "\033[1;31mERROR\033[0m: ");
+        // The printer uses \033[1;31merror\033[0m:  for error
+        AION_ASSERT_CONTAINS(output, "\033[1;31merror\033[0m: ");
         AION_ASSERT_CONTAINS(output, "colored error");
 
         // Check for caret color too
@@ -379,7 +379,7 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "ERROR: test.aion:2:1: error on line 2");
+        AION_ASSERT_CONTAINS(output, "test.aion:2:1\nerror: error on line 2");
         AION_ASSERT_CONTAINS(output, " 2 | line 2");
         AION_ASSERT_CONTAINS(output, "   | ^");
         capture.finish();
@@ -407,7 +407,7 @@ void register_error_tests(TestRunner& runner) {
         AION_ASSERT_CONTAINS(output, " 2 |   1 +");
         AION_ASSERT_CONTAINS(output, " 3 |   2;");
         AION_ASSERT_CONTAINS(output, "^~~");
-        AION_ASSERT_CONTAINS(output, "ERROR: test.aion:1:9: expression spans multiple lines");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:9\nerror: expression spans multiple lines");
         capture.finish();
     });
 
@@ -429,7 +429,7 @@ void register_error_tests(TestRunner& runner) {
 
         const std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "alpha beta gamma");
-        AION_ASSERT_CONTAINS(output, "ERROR: test.aion:1:7: unexpected token");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:7\nerror: unexpected token");
         AION_ASSERT_CONTAINS(output, "^\n");
         // Underline is disabled for this range, so no '~' markers should be emitted.
         AION_ASSERT_FALSE(output.find("~") != std::string::npos);

@@ -17,6 +17,8 @@ add_executable(aion
         core/src/ast/expr.cpp
         core/src/ast/type.cpp
         core/src/ast/ASTContext.cpp
+        core/src/ast/printer.cpp
+        core/src/ast/RecursiveAstVisitor.cpp
         core/src/error/error.cpp
         core/src/support/source_manager.cpp
         test/suite/aion_test.hpp

@@ -59,11 +59,15 @@ set(PARSER_CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/core/src/error/error.cpp
     ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
     ${CMAKE_SOURCE_DIR}/core/src/ast/ast.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/printer.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/RecursiveAstVisitor.cpp
     ${CMAKE_SOURCE_DIR}/core/src/ast/ASTContext.cpp
 )
 
 set(AST_CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/core/src/ast/ast.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/printer.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/RecursiveAstVisitor.cpp
     ${CMAKE_SOURCE_DIR}/core/src/ast/ASTContext.cpp
 )
 

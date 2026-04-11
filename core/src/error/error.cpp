@@ -386,7 +386,10 @@ namespace aion::diag {
         if (!show_colors_ || line.empty()) return line;
 
         std::string result;
-        result.reserve(line.size() * 3); // Account for ANSI codes
+        result.reserve(line.size() * 10); // Generous space for ANSI codes
+
+        // Start with white for non-highlighted parts
+        result += ANSI_WHITE;
 
         auto is_type = [](const std::string& word) {
             static const std::set<std::string> types = {
@@ -410,7 +413,7 @@ namespace aion::diag {
                 result += ANSI_GRAY;
                 result += line.substr(i);
                 result += ANSI_RESET;
-                break;
+                return result; // Comments are the end of the line
             }
 
             // String literal
@@ -422,6 +425,7 @@ namespace aion::diag {
                     if (line[i] == '"' && (i == 0 || line[i - 1] != '\\')) break;
                 }
                 result += ANSI_RESET;
+                result += ANSI_WHITE;
                 continue;
             }
 
@@ -434,6 +438,7 @@ namespace aion::diag {
                     if (line[i] == '\'' && (i == 0 || line[i - 1] != '\\')) break;
                 }
                 result += ANSI_RESET;
+                result += ANSI_WHITE;
                 continue;
             }
 
@@ -444,6 +449,7 @@ namespace aion::diag {
                     result += line[i++];
                 }
                 result += ANSI_RESET;
+                result += ANSI_WHITE;
                 --i;
                 continue;
             }
@@ -460,22 +466,25 @@ namespace aion::diag {
                 if (aion::lexer::is_keyword(word)) {
                     result += ANSI_BOLD_MAGENTA;
                     result += word;
+                    result += ANSI_RESET;
+                    result += ANSI_WHITE;
                 } else if (is_type(word)) {
                     result += ANSI_BOLD_YELLOW;
                     result += word;
+                    result += ANSI_RESET;
+                    result += ANSI_WHITE;
                 } else {
                     result += word;
                 }
-                result += ANSI_RESET;
                 continue;
             }
 
             // Punctuation / Operators
-            result += ANSI_BOLD_WHITE;
+            result += ANSI_WHITE;
             result += c;
-            result += ANSI_RESET;
         }
 
+        result += ANSI_RESET;
         return result;
     }
 

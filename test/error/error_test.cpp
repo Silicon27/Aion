@@ -188,7 +188,7 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "test.aion:1:9\nerror: use of undeclared identifier 'y'");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:9: error: use of undeclared identifier 'y'");
         AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
         AION_ASSERT_CONTAINS(output, "   |         ^");
         capture.finish();
@@ -379,7 +379,7 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "test.aion:2:1\nerror: error on line 2");
+        AION_ASSERT_CONTAINS(output, "test.aion:2:1: error: error on line 2");
         AION_ASSERT_CONTAINS(output, " 2 | line 2");
         AION_ASSERT_CONTAINS(output, "   | ^");
         capture.finish();
@@ -407,7 +407,7 @@ void register_error_tests(TestRunner& runner) {
         AION_ASSERT_CONTAINS(output, " 2 |   1 +");
         AION_ASSERT_CONTAINS(output, " 3 |   2;");
         AION_ASSERT_CONTAINS(output, "^~~");
-        AION_ASSERT_CONTAINS(output, "test.aion:1:9\nerror: expression spans multiple lines");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:9: error: expression spans multiple lines");
         capture.finish();
     });
 
@@ -429,7 +429,7 @@ void register_error_tests(TestRunner& runner) {
 
         const std::string output = capture.get_output();
         AION_ASSERT_CONTAINS(output, "alpha beta gamma");
-        AION_ASSERT_CONTAINS(output, "test.aion:1:7\nerror: unexpected token");
+        AION_ASSERT_CONTAINS(output, "test.aion:1:7: error: unexpected token");
         AION_ASSERT_CONTAINS(output, "^\n");
         // Underline is disabled for this range, so no '~' markers should be emitted.
         AION_ASSERT_FALSE(output.find("~") != std::string::npos);

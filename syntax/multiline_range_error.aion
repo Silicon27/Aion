@@ -1,5 +1,6 @@
 // Example program intended to trigger a multi-line diagnostics span.
 // Missing closing ')' causes the expression to span lines.
+let foo;
 let value: i32 = foo(
   1 +
   2;

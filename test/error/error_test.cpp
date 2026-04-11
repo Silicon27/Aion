@@ -271,12 +271,61 @@ void register_error_tests(TestRunner& runner) {
         FileID fid = sm.add_buffer("int x = y", "test.aion");
         diag::DiagnosticsEngine d(&sm, &printer, false);
         d.report(Source_Location(fid, 9), diag::parse::err_expected_semicolon) 
-        << diag::FixItHint::create_insertion(Source_Location(fid, 9), ";");
-        
+        << diag::FixItHint::create_insertion(Source_Location(fid, 9), ";")
+        << diag::fixit_message("insert ';' to terminate the declaration");
+
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "help: insert \";\"");
+        AION_ASSERT_CONTAINS(output, "help: insert ';' to terminate the declaration");
         AION_ASSERT_CONTAINS(output, " 1 | int x = y;");
         AION_ASSERT_CONTAINS(output, "   |          ~");
+        capture.finish();
+    });
+
+    printer_suite->add_test("NotesPrinting_streams", [] {
+        OutputCapture capture("NotesPrinting_streams");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
+
+        FileID fid = sm.add_buffer("let x = ;", "test.aion");
+        diag::DiagnosticsEngine d(&sm, &printer, false);
+        d.report(Source_Location(fid, 8), diag::parse::err_expected_expression)
+            << "expected expression"
+            << diag::note("this expression cannot be empty")
+            << diag::note("try: let x = 0;");
+
+        std::string output = capture.get_output();
+        AION_ASSERT_CONTAINS(output, "note: this expression cannot be empty");
+        AION_ASSERT_CONTAINS(output, "note: try: let x = 0;");
+        capture.finish();
+    });
+
+    printer_suite->add_test("NotesWithAnchors_preserve_stream_order", [] {
+        OutputCapture capture("NotesWithAnchors_preserve_stream_order");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
+
+        FileID fid = sm.add_buffer("foo(\n  1 +\n  2;\n", "test.aion");
+        Source_Location open_paren(fid, 3);
+        Source_Location err_loc(fid, 14);
+        auto open_to_end = diag::CharSourceRange::get_char_range(open_paren, err_loc);
+
+        diag::DiagnosticsEngine d(&sm, &printer, false);
+        d.report(err_loc, diag::parse::err_expected_rparen)
+            << diag::note("first note")
+            << diag::note("to match this '('")
+            << diag::at(open_paren)
+            << diag::note("spans this range")
+            << diag::with_range(open_to_end);
+
+        const std::string output = capture.get_output();
+        size_t first_idx = output.find("note: first note");
+        size_t second_idx = output.find("to match this '('");
+        size_t third_idx = output.find("spans this range");
+        AION_ASSERT_TRUE(first_idx != std::string::npos);
+        AION_ASSERT_TRUE(second_idx != std::string::npos);
+        AION_ASSERT_TRUE(third_idx != std::string::npos);
+        AION_ASSERT_TRUE(first_idx < second_idx);
+        AION_ASSERT_TRUE(second_idx < third_idx);
         capture.finish();
     });
 
@@ -293,8 +342,8 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        // The printer uses \033[1;31merror\033[0m: for Error
-        AION_ASSERT_CONTAINS(output, "\033[1;31merror\033[0m: ");
+        // The printer uses \033[1;31merror: \033[0m for Error
+        AION_ASSERT_CONTAINS(output, "\033[1;31merror: \033[0m");
         AION_ASSERT_CONTAINS(output, "colored error");
 
         // Check for caret color too
@@ -302,8 +351,8 @@ void register_error_tests(TestRunner& runner) {
         FileID fid = sm.add_buffer("foo", "test.aion");
         d.location = Source_Location(fid, 0);
         printer.handle_diagnostic(diag::Severity::error, d);
-        // Green color for caret
-        AION_ASSERT_CONTAINS(capture.get_output(), "\033[1;32m");
+        // Bold red color for caret (since it's an error)
+        AION_ASSERT_CONTAINS(capture.get_output(), "\033[1;31m");
         AION_ASSERT_CONTAINS(capture.get_output(), "^");
         
         capture.finish();

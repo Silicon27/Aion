@@ -120,6 +120,7 @@ enum : DiagID {
     err_expected_initialization,
     err_unrecognized_identifier,
     err_unknown_operator,
+    err_unexpected_attribute,
     warn_empty_statement,
 };
 } // namespace parse

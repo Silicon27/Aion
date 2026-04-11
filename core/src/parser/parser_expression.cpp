@@ -169,7 +169,7 @@ namespace aion::parse {
                 }
                 if (peek().type != TokenType::rparen) {
                     diagnostics.report(diagnostics.get_token_location(file_id, peek()), diag::parse::err_expected_rparen)
-                        << diag::CharSourceRange::get_token_range(loc, diagnostics.get_token_location(file_id, peek()))
+                        << diag::range_display({loc, diagnostics.get_token_location(file_id, peek())}, false, diagnostics.get_token_location(file_id, peek()))
                         << diag::note("to match this '('")
                         << diag::at(loc);
                 } else {

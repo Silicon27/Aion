@@ -279,6 +279,10 @@ namespace aion::diag {
                     continue;
                 }
 
+                if (!range.show_underline()) {
+                    continue;
+                }
+
                 Column start_col = (line_no == b_line) ? b_col : 1;
                 Column end_col = (line_no == e_line) ? e_col : static_cast<Column>(line_text.size() + 1);
                 size_t start_idx = (start_col > 0) ? static_cast<size_t>(start_col - 1) : 0;
@@ -291,6 +295,19 @@ namespace aion::diag {
                     if (marks[i] == ' ') {
                         marks[i] = '~';
                     }
+                }
+            }
+
+            for (const auto& range : diag.ranges) {
+                if (!range.is_valid() || !range.has_caret_location()) {
+                    continue;
+                }
+                if (range.caret_location.file != fid) {
+                    continue;
+                }
+                auto [caret_line, caret_col] = source_mgr_->get_line_column(range.caret_location);
+                if (caret_line == line_no) {
+                    mark_col(caret_col, '^');
                 }
             }
 
@@ -556,6 +573,20 @@ namespace aion::diag {
     }
 
     DiagnosticBuilder& DiagnosticBuilder::operator<<(CharSourceRange range) {
+        if (range.has_caret_location() && !range_contains_location(range, range.caret_location)) {
+            range.has_caret_location_ = false;
+            range.caret_location = Source_Location{};
+        }
+        ranges_.push_back(range);
+        return *this;
+    }
+
+    DiagnosticBuilder& DiagnosticBuilder::operator<<(const RangeDisplay& styled_range) {
+        CharSourceRange range = styled_range.range;
+        if (range.has_caret_location() && !range_contains_location(range, range.caret_location)) {
+            range.has_caret_location_ = false;
+            range.caret_location = Source_Location{};
+        }
         ranges_.push_back(range);
         return *this;
     }
@@ -586,7 +617,9 @@ namespace aion::diag {
         if (notes_.empty()) {
             notes_.push_back(note("related location"));
         }
-        notes_.back().location = note_loc.location;
+        if (!notes_.back().range.is_valid() || range_contains_location(notes_.back().range, note_loc.location)) {
+            notes_.back().location = note_loc.location;
+        }
         return *this;
     }
 
@@ -595,6 +628,9 @@ namespace aion::diag {
             notes_.push_back(note("related range"));
         }
         notes_.back().range = note_range.range;
+        if (note_range.caret_location.is_valid() && range_contains_location(note_range.range, note_range.caret_location)) {
+            notes_.back().location = note_range.caret_location;
+        }
         return *this;
     }
 

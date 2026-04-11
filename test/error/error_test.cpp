@@ -316,7 +316,7 @@ void register_error_tests(TestRunner& runner) {
             << diag::note("to match this '('")
             << diag::at(open_paren)
             << diag::note("spans this range")
-            << diag::with_range(open_to_end);
+            << diag::with_range(open_to_end, diag::at(open_paren));
 
         const std::string output = capture.get_output();
         size_t first_idx = output.find("note: first note");
@@ -411,6 +411,31 @@ void register_error_tests(TestRunner& runner) {
         AION_ASSERT_CONTAINS(output, " 3 |   2;");
         AION_ASSERT_CONTAINS(output, "^~~");
         AION_ASSERT_CONTAINS(output, "error: expression spans multiple lines");
+        capture.finish();
+    });
+
+    printer_suite->add_test("ConfiguredRangeCaretWithoutUnderline", []() {
+        OutputCapture capture("ConfiguredRangeCaretWithoutUnderline");
+        Source_Manager sm;
+        FileID fid = sm.add_buffer("alpha beta gamma", "test.aion");
+
+        diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
+        diag::DiagnosticsEngine d(&sm, &printer, false);
+
+        Source_Location begin(fid, 0);   // alpha
+        Source_Location end(fid, 16);    // end of line
+        Source_Location caret(fid, 6);   // 'b' in beta
+
+        d.report(caret, diag::parse::err_unexpected_token)
+            << diag::range_display(diag::CharSourceRange::get_char_range(begin, end), false, caret)
+            << "configured range with custom caret";
+
+        const std::string output = capture.get_output();
+        AION_ASSERT_CONTAINS(output, "alpha beta gamma");
+        AION_ASSERT_CONTAINS(output, "error: unexpected token");
+        AION_ASSERT_CONTAINS(output, "^\n");
+        // Underline is disabled for this range, so no '~' markers should be emitted.
+        AION_ASSERT_FALSE(output.find("~") != std::string::npos);
         capture.finish();
     });
 

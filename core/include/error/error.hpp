@@ -14,6 +14,7 @@
 #include <memory>
 #include <functional>
 #include <unordered_map>
+#include <utility>
 
 #include "error/DiagnosticSeverity.hpp"
 #include "error/diagid.hpp"
@@ -35,6 +36,9 @@ struct CharSourceRange {
     Source_Location begin;
     Source_Location end;
     bool is_token_range_ = true;  // true = token range, false = char range
+    bool show_underline_ = true;
+    Source_Location caret_location;
+    bool has_caret_location_ = false;
 
     CharSourceRange() = default;
     CharSourceRange(Source_Location b, Source_Location e, bool token = true)
@@ -43,6 +47,8 @@ struct CharSourceRange {
     bool is_valid() const;
     bool is_token_range() const { return is_token_range_; }
     bool is_char_range() const { return !is_token_range_; }
+    bool show_underline() const { return show_underline_; }
+    bool has_caret_location() const { return has_caret_location_; }
 
     static CharSourceRange get_token_range(Source_Location b, Source_Location e) {
         return CharSourceRange(b, e, true);
@@ -52,6 +58,22 @@ struct CharSourceRange {
         return CharSourceRange(b, e, false);
     }
 };
+
+inline bool range_contains_location(const CharSourceRange& range, Source_Location loc) {
+    if (!range.is_valid() || !loc.is_valid()) {
+        return false;
+    }
+    if (range.begin.file != loc.file || range.end.file != loc.file) {
+        return false;
+    }
+
+    Offset begin = range.begin.offset;
+    Offset end = range.end.offset;
+    if (begin > end) {
+        std::swap(begin, end);
+    }
+    return loc.offset >= begin && loc.offset <= end;
+}
 
 struct DiagnosticNote {
     std::string text;
@@ -81,10 +103,31 @@ inline NoteLocation at(Source_Location loc) {
 
 struct NoteRange {
     CharSourceRange range;
+    Source_Location caret_location;
 };
 
 inline NoteRange with_range(CharSourceRange range) {
-    return NoteRange{range};
+    return NoteRange{range, Source_Location{}};
+}
+
+inline NoteRange with_range(CharSourceRange range, NoteLocation loc) {
+    return NoteRange{range, range_contains_location(range, loc.location) ? loc.location : Source_Location{}};
+}
+
+struct RangeDisplay {
+    CharSourceRange range;
+};
+
+inline RangeDisplay range_display(CharSourceRange range, bool underline = true) {
+    range.show_underline_ = underline;
+    return RangeDisplay{range};
+}
+
+inline RangeDisplay range_display(CharSourceRange range, bool underline, Source_Location caret_location) {
+    range.show_underline_ = underline;
+    range.has_caret_location_ = range_contains_location(range, caret_location);
+    range.caret_location = range.has_caret_location_ ? caret_location : Source_Location{};
+    return RangeDisplay{range};
 }
 
 // ============================================================================
@@ -287,6 +330,9 @@ public:
 
     /// Add a source range to highlight.
     DiagnosticBuilder& operator<<(CharSourceRange range);
+
+    /// Add a source range with explicit display configuration.
+    DiagnosticBuilder& operator<<(const RangeDisplay& styled_range);
 
     /// Add an extra location for a caret.
     DiagnosticBuilder& operator<<(Source_Location loc);

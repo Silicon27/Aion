@@ -346,10 +346,12 @@ namespace aion::diag {
             if (fixit.is_null()) continue;
 
             std::string color_green = show_colors_ ? ANSI_BOLD_GREEN : "";
+            std::string color_red = show_colors_ ? ANSI_BOLD_RED : "";
             std::string color_reset = show_colors_ ? ANSI_RESET : "";
             std::string color_blue = show_colors_ ? ANSI_BOLD_CYAN : "";
+            std::string color_white = show_colors_ ? ANSI_BOLD_WHITE : "";
 
-            // Calculate padding based on line number width (try to match print_source_line)
+            // Calculate padding based on line number width
             int line_num_width = 2;
             if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
                 auto [line_no, _] = source_mgr_->get_line_column(fixit.remove_range.begin);
@@ -359,40 +361,40 @@ namespace aion::diag {
 
             *os_ << color_blue << padding << " |\n";
             *os_ << color_blue << padding << " = " << color_green << "help: " << color_reset;
+            
             if (!fixit.help_message.empty()) {
                 *os_ << fixit.help_message << "\n";
             } else if (!fixit.code_to_insert.empty() && fixit.remove_range.begin == fixit.remove_range.end) {
-                *os_ << "insert \"" << fixit.code_to_insert << "\"\n";
+                *os_ << "insert \"" << color_white << fixit.code_to_insert << color_reset << "\"\n";
             } else if (fixit.code_to_insert.empty()) {
                 *os_ << "remove this\n";
             } else {
-                *os_ << "replace with \"" << fixit.code_to_insert << "\"\n";
+                *os_ << "replace with \"" << color_white << fixit.code_to_insert << color_reset << "\"\n";
             }
 
-            // Show the line with the fix applied (Rust-style)
             if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
                 auto [line_no, col_no] = source_mgr_->get_line_column(fixit.remove_range.begin);
                 std::string line_text = source_mgr_->get_line_text(fixit.remove_range.begin);
                 if (!line_text.empty()) {
                     if (line_text.back() == '\n') line_text.pop_back();
 
-                    *os_ << color_blue << padding << " |\n";
-                    *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset;
-
                     auto [start_line, start_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
                     auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
 
                     if (start_line == end_line) {
                         std::string prefix = line_text.substr(0, start_col - 1);
-                        std::string suffix = (end_col - 1 < line_text.length()) ? line_text.substr(end_col - 1) : "";
+                        std::string removed = line_text.substr(start_col - 1, end_col - start_col);
+                        std::string suffix = (end_col - 1 < (int)line_text.length()) ? line_text.substr(end_col - 1) : "";
 
-                        *os_ << highlight_line(prefix) << color_green << fixit.code_to_insert << color_reset << highlight_line(suffix) << "\n";
-
-                        // Show underline for the fix
-                        *os_ << color_blue << padding << " | " << color_green;
-                        for (size_t i = 0; i < prefix.length(); ++i) *os_ << " ";
-                        for (size_t i = 0; i < fixit.code_to_insert.length(); ++i) *os_ << "~";
-                        *os_ << color_reset << "\n";
+                        *os_ << color_blue << padding << " |\n";
+                        
+                        // Original line with - (diff style)
+                        *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_red << "- " << color_reset 
+                             << highlight_line(prefix) << color_red << removed << color_reset << highlight_line(suffix) << "\n";
+                        
+                        // Suggested line with + (diff style)
+                        *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_green << "+ " << color_reset 
+                             << highlight_line(prefix) << color_green << fixit.code_to_insert << color_reset << highlight_line(suffix) << "\n";
                     }
                 }
             }

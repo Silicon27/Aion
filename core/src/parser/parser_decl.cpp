@@ -19,6 +19,11 @@ namespace aion::parse {
                 blind_consume();
                 break;
             }
+            case TokenType::semicolon: {
+                // consume for now, assumptions on why it may be there can come later;;
+                blind_consume();
+                break;
+            }
             default: {
                 diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token);
                 skip_until(TokenType::semicolon);
@@ -83,8 +88,12 @@ namespace aion::parse {
         // check for early semicolons placed before types are specified
         if (silent_probe(semicolon)) {
             SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            auto fixit_hint = diag::FixItHint::create_insertion(loc, "<type or initalizer>");
             diagnostics.report(loc, diag::parse::err_untyped_uninitialized_variable_declaration)
-                << "untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value.";
+                << "untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value."
+                << fixit_hint;
+            blind_consume(); // consume this semicolon as it effectively ends the declaration
+            return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
 
         if (silent_probe(equal)) {
@@ -135,7 +144,8 @@ namespace aion::parse {
             auto fixit_hint = diag::FixItHint::create_insertion(loc, "<expr>");
             diagnostics.report(loc, diag::parse::err_expected_expression)
                 << "expected initializer expression after '='."
-                << fixit_hint;
+                << fixit_hint
+                << diag::fixit_message("insert an initializer expression before ';'");
             silent_consume(TokenType::semicolon);
             return context.create<ErrorDecl>(Decl::DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }

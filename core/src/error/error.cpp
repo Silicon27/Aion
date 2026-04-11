@@ -6,9 +6,11 @@
 
 #include <error/error.hpp>
 #include <support/source_manager.hpp>
+#include <support/global_constants.hpp>
 #include <sstream>
 #include <iomanip>
 #include <set>
+#include <cctype>
 
 #define ANSI_RESET          "\033[0m"
 #define ANSI_BOLD           "\033[1m"
@@ -26,6 +28,7 @@
 #define ANSI_BOLD_MAGENTA   "\033[1;35m"
 #define ANSI_BOLD_CYAN      "\033[1;36m"
 #define ANSI_BOLD_WHITE     "\033[1;37m"
+#define ANSI_GRAY           "\033[90m"
 
 namespace aion::diag {
 
@@ -259,7 +262,7 @@ namespace aion::diag {
                 line_text.pop_back();
             }
 
-            *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset << line_text << "\n";
+            *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset << highlight_line(line_text) << "\n";
 
             std::string marks(std::max<size_t>(line_text.size(), 1), ' ');
             auto mark_col = [&](Column col, char glyph) {
@@ -379,7 +382,7 @@ namespace aion::diag {
                         std::string prefix = line_text.substr(0, start_col - 1);
                         std::string suffix = (end_col - 1 < line_text.length()) ? line_text.substr(end_col - 1) : "";
 
-                        *os_ << prefix << color_green << fixit.code_to_insert << color_reset << suffix << "\n";
+                        *os_ << highlight_line(prefix) << color_green << fixit.code_to_insert << color_reset << highlight_line(suffix) << "\n";
 
                         // Show underline for the fix
                         *os_ << color_blue << padding << " | " << color_green;
@@ -390,6 +393,103 @@ namespace aion::diag {
                 }
             }
         }
+    }
+
+    std::string TextDiagnosticPrinter::highlight_line(const std::string& line) const {
+        if (!show_colors_ || line.empty()) return line;
+
+        std::string result;
+        result.reserve(line.size() * 3); // Account for ANSI codes
+
+        auto is_type = [](const std::string& word) {
+            static const std::set<std::string> types = {
+                "i4", "i8", "i16", "i32", "i64", "i128",
+                "f4", "f8", "f16", "f32", "f64", "f128",
+                "bool", "char", "str", "String", "void", "unit"
+            };
+            return types.find(word) != types.end();
+        };
+
+        for (size_t i = 0; i < line.size(); ++i) {
+            char c = line[i];
+
+            if (std::isspace(static_cast<unsigned char>(c))) {
+                result += c;
+                continue;
+            }
+
+            // Line comment
+            if (c == '/' && i + 1 < line.size() && line[i + 1] == '/') {
+                result += ANSI_GRAY;
+                result += line.substr(i);
+                result += ANSI_RESET;
+                break;
+            }
+
+            // String literal
+            if (c == '"') {
+                result += ANSI_BOLD_GREEN;
+                result += c;
+                for (++i; i < line.size(); ++i) {
+                    result += line[i];
+                    if (line[i] == '"' && (i == 0 || line[i - 1] != '\\')) break;
+                }
+                result += ANSI_RESET;
+                continue;
+            }
+
+            // Char literal
+            if (c == '\'') {
+                result += ANSI_BOLD_GREEN;
+                result += c;
+                for (++i; i < line.size(); ++i) {
+                    result += line[i];
+                    if (line[i] == '\'' && (i == 0 || line[i - 1] != '\\')) break;
+                }
+                result += ANSI_RESET;
+                continue;
+            }
+
+            // Numbers
+            if (std::isdigit(static_cast<unsigned char>(c))) {
+                result += ANSI_BOLD_CYAN;
+                while (i < line.size() && (std::isalnum(static_cast<unsigned char>(line[i])) || line[i] == '.')) {
+                    result += line[i++];
+                }
+                result += ANSI_RESET;
+                --i;
+                continue;
+            }
+
+            // Identifiers / Keywords / Types
+            if (std::isalpha(static_cast<unsigned char>(c)) || c == '_') {
+                size_t start = i;
+                while (i < line.size() && (std::isalnum(static_cast<unsigned char>(line[i])) || line[i] == '_')) {
+                    ++i;
+                }
+                std::string word = line.substr(start, i - start);
+                --i;
+
+                if (aion::lexer::is_keyword(word)) {
+                    result += ANSI_BOLD_MAGENTA;
+                    result += word;
+                } else if (is_type(word)) {
+                    result += ANSI_BOLD_YELLOW;
+                    result += word;
+                } else {
+                    result += word;
+                }
+                result += ANSI_RESET;
+                continue;
+            }
+
+            // Punctuation / Operators
+            result += ANSI_BOLD_WHITE;
+            result += c;
+            result += ANSI_RESET;
+        }
+
+        return result;
     }
 
     // ============================================================================

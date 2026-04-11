@@ -283,6 +283,7 @@ class TextDiagnosticPrinter : public DiagnosticConsumer {
     std::ostream* os_;
     Source_Manager* source_mgr_;
     bool show_colors_;
+    bool show_fixits_line_ = false;
 
 public:
     TextDiagnosticPrinter(std::ostream& os, Source_Manager* sm = nullptr, bool colors = true)
@@ -291,6 +292,8 @@ public:
     void handle_diagnostic(Severity severity, const Diagnostic& diag) override;
 
     void print_summary() override;
+
+    void set_show_fixits_line(bool show) { show_fixits_line_ = show; }
 
 private:
     void print_severity(Severity severity);

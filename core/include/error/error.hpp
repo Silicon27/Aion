@@ -266,6 +266,9 @@ public:
     /// Reset the error/warning counts.
     virtual void clear() { num_errors_ = 0; num_warnings_ = 0; }
 
+    /// Print a summary of errors and warnings.
+    virtual void print_summary() {}
+
 protected:
     unsigned num_errors_ = 0;
     unsigned num_warnings_ = 0;
@@ -286,6 +289,8 @@ public:
         : os_(&os), source_mgr_(sm), show_colors_(colors) {}
 
     void handle_diagnostic(Severity severity, const Diagnostic& diag) override;
+
+    void print_summary() override;
 
 private:
     void print_severity(Severity severity);

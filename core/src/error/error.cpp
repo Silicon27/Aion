@@ -96,14 +96,14 @@ namespace aion::diag {
             rendered.message = "diagnostic emitted with no message";
         }
 
-        // 1. Location (above)
+        // 1. Location and severity/message
         if (source_mgr_ && rendered.location.is_valid()) {
             std::string path = source_mgr_->get_file_path(rendered.location);
             auto [line, col] = source_mgr_->get_line_column(rendered.location);
             
             if (show_colors_) *os_ << ANSI_BOLD_CYAN;
             if (!path.empty()) *os_ << path << ":";
-            *os_ << line << ":" << col << "\n";
+            *os_ << line << ":" << col << ": ";
             if (show_colors_) *os_ << ANSI_RESET;
         }
 
@@ -127,7 +127,7 @@ namespace aion::diag {
                 auto [line, col] = source_mgr_->get_line_column(note_entry.location);
                 if (show_colors_) *os_ << ANSI_BOLD_CYAN;
                 if (!path.empty()) *os_ << path << ":";
-                *os_ << line << ":" << col << "\n";
+                *os_ << line << ":" << col << ": ";
                 if (show_colors_) *os_ << ANSI_RESET;
             }
 
@@ -152,6 +152,32 @@ namespace aion::diag {
 
         os_->flush();
     }
+
+    void TextDiagnosticPrinter::print_summary() {
+        if (num_errors_ == 0 && num_warnings_ == 0) {
+            return;
+        }
+
+        if (num_errors_ > 0) {
+            if (show_colors_) *os_ << ANSI_BOLD_WHITE;
+            *os_ << num_errors_ << (num_errors_ == 1 ? " error" : " errors");
+            if (show_colors_) *os_ << ANSI_RESET;
+        }
+
+        if (num_errors_ > 0 && num_warnings_ > 0) {
+            *os_ << " and ";
+        }
+
+        if (num_warnings_ > 0) {
+            if (show_colors_) *os_ << ANSI_BOLD_WHITE;
+            *os_ << num_warnings_ << (num_warnings_ == 1 ? " warning" : " warnings");
+            if (show_colors_) *os_ << ANSI_RESET;
+        }
+
+        *os_ << " generated.\n";
+        os_->flush();
+    }
+
 
     void TextDiagnosticPrinter::print_severity(Severity severity) {
         if (show_colors_) {

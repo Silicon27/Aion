@@ -96,19 +96,19 @@ namespace aion::diag {
             rendered.message = "diagnostic emitted with no message";
         }
 
-        // Header: severity: location: message
-        print_severity(severity);
-        
+        // 1. Location (above)
         if (source_mgr_ && rendered.location.is_valid()) {
             std::string path = source_mgr_->get_file_path(rendered.location);
             auto [line, col] = source_mgr_->get_line_column(rendered.location);
             
             if (show_colors_) *os_ << ANSI_BOLD_CYAN;
             if (!path.empty()) *os_ << path << ":";
-            *os_ << line << ":" << col << ": ";
+            *os_ << line << ":" << col << "\n";
             if (show_colors_) *os_ << ANSI_RESET;
         }
 
+        // 2. Severity and message
+        print_severity(severity);
         if (show_colors_) *os_ << ANSI_BOLD_WHITE;
         *os_ << rendered.message << (show_colors_ ? ANSI_RESET : "") << "\n";
 
@@ -122,17 +122,16 @@ namespace aion::diag {
             const bool has_note_range = note_entry.range.is_valid();
 
             // Note Header
-            print_severity(Severity::note);
-            
             if (has_note_loc) {
                 std::string path = source_mgr_->get_file_path(note_entry.location);
                 auto [line, col] = source_mgr_->get_line_column(note_entry.location);
                 if (show_colors_) *os_ << ANSI_BOLD_CYAN;
                 if (!path.empty()) *os_ << path << ":";
-                *os_ << line << ":" << col << ": ";
+                *os_ << line << ":" << col << "\n";
                 if (show_colors_) *os_ << ANSI_RESET;
             }
 
+            print_severity(Severity::note);
             if (show_colors_) *os_ << ANSI_BOLD_WHITE;
             *os_ << (note_entry.text.empty() ? "related location" : note_entry.text) << (show_colors_ ? ANSI_RESET : "") << "\n";
 

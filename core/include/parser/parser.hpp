@@ -73,6 +73,9 @@ namespace aion::parse {
         /// usage examples would be tokens that if not matched, would indicate memory corruption during program runtime
         Token diffuse_match(const TokenType exp, const TokenType curr, const std::string& sigabrt_message);
 
+        // ---------- Newline handling ----------
+        void skip_newlines();
+
         // ---------- Non-reporting --------------
         /// would silently probe, this is, would return whether the curr == exp
         bool silent_probe(TokenType exp, const Token& curr);
@@ -86,6 +89,10 @@ namespace aion::parse {
 
         /// alias for silent_consume(const MatchToken&)
         Token attempt(const MatchToken& token) { return silent_consume(token); }
+
+        /// expect a token of a certain type, if not matched, emit a diagnostic and return invalid_token
+        Token expect(TokenType type);
+        Token expect(const MatchToken& token);
 
         // ---------- Recovery functions ----------
         /// skip_until overload

@@ -65,6 +65,12 @@ namespace aion::parse {
         std::abort();
     }
 
+    void Parser::skip_newlines() {
+        while (peek().type == TokenType::newline) {
+            blind_consume();
+        }
+    }
+
     bool Parser::silent_probe(const TokenType exp, const Token &curr) {
         return curr.type == exp;
     }
@@ -87,6 +93,32 @@ namespace aion::parse {
             return previous();
         }
         return Token(TokenType::invalid_token);
+    }
+
+    Token Parser::expect(TokenType type) {
+        Token t = silent_consume(type, peek());
+        if (t.type != TokenType::invalid_token) {
+            return t;
+        }
+
+        diag::DiagID id;
+        switch (type) {
+            case TokenType::semicolon: id = diag::parse::err_expected_semicolon; break;
+            case TokenType::rparen:    id = diag::parse::err_expected_rparen; break;
+            case TokenType::lparen:    id = diag::parse::err_expected_lparen; break;
+            case TokenType::rbrace:    id = diag::parse::err_expected_rbrace; break;
+            case TokenType::lbrace:    id = diag::parse::err_expected_lbrace; break;
+            case TokenType::identifier: id = diag::parse::err_expected_identifier; break;
+            case TokenType::equal:     id = diag::common::err_expected_token; break; // General
+            default:                   id = diag::common::err_expected_token; break;
+        }
+
+        diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), id);
+        return Token(TokenType::invalid_token);
+    }
+
+    Token Parser::expect(const MatchToken& token) {
+        return expect(token.token);
     }
 
     MutableType* Parser::match_type(const bool is_mut) {

@@ -8,10 +8,16 @@
 
 namespace aion::parse {
     Expr* Parser::parse_expression(const int rbp, const TokenType delim) {
+        skip_newlines();
         Token tok = blind_consume();
         Expr* left = nud(tok, delim);
 
-        while (peek().type != delim && lbp(peek().type) > rbp) {
+        while (true) {
+            skip_newlines();
+            if (peek().type == delim || lbp(peek().type) <= rbp) {
+                break;
+            }
+
             Token op = blind_consume();
             left = led(op, left, delim);
         }
@@ -82,7 +88,12 @@ namespace aion::parse {
             }
             case TokenType::lparen: {
                 Expr* inner = parse_expression(0, TokenType::rparen);
-                silent_consume(TokenType::rparen);
+                if (peek().type != TokenType::rparen) {
+                    diagnostics.report(diagnostics.get_token_location(file_id, peek()), diag::parse::err_expected_rparen)
+                        << diag::CharSourceRange::get_token_range(loc, diagnostics.get_token_location(file_id, peek()));
+                } else {
+                    blind_consume();
+                }
                 return inner;
             }
             default: {
@@ -132,13 +143,38 @@ namespace aion::parse {
             case TokenType::lparen: {
                 // function call - new context, delimiter switches to , between args and ) at end
                 ShortVec<Expr*> args(context);
-                while (peek().type != TokenType::rparen) {
-                    // parse_expression stops at the delimiter, so if we have not already met rparen, we would have to consume a comma.
-                    if (args.size() > 0) silent_consume(TokenType::comma);
+                while (true) {
+                    skip_newlines();
+                    if (peek().type == TokenType::rparen || peek().type == TokenType::eof || peek().type == TokenType::semicolon) {
+                        break;
+                    }
+
+                    if (args.size() > 0) {
+                        if (silent_consume(TokenType::comma, peek()).type == TokenType::invalid_token) {
+                            // if it's not a comma, and not an rparen, it could be an error or a missing comma
+                            skip_newlines();
+                            if (peek().type != TokenType::rparen) {
+                                // maybe report expected comma?
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+
+                    skip_newlines();
+                    if (peek().type == TokenType::rparen) break;
+
                     // each arg is its own expression - delimiter is , (stops prior to consuming it)
                     args.emplace_back(parse_expression(0, TokenType::comma));
                 }
-                silent_consume(TokenType::rparen);
+                if (peek().type != TokenType::rparen) {
+                    diagnostics.report(diagnostics.get_token_location(file_id, peek()), diag::parse::err_expected_rparen)
+                        << diag::CharSourceRange::get_token_range(loc, diagnostics.get_token_location(file_id, peek()))
+                        << diag::note("to match this '('")
+                        << diag::at(loc);
+                } else {
+                    blind_consume();
+                }
                 return context.create<CallExpr>(nullptr, nullptr, left, args.data(), args.size(), loc);
 
             }

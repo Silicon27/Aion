@@ -179,37 +179,6 @@ namespace aion::diag {
         *os_ << name << (show_colors_ ? ANSI_RESET : "") << ": ";
     }
 
-    void TextDiagnosticPrinter::print_location(const Diagnostic& diag, bool is_primary) {
-        if (!source_mgr_) {
-            return;
-        }
-
-        // Get file and location info
-        if (diag.location.is_valid()) {
-            std::string path = source_mgr_->get_file_path(diag.location);
-            auto [line, col] = source_mgr_->get_line_column(diag.location);
-            
-            if (show_colors_) {
-                *os_ << ANSI_BOLD_CYAN;
-            }
-
-            *os_ << (is_primary ? "--> " : "::: ");
-
-            if (show_colors_) {
-                *os_ << ANSI_RESET << ANSI_GRAY;
-            }
-
-            if (!path.empty()) {
-                *os_ << path << ":";
-            }
-            *os_ << line << ":" << col;
-
-            if (show_colors_) {
-                *os_ << ANSI_RESET;
-            }
-            *os_ << "\n";
-        }
-    }
 
     void TextDiagnosticPrinter::print_source_line(const Diagnostic& diag, const Severity severity, bool show_message) {
         if (!diag.location.is_valid()) {

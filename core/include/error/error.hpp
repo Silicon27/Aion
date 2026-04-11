@@ -53,6 +53,40 @@ struct CharSourceRange {
     }
 };
 
+struct DiagnosticNote {
+    std::string text;
+    Source_Location location;
+    CharSourceRange range;
+};
+
+inline DiagnosticNote note(const std::string& text) {
+    return DiagnosticNote{text, Source_Location{}, CharSourceRange{}};
+}
+
+inline DiagnosticNote note(const std::string& text, Source_Location loc) {
+    return DiagnosticNote{text, loc, CharSourceRange{}};
+}
+
+inline DiagnosticNote note(const std::string& text, CharSourceRange range) {
+    return DiagnosticNote{text, Source_Location{}, range};
+}
+
+struct NoteLocation {
+    Source_Location location;
+};
+
+inline NoteLocation at(Source_Location loc) {
+    return NoteLocation{loc};
+}
+
+struct NoteRange {
+    CharSourceRange range;
+};
+
+inline NoteRange with_range(CharSourceRange range) {
+    return NoteRange{range};
+}
+
 // ============================================================================
 // FixItHint
 // ============================================================================
@@ -71,6 +105,9 @@ public:
     /// The actual code to insert at the insertion location.
     std::string code_to_insert;
 
+    /// Optional custom help text shown with this fix-it.
+    std::string help_message;
+
     bool before_previous_insertions = false;
 
     FixItHint() = default;
@@ -88,6 +125,15 @@ public:
     static FixItHint create_replacement(CharSourceRange range, const std::string& code);
 };
 
+/// Stream token that attaches a help message to the most recent fix-it.
+struct FixItMessage {
+    std::string text;
+};
+
+inline FixItMessage fixit_message(const std::string& text) {
+    return FixItMessage{text};
+}
+
 // ============================================================================
 // Diagnostic
 // ============================================================================
@@ -99,6 +145,7 @@ struct Diagnostic {
     std::vector<Source_Location> extra_locations; ///< Additional carets
     Severity severity = Severity::warning;  ///< Severity level
     std::string message;                    ///< Formatted message
+    std::vector<DiagnosticNote> notes;      ///< Additional note lines and optional source anchors
     std::vector<CharSourceRange> ranges;    ///< Source ranges to highlight
     std::vector<FixItHint> fixits;          ///< Fix-it hints
 
@@ -116,6 +163,7 @@ class StoredDiagnostic {
     DiagID id_ = 0;
     Severity severity_ = Severity::warning;
     std::string message_;
+    std::vector<DiagnosticNote> notes_;
     // Full location info would be stored here
     std::vector<CharSourceRange> ranges_;
     std::vector<FixItHint> fixits_;
@@ -127,6 +175,7 @@ public:
     DiagID get_id() const { return id_; }
     Severity get_severity() const { return severity_; }
     const std::string& get_message() const { return message_; }
+    const std::vector<DiagnosticNote>& get_notes() const { return notes_; }
 
     using range_iterator = std::vector<CharSourceRange>::const_iterator;
     range_iterator range_begin() const { return ranges_.begin(); }
@@ -212,6 +261,7 @@ class DiagnosticBuilder {
     std::vector<CharSourceRange> ranges_;
     std::vector<FixItHint> fixits_;
     std::vector<Source_Location> extra_locations_;
+    std::vector<DiagnosticNote> notes_;
 
 public:
     DiagnosticBuilder(DiagnosticsEngine* engine, DiagID id)
@@ -242,6 +292,18 @@ public:
 
     /// Add a fix-it hint.
     DiagnosticBuilder& operator<<(FixItHint hint);
+
+    /// Add a note line to this diagnostic.
+    DiagnosticBuilder& operator<<(const DiagnosticNote& note_text);
+
+    /// Attach a source location to the most recent note.
+    DiagnosticBuilder& operator<<(const NoteLocation& note_loc);
+
+    /// Attach a source range to the most recent note.
+    DiagnosticBuilder& operator<<(const NoteRange& note_range);
+
+    /// Attach text to the most recently added fix-it hint.
+    DiagnosticBuilder& operator<<(const FixItMessage& message);
 
     /// Emit the diagnostic.
     void emit();
@@ -365,6 +427,7 @@ private:
     /// Process and emit the current diagnostic.
     void process_diag(DiagID id, Source_Location loc,
                      const std::string& message,
+                     const std::vector<DiagnosticNote>& notes,
                      const std::vector<CharSourceRange>& ranges,
                      const std::vector<FixItHint>& fixits,
                      const std::vector<Source_Location>& extra_locations);

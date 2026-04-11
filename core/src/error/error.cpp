@@ -6,10 +6,26 @@
 
 #include <error/error.hpp>
 #include <support/source_manager.hpp>
-
 #include <sstream>
 #include <iomanip>
 #include <set>
+
+#define ANSI_RESET          "\033[0m"
+#define ANSI_BOLD           "\033[1m"
+#define ANSI_RED            "\033[31m"
+#define ANSI_GREEN          "\033[32m"
+#define ANSI_YELLOW         "\033[33m"
+#define ANSI_BLUE           "\033[34m"
+#define ANSI_MAGENTA        "\033[35m"
+#define ANSI_CYAN           "\033[36m"
+#define ANSI_WHITE          "\033[37m"
+#define ANSI_BOLD_RED       "\033[1;31m"
+#define ANSI_BOLD_GREEN     "\033[1;32m"
+#define ANSI_BOLD_YELLOW    "\033[1;33m"
+#define ANSI_BOLD_BLUE      "\033[1;34m"
+#define ANSI_BOLD_MAGENTA   "\033[1;35m"
+#define ANSI_BOLD_CYAN      "\033[1;36m"
+#define ANSI_BOLD_WHITE     "\033[1;37m"
 
 namespace aion::diag {
 
@@ -56,6 +72,7 @@ namespace aion::diag {
         : id_(diag.id)
         , severity_(sev)
         , message_(diag.message)
+        , notes_(diag.notes)
         , ranges_(diag.ranges)
         , fixits_(diag.fixits) {}
 
@@ -93,6 +110,36 @@ namespace aion::diag {
             print_source_line(rendered, severity);
         }
 
+        for (const auto& note_entry : rendered.notes) {
+            const bool has_note_loc = note_entry.location.is_valid();
+            const bool has_note_range = note_entry.range.is_valid();
+            if (!source_mgr_ || (!has_note_loc && !has_note_range)) {
+                if (show_colors_) {
+                    *os_ << ANSI_BOLD_CYAN;
+                }
+                *os_ << "note: ";
+                if (show_colors_) {
+                    *os_ << ANSI_RESET;
+                }
+                *os_ << note_entry.text << "\n";
+                continue;
+            }
+
+            Diagnostic note_diag;
+            note_diag.id = rendered.id;
+            note_diag.severity = Severity::note;
+            note_diag.message = note_entry.text.empty() ? "related location" : note_entry.text;
+            note_diag.location = has_note_loc ? note_entry.location : note_entry.range.begin;
+            if (has_note_range) {
+                note_diag.ranges.push_back(note_entry.range);
+            }
+
+            print_location(note_diag);
+            print_severity(Severity::note);
+            *os_ << "\n";
+            print_source_line(note_diag, Severity::note);
+        }
+
         // Print fix-it hints
         if (!rendered.fixits.empty()) {
             print_fixit_hints(rendered);
@@ -105,29 +152,28 @@ namespace aion::diag {
         if (show_colors_) {
             switch (severity) {
                 case Severity::note:
-                    *os_ << "\033[1;36m";  // Bold cyan
+                    *os_ << ANSI_BOLD_CYAN;
                     break;
                 case Severity::remark:
-                    *os_ << "\033[1;35m";  // Bold magenta
+                    *os_ << ANSI_BOLD_MAGENTA;
                     break;
                 case Severity::warning:
-                    *os_ << "\033[1;33m";  // Bold yellow
+                    *os_ << ANSI_BOLD_YELLOW;
                     break;
                 case Severity::error:
                 case Severity::fatal:
-                    *os_ << "\033[1;31m";  // Bold red
+                    *os_ << ANSI_BOLD_RED;
                     break;
                 default:
                     break;
             }
         }
 
-        *os_ << get_severity_name(severity);
+        *os_ << get_severity_name(severity) << ": ";
 
         if (show_colors_) {
-            *os_ << "\033[0m";  // Reset
+            *os_ << ANSI_RESET;
         }
-        *os_ << ": ";
     }
 
     void TextDiagnosticPrinter::print_location(const Diagnostic& diag) {
@@ -141,7 +187,7 @@ namespace aion::diag {
             auto [line, col] = source_mgr_->get_line_column(diag.location);
 
             if (show_colors_) {
-                *os_ << "\033[1m";  // Bold
+                *os_ << ANSI_BOLD_WHITE;
             }
 
             if (!path.empty()) {
@@ -150,7 +196,7 @@ namespace aion::diag {
             *os_ << line << ":" << col << ": ";
 
             if (show_colors_) {
-                *os_ << "\033[0m";
+                *os_ << ANSI_RESET;
             }
         }
     }
@@ -189,10 +235,20 @@ namespace aion::diag {
             line_num_width = 2;
         }
         const std::string padding(line_num_width, ' ');
-        const std::string color_blue = show_colors_ ? "\033[1;34m" : "";
-        const std::string color_reset = show_colors_ ? "\033[0m" : "";
-        const std::string color_green = show_colors_ ? "\033[1;32m" : "";
-        const std::string color_msg = show_colors_ ? "\033[1;31m" : "";
+        const std::string color_blue = show_colors_ ? ANSI_BOLD_CYAN : "";
+        const std::string color_reset = show_colors_ ? ANSI_RESET : "";
+        const std::string color_green = show_colors_ ? ANSI_BOLD_GREEN : "";
+
+        std::string color_severity = "";
+        if (show_colors_) {
+            switch (severity) {
+                case Severity::error:
+                case Severity::fatal: color_severity = ANSI_BOLD_RED; break;
+                case Severity::warning: color_severity = ANSI_BOLD_YELLOW; break;
+                case Severity::note: color_severity = ANSI_BOLD_CYAN; break;
+                default: color_severity = ANSI_BOLD_WHITE; break;
+            }
+        }
 
         *os_ << color_blue << padding << " |\n" << color_reset;
 
@@ -257,23 +313,22 @@ namespace aion::diag {
 
             const bool has_marks = marks.find_first_not_of(' ') != std::string::npos;
             if (has_marks) {
-                *os_ << color_blue << padding << " | " << color_green << marks << color_reset << "\n";
+                std::string trimmed_marks = marks;
+                size_t last = trimmed_marks.find_last_not_of(' ');
+                if (last != std::string::npos) {
+                    trimmed_marks.erase(last + 1);
+                }
+                *os_ << color_blue << padding << " | " << color_severity << trimmed_marks;
                 if (line_no == primary_line) {
-                    size_t anchor = marks.find('^');
-                    if (anchor == std::string::npos) {
-                        anchor = marks.find('~');
-                    }
-                    if (anchor == std::string::npos) {
-                        anchor = (primary_col > 0) ? static_cast<size_t>(primary_col - 1) : 0;
-                    }
-                    *os_ << color_blue << padding << " | " << color_reset
-                         << std::string(anchor, ' ') << color_msg;
+                    *os_ << " " << color_severity;
                     if (show_colors_) {
                         print_severity(severity);
                     } else {
                         *os_ << get_severity_name(severity) << ": ";
                     }
-                    *os_ << diag.message << color_reset << "\n";
+                    *os_ << (show_colors_ ? ANSI_BOLD_WHITE : "") << diag.message << color_reset << "\n";
+                } else {
+                    *os_ << color_reset << "\n";
                 }
             }
         }
@@ -283,12 +338,23 @@ namespace aion::diag {
         for (const auto& fixit : diag.fixits) {
             if (fixit.is_null()) continue;
 
-            std::string color_green = show_colors_ ? "\033[1;32m" : "";
-            std::string color_reset = show_colors_ ? "\033[0m" : "";
-            std::string color_blue = show_colors_ ? "\033[1;34m" : "";
+            std::string color_green = show_colors_ ? ANSI_BOLD_GREEN : "";
+            std::string color_reset = show_colors_ ? ANSI_RESET : "";
+            std::string color_blue = show_colors_ ? ANSI_BOLD_CYAN : "";
 
-            *os_ << color_green << "help: " << color_reset;
-            if (!fixit.code_to_insert.empty() && fixit.remove_range.begin == fixit.remove_range.end) {
+            // Calculate padding based on line number width (try to match print_source_line)
+            int line_num_width = 2;
+            if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
+                auto [line_no, _] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                line_num_width = std::max(2, (int)std::to_string(line_no).length());
+            }
+            std::string padding(line_num_width, ' ');
+
+            *os_ << color_blue << padding << " |\n";
+            *os_ << color_blue << padding << " = " << color_green << "help: " << color_reset;
+            if (!fixit.help_message.empty()) {
+                *os_ << fixit.help_message << "\n";
+            } else if (!fixit.code_to_insert.empty() && fixit.remove_range.begin == fixit.remove_range.end) {
                 *os_ << "insert \"" << fixit.code_to_insert << "\"\n";
             } else if (fixit.code_to_insert.empty()) {
                 *os_ << "remove this\n";
@@ -298,34 +364,30 @@ namespace aion::diag {
 
             // Show the line with the fix applied (Rust-style)
             if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
-                 auto [line_no, col_no] = source_mgr_->get_line_column(fixit.remove_range.begin);
-                 std::string line_text = source_mgr_->get_line_text(fixit.remove_range.begin);
-                 if (!line_text.empty()) {
-                     if (line_text.back() == '\n') line_text.pop_back();
+                auto [line_no, col_no] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                std::string line_text = source_mgr_->get_line_text(fixit.remove_range.begin);
+                if (!line_text.empty()) {
+                    if (line_text.back() == '\n') line_text.pop_back();
 
-                     int line_num_width = std::to_string(line_no).length();
-                     if (line_num_width < 2) line_num_width = 2;
-                     std::string padding(line_num_width, ' ');
+                    *os_ << color_blue << padding << " |\n";
+                    *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset;
 
-                     *os_ << color_blue << padding << " |\n";
-                     *os_ << std::setw(line_num_width) << line_no << " | " << color_reset;
+                    auto [start_line, start_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                    auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
 
-                     auto [start_line, start_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
-                     auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
+                    if (start_line == end_line) {
+                        std::string prefix = line_text.substr(0, start_col - 1);
+                        std::string suffix = (end_col - 1 < line_text.length()) ? line_text.substr(end_col - 1) : "";
 
-                     if (start_line == end_line) {
-                         std::string prefix = line_text.substr(0, start_col - 1);
-                         std::string suffix = (end_col - 1 < line_text.length()) ? line_text.substr(end_col - 1) : "";
+                        *os_ << prefix << color_green << fixit.code_to_insert << color_reset << suffix << "\n";
 
-                         *os_ << prefix << color_green << fixit.code_to_insert << color_reset << suffix << "\n";
-
-                         // Show underline for the fix
-                         *os_ << color_blue << padding << " | " << color_green;
-                         for (size_t i = 0; i < prefix.length(); ++i) *os_ << " ";
-                         for (size_t i = 0; i < fixit.code_to_insert.length(); ++i) *os_ << "~";
-                         *os_ << color_reset << "\n";
-                     }
-                 }
+                        // Show underline for the fix
+                        *os_ << color_blue << padding << " | " << color_green;
+                        for (size_t i = 0; i < prefix.length(); ++i) *os_ << " ";
+                        for (size_t i = 0; i < fixit.code_to_insert.length(); ++i) *os_ << "~";
+                        *os_ << color_reset << "\n";
+                    }
+                }
             }
         }
     }
@@ -342,7 +404,8 @@ namespace aion::diag {
         , int_args_(std::move(other.int_args_))
         , ranges_(std::move(other.ranges_))
         , fixits_(std::move(other.fixits_))
-        , extra_locations_(std::move(other.extra_locations_)) {
+        , extra_locations_(std::move(other.extra_locations_))
+        , notes_(std::move(other.notes_)) {
         other.is_active_ = false;
     }
 
@@ -359,6 +422,7 @@ namespace aion::diag {
             ranges_ = std::move(other.ranges_);
             fixits_ = std::move(other.fixits_);
             extra_locations_ = std::move(other.extra_locations_);
+            notes_ = std::move(other.notes_);
             other.is_active_ = false;
         }
         return *this;
@@ -410,6 +474,34 @@ namespace aion::diag {
         return *this;
     }
 
+    DiagnosticBuilder& DiagnosticBuilder::operator<<(const FixItMessage& message) {
+        if (!fixits_.empty()) {
+            fixits_.back().help_message = message.text;
+        }
+        return *this;
+    }
+
+    DiagnosticBuilder& DiagnosticBuilder::operator<<(const DiagnosticNote& note_text) {
+        notes_.push_back(note_text);
+        return *this;
+    }
+
+    DiagnosticBuilder& DiagnosticBuilder::operator<<(const NoteLocation& note_loc) {
+        if (notes_.empty()) {
+            notes_.push_back(note("related location"));
+        }
+        notes_.back().location = note_loc.location;
+        return *this;
+    }
+
+    DiagnosticBuilder& DiagnosticBuilder::operator<<(const NoteRange& note_range) {
+        if (notes_.empty()) {
+            notes_.push_back(note("related range"));
+        }
+        notes_.back().range = note_range.range;
+        return *this;
+    }
+
     std::string DiagnosticBuilder::formatMessage(const char* format_str) const {
         if (!format_str) {
             return "";
@@ -425,12 +517,12 @@ namespace aion::diag {
         while (*p) {
             if (*p == '%' && p[1] >= '0' && p[1] <= '9') {
                 // Found a placeholder like %0, %1, etc.
-                // Determine which argument to use
-                // Simple approach: use string args first, then int args
-                if (str_idx < string_args_.size()) {
-                    result += string_args_[str_idx++];
-                } else if (int_idx < int_args_.size()) {
-                    result += std::to_string(int_args_[int_idx++]);
+                size_t idx = p[1] - '0';
+                if (idx < string_args_.size()) {
+                    result += string_args_[idx];
+                    // We don't mark it as used yet, because placeholders might be out of order
+                } else if (idx < string_args_.size() + int_args_.size()) {
+                    result += std::to_string(int_args_[idx - string_args_.size()]);
                 } else {
                     result += "%";
                     result += p[1];
@@ -467,7 +559,7 @@ namespace aion::diag {
             }
         }
 
-        engine_->process_diag(diag_id_, engine_->cur_diag_loc_, message, ranges_, fixits_, extra_locations_);
+        engine_->process_diag(diag_id_, engine_->cur_diag_loc_, message, notes_, ranges_, fixits_, extra_locations_);
     }
 
     // ============================================================================
@@ -536,11 +628,34 @@ namespace aion::diag {
         switch (id) {
             case common::err_unknown_identifier: return "unknown identifier '%0'";
             case common::warn_unused_variable: return "unused variable '%0'";
-            case parse::err_expected_semicolon: return "expected ';'";
+            case common::err_expected_token: return "expected token";
+            case common::err_file_not_found: return "file not found: '%0'";
+            case common::err_invalid_character: return "invalid character";
+            case common::err_matched_no_tokens: return "matched no tokens";
+            case common::warn_unused_parameter: return "unused parameter '%0'";
+            case common::note_previous_definition: return "previous definition is here";
+            case common::note_declared_here: return "declared here";
+
             case parse::err_expected_expression: return "expected expression";
+            case parse::err_expected_one_of: return "expected one of %0";
+            case parse::err_expected_statement: return "expected statement";
+            case parse::err_expected_type: return "expected type";
+            case parse::err_expected_identifier: return "expected identifier";
+            case parse::err_expected_semicolon: return "expected ';'";
+            case parse::err_expected_lparen: return "expected '('";
+            case parse::err_expected_rparen: return "expected ')'";
+            case parse::err_expected_lbrace: return "expected '{'";
+            case parse::err_expected_rbrace: return "expected '}'";
+            case parse::err_expected_lbracket: return "expected '['";
+            case parse::err_expected_rbracket: return "expected ']'";
+            case parse::err_unexpected_token: return "unexpected token";
+            case parse::err_mismatched_brackets: return "mismatched brackets";
+            case parse::err_untyped_uninitialized_variable_declaration: return "%0"; // Use passed message
+            case parse::err_expected_initialization: return "expected initialization";
             case parse::err_unrecognized_identifier: return "unrecognized identifier";
             case parse::err_unknown_operator: return "unexpected token in expression";
-            case common::err_file_not_found: return "file not found: '%0'";
+            case parse::warn_empty_statement: return "empty statement";
+
             default: return nullptr;
         }
     }
@@ -605,6 +720,7 @@ namespace aion::diag {
 
     void DiagnosticsEngine::process_diag(DiagID id, Source_Location loc,
                                         const std::string& message,
+                                        const std::vector<DiagnosticNote>& notes,
                                         const std::vector<CharSourceRange>& ranges,
                                         const std::vector<FixItHint>& fixits,
                                         const std::vector<Source_Location>& extra_locations) {
@@ -613,6 +729,7 @@ namespace aion::diag {
         diag.location = loc;
         diag.severity = get_severity(id);
         diag.message = message;
+        diag.notes = notes;
         diag.ranges = ranges;
         diag.fixits = fixits;
         diag.extra_locations = extra_locations;

@@ -260,6 +260,29 @@ void register_error_tests(TestRunner& runner) {
         AION_ASSERT_CONTAINS(output, "help: insert `;`\n");
         capture.finish();
     });
+
+    printer_suite->add_test("VerboseFixItPrinting", []() {
+        OutputCapture capture("VerboseFixItPrinting");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(capture.get_stream(), &sm, false);
+        printer.set_show_fixits_line(true);
+        
+        FileID fid = sm.add_buffer("int x = y", "test.aion");
+        diag::Diagnostic d;
+        d.id = diag::parse::err_expected_semicolon;
+        d.message = "expected ';'";
+        d.severity = diag::Severity::error;
+        d.location = Source_Location(fid, 9);
+        d.fixits.push_back(diag::FixItHint::create_insertion(Source_Location(fid, 9), ";"));
+        
+        printer.handle_diagnostic(diag::Severity::error, d);
+        
+        std::string output = capture.get_output();
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y");
+        AION_ASSERT_CONTAINS(output, "   |          ^ help: insert `;`\n");
+        AION_ASSERT_CONTAINS(output, "   | int x = y;");
+        capture.finish();
+    });
     
     printer_suite->add_test("FixItPrinting_streams", [] {
         OutputCapture capture("FixItPrinting_streams");

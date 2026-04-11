@@ -258,9 +258,8 @@ void register_error_tests(TestRunner& runner) {
         printer.handle_diagnostic(diag::Severity::error, d);
         
         std::string output = capture.get_output();
-        AION_ASSERT_CONTAINS(output, "help: insert \";\"");
-        AION_ASSERT_CONTAINS(output, " 1 | - int x = y");
-        AION_ASSERT_CONTAINS(output, " 1 | + int x = y;");
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y");
+        AION_ASSERT_CONTAINS(output, "help: insert `;`\n");
         capture.finish();
     });
     
@@ -276,9 +275,8 @@ void register_error_tests(TestRunner& runner) {
         << diag::fixit_message("insert ';' to terminate the declaration");
 
         std::string output = capture.get_output();
+        AION_ASSERT_CONTAINS(output, " 1 | int x = y");
         AION_ASSERT_CONTAINS(output, "help: insert ';' to terminate the declaration");
-        AION_ASSERT_CONTAINS(output, " 1 | - int x = y");
-        AION_ASSERT_CONTAINS(output, " 1 | + int x = y;");
         capture.finish();
     });
 

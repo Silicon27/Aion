@@ -131,11 +131,6 @@ namespace aion::diag {
             print_source_line(note_diag, Severity::note, false);
         }
 
-        // Print fix-it hints
-        if (!rendered.fixits.empty()) {
-            print_fixit_hints(rendered);
-        }
-
         os_->flush();
     }
 
@@ -225,6 +220,13 @@ namespace aion::diag {
                 lines_to_render.insert(line);
             }
         }
+        for (const auto& fixit : diag.fixits) {
+            if (fixit.is_null()) continue;
+            if (fixit.remove_range.begin.file == fid) {
+                auto [f_line, _] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                lines_to_render.insert(f_line);
+            }
+        }
 
         int line_num_width = std::to_string(*lines_to_render.rbegin()).length();
         if (line_num_width < 2) {
@@ -257,7 +259,7 @@ namespace aion::diag {
 
             *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset << highlight_line(line_text) << "\n";
 
-            std::string marks(std::max<size_t>(line_text.size(), 1), ' ');
+            std::string marks(std::max<size_t>(line_text.size() + 1, 1), ' ');
             auto mark_col = [&](Column col, char glyph) {
                 if (col == 0) {
                     return;
@@ -325,84 +327,69 @@ namespace aion::diag {
             }
 
             const bool has_marks = marks.find_first_not_of(' ') != std::string::npos;
+            std::string trimmed_marks = "";
+            bool primary_marks_printed = false;
+            
             if (has_marks) {
-                std::string trimmed_marks = marks;
+                trimmed_marks = marks;
                 size_t last = trimmed_marks.find_last_not_of(' ');
                 if (last != std::string::npos) {
                     trimmed_marks.erase(last + 1);
                 }
                 *os_ << color_blue << padding << " | " << color_severity << trimmed_marks;
+                primary_marks_printed = true;
                 if (show_message && line_no == primary_line) {
-                    *os_ << " " << color_severity << diag.message << color_reset << "\n";
-                } else {
-                    *os_ << color_reset << "\n";
+                    *os_ << " " << color_severity << diag.message << color_reset;
                 }
             }
-        }
-    }
 
-    void TextDiagnosticPrinter::print_fixit_hints(const Diagnostic& diag) {
-        if (diag.fixits.empty()) return;
-
-        for (const auto& fixit : diag.fixits) {
-            if (fixit.is_null()) continue;
-
-            std::string color_green = show_colors_ ? ANSI_BOLD_GREEN : "";
-            std::string color_reset = show_colors_ ? ANSI_RESET : "";
-            std::string color_blue = show_colors_ ? ANSI_BOLD_CYAN : "";
-
-            // Calculate padding
-            int line_num_width = 2;
-            if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
-                auto [line_no, _] = source_mgr_->get_line_column(fixit.remove_range.begin);
-                line_num_width = std::max(2, (int)std::to_string(line_no).length());
-            }
-            std::string padding(line_num_width, ' ');
-
-            std::string help_text;
-            if (!fixit.help_message.empty()) {
-                help_text = fixit.help_message;
-            } else if (!fixit.code_to_insert.empty() && fixit.remove_range.begin == fixit.remove_range.end) {
-                help_text = "insert `" + fixit.code_to_insert + "`";
-            } else if (fixit.code_to_insert.empty()) {
-                help_text = "remove this";
-            } else {
-                help_text = "replace with `" + fixit.code_to_insert + "`";
-            }
-
-            if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
-                auto [line_no, col_no] = source_mgr_->get_line_column(fixit.remove_range.begin);
-                std::string line_text = source_mgr_->get_line_text(fixit.remove_range.begin);
-                if (!line_text.empty()) {
-                    if (line_text.back() == '\n') line_text.pop_back();
-
-                    auto [start_line, start_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
-                    auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
-
-                    if (start_line == end_line) {
-                        *os_ << color_blue << padding << " |\n";
-                        *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset << highlight_line(line_text) << "\n";
-                        
-                        std::string marks(std::max<size_t>(line_text.size(), 1), ' ');
-                        if (start_col == end_col) {
-                            if (start_col > 0 && start_col <= marks.size() + 1) {
-                                marks[start_col - 1] = '^';
-                            }
-                        } else {
-                            for (int i = start_col - 1; i < end_col - 1 && (size_t)i < marks.size(); ++i) {
-                                marks[i] = '~';
-                            }
-                        }
-                        
-                        // Trim trailing spaces from marks so the help message is closer
-                        size_t last_mark = marks.find_last_not_of(' ');
-                        if (last_mark != std::string::npos) {
-                            marks = marks.substr(0, last_mark + 1);
-                        }
-                        
-                        *os_ << color_blue << padding << " | " << color_green << marks << " help: " << help_text << color_reset << "\n";
+            // Print fix-its on this line
+            std::vector<const FixItHint*> line_fixits;
+            for (const auto& fixit : diag.fixits) {
+                if (fixit.is_null()) continue;
+                if (fixit.remove_range.begin.file == fid) {
+                    auto [f_line, _] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                    if (f_line == line_no) {
+                        line_fixits.push_back(&fixit);
                     }
                 }
+            }
+
+            for (size_t i = 0; i < line_fixits.size(); ++i) {
+                const auto& fixit = *line_fixits[i];
+                auto [start_line, start_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
+                
+                std::string f_marks(std::max<size_t>(line_text.size() + 1, 1), ' ');
+                if (start_col == end_col) {
+                    if (start_col > 0 && start_col <= f_marks.size() + 1) f_marks[start_col - 1] = '^';
+                } else {
+                    for (int j = start_col - 1; j < end_col - 1 && (size_t)j < f_marks.size(); ++j) f_marks[j] = '~';
+                }
+                
+                size_t last_f_mark = f_marks.find_last_not_of(' ');
+                if (last_f_mark != std::string::npos) {
+                    f_marks = f_marks.substr(0, last_f_mark + 1);
+                }
+
+                std::string help_text;
+                if (!fixit.help_message.empty()) help_text = fixit.help_message;
+                else if (!fixit.code_to_insert.empty() && fixit.remove_range.begin == fixit.remove_range.end) help_text = "insert `" + fixit.code_to_insert + "`";
+                else if (fixit.code_to_insert.empty()) help_text = "remove this";
+                else help_text = "replace with `" + fixit.code_to_insert + "`";
+
+                if (i == 0 && primary_marks_printed && f_marks == trimmed_marks && !show_message) {
+                    // Merge with primary marks
+                    *os_ << color_green << " help: " << help_text << color_reset;
+                } else {
+                    if (primary_marks_printed || i > 0) *os_ << "\n";
+                    *os_ << color_blue << padding << " | " << color_green << f_marks << " help: " << help_text << color_reset;
+                    primary_marks_printed = true; // For next fixit
+                }
+            }
+
+            if (primary_marks_printed) {
+                *os_ << "\n";
             }
         }
     }

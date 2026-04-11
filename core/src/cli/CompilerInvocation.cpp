@@ -50,6 +50,7 @@ CompilerConfig parse(int argc, char *argv[]) {
 
     bool verbose        = false;
     int  max_error_count = 20;
+    bool show_fixits    = false;
 
     // optimization flags
     bool opt_O0 = false;
@@ -100,6 +101,11 @@ CompilerConfig parse(int argc, char *argv[]) {
         .nargs(1, 1)
         .scan<'d', int>()
         .store_into(max_error_count);
+
+    program.add_argument("-fshow-fixits")
+        .help("Show the line after applying the suggested fix")
+        .flag()
+        .store_into(show_fixits);
 
     // -o
     program.add_argument("-o", "--output")
@@ -344,6 +350,7 @@ CompilerConfig parse(int argc, char *argv[]) {
     Flags flags;
     flags.verbose         = verbose;
     flags.max_error_count = max_error_count;
+    flags.show_fixits     = show_fixits;
     flags.level           = opt_level;
     flags.output_format   = format;
     flags.output_file     = o_output;
@@ -447,6 +454,7 @@ int CompilerInvocation::run() {
     SourceManager sm;
     diag_.set_source_manager(&sm);
     auto *printer = new aion::diag::TextDiagnosticPrinter(std::cerr, &sm, diag_.get_show_colors());
+    printer->set_show_fixits_line(config.flags.show_fixits);
     diag_.set_client(printer, true);
 
     std::vector<std::string> object_files;

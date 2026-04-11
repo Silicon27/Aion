@@ -1,0 +1,40 @@
+// Variable declaration edge-case corpus.
+// One case per line so parser recovery is easy to inspect.
+// ===== valid forms =====
+let a: i32 = 1;
+let b = 2;
+let c: i32;
+let mut d = 4;
+let mut e: i32 = 5;
+let comp f = 6;
+let comp g: i32 = 7;
+let    h    :    i32    =    8    ;
+let i: i32 = 9; // trailing comment
+// ===== initializer / type edge cases =====
+let j: i32 = ;
+let k = ;
+let l: i32;
+let comp m = ;
+let mut n: i32 = ;
+let o: = 11;
+let p : i32 = 12;
+// ===== identifier / attribute edge cases =====
+let = 13;
+let mut = 14;
+let comp = 15;
+let mut comp q = 16;
+let comp mut r = 17;
+let mut s: i32 = 18;
+// ===== multiline initializer / recovery edge cases =====
+let t: i32 = (
+  1 + 2
+);
+let u: i32 = (
+  3 + 4;
+);
+let v: i32 = (5 + 6);
+// ===== comment adjacency =====
+// let w: i32 = 19;
+let x: i32 = 20; // inline comment after declaration
+// ===== isolated missing-semicolon edge case =====
+let y: i32 = 21

@@ -342,16 +342,16 @@ namespace aion::diag {
     }
 
     void TextDiagnosticPrinter::print_fixit_hints(const Diagnostic& diag) {
+        if (diag.fixits.empty()) return;
+
         for (const auto& fixit : diag.fixits) {
             if (fixit.is_null()) continue;
 
             std::string color_green = show_colors_ ? ANSI_BOLD_GREEN : "";
-            std::string color_red = show_colors_ ? ANSI_BOLD_RED : "";
             std::string color_reset = show_colors_ ? ANSI_RESET : "";
             std::string color_blue = show_colors_ ? ANSI_BOLD_CYAN : "";
-            std::string color_white = show_colors_ ? ANSI_BOLD_WHITE : "";
 
-            // Calculate padding based on line number width
+            // Calculate padding
             int line_num_width = 2;
             if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
                 auto [line_no, _] = source_mgr_->get_line_column(fixit.remove_range.begin);
@@ -359,17 +359,15 @@ namespace aion::diag {
             }
             std::string padding(line_num_width, ' ');
 
-            *os_ << color_blue << padding << " |\n";
-            *os_ << color_blue << padding << " = " << color_green << "help: " << color_reset;
-            
+            std::string help_text;
             if (!fixit.help_message.empty()) {
-                *os_ << fixit.help_message << "\n";
+                help_text = fixit.help_message;
             } else if (!fixit.code_to_insert.empty() && fixit.remove_range.begin == fixit.remove_range.end) {
-                *os_ << "insert \"" << color_white << fixit.code_to_insert << color_reset << "\"\n";
+                help_text = "insert `" + fixit.code_to_insert + "`";
             } else if (fixit.code_to_insert.empty()) {
-                *os_ << "remove this\n";
+                help_text = "remove this";
             } else {
-                *os_ << "replace with \"" << color_white << fixit.code_to_insert << color_reset << "\"\n";
+                help_text = "replace with `" + fixit.code_to_insert + "`";
             }
 
             if (source_mgr_ && fixit.remove_range.begin.is_valid()) {
@@ -382,19 +380,27 @@ namespace aion::diag {
                     auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
 
                     if (start_line == end_line) {
-                        std::string prefix = line_text.substr(0, start_col - 1);
-                        std::string removed = line_text.substr(start_col - 1, end_col - start_col);
-                        std::string suffix = (end_col - 1 < (int)line_text.length()) ? line_text.substr(end_col - 1) : "";
-
                         *os_ << color_blue << padding << " |\n";
+                        *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_reset << highlight_line(line_text) << "\n";
                         
-                        // Original line with - (diff style)
-                        *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_red << "- " << color_reset 
-                             << highlight_line(prefix) << color_red << removed << color_reset << highlight_line(suffix) << "\n";
+                        std::string marks(std::max<size_t>(line_text.size(), 1), ' ');
+                        if (start_col == end_col) {
+                            if (start_col > 0 && start_col <= marks.size() + 1) {
+                                marks[start_col - 1] = '^';
+                            }
+                        } else {
+                            for (int i = start_col - 1; i < end_col - 1 && (size_t)i < marks.size(); ++i) {
+                                marks[i] = '~';
+                            }
+                        }
                         
-                        // Suggested line with + (diff style)
-                        *os_ << color_blue << std::setw(line_num_width) << line_no << " | " << color_green << "+ " << color_reset 
-                             << highlight_line(prefix) << color_green << fixit.code_to_insert << color_reset << highlight_line(suffix) << "\n";
+                        // Trim trailing spaces from marks so the help message is closer
+                        size_t last_mark = marks.find_last_not_of(' ');
+                        if (last_mark != std::string::npos) {
+                            marks = marks.substr(0, last_mark + 1);
+                        }
+                        
+                        *os_ << color_blue << padding << " | " << color_green << marks << " help: " << help_text << color_reset << "\n";
                     }
                 }
             }

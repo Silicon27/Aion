@@ -38,8 +38,6 @@ namespace aion::parse {
     }
 
     Decl* Parser::parse_variable_decl() {
-        // TODO: improve grammar-driven recovery around optional type annotation and initializer.
-
         static auto initial_let = MatchToken(TokenType::kw_let); // should not error if not matched, if error it could mean memory corruption during program runtime
         static auto mut = MatchToken(TokenType::kw_mut);
         static auto comp = MatchToken(TokenType::kw_comp);
@@ -70,7 +68,6 @@ namespace aion::parse {
                 SourceLocation mut_loc = diagnostics.get_token_location(file_id, mut_tok);
                 SourceLocation comp_loc = diagnostics.get_token_location(file_id, comp_tok);
                 diagnostics.report(mut_loc, diag::parse::err_unexpected_attribute)
-                    << comp_loc
                     << "compile time variables cannot be attributed with mut"
                     << diag::FixItHint::create_removal(diagnostics.token_range(mut_tok));
                 blind_consume();
@@ -83,7 +80,6 @@ namespace aion::parse {
                 SourceLocation mut_loc = diagnostics.get_token_location(file_id, mut_tok);
                 SourceLocation comp_loc = diagnostics.get_token_location(file_id, comp_tok);
                 diagnostics.report(mut_loc, diag::parse::err_unexpected_attribute)
-                    << comp_loc
                     << "compile time variables cannot be attributed with mut"
                     << diag::FixItHint::create_removal(diagnostics.token_range(mut_tok));
                 blind_consume();

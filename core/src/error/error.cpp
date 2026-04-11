@@ -363,28 +363,62 @@ namespace aion::diag {
             for (const auto& fixit : diag.fixits) {
                 if (fixit.is_null()) continue;
                 if (fixit.remove_range.begin.file == fid) {
-                    auto [f_line, _] = source_mgr_->get_line_column(fixit.remove_range.begin);
-                    if (f_line == line_no) {
+                    auto [b_line, _b_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                    auto [e_line, _e_col] = source_mgr_->get_line_column(fixit.remove_range.end);
+                    if (b_line > e_line) {
+                        std::swap(b_line, e_line);
+                    }
+                    if (line_no >= b_line && line_no <= e_line) {
                         line_fixits.push_back(&fixit);
                     }
                 }
             }
 
+            auto build_fixit_marks_for_line = [&](const FixItHint& fixit) {
+                std::string f_marks(std::max<size_t>(line_text.size() + 1, 1), ' ');
+                auto [b_line, b_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
+                auto [e_line, e_col] = source_mgr_->get_line_column(fixit.remove_range.end);
+                if (b_line > e_line) {
+                    std::swap(b_line, e_line);
+                    std::swap(b_col, e_col);
+                }
+
+                if (line_no < b_line || line_no > e_line) {
+                    return std::string{};
+                }
+
+                Column start_col = (line_no == b_line) ? b_col : 1;
+                Column end_col = (line_no == e_line) ? e_col : static_cast<Column>(line_text.size() + 1);
+                size_t start_idx = (start_col > 0) ? static_cast<size_t>(start_col - 1) : 0;
+                start_idx = std::min(start_idx, f_marks.size() - 1);
+
+                if (start_col == end_col && b_line == e_line) {
+                    f_marks[start_idx] = '^';
+                } else {
+                    size_t end_idx_exclusive = (end_col > 0)
+                        ? static_cast<size_t>(end_col - (fixit.remove_range.is_token_range() ? 0 : 1))
+                        : 0;
+                    if (end_idx_exclusive <= start_idx) {
+                        end_idx_exclusive = start_idx + 1;
+                    }
+                    end_idx_exclusive = std::min(end_idx_exclusive, f_marks.size());
+                    for (size_t j = start_idx; j < end_idx_exclusive; ++j) {
+                        f_marks[j] = '~';
+                    }
+                }
+
+                size_t last_f_mark = f_marks.find_last_not_of(' ');
+                if (last_f_mark == std::string::npos) {
+                    return std::string{};
+                }
+                return f_marks.substr(0, last_f_mark + 1);
+            };
+
             for (size_t i = 0; i < line_fixits.size(); ++i) {
                 const auto& fixit = *line_fixits[i];
-                auto [start_line, start_col] = source_mgr_->get_line_column(fixit.remove_range.begin);
-                auto [end_line, end_col] = source_mgr_->get_line_column(fixit.remove_range.end);
-                
-                std::string f_marks(std::max<size_t>(line_text.size() + 1, 1), ' ');
-                if (start_col == end_col) {
-                    if (start_col > 0 && start_col <= f_marks.size() + 1) f_marks[start_col - 1] = '^';
-                } else {
-                    for (int j = start_col - 1; j < end_col - 1 && (size_t)j < f_marks.size(); ++j) f_marks[j] = '~';
-                }
-                
-                size_t last_f_mark = f_marks.find_last_not_of(' ');
-                if (last_f_mark != std::string::npos) {
-                    f_marks = f_marks.substr(0, last_f_mark + 1);
+                std::string f_marks = build_fixit_marks_for_line(fixit);
+                if (f_marks.empty()) {
+                    continue;
                 }
 
                 std::string help_text;
@@ -393,8 +427,22 @@ namespace aion::diag {
                 else if (fixit.code_to_insert.empty()) help_text = "remove this";
                 else help_text = "replace with `" + fixit.code_to_insert + "`";
 
-                if (i == 0 && primary_marks_printed && f_marks == trimmed_marks && !show_message) {
-                    // Merge with primary marks
+                if (i == 0 && primary_marks_printed) {
+                    // Merge first fix-it with already-printed primary marker line.
+                    for (size_t j = 0; j < f_marks.size() && j < trimmed_marks.size(); ++j) {
+                        if (trimmed_marks[j] == ' ' && f_marks[j] != ' ') {
+                            trimmed_marks[j] = f_marks[j];
+                        }
+                    }
+                    if (f_marks.size() > trimmed_marks.size()) {
+                        trimmed_marks += f_marks.substr(trimmed_marks.size());
+                    }
+
+                    // Re-print merged marker row so carets and tildes align visually.
+                    *os_ << "\r" << color_blue << padding << " | " << color_severity << trimmed_marks;
+                    if (show_message && line_no == primary_line) {
+                        *os_ << " " << color_severity << diag.message;
+                    }
                     *os_ << color_green << " help: " << help_text << color_reset;
                 } else {
                     if (primary_marks_printed || i > 0) *os_ << "\n";

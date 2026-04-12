@@ -27,7 +27,7 @@ namespace aion::parse {
             default: {
                 diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token);
                 skip_until(TokenType::semicolon);
-                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(DeclKind::variable, nullptr));
+                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr));
             }
         }
     }
@@ -98,7 +98,7 @@ namespace aion::parse {
                 << fixit_hint;
 
             skip_until(TokenType::semicolon); // TODO integrate more advanced recovery functions
-            return context.create<ErrorDecl>(DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
+            return context.create<ErrorDecl>(context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
 
         // check for early semicolons placed before types are specified
@@ -109,7 +109,7 @@ namespace aion::parse {
                 << "untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value."
                 << fixit_hint;
             blind_consume(); // consume this semicolon as it effectively ends the declaration
-            return context.create<ErrorDecl>(DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
+            return context.create<ErrorDecl>(context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
 
         if (silent_probe(equal)) {
@@ -130,7 +130,7 @@ namespace aion::parse {
                     << "expected type for variable declaration, none provided."
                     << fixit_hint;
                 skip_until(TokenType::semicolon);
-                return context.create<ErrorDecl>(DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
+                return context.create<ErrorDecl>(context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
             }
         }
 
@@ -143,7 +143,7 @@ namespace aion::parse {
                     << "expected initializer for variable attributed with comp, none provided."
                     << fixit_hint;
                 skip_until(TokenType::semicolon);
-                return context.create<ErrorDecl>(DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
+                return context.create<ErrorDecl>(context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
             }
             goto ast_construction;
         }
@@ -162,7 +162,7 @@ namespace aion::parse {
                 << fixit_hint
                 << diag::fixit_message("insert an initializer expression before ';'");
             silent_consume(TokenType::semicolon);
-            return context.create<ErrorDecl>(DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
+            return context.create<ErrorDecl>(context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
         expression = parse_expression(0, TokenType::semicolon);
 
@@ -177,7 +177,7 @@ namespace aion::parse {
         if (!silent_probe(semicolon)) {
             diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_expected_semicolon);
             skip_until(TokenType::semicolon);
-            return context.create<ErrorDecl>(DeclKind::variable, context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
+            return context.create<ErrorDecl>(context.create<IdentifierInfo>(variable_id_token.lexeme.c_str()));
         }
         silent_consume(TokenType::semicolon);
         return variable;

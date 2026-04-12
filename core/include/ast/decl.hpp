@@ -26,8 +26,13 @@ namespace aion::ast {
     public:
         IdentifierInfo* name;
 
-        NamedDecl(DeclKind declaration_kind, IdentifierInfo* name)
-        : Decl(declaration_kind), name(name) {}
+    protected:
+        NamedDecl(IdentifierInfo* name, const DeclKind kind)
+        : Decl(kind), name(name) {}
+
+    public:
+        explicit NamedDecl(IdentifierInfo* name)
+        : Decl(DeclKind::named), name(name) {}
 
         [[nodiscard]] IdentifierInfo* get_name() const { return name; }
         [[nodiscard]] std::string_view get_identifier() const { return name->get_name(); }
@@ -37,9 +42,14 @@ namespace aion::ast {
 
     class ValueDecl : public NamedDecl {
         MutableType* type;
+
+    protected:
+        ValueDecl(IdentifierInfo* name, MutableType* type, const DeclKind kind)
+        : NamedDecl(name, kind), type(type) {}
+
     public:
-        ValueDecl(const DeclKind declaration_kind, IdentifierInfo* name, MutableType* type)
-        : NamedDecl(declaration_kind, name), type(type) {}
+        ValueDecl(IdentifierInfo* name, MutableType* type)
+        : NamedDecl(name, DeclKind::value), type(type) {}
 
         [[nodiscard]] MutableType* get_type() const { return type; }
         void set_type(MutableType* new_type) { type = new_type; }
@@ -55,7 +65,7 @@ namespace aion::ast {
         VarDecl(IdentifierInfo* name, MutableType* type,
             StorageClass storage_class, const SourceRange &range,
             Expr* init = nullptr)
-            : ValueDecl(DeclKind::variable, name, type), init(init),
+            : ValueDecl(name, type, DeclKind::variable), init(init),
         storage_class(storage_class), id_range(range) {}
 
         Expr* get_init() const { return init; }
@@ -70,8 +80,8 @@ namespace aion::ast {
 
     class ErrorDecl : public NamedDecl {
     public:
-        ErrorDecl(const DeclKind declaration_kind, IdentifierInfo* name)
-        : NamedDecl(declaration_kind, name) {}
+        explicit ErrorDecl(IdentifierInfo* name)
+        : NamedDecl(name, DeclKind::error) {}
     };
     static_assert(std::is_trivially_destructible_v<ErrorDecl>);
 }

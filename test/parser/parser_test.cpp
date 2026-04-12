@@ -180,7 +180,7 @@ void register_parser_tests(TestRunner& runner) {
 
         auto* ref = as_expr<DeclRefExpr>(expr);
         AION_ASSERT_NOT_NULL(ref->decl);
-        AION_ASSERT_ENUM_EQ(ref->decl->get_kind(), DeclKind::unresolved);
+        AION_ASSERT_ENUM_EQ(ref->decl->get_kind(), DeclKind::value);
         AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::named);
     });
 

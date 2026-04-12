@@ -26,6 +26,9 @@ namespace aion::ast {
     enum class DeclKind : std::uint8_t {
         unresolved,
         translation_unit,
+        named,
+        error,
+        value,
         variable,
         function,
         struct_,
@@ -131,7 +134,7 @@ namespace aion::ast {
 
         [[nodiscard]] ExprKind get_kind() const { return expr_kind; }
         [[nodiscard]] ValueCategory get_category() const { return category; }
-        
+
         ExprKind expr_kind;
         ValueCategory category;
 

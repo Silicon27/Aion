@@ -34,7 +34,7 @@ namespace aion::parse {
                     // since the nature of the identifier is indeterminate, we let its
                     // DeclKind be unresolved; resolution work is operated by sema later on
                     return context.create<DeclRefExpr>(
-                        context.create<ValueDecl>(DeclKind::unresolved, id, nullptr),
+                        context.create<ValueDecl>(id, nullptr),
                         nullptr,
                         loc
                         );

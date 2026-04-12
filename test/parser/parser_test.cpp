@@ -131,10 +131,10 @@ void register_parser_tests(TestRunner& runner) {
         Expr* expr = parser.parse_expression(0, TokenType::eof);
 
         auto* root = as_expr<BinaryExpr>(expr);
-        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::add);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryOp::add);
 
         auto* rhs = as_expr<BinaryExpr>(root->rhs);
-        AION_ASSERT_ENUM_EQ(rhs->op, BinaryExpr::BinaryOp::mul);
+        AION_ASSERT_ENUM_EQ(rhs->op, BinaryOp::mul);
         AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
     });
 
@@ -148,10 +148,10 @@ void register_parser_tests(TestRunner& runner) {
         Expr* expr = parser.parse_expression(0, TokenType::eof);
 
         auto* root = as_expr<BinaryExpr>(expr);
-        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::mul);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryOp::mul);
 
         auto* lhs = as_expr<BinaryExpr>(root->lhs);
-        AION_ASSERT_ENUM_EQ(lhs->op, BinaryExpr::BinaryOp::add);
+        AION_ASSERT_ENUM_EQ(lhs->op, BinaryOp::add);
     });
 
     expr_suite->add_test("unary_prefix_builds_unary_node", []() {
@@ -164,7 +164,7 @@ void register_parser_tests(TestRunner& runner) {
         Expr* expr = parser.parse_expression(0, TokenType::eof);
 
         auto* unary = as_expr<UnaryExpr>(expr);
-        AION_ASSERT_ENUM_EQ(unary->op, UnaryExpr::UnaryOp::minus);
+        AION_ASSERT_ENUM_EQ(unary->op, UnaryOp::minus);
         AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
     });
 
@@ -180,7 +180,7 @@ void register_parser_tests(TestRunner& runner) {
 
         auto* ref = as_expr<DeclRefExpr>(expr);
         AION_ASSERT_NOT_NULL(ref->decl);
-        AION_ASSERT_ENUM_EQ(ref->decl->get_kind(), Decl::DeclKind::unresolved);
+        AION_ASSERT_ENUM_EQ(ref->decl->get_kind(), DeclKind::unresolved);
         AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::named);
     });
 
@@ -199,7 +199,7 @@ void register_parser_tests(TestRunner& runner) {
         AION_ASSERT_NOT_NULL(call->callee);
 
         auto* arg1 = as_expr<BinaryExpr>(call->args[1]);
-        AION_ASSERT_ENUM_EQ(arg1->op, BinaryExpr::BinaryOp::add);
+        AION_ASSERT_ENUM_EQ(arg1->op, BinaryOp::add);
     });
 
     expr_suite->add_test("literal_nodes_have_unnamed_category", []() {
@@ -247,10 +247,10 @@ void register_parser_tests(TestRunner& runner) {
         Expr* expr = parser.parse_expression(0, TokenType::eof);
 
         auto* add = as_expr<BinaryExpr>(expr);
-        AION_ASSERT_ENUM_EQ(add->op, BinaryExpr::BinaryOp::add);
+        AION_ASSERT_ENUM_EQ(add->op, BinaryOp::add);
 
         auto* lhs_unary = as_expr<UnaryExpr>(add->lhs);
-        AION_ASSERT_ENUM_EQ(lhs_unary->op, UnaryExpr::UnaryOp::minus);
+        AION_ASSERT_ENUM_EQ(lhs_unary->op, UnaryOp::minus);
     });
 
     expr_suite->add_test("binary_same_precedence_is_left_associative", []() {
@@ -263,10 +263,10 @@ void register_parser_tests(TestRunner& runner) {
         Expr* expr = parser.parse_expression(0, TokenType::eof);
 
         auto* root = as_expr<BinaryExpr>(expr);
-        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::sub);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryOp::sub);
 
         auto* lhs = as_expr<BinaryExpr>(root->lhs);
-        AION_ASSERT_ENUM_EQ(lhs->op, BinaryExpr::BinaryOp::sub);
+        AION_ASSERT_ENUM_EQ(lhs->op, BinaryOp::sub);
     });
 
     expr_suite->add_test("assignment_chain_currently_parses_left_associative", []() {
@@ -282,12 +282,12 @@ void register_parser_tests(TestRunner& runner) {
         Expr* expr = parser.parse_expression(0, TokenType::eof);
 
         auto* root = as_expr<BinaryExpr>(expr);
-        AION_ASSERT_ENUM_EQ(root->op, BinaryExpr::BinaryOp::assign);
+        AION_ASSERT_ENUM_EQ(root->op, BinaryOp::assign);
 
         auto* lhs_assign = as_expr<BinaryExpr>(root->lhs);
         auto* rhs_ref = as_expr<DeclRefExpr>(root->rhs);
 
-        AION_ASSERT_ENUM_EQ(lhs_assign->op, BinaryExpr::BinaryOp::assign);
+        AION_ASSERT_ENUM_EQ(lhs_assign->op, BinaryOp::assign);
         AION_ASSERT_ENUM_EQ(lhs_assign->get_category(), ValueCategory::unnamed);
         AION_ASSERT_ENUM_EQ(rhs_ref->get_category(), ValueCategory::named);
 
@@ -333,7 +333,7 @@ void register_parser_tests(TestRunner& runner) {
 
         [[maybe_unused]] auto* inner_call = as_expr<CallExpr>(outer->args[0]);
         auto* grouped = as_expr<BinaryExpr>(outer->args[1]);
-        AION_ASSERT_ENUM_EQ(grouped->op, BinaryExpr::BinaryOp::add);
+        AION_ASSERT_ENUM_EQ(grouped->op, BinaryOp::add);
     });
 
     expr_suite->add_test("parse_expression_stops_at_delimiter", []() {
@@ -346,7 +346,7 @@ void register_parser_tests(TestRunner& runner) {
         Expr* expr = parser.parse_expression(0, TokenType::comma);
 
         auto* add = as_expr<BinaryExpr>(expr);
-        AION_ASSERT_ENUM_EQ(add->op, BinaryExpr::BinaryOp::add);
+        AION_ASSERT_ENUM_EQ(add->op, BinaryOp::add);
         AION_ASSERT_ENUM_EQ(parser.peek().type, TokenType::comma);
     });
 

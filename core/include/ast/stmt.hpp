@@ -16,7 +16,7 @@ namespace aion::ast {
         std::uint32_t num_stmts = 0;
 
         explicit CompoundStmt(std::uint32_t num_stmts)
-            : Stmt(Kind::compound_stmt), num_stmts(num_stmts) {}
+            : Stmt(StmtKind::compound_stmt), num_stmts(num_stmts) {}
 
     public:
         static CompoundStmt* create(ASTContext& context, Stmt** stmts, std::uint32_t num_stmts);

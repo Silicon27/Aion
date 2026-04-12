@@ -12,6 +12,67 @@
 namespace aion::ast {
     class ValueDecl;
 
+    enum class TypedExprTypeKind : std::uint8_t {
+        /// any type that is not an inferred "common type" made from the combination of other types
+        atom_type,
+        /// any type that is inferred from the combination of other types
+        /// (ex. binary expressions where the 2 types are related but not equal. you thereby infer a common type)
+        common_type,
+    };
+
+    enum class BinaryOp : std::uint8_t {
+        add,
+        sub,
+        mul,
+        div,
+        mod,
+        pow,
+        equal,
+        not_equal,
+        less,
+        less_equal,
+        greater,
+        greater_equal,
+        logical_and,
+        logical_or,
+        bit_and,
+        bit_or,
+        bit_xor,
+        lshift,
+        rshift,
+        assign,
+        add_assign,
+        sub_assign,
+        mul_assign,
+        div_assign,
+        mod_assign,
+        and_assign,
+        or_assign,
+        xor_assign,
+        lshift_assign,
+        rshift_assign,
+        dot,
+        arrow,
+        scope_resolution,
+        range,
+        inclusive_range,
+        fat_arrow,
+        as,
+    };
+
+    enum class UnaryOp : std::uint8_t {
+        plus,
+        minus,
+        logical_not,
+        bit_not,
+        address_of,
+        deref,
+        preincrement,
+        postincrement,
+        predecrement,
+        postdecrement,
+    };
+
     class ErrorExpr;
     class TypedExpr;
     class DeclRefExpr;
@@ -35,23 +96,14 @@ namespace aion::ast {
 
     class TypedExpr : public Expr {
     public:
-        enum class TypeKind : std::uint8_t {
-            /// any type that is not an inferred "common type" made from the combination of other types
-            atom_type,
-            /// any type that is inferred from the combination of other types
-            /// (ex. binary expressions where the 2 types are related but not equal. you thereby infer a common type)
-            common_type,
-        };
-
-        TypedExpr(TypeKind tk, MutableType* type, const ValueCategory category)
+        TypedExpr(TypedExprTypeKind tk, MutableType* type, const ValueCategory category)
             : Expr(ExprKind::typed_expr, category), tk(tk), type(type) {}
 
-        [[nodiscard]] TypeKind get_type_kind() const { return tk; }
+        [[nodiscard]] TypedExprTypeKind get_type_kind() const { return tk; }
         [[nodiscard]] MutableType* get_type() const { return type; }
         void set_type(MutableType* new_type) { type = new_type; }
 
-    private:
-        TypeKind tk;
+        TypedExprTypeKind tk;
         MutableType* type;
     };
     static_assert(std::is_trivially_destructible_v<TypedExpr>);
@@ -67,55 +119,15 @@ namespace aion::ast {
         SourceLocation loc;
 
         DeclRefExpr(ValueDecl* decl, MutableType* type, const SourceLocation &loc = {})
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::named), decl(decl), loc(loc) {}
+            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::named), decl(decl), loc(loc) {}
     };
     static_assert(std::is_trivially_destructible_v<DeclRefExpr>);
 
     class BinaryExpr : public TypedExpr {
     public:
-        enum class BinaryOp : std::uint8_t {
-            add,
-            sub,
-            mul,
-            div,
-            mod,
-            pow,
-            equal,
-            not_equal,
-            less,
-            less_equal,
-            greater,
-            greater_equal,
-            logical_and,
-            logical_or,
-            bit_and,
-            bit_or,
-            bit_xor,
-            lshift,
-            rshift,
-            assign,
-            add_assign,
-            sub_assign,
-            mul_assign,
-            div_assign,
-            mod_assign,
-            and_assign,
-            or_assign,
-            xor_assign,
-            lshift_assign,
-            rshift_assign,
-            dot,
-            arrow,
-            scope_resolution,
-            range,
-            inclusive_range,
-            fat_arrow,
-            as,
-        };
-
         BinaryExpr(Expr* lhs, Expr* rhs, const BinaryOp op, const ValueCategory v, MutableType* type,
                    const bool is_comp, const SourceRange &range = {})
-            : TypedExpr(TypeKind::common_type, type, v), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp), range(range) {}
+            : TypedExpr(TypedExprTypeKind::common_type, type, v), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp), range(range) {}
 
         Expr* lhs;
         Expr* rhs;
@@ -127,22 +139,9 @@ namespace aion::ast {
 
     class UnaryExpr : public TypedExpr {
     public:
-        enum class UnaryOp : std::uint8_t {
-            plus,
-            minus,
-            logical_not,
-            bit_not,
-            address_of,
-            deref,
-            preincrement,
-            postincrement,
-            predecrement,
-            postdecrement,
-        };
-
         UnaryExpr(Expr* operand, const UnaryOp op, const ValueCategory v, MutableType* type,
                    bool is_comp, const SourceLocation &loc = {})
-            : TypedExpr(TypeKind::common_type, type, v), operand(operand), op(op), is_comp(is_comp) {
+            : TypedExpr(TypedExprTypeKind::common_type, type, v), operand(operand), op(op), is_comp(is_comp) {
         }
 
         [[nodiscard]] Expr* get_operand() const { return operand; }
@@ -171,7 +170,7 @@ namespace aion::ast {
         SourceLocation loc;
 
         NumberLiteralExpr(MutableType* type, const std::string_view literal_value, const SourceLocation& loc)
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed), value(literal_value), loc(loc) {}
+            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::unnamed), value(literal_value), loc(loc) {}
     };
     static_assert(std::is_trivially_destructible_v<NumberLiteralExpr>);
 
@@ -185,7 +184,7 @@ namespace aion::ast {
 
 
         StringLiteralExpr(MutableType* type, const std::string_view v, const std::uint8_t flags, const SourceLocation& loc)
-            : TypedExpr(TypeKind::atom_type, type, ValueCategory::unnamed), value(v), prefix_flags(flags), loc(loc) {}
+            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::unnamed), value(v), prefix_flags(flags), loc(loc) {}
 
     };
     static_assert(std::is_trivially_destructible_v<StringLiteralExpr>);

@@ -13,59 +13,59 @@ namespace aion::ast {
     class MutableType;
     class UserDefinedType;
 
+    enum class BuiltinTypeKind {
+        i4,
+        i8,
+        i16,
+        i32,
+        i64,
+        i128,
+        f4,
+        f8,
+        f16,
+        f32,
+        f64,
+        f128,
+        char_,
+        bool_,
+        string_literal,
+    };
+
     class BuiltinType : public Type {
         friend class ASTContext;
     public:
-        enum class Kind {
-            i4,
-            i8,
-            i16,
-            i32,
-            i64,
-            i128,
-            f4,
-            f8,
-            f16,
-            f32,
-            f64,
-            f128,
-            char_,
-            bool_,
-            string_literal,
-        };
-
-        static Kind get_kind(const lexer::TokenType type) {
+        static BuiltinTypeKind get_kind(const lexer::TokenType type) {
             switch (type) {
-                case lexer::TokenType::kw_i4: return Kind::i4;
-                case lexer::TokenType::kw_i8: return Kind::i8;
-                case lexer::TokenType::kw_i16: return Kind::i16;
-                case lexer::TokenType::kw_i32: return Kind::i32;
-                case lexer::TokenType::kw_i64: return Kind::i64;
-                case lexer::TokenType::kw_i128: return Kind::i128;
-                case lexer::TokenType::kw_f4: return Kind::f4;
-                case lexer::TokenType::kw_f8: return Kind::f8;
-                case lexer::TokenType::kw_f16: return Kind::f16;
-                case lexer::TokenType::kw_f32: return Kind::f32;
-                case lexer::TokenType::kw_f64: return Kind::f64;
-                case lexer::TokenType::kw_f128: return Kind::f128;
-                case lexer::TokenType::kw_char: return Kind::char_;
-                case lexer::TokenType::kw_bool: return Kind::bool_;
-                case lexer::TokenType::int_literal: return Kind::i32; // TODO make this platform dependent, make it the size of the platforms word size
-                case lexer::TokenType::float_literal: return Kind::f32; // todo this too
-                case lexer::TokenType::string_literal: return Kind::string_literal;
+                case lexer::TokenType::kw_i4: return BuiltinTypeKind::i4;
+                case lexer::TokenType::kw_i8: return BuiltinTypeKind::i8;
+                case lexer::TokenType::kw_i16: return BuiltinTypeKind::i16;
+                case lexer::TokenType::kw_i32: return BuiltinTypeKind::i32;
+                case lexer::TokenType::kw_i64: return BuiltinTypeKind::i64;
+                case lexer::TokenType::kw_i128: return BuiltinTypeKind::i128;
+                case lexer::TokenType::kw_f4: return BuiltinTypeKind::f4;
+                case lexer::TokenType::kw_f8: return BuiltinTypeKind::f8;
+                case lexer::TokenType::kw_f16: return BuiltinTypeKind::f16;
+                case lexer::TokenType::kw_f32: return BuiltinTypeKind::f32;
+                case lexer::TokenType::kw_f64: return BuiltinTypeKind::f64;
+                case lexer::TokenType::kw_f128: return BuiltinTypeKind::f128;
+                case lexer::TokenType::kw_char: return BuiltinTypeKind::char_;
+                case lexer::TokenType::kw_bool: return BuiltinTypeKind::bool_;
+                case lexer::TokenType::int_literal: return BuiltinTypeKind::i32; // TODO make this platform dependent, make it the size of the platforms word size
+                case lexer::TokenType::float_literal: return BuiltinTypeKind::f32; // todo this too
+                case lexer::TokenType::string_literal: return BuiltinTypeKind::string_literal;
                 default:
                     // This should not happen if is_builtin_type_token(type) is true
-                    return Kind::i32;
+                    return BuiltinTypeKind::i32;
             }
         }
 
-        explicit BuiltinType(const Kind BK)
-            : Type(Type::Kind::builtin), builtin_kind(BK) {}
+        explicit BuiltinType(const BuiltinTypeKind BK)
+            : Type(TypeKind::builtin), builtin_kind(BK) {}
 
     protected:
-        [[nodiscard]] Kind get_builtin_kind() const { return builtin_kind; }
+        [[nodiscard]] BuiltinTypeKind get_builtin_kind() const { return builtin_kind; }
     private:
-        Kind builtin_kind;
+        BuiltinTypeKind builtin_kind;
     };
     static_assert(std::is_trivially_destructible_v<BuiltinType>);
 
@@ -88,7 +88,7 @@ namespace aion::ast {
         std::string_view name;
     public:
         explicit UserDefinedType(std::string_view name)
-            : Type(Kind::user_defined), name(name) {}
+            : Type(TypeKind::user_defined), name(name) {}
 
         std::string_view get_name() const { return name; }
     };

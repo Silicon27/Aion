@@ -18,6 +18,46 @@ namespace aion::ast {
     class DeclContext;
     class MutableType;
 
+    enum class TypeKind {
+        builtin,
+        user_defined,
+    };
+
+    enum class DeclKind : std::uint8_t {
+        unresolved,
+        translation_unit,
+        variable,
+        function,
+        struct_,
+        enum_,
+        module,
+    };
+
+    enum class StmtKind : std::uint8_t {
+        compound_stmt,
+        if_stmt,
+        while_stmt,
+        for_stmt,
+        return_stmt,
+    };
+
+    enum class ExprKind : std::uint8_t {
+        typed_expr,
+        binary_expr,
+        unary_expr,
+        call_expr,
+        identifier_expr,
+        integer_literal_expr,
+        float_literal_expr,
+        string_literal_expr,
+        member_expr,
+        array_expr,
+        struct_expr,
+        enum_expr,
+        cast_expr,
+        sizeof_expr,
+    };
+
     class IdentifierInfo {
         const char* name;
     public:
@@ -30,16 +70,11 @@ namespace aion::ast {
     class Type {
         friend class ASTContext;
     public:
-        enum class Kind {
-            builtin,
-            user_defined,
-        };
-
-        explicit Type(const Kind K) : type_kind(K) {}
-        [[nodiscard]] Kind get_kind() const { return type_kind; }
-        void set_kind(const Kind K) { type_kind = K; }
+        explicit Type(const TypeKind K) : type_kind(K) {}
+        [[nodiscard]] TypeKind get_kind() const { return type_kind; }
+        void set_kind(const TypeKind K) { type_kind = K; }
     protected:
-        Kind type_kind;
+        TypeKind type_kind;
     };
     static_assert(std::is_trivially_destructible_v<Type>);
 
@@ -62,17 +97,6 @@ namespace aion::ast {
     /// Base class for all declarations.
     class Decl {
         friend class ASTContext;
-    public:
-        enum class DeclKind : std::uint8_t {
-            unresolved,
-            translation_unit,
-            variable,
-            function,
-            struct_,
-            enum_,
-            module,
-        };
-
     private:
         DeclKind decl_kind;
 
@@ -92,31 +116,15 @@ namespace aion::ast {
     class Stmt {
         friend class ASTContext;
     public:
-        enum class Kind : std::uint8_t {
-            compound_stmt,
-            if_stmt,
-            while_stmt,
-            for_stmt,
-            return_stmt,
-        };
-
-    private:
-        Kind stmt_kind;
-
-    public:
-        explicit Stmt(const Kind K) : stmt_kind(K) {}
-
-    public:
-        [[nodiscard]] Kind get_kind() const { return stmt_kind; }
+        StmtKind stmt_kind;
+        explicit Stmt(const StmtKind K) : stmt_kind(K) {}
+        [[nodiscard]] StmtKind get_kind() const { return stmt_kind; }
     };
     static_assert(std::is_trivially_destructible_v<Stmt>);
 
     /// Base class for all expressions
     class Expr  {
     public:
-        enum class ExprKind : std::uint8_t {
-            typed_expr,
-        };
 
         explicit Expr(const ExprKind k, const ValueCategory v)
             : expr_kind(k), category(v) {}

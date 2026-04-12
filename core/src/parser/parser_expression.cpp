@@ -34,7 +34,7 @@ namespace aion::parse {
                     // since the nature of the identifier is indeterminate, we let its
                     // DeclKind be unresolved; resolution work is operated by sema later on
                     return context.create<DeclRefExpr>(
-                        context.create<ValueDecl>(Decl::DeclKind::unresolved, id, nullptr),
+                        context.create<ValueDecl>(DeclKind::unresolved, id, nullptr),
                         nullptr,
                         loc
                         );
@@ -59,7 +59,7 @@ namespace aion::parse {
             }
             case TokenType::string_literal: {
                 return context.create<StringLiteralExpr>(
-                    context.create<MutableType>(context.create<BuiltinType>(BuiltinType::Kind::string_literal), false),
+                    context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::string_literal), false),
                     context.allocate_string(tok.lexeme),
                     tok.flags,
                     loc
@@ -72,18 +72,18 @@ namespace aion::parse {
 
                 /// NOTE is_comp is set to false, as of currently we are unable to deduce the type of the operand,
                 /// and therefore its computation model – that we leave to sema
-                return context.create<UnaryExpr>(operand, UnaryExpr::UnaryOp::minus, ValueCategory::unnamed,
+                return context.create<UnaryExpr>(operand, UnaryOp::minus, ValueCategory::unnamed,
                     nullptr, false, loc);
             }
             case TokenType::plus: {
                 Expr* operand = parse_expression(55, delim);
-                return context.create<UnaryExpr>(operand, UnaryExpr::UnaryOp::plus, ValueCategory::unnamed,
+                return context.create<UnaryExpr>(operand, UnaryOp::plus, ValueCategory::unnamed,
                     nullptr, false, loc);
 
             }
             case TokenType::bang: {
                 Expr* operand = parse_expression(55, delim);
-                return context.create<UnaryExpr>(operand, UnaryExpr::UnaryOp::logical_not, ValueCategory::unnamed,
+                return context.create<UnaryExpr>(operand, UnaryOp::logical_not, ValueCategory::unnamed,
                     nullptr, false, loc);
             }
             case TokenType::lparen: {
@@ -113,15 +113,15 @@ namespace aion::parse {
             case TokenType::minus:
             case TokenType::star:
             case TokenType::slash: {
-                auto get_op = [&](TokenType type) -> BinaryExpr::BinaryOp {
+                auto get_op = [&](TokenType type) -> BinaryOp {
                     switch (type) {
-                        case TokenType::plus: return BinaryExpr::BinaryOp::add;
-                            case TokenType::minus: return BinaryExpr::BinaryOp::sub;
-                            case TokenType::star: return BinaryExpr::BinaryOp::mul;
-                            case TokenType::slash: return BinaryExpr::BinaryOp::div;
+                        case TokenType::plus: return BinaryOp::add;
+                            case TokenType::minus: return BinaryOp::sub;
+                            case TokenType::star: return BinaryOp::mul;
+                            case TokenType::slash: return BinaryOp::div;
                             default: {
                                 diagnostics.report(loc, diag::parse::err_unknown_operator);
-                                return BinaryExpr::BinaryOp::add;
+                                return BinaryOp::add;
                             }
                     }
                 };
@@ -135,7 +135,7 @@ namespace aion::parse {
             case TokenType::equal: {
                 Expr* right = parse_expression(lbp(op.type), delim);
                 return context.create<BinaryExpr>(left, right,
-                    BinaryExpr::BinaryOp::assign, ValueCategory::unnamed,
+                    BinaryOp::assign, ValueCategory::unnamed,
                     nullptr, false,
                     SourceRange(loc, diagnostics.get_token_location(file_id, peek()))
                 );

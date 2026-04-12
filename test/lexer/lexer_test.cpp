@@ -360,6 +360,7 @@ void register_lexer_tests(TestRunner& runner) {
         auto tokens = get_meaningful_tokens(tokenize_string("0o755"));
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::int_literal));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "0o755");
     });
 
     int_suite->add_test("integer_with_underscore_separator", []() {

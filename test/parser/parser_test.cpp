@@ -211,7 +211,7 @@ void register_parser_tests(TestRunner& runner) {
         {
             Parser parser = make_expr_parser("1.25", context, sm, diags);
             Expr* expr = parser.parse_expression(0, TokenType::eof);
-            [[maybe_unused]] auto* num = as_expr<NumberLiteralExpr>(expr);
+            [[maybe_unused]] auto* num = as_expr<FloatLiteralExpr>(expr);
             AION_ASSERT_ENUM_EQ(expr->get_category(), ValueCategory::unnamed);
             AION_DEBUG(std::string(num->value));
         }

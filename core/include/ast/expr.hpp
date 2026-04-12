@@ -78,7 +78,8 @@ namespace aion::ast {
     class DeclRefExpr;
     class BinaryExpr;
     class UnaryExpr;
-    class NumberLiteralExpr;
+    class IntegerLiteralExpr;
+    class FloatLiteralExpr;
     class StringLiteralExpr;
     class VarExpr;
     class CallExpr;
@@ -96,8 +97,9 @@ namespace aion::ast {
 
     class TypedExpr : public Expr {
     public:
-        TypedExpr(TypedExprTypeKind tk, MutableType* type, const ValueCategory category)
-            : Expr(ExprKind::typed_expr, category), tk(tk), type(type) {}
+        TypedExpr(TypedExprTypeKind tk, MutableType* type, const ValueCategory category,
+                  const ExprKind kind = ExprKind::typed_expr)
+            : Expr(kind, category), tk(tk), type(type) {}
 
         [[nodiscard]] TypedExprTypeKind get_type_kind() const { return tk; }
         [[nodiscard]] MutableType* get_type() const { return type; }
@@ -118,8 +120,9 @@ namespace aion::ast {
         /// the far left of the identifier.
         SourceLocation loc;
 
-        DeclRefExpr(ValueDecl* decl, MutableType* type, const SourceLocation &loc = {})
-            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::named), decl(decl), loc(loc) {}
+        DeclRefExpr(ValueDecl* decl, MutableType* type, const SourceLocation &loc = {},
+                    const ExprKind kind = ExprKind::identifier_expr)
+            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::named, kind), decl(decl), loc(loc) {}
     };
     static_assert(std::is_trivially_destructible_v<DeclRefExpr>);
 
@@ -127,7 +130,7 @@ namespace aion::ast {
     public:
         BinaryExpr(Expr* lhs, Expr* rhs, const BinaryOp op, const ValueCategory v, MutableType* type,
                    const bool is_comp, const SourceRange &range = {})
-            : TypedExpr(TypedExprTypeKind::common_type, type, v), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp), range(range) {}
+            : TypedExpr(TypedExprTypeKind::common_type, type, v, ExprKind::binary_expr), lhs(lhs), rhs(rhs), op(op), is_comp(is_comp), range(range) {}
 
         Expr* lhs;
         Expr* rhs;
@@ -141,7 +144,7 @@ namespace aion::ast {
     public:
         UnaryExpr(Expr* operand, const UnaryOp op, const ValueCategory v, MutableType* type,
                    bool is_comp, const SourceLocation &loc = {})
-            : TypedExpr(TypedExprTypeKind::common_type, type, v), operand(operand), op(op), is_comp(is_comp) {
+            : TypedExpr(TypedExprTypeKind::common_type, type, v, ExprKind::unary_expr), operand(operand), op(op), is_comp(is_comp), loc(loc) {
         }
 
         [[nodiscard]] Expr* get_operand() const { return operand; }
@@ -159,7 +162,7 @@ namespace aion::ast {
     };
 
     /// any number literal (integers, floats, doubles, etc.)
-    class NumberLiteralExpr : public TypedExpr {
+    class IntegerLiteralExpr : public TypedExpr {
     public:
 
         // Avoid storing as a float or int here – actual
@@ -169,10 +172,20 @@ namespace aion::ast {
         std::string_view value;
         SourceLocation loc;
 
-        NumberLiteralExpr(MutableType* type, const std::string_view literal_value, const SourceLocation& loc)
-            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::unnamed), value(literal_value), loc(loc) {}
+        IntegerLiteralExpr(MutableType* type, const std::string_view literal_value, const SourceLocation& loc)
+            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::unnamed, ExprKind::integer_literal_expr), value(literal_value), loc(loc) {}
     };
-    static_assert(std::is_trivially_destructible_v<NumberLiteralExpr>);
+    static_assert(std::is_trivially_destructible_v<IntegerLiteralExpr>);
+
+    class FloatLiteralExpr : public TypedExpr {
+    public:
+        std::string_view value;
+        SourceLocation loc;
+
+        FloatLiteralExpr(MutableType* type, const std::string_view literal_value, const SourceLocation& loc)
+            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::unnamed, ExprKind::float_literal_expr), value(literal_value), loc(loc) {}
+    };
+    static_assert(std::is_trivially_destructible_v<FloatLiteralExpr>);
 
     /// any string literal (e. "this string", f"this{x}", etc.)
     class StringLiteralExpr : public TypedExpr {
@@ -184,7 +197,7 @@ namespace aion::ast {
 
 
         StringLiteralExpr(MutableType* type, const std::string_view v, const std::uint8_t flags, const SourceLocation& loc)
-            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::unnamed), value(v), prefix_flags(flags), loc(loc) {}
+            : TypedExpr(TypedExprTypeKind::atom_type, type, ValueCategory::unnamed, ExprKind::string_literal_expr), value(v), prefix_flags(flags), loc(loc) {}
 
     };
     static_assert(std::is_trivially_destructible_v<StringLiteralExpr>);
@@ -204,7 +217,7 @@ namespace aion::ast {
         unsigned num_args;
 
         CallExpr(ValueDecl* decl, MutableType* type, Expr* callee, Expr** args, unsigned num_args, const SourceLocation& loc)
-            : DeclRefExpr(decl, type, loc),
+            : DeclRefExpr(decl, type, loc, ExprKind::call_expr),
                 callee(callee), args(args), num_args(num_args) {}
     };
     static_assert(std::is_trivially_destructible_v<CallExpr>);

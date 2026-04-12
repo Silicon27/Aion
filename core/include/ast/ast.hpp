@@ -131,7 +131,7 @@ namespace aion::ast {
 
         [[nodiscard]] ExprKind get_kind() const { return expr_kind; }
         [[nodiscard]] ValueCategory get_category() const { return category; }
-    private:
+        
         ExprKind expr_kind;
         ValueCategory category;
 

@@ -46,7 +46,16 @@ namespace aion::parse {
                     return context.create<ErrorExpr>(loc, ValueCategory::named);
                 }
             }
-            case TokenType::int_literal:
+            case TokenType::int_literal: {
+                auto type_creator = [&](TokenType type) -> MutableType* {
+                    return context.create<MutableType>(
+                        context.create<BuiltinType>(BuiltinType::get_kind(type)),
+                        false
+                        );
+                };
+
+                return context.create<IntegerLiteralExpr>(type_creator(tok.type), context.allocate_string(tok.lexeme), loc);
+            }
             case TokenType::float_literal: {
                 auto type_creator = [&](TokenType type) -> MutableType* {
                     return context.create<MutableType>(
@@ -55,7 +64,7 @@ namespace aion::parse {
                         );
                 };
 
-                return context.create<NumberLiteralExpr>(type_creator(tok.type), context.allocate_string(tok.lexeme), loc);
+                return context.create<FloatLiteralExpr>(type_creator(tok.type), context.allocate_string(tok.lexeme), loc);
             }
             case TokenType::string_literal: {
                 return context.create<StringLiteralExpr>(

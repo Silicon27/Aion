@@ -5,7 +5,7 @@
 %%For: 
 %Magnification: 1.00
 %%Orientation: Portrait
-%%BoundingBox: 0 0 500 90.395477
+%%BoundingBox: 0 0 500 77.519379
 %%Pages: 0
 %%BeginSetup
 %%EndSetup
@@ -19,13 +19,13 @@
 /marginwidth 10 def
 /distx 20 def
 /disty 40 def
-/boundaspect 5.531250 def  % aspect ratio of the BoundingBox (width/height)
+/boundaspect 6.450000 def  % aspect ratio of the BoundingBox (width/height)
 /boundx 500 def
 /boundy boundx boundaspect div def
 /xspacing 0 def
 /yspacing 0 def
 /rows 4 def
-/cols 5 def
+/cols 6 def
 /scalefactor 0 def
 /boxfont /Times-Roman findfont fontheight scalefont def
 
@@ -177,7 +177,8 @@ boxfont setfont
 (aion::ast::Expr) cw
 (aion::ast::BinaryExpr) cw
 (aion::ast::DeclRefExpr) cw
-(aion::ast::NumberLiteralExpr) cw
+(aion::ast::FloatLiteralExpr) cw
+(aion::ast::IntegerLiteralExpr) cw
 (aion::ast::StringLiteralExpr) cw
 (aion::ast::UnaryExpr) cw
 (aion::ast::CallExpr) cw
@@ -192,25 +193,26 @@ boundx scalefactor div boundy scalefactor div scale
 
 % ----- classes -----
 
- (aion::ast::TypedExpr) 2.000000 2.000000 box
- (aion::ast::Expr) 2.000000 3.000000 box
+ (aion::ast::TypedExpr) 2.500000 2.000000 box
+ (aion::ast::Expr) 2.500000 3.000000 box
  (aion::ast::BinaryExpr) 0.000000 1.000000 box
  (aion::ast::DeclRefExpr) 1.000000 1.000000 box
- (aion::ast::NumberLiteralExpr) 2.000000 1.000000 box
- (aion::ast::StringLiteralExpr) 3.000000 1.000000 box
- (aion::ast::UnaryExpr) 4.000000 1.000000 box
+ (aion::ast::FloatLiteralExpr) 2.000000 1.000000 box
+ (aion::ast::IntegerLiteralExpr) 3.000000 1.000000 box
+ (aion::ast::StringLiteralExpr) 4.000000 1.000000 box
+ (aion::ast::UnaryExpr) 5.000000 1.000000 box
  (aion::ast::CallExpr) 1.000000 0.000000 box
 
 % ----- relations -----
 
 solid
-0 2.000000 2.000000 out
+0 2.500000 2.000000 out
 solid
-1 2.000000 3.000000 in
+1 2.500000 3.000000 in
 solid
-1 2.000000 1.250000 out
+1 2.500000 1.250000 out
 solid
-0.000000 4.000000 2.000000 conn
+0.000000 5.000000 2.000000 conn
 solid
 0 0.000000 1.750000 in
 solid
@@ -223,5 +225,7 @@ solid
 0 3.000000 1.750000 in
 solid
 0 4.000000 1.750000 in
+solid
+0 5.000000 1.750000 in
 solid
 0 1.000000 0.750000 in

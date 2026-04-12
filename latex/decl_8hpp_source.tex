@@ -26,51 +26,59 @@
 \DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<TranslationUnitDecl>);}
 \DoxyCodeLine{00024\ }
 \DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{class\ }NamedDecl\ :\ \textcolor{keyword}{public}\ Decl\ \{}
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name;}
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ NamedDecl(DeclKind\ declaration\_kind,\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name)}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ :\ Decl(declaration\_kind),\ name(name)\ \{\}}
-\DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ get\_name()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name;\ \}}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ [[nodiscard]]\ std::string\_view\ get\_identifier()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name-\/>get\_name();\ \}}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_name(\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ new\_name)\ \{\ name\ =\ new\_name;\ \}}
-\DoxyCodeLine{00034\ \ \ \ \ \};}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<NamedDecl>);}
-\DoxyCodeLine{00036\ }
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{class\ }ValueDecl\ :\ \textcolor{keyword}{public}\ NamedDecl\ \{}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type;}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ ValueDecl(\textcolor{keyword}{const}\ DeclKind\ declaration\_kind,\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type)}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ :\ NamedDecl(declaration\_kind,\ name),\ type(type)\ \{\}}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ get\_type()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ type;\ \}}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_type(\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ new\_type)\ \{\ type\ =\ new\_type;\ \}}
-\DoxyCodeLine{00045\ \ \ \ \ \};}
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<ValueDecl>);}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{class\ }VarDecl\ :\ \textcolor{keyword}{public}\ ValueDecl\ \{}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ init;}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ StorageClass\ storage\_class;}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ id\_range;}
-\DoxyCodeLine{00052\ }
-\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ VarDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ StorageClass\ storage\_class,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ \&range,}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ init\ =\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ :\ ValueDecl(DeclKind::variable,\ name,\ type),\ init(init),}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ storage\_class(storage\_class),\ id\_range(range)\ \{\}}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ get\_init()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ init;\ \}}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_init(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ init)\ \{\ this-\/>init\ =\ init;\ \}}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ StorageClass\ get\_storage\_class()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ storage\_class;\ \}}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_storage\_class(\textcolor{keyword}{const}\ StorageClass\ storage\_class)\ \{\ this-\/>storage\_class\ =\ storage\_class;\ \}}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ get\_id\_loc()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ id\_range;\ \}}
-\DoxyCodeLine{00067\ \ \ \ \ \};}
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<VarDecl>);}
-\DoxyCodeLine{00069\ \}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ NamedDecl(DeclKind\ declaration\_kind,\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name)}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ :\ Decl(declaration\_kind),\ name(name)\ \{\}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ get\_name()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name;\ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ [[nodiscard]]\ std::string\_view\ get\_identifier()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name-\/>get\_name();\ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_name(\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ new\_name)\ \{\ name\ =\ new\_name;\ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<NamedDecl>);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{class\ }ValueDecl\ :\ \textcolor{keyword}{public}\ NamedDecl\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type;}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ ValueDecl(\textcolor{keyword}{const}\ DeclKind\ declaration\_kind,\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type)}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ :\ NamedDecl(declaration\_kind,\ name),\ type(type)\ \{\}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ get\_type()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ type;\ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_type(\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ new\_type)\ \{\ type\ =\ new\_type;\ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<ValueDecl>);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{class\ }VarDecl\ :\ \textcolor{keyword}{public}\ ValueDecl\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ init;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ StorageClass\ storage\_class;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ id\_range;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ VarDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name,\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ StorageClass\ storage\_class,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ \&range,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ init\ =\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ :\ ValueDecl(DeclKind::variable,\ name,\ type),\ init(init),}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ storage\_class(storage\_class),\ id\_range(range)\ \{\}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ get\_init()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ init;\ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_init(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ init)\ \{\ this-\/>init\ =\ init;\ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ StorageClass\ get\_storage\_class()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ storage\_class;\ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_storage\_class(\textcolor{keyword}{const}\ StorageClass\ storage\_class)\ \{\ this-\/>storage\_class\ =\ storage\_class;\ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ get\_id\_loc()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ id\_range;\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \};}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<VarDecl>);}
 \DoxyCodeLine{00070\ }
-\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_DECL\_HPP}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{class\ }ErrorDecl\ :\ \textcolor{keyword}{public}\ NamedDecl\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ ErrorDecl(\textcolor{keyword}{const}\ DeclKind\ declaration\_kind,\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ name)}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ :\ NamedDecl(declaration\_kind,\ name)\ \{\}}
+\DoxyCodeLine{00075\ \ \ \ \ \};}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<ErrorDecl>);}
+\DoxyCodeLine{00077\ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_DECL\_HPP}}
 
 \end{DoxyCode}

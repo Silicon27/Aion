@@ -1,0 +1,110 @@
+\doxysection{aion\+::ast\+::Short\+Vec\texorpdfstring{$<$}{<} EleT, Context \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classaion_1_1ast_1_1_short_vec}{}\label{classaion_1_1ast_1_1_short_vec}\index{aion::ast::ShortVec$<$ EleT, Context $>$@{aion::ast::ShortVec$<$ EleT, Context $>$}}
+
+
+{\ttfamily \#include $<$Short\+Vec.\+hpp$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a69d04606abf137a68e3e9cfc18f76d50}\label{classaion_1_1ast_1_1_short_vec_a69d04606abf137a68e3e9cfc18f76d50} 
+using {\bfseries value\+\_\+type} = EleT
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a44ed53afbff9d7967d54d5f54d1f69c0}\label{classaion_1_1ast_1_1_short_vec_a44ed53afbff9d7967d54d5f54d1f69c0} 
+using {\bfseries context\+\_\+type} = Context
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a88cdb7fce31e64650e52cfed494d41d7}\label{classaion_1_1ast_1_1_short_vec_a88cdb7fce31e64650e52cfed494d41d7} 
+using {\bfseries size\+\_\+type} = std\+::size\+\_\+t
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_aee89cfb782ffd69f211882f6d5943af3}\label{classaion_1_1ast_1_1_short_vec_aee89cfb782ffd69f211882f6d5943af3} 
+using {\bfseries reference} = EleT\&
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a809302e3e6b9610f9bd4420951e66713}\label{classaion_1_1ast_1_1_short_vec_a809302e3e6b9610f9bd4420951e66713} 
+using {\bfseries const\+\_\+reference} = const EleT\&
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_aedd9eca487929c57d92821d69bfa86a6}\label{classaion_1_1ast_1_1_short_vec_aedd9eca487929c57d92821d69bfa86a6} 
+using {\bfseries pointer} = EleT\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a55f8c898e0e1024a55fdf5772a8f8d30}\label{classaion_1_1ast_1_1_short_vec_a55f8c898e0e1024a55fdf5772a8f8d30} 
+using {\bfseries const\+\_\+pointer} = const EleT\texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_ad3f475b3f93a5ac4bc4730643d6887a2}\label{classaion_1_1ast_1_1_short_vec_ad3f475b3f93a5ac4bc4730643d6887a2} 
+using {\bfseries iterator} = pointer
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a42e97ab2f8d9357e19165dc734165fd3}\label{classaion_1_1ast_1_1_short_vec_a42e97ab2f8d9357e19165dc734165fd3} 
+using {\bfseries const\+\_\+iterator} = const\+\_\+pointer
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a51c5df59c00f88c6dbb374ae4c190b68}\label{classaion_1_1ast_1_1_short_vec_a51c5df59c00f88c6dbb374ae4c190b68} 
+{\bfseries Short\+Vec} (Context \&context)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a4bb387b2c23826f922018d716302ad99}\label{classaion_1_1ast_1_1_short_vec_a4bb387b2c23826f922018d716302ad99} 
+{\bfseries Short\+Vec} (Context \&c, std\+::initializer\+\_\+list$<$ EleT $>$ elements)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a4ef7727ff7b97b49ce3125478b00021e}\label{classaion_1_1ast_1_1_short_vec_a4ef7727ff7b97b49ce3125478b00021e} 
+{\bfseries Short\+Vec} (const \mbox{\hyperlink{classaion_1_1ast_1_1_short_vec}{Short\+Vec}} \&other)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a0c17e57d3230cea2efb53a198bc8057d}\label{classaion_1_1ast_1_1_short_vec_a0c17e57d3230cea2efb53a198bc8057d} 
+{\bfseries Short\+Vec} (\mbox{\hyperlink{classaion_1_1ast_1_1_short_vec}{Short\+Vec}} \&\&other) noexcept
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a137cd329404dcc6934f12427a521ee88}\label{classaion_1_1ast_1_1_short_vec_a137cd329404dcc6934f12427a521ee88} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Short\+Vec} ()=default
+\begin{DoxyCompactList}\small\item\em No deallocation is required because Context owns the storage. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a62b436f7e8570b6d33f129b1987f5d87}\label{classaion_1_1ast_1_1_short_vec_a62b436f7e8570b6d33f129b1987f5d87} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_short_vec}{Short\+Vec}} \& {\bfseries operator=} (const \mbox{\hyperlink{classaion_1_1ast_1_1_short_vec}{Short\+Vec}} \&other)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a75f20c8cd3c50e54871fec17dcd94a4d}\label{classaion_1_1ast_1_1_short_vec_a75f20c8cd3c50e54871fec17dcd94a4d} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_short_vec}{Short\+Vec}} \& {\bfseries operator=} (\mbox{\hyperlink{classaion_1_1ast_1_1_short_vec}{Short\+Vec}} \&\&other) noexcept
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a03e0187d4236780dcee43e4824a33d3c}\label{classaion_1_1ast_1_1_short_vec_a03e0187d4236780dcee43e4824a33d3c} 
+void {\bfseries reserve} (size\+\_\+type new\+\_\+cap)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a1fb476f036d906664f6f18c06efa59c0}\label{classaion_1_1ast_1_1_short_vec_a1fb476f036d906664f6f18c06efa59c0} 
+void {\bfseries push\+\_\+back} (const EleT \&element)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_ab26a6ea1fcc7061afc2d475610a3ba5f}\label{classaion_1_1ast_1_1_short_vec_ab26a6ea1fcc7061afc2d475610a3ba5f} 
+{\footnotesize template$<$typename... Args$>$ \newline
+requires std\+::is\+\_\+constructible\+\_\+v$<$EleT, Args...$>$}\\void {\bfseries emplace\+\_\+back} (Args... args)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a44986b2f9b2aaf754a6abb167c2bb1c7}\label{classaion_1_1ast_1_1_short_vec_a44986b2f9b2aaf754a6abb167c2bb1c7} 
+reference {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+type index)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a8fe01ed06e8895b8dc28a365f7e1ab5f}\label{classaion_1_1ast_1_1_short_vec_a8fe01ed06e8895b8dc28a365f7e1ab5f} 
+reference {\bfseries at} (size\+\_\+type index)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_ac3819db29f87ec94fd2c6e942086634b}\label{classaion_1_1ast_1_1_short_vec_ac3819db29f87ec94fd2c6e942086634b} 
+pointer {\bfseries begin} () noexcept
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a158652be22071abe7b6b904217f06775}\label{classaion_1_1ast_1_1_short_vec_a158652be22071abe7b6b904217f06775} 
+pointer {\bfseries end} () noexcept
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_ad34e6287a54f0de52dd0f294c73d377b}\label{classaion_1_1ast_1_1_short_vec_ad34e6287a54f0de52dd0f294c73d377b} 
+size\+\_\+type {\bfseries size} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a8db02a2b7d877ae359fa25367b81f442}\label{classaion_1_1ast_1_1_short_vec_a8db02a2b7d877ae359fa25367b81f442} 
+size\+\_\+type {\bfseries capacity} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_short_vec_a81fe13453eb1ea08c4391d16a330de1a}\label{classaion_1_1ast_1_1_short_vec_a81fe13453eb1ea08c4391d16a330de1a} 
+pointer {\bfseries data} () noexcept
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename EleT, typename Context = ASTContext$>$\newline
+class aion\+::ast\+::\+Short\+Vec$<$ Ele\+T, Context $>$}
+\doxylink{classaion_1_1ast_1_1_short_vec}{Short\+Vec} -\/ A lightweight alternative to std\+::vector, allocating within context boundaries and optimized for fewer allocations/elements.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em EleT} & -\/ Element type stored in the vector \\
+\hline
+{\em Context} & -\/ Context type for allocation and management \\
+\hline
+\end{DoxyTemplParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/Short\+Vec.\+hpp\end{DoxyCompactItemize}

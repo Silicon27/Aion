@@ -9,6 +9,5 @@ var searchData=
   ['get_5fnum_5ferrors_6',['get_num_errors',['../classaion_1_1diag_1_1_diagnostic_consumer.html#a8f7dfa0c6d1c0da068aad58853472223',1,'aion::diag::DiagnosticConsumer']]],
   ['get_5fnum_5fwarnings_7',['get_num_warnings',['../classaion_1_1diag_1_1_diagnostic_consumer.html#a836d861af56807d14a2ba09971344062',1,'aion::diag::DiagnosticConsumer']]],
   ['get_5fseverity_8',['get_severity',['../classaion_1_1diag_1_1_diagnostics_engine.html#af1b1f1e4632dbc809c05293c60859a0a',1,'aion::diag::DiagnosticsEngine']]],
-  ['getastcontext_9',['getASTContext',['../class_compiler___invocation.html#a1a71d3c4f1f97214f118fd41ec825682',1,'Compiler_Invocation']]],
-  ['getdiagnostics_10',['getDiagnostics',['../class_compiler___invocation.html#abf96b43ac4d42c6e730acd643753e9eb',1,'Compiler_Invocation']]]
+  ['getdiagnostics_9',['getDiagnostics',['../class_compiler_invocation.html#abc05e384176457cb2d4b406099a68271',1,'CompilerInvocation']]]
 ];

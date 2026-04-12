@@ -1,0 +1,113 @@
+\doxysection{aion\+::ast\+::String\+Map\texorpdfstring{$<$}{<} Value, Context \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classaion_1_1ast_1_1_string_map}{}\label{classaion_1_1ast_1_1_string_map}\index{aion::ast::StringMap$<$ Value, Context $>$@{aion::ast::StringMap$<$ Value, Context $>$}}
+
+
+Open addressing.  
+
+
+
+
+{\ttfamily \#include $<$String\+Map.\+hpp$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_add8e9801855d015b8862d692db2f1d7a}\label{classaion_1_1ast_1_1_string_map_add8e9801855d015b8862d692db2f1d7a} 
+using {\bfseries value\+\_\+type} = Value
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_af0cc398f67bae00521556fd88ac50805}\label{classaion_1_1ast_1_1_string_map_af0cc398f67bae00521556fd88ac50805} 
+using {\bfseries allocator\+\_\+type} = Context
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a9355c4e7bdaab1a70fcf485a597114fd}\label{classaion_1_1ast_1_1_string_map_a9355c4e7bdaab1a70fcf485a597114fd} 
+using {\bfseries key\+\_\+type} = std\+::string\+\_\+view
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a11541fc3384f2b9cf12783661ffb2da2}\label{classaion_1_1ast_1_1_string_map_a11541fc3384f2b9cf12783661ffb2da2} 
+using {\bfseries mapped\+\_\+type} = Value
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_abe9e879c55e24155c428e7ee92153584}\label{classaion_1_1ast_1_1_string_map_abe9e879c55e24155c428e7ee92153584} 
+using {\bfseries reference} = Value \&
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_ab52056bc68095e1b9dc5be23ece44d98}\label{classaion_1_1ast_1_1_string_map_ab52056bc68095e1b9dc5be23ece44d98} 
+using {\bfseries const\+\_\+reference} = const Value \&
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_ad037f868c5d09dc7033c72cc45ecd73c}\label{classaion_1_1ast_1_1_string_map_ad037f868c5d09dc7033c72cc45ecd73c} 
+using {\bfseries pointer} = Value \texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a7a203a3c994e93eadb90dbb1584199bf}\label{classaion_1_1ast_1_1_string_map_a7a203a3c994e93eadb90dbb1584199bf} 
+using {\bfseries const\+\_\+pointer} = const Value \texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a31d53a10ebaacc7e02ddc7fdb31a48b9}\label{classaion_1_1ast_1_1_string_map_a31d53a10ebaacc7e02ddc7fdb31a48b9} 
+using {\bfseries size\+\_\+type} = std\+::size\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a4903e2cccf0ab3718caa07b961ed5630}\label{classaion_1_1ast_1_1_string_map_a4903e2cccf0ab3718caa07b961ed5630} 
+std\+::size\+\_\+t {\bfseries get\+\_\+size} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a1a3bef17104fc113bbc488c26b411045}\label{classaion_1_1ast_1_1_string_map_a1a3bef17104fc113bbc488c26b411045} 
+std\+::size\+\_\+t {\bfseries get\+\_\+bytes\+\_\+used} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a0c4cab2da64e8afb8c710b3b8792b82e}\label{classaion_1_1ast_1_1_string_map_a0c4cab2da64e8afb8c710b3b8792b82e} 
+std\+::size\+\_\+t {\bfseries get\+\_\+capacity} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_ad8859bd3944fe4c668bd19add2d33e93}\label{classaion_1_1ast_1_1_string_map_ad8859bd3944fe4c668bd19add2d33e93} 
+bool {\bfseries empty} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_acb121313bd26c678425d4f8d2fd8a96a}\label{classaion_1_1ast_1_1_string_map_acb121313bd26c678425d4f8d2fd8a96a} 
+float {\bfseries load\+\_\+factor} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a5d9eb6b366638d029a81a1c9fb5283ae}\label{classaion_1_1ast_1_1_string_map_a5d9eb6b366638d029a81a1c9fb5283ae} 
+float {\bfseries get\+\_\+max\+\_\+load\+\_\+factor} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a1c78452624243b088165b860532385af}\label{classaion_1_1ast_1_1_string_map_a1c78452624243b088165b860532385af} 
+void {\bfseries set\+\_\+max\+\_\+load\+\_\+factor} (const float factor)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_afa33d1f01b5e4f541f2a14351de0c73e}\label{classaion_1_1ast_1_1_string_map_afa33d1f01b5e4f541f2a14351de0c73e} 
+{\bfseries String\+Map} (Context \&ctx, std\+::size\+\_\+t initial\+\_\+capacity=64)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_ad6a8585bb0d74ca53e60fb1baf6e3e74}\label{classaion_1_1ast_1_1_string_map_ad6a8585bb0d74ca53e60fb1baf6e3e74} 
+void {\bfseries rehash} (size\+\_\+type new\+\_\+cap)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_ac2b42f15f2d48f910ad0cd3084949e3e}\label{classaion_1_1ast_1_1_string_map_ac2b42f15f2d48f910ad0cd3084949e3e} 
+bool {\bfseries is\+\_\+full} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_ab98ccd676fd19385e2c1fb3d4a29242d}\label{classaion_1_1ast_1_1_string_map_ab98ccd676fd19385e2c1fb3d4a29242d} 
+void {\bfseries insert} (std\+::pair$<$ const std\+::string\+\_\+view, Value $>$ const \&value)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a9e8de324f2f04e0b3d2ece0256a73700}\label{classaion_1_1ast_1_1_string_map_a9e8de324f2f04e0b3d2ece0256a73700} 
+void {\bfseries insert} (std\+::string\+\_\+view key, Value value)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a92bdc657c8964cd5c540954210aef92f}\label{classaion_1_1ast_1_1_string_map_a92bdc657c8964cd5c540954210aef92f} 
+{\footnotesize template$<$typename... Args$>$ \newline
+requires std\+::is\+\_\+constructible\+\_\+v$<$Value, Args...$>$}\\void {\bfseries emplace} (key\+\_\+type k, Args \&\&... args)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a14e32571e2157461427aac3baa4607df}\label{classaion_1_1ast_1_1_string_map_a14e32571e2157461427aac3baa4607df} 
+{\footnotesize template$<$typename... Args$>$ \newline
+requires std\+::is\+\_\+constructible\+\_\+v$<$Value, Args...$>$}\\mapped\+\_\+type \& {\bfseries emplace\+\_\+or\+\_\+get} (key\+\_\+type k, Args \&\&... args)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a8123b6b85bb41b965f31cff92239f837}\label{classaion_1_1ast_1_1_string_map_a8123b6b85bb41b965f31cff92239f837} 
+mapped\+\_\+type \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (std\+::string\+\_\+view key)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_ad7a3edf56a64be75f7d9798d6e24ef17}\label{classaion_1_1ast_1_1_string_map_ad7a3edf56a64be75f7d9798d6e24ef17} 
+const Value \texorpdfstring{$\ast$}{*} {\bfseries find} (std\+::string\+\_\+view key) const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a4a13b1f4e5d11b8b8e8fe0965a115915}\label{classaion_1_1ast_1_1_string_map_a4a13b1f4e5d11b8b8e8fe0965a115915} 
+Value \texorpdfstring{$\ast$}{*} {\bfseries find} (std\+::string\+\_\+view key)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a75d258dad5dc5a062e94116ba0fa0cb7}\label{classaion_1_1ast_1_1_string_map_a75d258dad5dc5a062e94116ba0fa0cb7} 
+const Value \texorpdfstring{$\ast$}{*} {\bfseries at} (std\+::string\+\_\+view key) const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_string_map_a8b2eb43a89a453fc194ad1b0a65847dd}\label{classaion_1_1ast_1_1_string_map_a8b2eb43a89a453fc194ad1b0a65847dd} 
+Value \texorpdfstring{$\ast$}{*} {\bfseries at} (std\+::string\+\_\+view key)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Value, typename Context = ASTContext$>$\newline
+class aion\+::ast\+::\+String\+Map$<$ Value, Context $>$}
+Open addressing. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/String\+Map.\+hpp\end{DoxyCompactItemize}

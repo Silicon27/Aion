@@ -25,7 +25,9 @@ unsigned {\bfseries get\+\_\+num\+\_\+warnings} () const
 \begin{DoxyCompactList}\small\item\em Returns the number of warnings emitted. \end{DoxyCompactList}\item 
 \Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a92edd8ab4d52eb267bd4f493b2c3ed75}\label{classaion_1_1diag_1_1_diagnostic_consumer_a92edd8ab4d52eb267bd4f493b2c3ed75} 
 virtual void {\bfseries clear} ()
-\begin{DoxyCompactList}\small\item\em Reset the error/warning counts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Reset the error/warning counts. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer_a6d170cbd73dea81245c0d529faeb41e6}{print\+\_\+summary}} ()
+\begin{DoxyCompactList}\small\item\em Print a summary of errors and warnings. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -53,6 +55,20 @@ Callback for when a diagnostic is emitted.
 
 
 Implemented in \mbox{\hyperlink{classaion_1_1diag_1_1_text_diagnostic_printer_a73a6274d1c6891d21867336f2102e7d2}{aion\+::diag\+::\+Text\+Diagnostic\+Printer}}.
+
+\Hypertarget{classaion_1_1diag_1_1_diagnostic_consumer_a6d170cbd73dea81245c0d529faeb41e6}\index{aion::diag::DiagnosticConsumer@{aion::diag::DiagnosticConsumer}!print\_summary@{print\_summary}}
+\index{print\_summary@{print\_summary}!aion::diag::DiagnosticConsumer@{aion::diag::DiagnosticConsumer}}
+\doxysubsubsection{\texorpdfstring{print\_summary()}{print\_summary()}}
+{\footnotesize\ttfamily \label{classaion_1_1diag_1_1_diagnostic_consumer_a6d170cbd73dea81245c0d529faeb41e6} 
+virtual void aion\+::diag\+::\+Diagnostic\+Consumer\+::print\+\_\+summary (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Print a summary of errors and warnings. 
+
+
+
+Reimplemented in \mbox{\hyperlink{classaion_1_1diag_1_1_text_diagnostic_printer_abb6d7b0e3974d184c843140f21d23c8e}{aion\+::diag\+::\+Text\+Diagnostic\+Printer}}.
 
 
 

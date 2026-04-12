@@ -28,6 +28,9 @@ enum class {\bfseries Parser\+Context} \{ {\bfseries top\+\_\+level}
 \Hypertarget{classaion_1_1parse_1_1_parser_ad4472d6254f931867c72f04274e50c17}\label{classaion_1_1parse_1_1_parser_ad4472d6254f931867c72f04274e50c17} 
 \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries diffuse\+\_\+match} (const Token\+Type exp, const Token\+Type curr, const std\+::string \&sigabrt\+\_\+message)
 \begin{DoxyCompactList}\small\item\em usage examples would be tokens that if not matched, would indicate memory corruption during program runtime \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_afebef7714847ca269d755e042b1ad24a}\label{classaion_1_1parse_1_1_parser_afebef7714847ca269d755e042b1ad24a} 
+void {\bfseries skip\+\_\+newlines} ()
+\item 
 \Hypertarget{classaion_1_1parse_1_1_parser_a969d5adb73b328db7245a8a2ade3b5fe}\label{classaion_1_1parse_1_1_parser_a969d5adb73b328db7245a8a2ade3b5fe} 
 bool {\bfseries silent\+\_\+probe} (Token\+Type exp, const \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} \&curr)
 \begin{DoxyCompactList}\small\item\em would silently probe, this is, would return whether the curr == exp \end{DoxyCompactList}\item 
@@ -43,6 +46,12 @@ bool {\bfseries silent\+\_\+probe} (const \mbox{\hyperlink{structaion_1_1parse_1
 \Hypertarget{classaion_1_1parse_1_1_parser_ac22dda0a8e93807d3ab6a34d510b8049}\label{classaion_1_1parse_1_1_parser_ac22dda0a8e93807d3ab6a34d510b8049} 
 \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries attempt} (const \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{Match\+Token}} \&token)
 \begin{DoxyCompactList}\small\item\em alias for \doxylink{classaion_1_1parse_1_1_parser_a11a474f2f36a97cefbf11fb9b6275a41}{silent\+\_\+consume(const Match\+Token\&)} \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_ade0fa57d15870806a535f84cfb1f56f7}\label{classaion_1_1parse_1_1_parser_ade0fa57d15870806a535f84cfb1f56f7} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries expect} (Token\+Type type)
+\begin{DoxyCompactList}\small\item\em expect a token of a certain type, if not matched, emit a diagnostic and return invalid\+\_\+token \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1parse_1_1_parser_a23432689a89ad5969ed350b252a42cb0}\label{classaion_1_1parse_1_1_parser_a23432689a89ad5969ed350b252a42cb0} 
+\mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} {\bfseries expect} (const \mbox{\hyperlink{structaion_1_1parse_1_1_match_token}{Match\+Token}} \&token)
+\item 
 \mbox{\hyperlink{structaion_1_1lexer_1_1_token}{Token}} \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}{skip\+\_\+until}} (const std\+::string \&lexeme)
 \item 
 \Hypertarget{classaion_1_1parse_1_1_parser_af0f95f1a683559ffc1fd2cfd30da680d}\label{classaion_1_1parse_1_1_parser_af0f95f1a683559ffc1fd2cfd30da680d} 
@@ -58,15 +67,14 @@ bool {\bfseries is\+\_\+at\+\_\+end} () const
 \item 
 \Hypertarget{classaion_1_1parse_1_1_parser_a2be63981aa34d7d234c514ebaea380ee}\label{classaion_1_1parse_1_1_parser_a2be63981aa34d7d234c514ebaea380ee} 
 void {\bfseries parse} ()
-\item 
+\begin{DoxyCompactList}\small\item\em primary entry point is \doxylink{classaion_1_1parse_1_1_parser_a2be63981aa34d7d234c514ebaea380ee}{parse()} \end{DoxyCompactList}\item 
 \Hypertarget{classaion_1_1parse_1_1_parser_a4c159cfa37819b2e90c557c6d5b17677}\label{classaion_1_1parse_1_1_parser_a4c159cfa37819b2e90c557c6d5b17677} 
 void {\bfseries parse\+\_\+top\+\_\+level\+\_\+decl} ()
+\begin{DoxyCompactList}\small\item\em will be called in a loop from \doxylink{classaion_1_1parse_1_1_parser_a2be63981aa34d7d234c514ebaea380ee}{parse()} until we reach the end of the token stream. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classaion_1_1parse_1_1_parser_a5d368ea02a6547ff849b1394341cb77d}{parse\+\_\+first\+\_\+top\+\_\+level\+\_\+decl}} ()
 \item 
-\Hypertarget{classaion_1_1parse_1_1_parser_a5d368ea02a6547ff849b1394341cb77d}\label{classaion_1_1parse_1_1_parser_a5d368ea02a6547ff849b1394341cb77d} 
-bool {\bfseries parse\+\_\+first\+\_\+top\+\_\+level\+\_\+decl} ()
-\item 
-\Hypertarget{classaion_1_1parse_1_1_parser_ae23b8d54ec5688e70ee5bab05d21ab1c}\label{classaion_1_1parse_1_1_parser_ae23b8d54ec5688e70ee5bab05d21ab1c} 
-void {\bfseries parse\+\_\+variable\+\_\+decl} ()
+\Hypertarget{classaion_1_1parse_1_1_parser_a3be26c2e4481b201c5b9eec58e5a9daf}\label{classaion_1_1parse_1_1_parser_a3be26c2e4481b201c5b9eec58e5a9daf} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries parse\+\_\+variable\+\_\+decl} ()
 \item 
 \Hypertarget{classaion_1_1parse_1_1_parser_a0c2aa356ad527b394344b1428dacbd2c}\label{classaion_1_1parse_1_1_parser_a0c2aa356ad527b394344b1428dacbd2c} 
 \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries parse\+\_\+expression} (int rbp, Token\+Type delim)
@@ -104,7 +112,13 @@ the error would have to be first emitted before we attempt to end the parsing fu
 
 we want to use an precedence level high than the additive lbp
 
-NOTE is\+\_\+comp is set to false, as of currently we are unable to deduce the type of the operand, and therefore its computation model – that we leave to sema\Hypertarget{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}\index{aion::parse::Parser@{aion::parse::Parser}!skip\_until@{skip\_until}}
+NOTE is\+\_\+comp is set to false, as of currently we are unable to deduce the type of the operand, and therefore its computation model – that we leave to sema\Hypertarget{classaion_1_1parse_1_1_parser_a5d368ea02a6547ff849b1394341cb77d}\index{aion::parse::Parser@{aion::parse::Parser}!parse\_first\_top\_level\_decl@{parse\_first\_top\_level\_decl}}
+\index{parse\_first\_top\_level\_decl@{parse\_first\_top\_level\_decl}!aion::parse::Parser@{aion::parse::Parser}}
+\doxysubsubsection{\texorpdfstring{parse\_first\_top\_level\_decl()}{parse\_first\_top\_level\_decl()}}
+{\footnotesize\ttfamily \label{classaion_1_1parse_1_1_parser_a5d368ea02a6547ff849b1394341cb77d} 
+bool aion\+::parse\+::\+Parser\+::parse\+\_\+first\+\_\+top\+\_\+level\+\_\+decl (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+We also thereby create a specialized first top level declaration parser, which is responsible mainly for parsing module declarations and imports TODO TODO for module declaration\Hypertarget{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28}\index{aion::parse::Parser@{aion::parse::Parser}!skip\_until@{skip\_until}}
 \index{skip\_until@{skip\_until}!aion::parse::Parser@{aion::parse::Parser}}
 \doxysubsubsection{\texorpdfstring{skip\_until()}{skip\_until()}}
 {\footnotesize\ttfamily \label{classaion_1_1parse_1_1_parser_a216b401e05575e2989f866aa8c888d28} 

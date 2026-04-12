@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['add_5fbuffer_0',['add_buffer',['../classaion_1_1_source_manager.html#af11a6840c4175b2f1a5d65c3a8a4144a',1,'aion::SourceManager']]],
+  ['add_5fbuffer_0',['add_buffer',['../classaion_1_1_source_manager.html#ac87951932516ba802e16dac0ab279119',1,'aion::SourceManager']]],
   ['add_5fconst_1',['add_const',['../structadd__const.html',1,'']]],
   ['add_5ffile_5ffrom_5fdisk_2',['add_file_from_disk',['../classaion_1_1_source_manager.html#a6e6f85c9fd0cdd32fb1f61391a87d2c4',1,'aion::SourceManager']]],
   ['add_5flvalue_5freference_3',['add_lvalue_reference',['../structadd__lvalue__reference.html',1,'']]],
@@ -33,7 +33,6 @@ var searchData=
   ['argument_30',['Argument',['../classargparse_1_1_argument.html',1,'argparse']]],
   ['argumentparser_31',['ArgumentParser',['../classargparse_1_1_argument_parser.html',1,'argparse']]],
   ['astcontext_32',['ASTContext',['../classaion_1_1ast_1_1_a_s_t_context.html',1,'aion::ast']]],
-  ['atom_5ftype_33',['atom_type',['../classaion_1_1ast_1_1_typed_expr.html#a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd',1,'aion::ast::TypedExpr']]],
-  ['attempt_34',['attempt',['../classaion_1_1parse_1_1_parser.html#ac22dda0a8e93807d3ab6a34d510b8049',1,'aion::parse::Parser']]],
-  ['attempt_5fto_5fskip_5funtil_5ffamiliar_35',['attempt_to_skip_until_familiar',['../classaion_1_1parse_1_1_parser.html#ae467bbcbbd0db8b49d437028bdafe18d',1,'aion::parse::Parser']]]
+  ['attempt_33',['attempt',['../classaion_1_1parse_1_1_parser.html#ac22dda0a8e93807d3ab6a34d510b8049',1,'aion::parse::Parser']]],
+  ['attempt_5fto_5fskip_5funtil_5ffamiliar_34',['attempt_to_skip_until_familiar',['../classaion_1_1parse_1_1_parser.html#ae467bbcbbd0db8b49d437028bdafe18d',1,'aion::parse::Parser']]]
 ];

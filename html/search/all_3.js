@@ -11,7 +11,8 @@ var searchData=
   ['diagnosticconsumer_8',['DiagnosticConsumer',['../classaion_1_1diag_1_1_diagnostic_consumer.html',1,'aion::diag']]],
   ['diagnosticinfo_9',['DiagnosticInfo',['../structaion_1_1diag_1_1_diagnostic_info.html',1,'aion::diag']]],
   ['diagnosticmapping_10',['DiagnosticMapping',['../classaion_1_1diag_1_1_diagnostic_mapping.html',1,'aion::diag']]],
-  ['diagnosticsengine_11',['DiagnosticsEngine',['../classaion_1_1diag_1_1_diagnostics_engine.html',1,'aion::diag']]],
-  ['diffuse_5fmatch_12',['diffuse_match',['../classaion_1_1parse_1_1_parser.html#ad4472d6254f931867c72f04274e50c17',1,'aion::parse::Parser']]],
-  ['digest_13',['digest',['../struct_x_x_h32__canonical__t.html#a85a83578344a5dd1c7a6cc0472230f30',1,'XXH32_canonical_t']]]
+  ['diagnosticnote_11',['DiagnosticNote',['../structaion_1_1diag_1_1_diagnostic_note.html',1,'aion::diag']]],
+  ['diagnosticsengine_12',['DiagnosticsEngine',['../classaion_1_1diag_1_1_diagnostics_engine.html',1,'aion::diag']]],
+  ['diffuse_5fmatch_13',['diffuse_match',['../classaion_1_1parse_1_1_parser.html#ad4472d6254f931867c72f04274e50c17',1,'aion::parse::Parser']]],
+  ['digest_14',['digest',['../struct_x_x_h32__canonical__t.html#a85a83578344a5dd1c7a6cc0472230f30',1,'XXH32_canonical_t']]]
 ];

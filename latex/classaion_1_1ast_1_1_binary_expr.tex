@@ -6,73 +6,6 @@ Inheritance diagram for aion\+::ast\+::Binary\+Expr\+:\begin{figure}[H]
 \includegraphics[height=3.000000cm]{classaion_1_1ast_1_1_binary_expr}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Types}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classaion_1_1ast_1_1_binary_expr_af9a823b3817851e216aa581ddf7eb6cd}\label{classaion_1_1ast_1_1_binary_expr_af9a823b3817851e216aa581ddf7eb6cd} 
-enum class {\bfseries Binary\+Op} \+: std\+::uint8\+\_\+t \{ \newline
-{\bfseries add}
-, {\bfseries sub}
-, {\bfseries mul}
-, {\bfseries div}
-, \newline
-{\bfseries mod}
-, {\bfseries pow}
-, {\bfseries equal}
-, {\bfseries not\+\_\+equal}
-, \newline
-{\bfseries less}
-, {\bfseries less\+\_\+equal}
-, {\bfseries greater}
-, {\bfseries greater\+\_\+equal}
-, \newline
-{\bfseries logical\+\_\+and}
-, {\bfseries logical\+\_\+or}
-, {\bfseries bit\+\_\+and}
-, {\bfseries bit\+\_\+or}
-, \newline
-{\bfseries bit\+\_\+xor}
-, {\bfseries lshift}
-, {\bfseries rshift}
-, {\bfseries assign}
-, \newline
-{\bfseries add\+\_\+assign}
-, {\bfseries sub\+\_\+assign}
-, {\bfseries mul\+\_\+assign}
-, {\bfseries div\+\_\+assign}
-, \newline
-{\bfseries mod\+\_\+assign}
-, {\bfseries and\+\_\+assign}
-, {\bfseries or\+\_\+assign}
-, {\bfseries xor\+\_\+assign}
-, \newline
-{\bfseries lshift\+\_\+assign}
-, {\bfseries rshift\+\_\+assign}
-, {\bfseries dot}
-, {\bfseries arrow}
-, \newline
-{\bfseries scope\+\_\+resolution}
-, {\bfseries range}
-, {\bfseries inclusive\+\_\+range}
-, {\bfseries fat\+\_\+arrow}
-, \newline
-{\bfseries as}
- \}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
-\begin{DoxyCompactItemize}
-\item 
-enum class \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} \+: std\+::uint8\+\_\+t \{ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{atom\+\_\+type}}
-, \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{common\+\_\+type}}
- \}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8}\label{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8} 
-enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\_\+expr}
- \}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -82,9 +15,9 @@ enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category)
+{\bfseries Typed\+Expr} (Typed\+Expr\+Type\+Kind tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category, const Expr\+Kind kind=Expr\+Kind\+::typed\+\_\+expr)
 \item 
-\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} {\bfseries get\+\_\+type\+\_\+kind} () const
+Typed\+Expr\+Type\+Kind {\bfseries get\+\_\+type\+\_\+kind} () const
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+type} () const
 \item 
@@ -116,6 +49,20 @@ bool {\bfseries is\+\_\+comp} = false
 \item 
 \Hypertarget{classaion_1_1ast_1_1_binary_expr_adc0622a4d21ce80e04773f41adaef3a8}\label{classaion_1_1ast_1_1_binary_expr_adc0622a4d21ce80e04773f41adaef3a8} 
 \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries range}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+Typed\+Expr\+Type\+Kind {\bfseries tk}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries type}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+Expr\+Kind {\bfseries expr\+\_\+kind}
+\item 
+Value\+Category {\bfseries category}
 \end{DoxyCompactItemize}
 
 

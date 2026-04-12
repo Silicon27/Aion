@@ -1,0 +1,30 @@
+\doxysection{Compiler\+Invocation Class Reference}
+\hypertarget{class_compiler_invocation}{}\label{class_compiler_invocation}\index{CompilerInvocation@{CompilerInvocation}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_compiler_invocation_ae5aa8e897f75e451e914cd676beeb620}\label{class_compiler_invocation_ae5aa8e897f75e451e914cd676beeb620} 
+{\bfseries Compiler\+Invocation} (\mbox{\hyperlink{structaion_1_1compiler__config_1_1_compiler_config}{aion\+::compiler\+\_\+config\+::\+Compiler\+Config}} config, \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion\+::diag\+::\+Diagnostics\+Engine}} \&diag)
+\item 
+int \mbox{\hyperlink{class_compiler_invocation_a170c4809f06f35177c6158cd7c907f19}{run}} ()
+\item 
+\Hypertarget{class_compiler_invocation_abc05e384176457cb2d4b406099a68271}\label{class_compiler_invocation_abc05e384176457cb2d4b406099a68271} 
+\mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion\+::diag\+::\+Diagnostics\+Engine}} \& {\bfseries get\+Diagnostics} ()
+\begin{DoxyCompactList}\small\item\em Get the diagnostics engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_compiler_invocation_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_compiler_invocation_a170c4809f06f35177c6158cd7c907f19}\index{CompilerInvocation@{CompilerInvocation}!run@{run}}
+\index{run@{run}!CompilerInvocation@{CompilerInvocation}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{class_compiler_invocation_a170c4809f06f35177c6158cd7c907f19} 
+int Compiler\+Invocation\+::run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Run the entire pipeline (preprocess, lex, parse, sema, codegen, link). Currently, codegen is not wired here; focus is on CC as orchestration. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+core/include/cli/Compiler\+Invocation.\+hpp\item 
+core/src/cli/Compiler\+Invocation.\+cpp\end{DoxyCompactItemize}

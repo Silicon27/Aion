@@ -1,0 +1,35 @@
+\doxysection{next\+\_\+power\+\_\+of\+\_\+two.\+hpp}
+\hypertarget{next__power__of__two_8hpp_source}{}\label{next__power__of__two_8hpp_source}\index{core/include/support/si/include/impl/memory/next\_power\_of\_two.hpp@{core/include/support/si/include/impl/memory/next\_power\_of\_two.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/04-\/08.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_MEMORY\_NEXT\_POWER\_OF\_TWO\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_MEMORY\_NEXT\_POWER\_OF\_TWO\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}si/type\_traits.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}si/limits.hpp"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace\ }si\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{constexpr}\ T\ next\_power\_of\_two(T\ x)\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(si::is\_unsigned\_v<T>,\ \textcolor{stringliteral}{"{}T\ must\ be\ unsigned"{}});}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ <=\ 1)\ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ -\/-\/x;\ \textcolor{comment}{//\ critical\ to\ handle\ exact\ powers\ of\ two}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (si::size\_t\ i\ =\ 1;\ i\ <\ si::numeric\_limits<T>::digits;\ i\ <<=\ 1)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ x\ |=\ x\ >>\ i;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ x\ +\ 1;}
+\DoxyCodeLine{00026\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//SI\_LIB\_MEMORY\_NEXT\_POWER\_OF\_TWO\_HPP}}
+
+\end{DoxyCode}

@@ -13,7 +13,12 @@ Inheritance diagram for aion\+::diag\+::Text\+Diagnostic\+Printer\+:\begin{figur
 {\bfseries Text\+Diagnostic\+Printer} (std\+::ostream \&os, \mbox{\hyperlink{classaion_1_1_source_manager}{Source\+\_\+\+Manager}} \texorpdfstring{$\ast$}{*}sm=nullptr, bool colors=true)
 \item 
 void \mbox{\hyperlink{classaion_1_1diag_1_1_text_diagnostic_printer_a73a6274d1c6891d21867336f2102e7d2}{handle\+\_\+diagnostic}} (Severity severity, const \mbox{\hyperlink{structaion_1_1diag_1_1_diagnostic}{Diagnostic}} \&diag) override
-\begin{DoxyCompactList}\small\item\em Callback for when a diagnostic is emitted. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Callback for when a diagnostic is emitted. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classaion_1_1diag_1_1_text_diagnostic_printer_abb6d7b0e3974d184c843140f21d23c8e}{print\+\_\+summary}} () override
+\begin{DoxyCompactList}\small\item\em Print a summary of errors and warnings. \end{DoxyCompactList}\item 
+\Hypertarget{classaion_1_1diag_1_1_text_diagnostic_printer_a1a8ac6403bd82a7744dc2823eccd50cb}\label{classaion_1_1diag_1_1_text_diagnostic_printer_a1a8ac6403bd82a7744dc2823eccd50cb} 
+void {\bfseries set\+\_\+show\+\_\+fixits\+\_\+line} (bool show)
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer}{aion\+::diag\+::\+Diagnostic\+Consumer}}}
 \begin{DoxyCompactItemize}
 \item 
@@ -53,6 +58,20 @@ Callback for when a diagnostic is emitted.
 
 
 Implements \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer_a5701220bccc309b7aface60292719235}{aion\+::diag\+::\+Diagnostic\+Consumer}}.
+
+\Hypertarget{classaion_1_1diag_1_1_text_diagnostic_printer_abb6d7b0e3974d184c843140f21d23c8e}\index{aion::diag::TextDiagnosticPrinter@{aion::diag::TextDiagnosticPrinter}!print\_summary@{print\_summary}}
+\index{print\_summary@{print\_summary}!aion::diag::TextDiagnosticPrinter@{aion::diag::TextDiagnosticPrinter}}
+\doxysubsubsection{\texorpdfstring{print\_summary()}{print\_summary()}}
+{\footnotesize\ttfamily \label{classaion_1_1diag_1_1_text_diagnostic_printer_abb6d7b0e3974d184c843140f21d23c8e} 
+void aion\+::diag\+::\+Text\+Diagnostic\+Printer\+::print\+\_\+summary (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Print a summary of errors and warnings. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostic_consumer_a6d170cbd73dea81245c0d529faeb41e6}{aion\+::diag\+::\+Diagnostic\+Consumer}}.
 
 
 

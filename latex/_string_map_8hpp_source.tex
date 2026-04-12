@@ -1,0 +1,227 @@
+\doxysection{String\+Map.\+hpp}
+\hypertarget{_string_map_8hpp_source}{}\label{_string_map_8hpp_source}\index{core/include/ast/StringMap.hpp@{core/include/ast/StringMap.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ David\ Yang\ on\ 2026-\/02-\/08.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ AION\_STRING\_MAP\_HPP}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ AION\_STRING\_MAP\_HPP}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <new>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <string\_view>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ XXH\_INLINE\_ALL}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{xxhash_8h}{support/xxhash.h}}>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <si/memory.hpp>}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Value,\ \textcolor{keyword}{typename}\ Context\ =\ ASTContext>}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{class\ }StringMap\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }Slot\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ hash;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\_view\ key;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ Value\ value;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ occupied;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ Slot()\ :\ hash(0),\ key(),\ value(),\ occupied(\textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ Slot(std::string\_view\ k,\ Value\ v,\ std::size\_t\ h,\ \textcolor{keywordtype}{bool}\ o)}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ hash(h),\ key(k),\ value(v),\ occupied(o)\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ std::size\_t\ capacity;\ \textcolor{comment}{//\ num\ of\ allocated\ slots}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ std::size\_t\ size;\ \textcolor{comment}{//\ num\ of\ occupied\ slots}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ std::size\_t\ bytes\_used;\ \textcolor{comment}{//\ num\ of\ bytes\ used}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ Context\ \&ctx;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ Slot\ *slots;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ max\_load\_factor\ =\ 0.75f;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ Value;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }allocator\_type\ =\ Context;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }key\_type\ =\ std::string\_view;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }mapped\_type\ =\ Value;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }reference\ =\ Value\ \&;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }const\_reference\ =\ \textcolor{keyword}{const}\ Value\ \&;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }pointer\ =\ Value\ *;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ =\ \textcolor{keyword}{const}\ Value\ *;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ std::size\_t;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ [[nodiscard]]\ std::size\_t\ get\_size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ size;\ \}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ [[nodiscard]]\ std::size\_t\ get\_bytes\_used()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ bytes\_used;\ \}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ [[nodiscard]]\ std::size\_t\ get\_capacity()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ capacity;\ \}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ empty()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ size\ ==\ 0;\ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{float}\ load\_factor()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ capacity\ ==\ 0\ ?\ 0.0f\ :\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(size)\ /\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(capacity);}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{float}\ get\_max\_load\_factor()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ max\_load\_factor;\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_max\_load\_factor(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ factor)\ \{\ max\_load\_factor\ =\ factor;\ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ StringMap(Context\ \&ctx,\ std::size\_t\ initial\_capacity\ =\ 64)\ :\ size(0),\ bytes\_used(0),\ ctx(ctx)\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ capacity\ =\ si::next\_power\_of\_two(std::max<std::size\_t>(initial\_capacity,\ 4));}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ bytes\ =\ capacity\ *\ \textcolor{keyword}{sizeof}(Slot);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ slots\ =\ \textcolor{keyword}{static\_cast<}Slot\ *\textcolor{keyword}{>}(ctx.allocate(bytes,\ \textcolor{keyword}{alignof}(Slot)));}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ i\ =\ 0;\ i\ <\ capacity;\ ++i)\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}(\&slots[i])\ Slot();}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ rehash(size\_type\ new\_cap)\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ new\_cap\ =\ si::next\_power\_of\_two(new\_cap);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_cap\ <=\ capacity)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ Slot\ *old\_slots\ =\ slots;}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ old\_cap\ =\ capacity;}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ bytes\ =\ new\_cap\ *\ \textcolor{keyword}{sizeof}(Slot);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ slots\ =\ \textcolor{keyword}{static\_cast<}Slot\ *\textcolor{keyword}{>}(ctx.allocate(bytes,\ \textcolor{keyword}{alignof}(Slot)));}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ capacity\ =\ new\_cap;}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ i\ =\ 0;\ i\ <\ capacity;\ ++i)\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}(\&slots[i])\ Slot();}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ size\ =\ 0;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ bytes\_used\ =\ 0;}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ i\ =\ 0;\ i\ <\ old\_cap;\ ++i)\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (old\_slots[i].occupied)\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert\_with\_hash(old\_slots[i].key,\ old\_slots[i].value,\ old\_slots[i].hash);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_full()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (capacity\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(size)\ +\ 1)\ >\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(capacity)\ *\ max\_load\_factor;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ insert(std::pair<const\ std::string\_view,\ Value>\ \textcolor{keyword}{const}\ \&value)\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(value.first);}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Value\ *v\ =\ find\_with\_hash(value.first,\ h))\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *v\ =\ value.second;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *storage\ =\ ctx.allocate\_string(value.first);}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ insert\_with\_hash(std::string\_view(storage,\ value.first.size()),\ value.second,\ h);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ insert(std::string\_view\ key,\ Value\ value)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(key);}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Value\ *v\ =\ find\_with\_hash(key,\ h))\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *v\ =\ value;}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *storage\ =\ ctx.allocate\_string(key);}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ insert\_with\_hash(std::string\_view(storage,\ key.size()),\ value,\ h);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ emplace(key\_type\ k,\ Args\ \&\&...\ args)}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{requires}\ std::is\_constructible\_v<Value,\ Args...>\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(k);}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Value\ *v\ =\ find\_with\_hash(k,\ h))\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *v\ =\ Value(std::forward<Args>(args)...);}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *storage\ =\ ctx.allocate\_string(k);}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ insert\_with\_hash(std::string\_view(storage,\ k.size()),\ Value(std::forward<Args>(args)...),\ h);}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ mapped\_type\ \&emplace\_or\_get(key\_type\ k,\ Args\ \&\&...\ args)}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{requires}\ std::is\_constructible\_v<Value,\ Args...>\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(k);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Value\ *v\ =\ find\_with\_hash(k,\ h))\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *v;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *storage\ =\ ctx.allocate\_string(k);}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *insert\_with\_hash(std::string\_view(storage,\ k.size()),\ Value(std::forward<Args>(args)...),\ h);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ mapped\_type\ \&operator[](std::string\_view\ key)}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{requires}\ std::is\_default\_constructible\_v<mapped\_type>\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(key);}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Value\ *v\ =\ find\_with\_hash(key,\ h))\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *v;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *storage\ =\ ctx.allocate\_string(key);}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *insert\_with\_hash(std::string\_view(storage,\ key.size()),\ Value(),\ h);}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Value\ *find(std::string\_view\ key)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (capacity\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(key);}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ find\_with\_hash(key,\ h);}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ Value\ *find(std::string\_view\ key)\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (capacity\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(key);}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ find\_with\_hash(key,\ h);}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Value\ *at(std::string\_view\ key)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (capacity\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(key);}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ find\_with\_hash(key,\ h);}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ Value\ *at(std::string\_view\ key)\ \{}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (capacity\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ h\ =\ hash\_key(key);}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ find\_with\_hash(key,\ h);}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{size\_t}\ hash\_key(std::string\_view\ s)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{group___x_x_h3__family_gad6a9754d8d49672a07d75d17c1fcd883}{XXH3\_64bits}}(s.data(),\ s.size());\ \}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ Value\ *find\_with\_hash(std::string\_view\ key,\ std::size\_t\ h)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (capacity\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ idx\ =\ h\ \&\ (capacity\ -\/\ 1);}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ start\_idx\ =\ idx;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (slots[idx].occupied)\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (slots[idx].hash\ ==\ h\ \&\&\ slots[idx].key\ ==\ key)\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&slots[idx].value;}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ idx\ =\ (idx\ +\ 1)\ \&\ (capacity\ -\/\ 1);}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (idx\ ==\ start\_idx)\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ Value\ *insert\_with\_hash(std::string\_view\ key,\ Value\ value,\ std::size\_t\ h)\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_full())\ rehash(capacity\ *\ 2);}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ idx\ =\ h\ \&\ (capacity\ -\/\ 1);}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (slots[idx].occupied)\ \{}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (slots[idx].hash\ ==\ h\ \&\&\ slots[idx].key\ ==\ key)\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ slots[idx].value\ =\ value;}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&slots[idx].value;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ idx\ =\ (idx\ +\ 1)\ \&\ (capacity\ -\/\ 1);}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ slots[idx]\ =\ Slot(key,\ value,\ h,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ ++size;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ bytes\_used\ +=\ key.size();}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&slots[idx].value;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00219\ \ \ \ \ \};}
+\DoxyCodeLine{00220\ \}\ \textcolor{comment}{//\ namespace\ aion::ast}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_STRING\_MAP\_HPP}}
+
+\end{DoxyCode}

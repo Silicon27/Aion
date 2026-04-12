@@ -1,0 +1,131 @@
+\doxysection{Compiler\+Invocation.\+hpp}
+\hypertarget{_compiler_invocation_8hpp_source}{}\label{_compiler_invocation_8hpp_source}\index{core/include/cli/CompilerInvocation.hpp@{core/include/cli/CompilerInvocation.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ COMPILER\_INVOCATION\_HPP}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ COMPILER\_INVOCATION\_HPP}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <istream>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}compiler\_config.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}../error/error.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}../preprocessor/preprocessor.hpp"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}../lexer/lexer.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}../ast/ASTContext.hpp"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ Forward\ declaration\ to\ avoid\ circular\ dependency}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace\ }aion::parse\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1parse_1_1_parser}{Parser}};}
+\DoxyCodeLine{00019\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace\ }aion::compiler\_config\ \{}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{using\ namespace\ }aion;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{using\ namespace\ }aion::ast;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using\ namespace\ }aion::lexer;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1compiler__config_1_1_compiler_config}{CompilerConfig}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ std::vector<std::string>\ sources;\ \textcolor{comment}{//\ sources\ to\ compile\ from}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_flags}{Flags}}\ flags;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Resolved\ output\ artifact\ (final\ exe\ or\ single\ file\ output).}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ May\ be\ std::nullopt\ for\ per-\/source\ outputs\ (e.g.\ -\/c\ with\ multiple\ files).}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::optional<std::string>\ output;}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reference\ to\ the\ shared\ diagnostics\ engine}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}*\ diag\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00036\ \ \ \ \ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ takes\ argv\ and\ returns\ a\ fully-\/populated\ Compiler\_Config}}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_compiler_config}{CompilerConfig}}\ parse(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ *argv[]);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{struct\ }PreprocessorInvoke\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1compiler__config_1_1_preprocessor_invoke_1_1_param}{Param}}\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ input\_file;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}\&\ diag;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_preprocessor_invoke_1_1_param}{Param}}\ param;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ PreprocessorInvoke(\mbox{\hyperlink{structaion_1_1compiler__config_1_1_preprocessor_invoke_1_1_param}{Param}}\ param);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_preprocessor}{Preprocessor}}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_preprocessor_invoke_a5db6c297f968e5c0d5082a3704c72c7e}{invoke}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00053\ \ \ \ \ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{struct\ }LexerInvoke\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1compiler__config_1_1_lexer_invoke_1_1_param}{Param}}\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ std::istream\ \&input\_Stream;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}\&\ diag;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_lexer_invoke_1_1_param}{Param}}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_lexer_invoke_a51cf985c3e1f1741219f8d6c6a205cbf}{param}};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ LexerInvoke(\textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_lexer_invoke_1_1_param}{Param}}\ \&\mbox{\hyperlink{structaion_1_1compiler__config_1_1_lexer_invoke_a51cf985c3e1f1741219f8d6c6a205cbf}{param}});}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ std::unique\_ptr<Lexer>\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_lexer_invoke_aefa0a26ab8db6d7fa397e6ca14bbe6b8}{invoke}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ \ \ \ \ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{struct\ }ParserInvoke\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1compiler__config_1_1_parser_invoke_1_1_param}{Param}}\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ FileId\ file\_id;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}\&\ diag;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}}\&\ context;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<Token>\ tokens;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_flags}{Flags}}\ flags;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_parser_invoke_1_1_param}{Param}}\ param;}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ ParserInvoke(\textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_parser_invoke_1_1_param}{Param}}\&\ param);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ std::unique\_ptr<parse::Parser>\ invoke()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ \ \ \ \ \};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{struct\ }SemaInvoke\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1compiler__config_1_1_sema_invoke_1_1_param}{Param}}\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}}\&\ context;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ allowed\_errors;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}\&\ diag;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_sema_invoke_1_1_param}{Param}}\ param;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ SemaInvoke(\mbox{\hyperlink{structaion_1_1compiler__config_1_1_sema_invoke_1_1_param}{Param}}\ param);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_sema_invoke_a6f74d587b1578a2fecee35d3facf2895}{invoke}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00104\ \ \ \ \ \};}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{struct\ }LinkerInvoke\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structaion_1_1compiler__config_1_1_linker_invoke_1_1_param}{Param}}\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_compiler_config}{CompilerConfig}}\ \&config;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::string>\ object\_files;\ \textcolor{comment}{//\ input\ object\ files\ from\ all\ sources}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{diag::DiagnosticsEngine}}\&\ diag;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{mutable}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_linker_invoke_1_1_param}{Param}}\ param;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ LinkerInvoke(\mbox{\hyperlink{structaion_1_1compiler__config_1_1_linker_invoke_1_1_param}{Param}}\ param);}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_linker_invoke_a1e3e277b3ef6872cff1405fecae1f913}{invoke}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00119\ \ \ \ \ \};}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \}\ \textcolor{comment}{//\ namespace\ aion::compiler\_config}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{keyword}{class\ }CompilerInvocation\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{structaion_1_1compiler__config_1_1_compiler_config}{aion::compiler\_config::CompilerConfig}}\ config;}
+\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion::diag::DiagnosticsEngine}}\&\ diag\_;}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{explicit}\ CompilerInvocation(\mbox{\hyperlink{structaion_1_1compiler__config_1_1_compiler_config}{aion::compiler\_config::CompilerConfig}}\ config,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion::diag::DiagnosticsEngine}}\&\ diag);}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_compiler_invocation_a170c4809f06f35177c6158cd7c907f19}{run}}();}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00137\ \ \ \ \ \mbox{\hyperlink{classaion_1_1diag_1_1_diagnostics_engine}{aion::diag::DiagnosticsEngine}}\&\ \mbox{\hyperlink{class_compiler_invocation_abc05e384176457cb2d4b406099a68271}{getDiagnostics}}()\ \{\ \textcolor{keywordflow}{return}\ diag\_;\ \}}
+\DoxyCodeLine{00138\ \};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//COMPILER\_INVOCATION\_HPP}}
+
+\end{DoxyCode}

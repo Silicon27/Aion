@@ -9,5 +9,6 @@ var searchData=
   ['diagnosticconsumer_6',['DiagnosticConsumer',['../classaion_1_1diag_1_1_diagnostic_consumer.html',1,'aion::diag']]],
   ['diagnosticinfo_7',['DiagnosticInfo',['../structaion_1_1diag_1_1_diagnostic_info.html',1,'aion::diag']]],
   ['diagnosticmapping_8',['DiagnosticMapping',['../classaion_1_1diag_1_1_diagnostic_mapping.html',1,'aion::diag']]],
-  ['diagnosticsengine_9',['DiagnosticsEngine',['../classaion_1_1diag_1_1_diagnostics_engine.html',1,'aion::diag']]]
+  ['diagnosticnote_9',['DiagnosticNote',['../structaion_1_1diag_1_1_diagnostic_note.html',1,'aion::diag']]],
+  ['diagnosticsengine_10',['DiagnosticsEngine',['../classaion_1_1diag_1_1_diagnostics_engine.html',1,'aion::diag']]]
 ];

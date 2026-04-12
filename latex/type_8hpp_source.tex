@@ -17,59 +17,59 @@
 \DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}};}
 \DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_user_defined_type}{UserDefinedType}};}
 \DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{class\ }BuiltinType\ :\ \textcolor{keyword}{public}\ Type\ \{}
-\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ Kind\ \{}
-\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ i4,}
-\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ i8,}
-\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ i16,}
-\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ i32,}
-\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ i64,}
-\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ i128,}
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ f4,}
-\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ f8,}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ f16,}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ f32,}
-\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ f64,}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ f128,}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ char\_,}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ bool\_,}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ string\_literal,}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{00036\ }
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ Kind\ get\_kind(\textcolor{keyword}{const}\ lexer::TokenType\ type)\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{enum\ class}\ BuiltinTypeKind\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ i4,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ i8,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ i16,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ i32,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ i64,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ i128,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ f4,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ f8,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ f16,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ f32,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ f64,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ f128,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ char\_,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ bool\_,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ string\_literal,}
+\DoxyCodeLine{00032\ \ \ \ \ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{class\ }BuiltinType\ :\ \textcolor{keyword}{public}\ Type\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ BuiltinTypeKind\ get\_kind(\textcolor{keyword}{const}\ lexer::TokenType\ type)\ \{}
 \DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (type)\ \{}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i4:\ \textcolor{keywordflow}{return}\ Kind::i4;}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i8:\ \textcolor{keywordflow}{return}\ Kind::i8;}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i16:\ \textcolor{keywordflow}{return}\ Kind::i16;}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i32:\ \textcolor{keywordflow}{return}\ Kind::i32;}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i64:\ \textcolor{keywordflow}{return}\ Kind::i64;}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i128:\ \textcolor{keywordflow}{return}\ Kind::i128;}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f4:\ \textcolor{keywordflow}{return}\ Kind::f4;}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f8:\ \textcolor{keywordflow}{return}\ Kind::f8;}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f16:\ \textcolor{keywordflow}{return}\ Kind::f16;}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f32:\ \textcolor{keywordflow}{return}\ Kind::f32;}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f64:\ \textcolor{keywordflow}{return}\ Kind::f64;}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f128:\ \textcolor{keywordflow}{return}\ Kind::f128;}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_char:\ \textcolor{keywordflow}{return}\ Kind::char\_;}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_bool:\ \textcolor{keywordflow}{return}\ Kind::bool\_;}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::int\_literal:\ \textcolor{keywordflow}{return}\ Kind::i32;\ \textcolor{comment}{//\ TODO\ make\ this\ platform\ dependent,\ make\ it\ the\ size\ of\ the\ platforms\ word\ size}}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::float\_literal:\ \textcolor{keywordflow}{return}\ Kind::f32;\ \textcolor{comment}{//\ todo\ this\ too}}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::string\_literal:\ \textcolor{keywordflow}{return}\ Kind::string\_literal;}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i4:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i4;}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i8:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i8;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i16:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i16;}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i32:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i32;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i64:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i64;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_i128:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i128;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f4:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::f4;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f8:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::f8;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f16:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::f16;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f32:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::f32;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f64:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::f64;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_f128:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::f128;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_char:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::char\_;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::kw\_bool:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::bool\_;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::int\_literal:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i32;\ \textcolor{comment}{//\ TODO\ make\ this\ platform\ dependent,\ make\ it\ the\ size\ of\ the\ platforms\ word\ size}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::float\_literal:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::f32;\ \textcolor{comment}{//\ todo\ this\ too}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ lexer::TokenType::string\_literal:\ \textcolor{keywordflow}{return}\ BuiltinTypeKind::string\_literal;}
 \DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
 \DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ should\ not\ happen\ if\ is\_builtin\_type\_token(type)\ is\ true}}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ Kind::i32;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ BuiltinTypeKind::i32;}
 \DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ BuiltinType(\textcolor{keyword}{const}\ Kind\ BK)}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Type(Type::Kind::builtin),\ builtin\_kind(BK)\ \{\}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ BuiltinType(\textcolor{keyword}{const}\ BuiltinTypeKind\ BK)}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Type(TypeKind::builtin),\ builtin\_kind(BK)\ \{\}}
 \DoxyCodeLine{00064\ }
 \DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ [[nodiscard]]\ Kind\ get\_builtin\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ builtin\_kind;\ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ [[nodiscard]]\ BuiltinTypeKind\ get\_builtin\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ builtin\_kind;\ \}}
 \DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ Kind\ builtin\_kind;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ BuiltinTypeKind\ builtin\_kind;}
 \DoxyCodeLine{00069\ \ \ \ \ \};}
 \DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<BuiltinType>);}
 \DoxyCodeLine{00071\ }
@@ -92,7 +92,7 @@
 \DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ std::string\_view\ name;}
 \DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{public}:}
 \DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ UserDefinedType(std::string\_view\ name)}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Type(Kind::user\_defined),\ name(name)\ \{\}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ :\ Type(TypeKind::user\_defined),\ name(name)\ \{\}}
 \DoxyCodeLine{00092\ }
 \DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::string\_view\ get\_name()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name;\ \}}
 \DoxyCodeLine{00094\ \ \ \ \ \};}

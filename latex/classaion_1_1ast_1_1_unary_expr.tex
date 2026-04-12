@@ -6,39 +6,6 @@ Inheritance diagram for aion\+::ast\+::Unary\+Expr\+:\begin{figure}[H]
 \includegraphics[height=3.000000cm]{classaion_1_1ast_1_1_unary_expr}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Types}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classaion_1_1ast_1_1_unary_expr_a98daf4348c34f490d6b90b7c822bb272}\label{classaion_1_1ast_1_1_unary_expr_a98daf4348c34f490d6b90b7c822bb272} 
-enum class {\bfseries Unary\+Op} \+: std\+::uint8\+\_\+t \{ \newline
-{\bfseries plus}
-, {\bfseries minus}
-, {\bfseries logical\+\_\+not}
-, {\bfseries bit\+\_\+not}
-, \newline
-{\bfseries address\+\_\+of}
-, {\bfseries deref}
-, {\bfseries preincrement}
-, {\bfseries postincrement}
-, \newline
-{\bfseries predecrement}
-, {\bfseries postdecrement}
- \}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
-\begin{DoxyCompactItemize}
-\item 
-enum class \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} \+: std\+::uint8\+\_\+t \{ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{atom\+\_\+type}}
-, \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{common\+\_\+type}}
- \}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8}\label{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8} 
-enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\_\+expr}
- \}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -66,9 +33,9 @@ void {\bfseries set\+\_\+compile\+\_\+time\+\_\+computable} (const bool new\+\_\
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category)
+{\bfseries Typed\+Expr} (Typed\+Expr\+Type\+Kind tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category, const Expr\+Kind kind=Expr\+Kind\+::typed\+\_\+expr)
 \item 
-\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} {\bfseries get\+\_\+type\+\_\+kind} () const
+Typed\+Expr\+Type\+Kind {\bfseries get\+\_\+type\+\_\+kind} () const
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+type} () const
 \item 
@@ -97,6 +64,20 @@ bool {\bfseries is\+\_\+comp} = false
 \item 
 \Hypertarget{classaion_1_1ast_1_1_unary_expr_a19cce2b8f486cef673a4ec743eef3581}\label{classaion_1_1ast_1_1_unary_expr_a19cce2b8f486cef673a4ec743eef3581} 
 \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries loc}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+Typed\+Expr\+Type\+Kind {\bfseries tk}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries type}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\begin{DoxyCompactItemize}
+\item 
+Expr\+Kind {\bfseries expr\+\_\+kind}
+\item 
+Value\+Category {\bfseries category}
 \end{DoxyCompactItemize}
 
 

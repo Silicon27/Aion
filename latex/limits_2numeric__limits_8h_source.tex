@@ -1,0 +1,376 @@
+\doxysection{numeric\+\_\+limits.\+h}
+\hypertarget{limits_2numeric__limits_8h_source}{}\label{limits_2numeric__limits_8h_source}\index{core/include/support/si/include/impl/limits/numeric\_limits.h@{core/include/support/si/include/impl/limits/numeric\_limits.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ GitHub\ Copilot\ on\ 2026-\/04-\/08.\ Moved\ to\ impl/limits}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ SI\_LIB\_LIMITS\_NUMERIC\_LIMITS\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ SI\_LIB\_LIMITS\_NUMERIC\_LIMITS\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}../../compat/sconfig.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../type\_traits/is\_integral.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}../type\_traits/is\_unsigned.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}../type\_traits/is\_same.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <climits>}\ \textcolor{comment}{//\ for\ CHAR\_BIT}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <cfloat>}\ \ \textcolor{comment}{//\ for\ float\ limits}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ Some\ platforms\ may\ not\ define\ the\ denorm\ macros;\ provide\ fallbacks}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#ifndef\ FLT\_DENORM\_MIN}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_FLT\_DENORM\_MIN\ 0.0f}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_FLT\_DENORM\_MIN\ FLT\_DENORM\_MIN}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#ifndef\ DBL\_DENORM\_MIN}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_DBL\_DENORM\_MIN\ 0.0}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_DBL\_DENORM\_MIN\ DBL\_DENORM\_MIN}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#ifndef\ LDBL\_DENORM\_MIN}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_LDBL\_DENORM\_MIN\ 0.0L}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#\ \ \ define\ SI\_LDBL\_DENORM\_MIN\ LDBL\_DENORM\_MIN}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ SI\_NAMESPACE\_START}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//\ primary\ template:\ mirrors\ std::numeric\_limits\ defaults}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ 0;\ \ \ \ \ \ \textcolor{comment}{//\ number\ of\ radix\ digits}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ 0;\ \ \ \ \textcolor{comment}{//\ number\ of\ base-\/10\ digits}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 0;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ epsilon()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ round\_error()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent\ =\ 0;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent10\ =\ 0;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent\ =\ 0;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent10\ =\ 0;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_infinity\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_quiet\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_signaling\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\_loss\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ infinity()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ quiet\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ signaling\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ T\ denorm\_min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ T();\ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ helper\ for\ digits10\ calculation\ (floor)}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\_from\_digits(\textcolor{keywordtype}{int}\ d)\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ log10(2)\ \string~\ 0.301029995663981195}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(d\ *\ 0.301029995663981195);}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ Integral\ specializations\ (signed\ and\ unsigned)}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//\ Note:\ \`{}char`\ signedness\ is\ implementation-\/defined\ and\ we\ detect\ it.}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ unsigned\ char}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<unsigned\ char>\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ char)\ *\ CHAR\_BIT;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(UCHAR\_MAX);\ \}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ epsilon()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ round\_error()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent\ =\ 0;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent10\ =\ 0;}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent\ =\ 0;}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent10\ =\ 0;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_infinity\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_quiet\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_signaling\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\_loss\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ infinity()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ quiet\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ signaling\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ denorm\_min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00109\ \ \ \ \ \};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{//\ signed\ char}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<signed\ char>\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{signed}\ char)\ *\ CHAR\_BIT\ -\/\ 1;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(SCHAR\_MIN);\ \}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(SCHAR\_MAX);\ \}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ epsilon()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ round\_error()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent\ =\ 0;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent10\ =\ 0;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent\ =\ 0;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent10\ =\ 0;}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_infinity\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_quiet\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_signaling\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\_loss\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ infinity()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ quiet\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ signaling\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{signed}\ \textcolor{keywordtype}{char}\ denorm\_min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00138\ \ \ \ \ \};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{comment}{//\ char\ (implementation-\/defined\ signedness)}}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<char>\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ char\_is\_signed\ =\ (char(-\/1)\ <\ 0);}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ char\_is\_signed\ ?\ (\textcolor{keyword}{sizeof}(char)\ *\ CHAR\_BIT\ -\/\ 1)\ :\ (\textcolor{keyword}{sizeof}(char)\ *\ CHAR\_BIT);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ char\_is\_signed;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(CHAR\_MIN);\ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(CHAR\_MAX);\ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ epsilon()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ round\_error()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent\ =\ 0;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent10\ =\ 0;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent\ =\ 0;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent10\ =\ 0;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_infinity\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_quiet\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_signaling\_NaN\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\_loss\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ infinity()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ quiet\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ signaling\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ denorm\_min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00168\ \ \ \ \ \};}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{//\ unsigned\ short}}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<unsigned\ short>\ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ short)\ *\ CHAR\_BIT;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\textcolor{keyword}{>}(USHRT\_MAX);\ \}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \};}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{comment}{//\ short}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<short>\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(short)\ *\ CHAR\_BIT\ -\/\ 1;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{short}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{short}\textcolor{keyword}{>}(SHRT\_MIN);\ \}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{short}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{short}\textcolor{keyword}{>}(SHRT\_MAX);\ \}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{short}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00196\ \ \ \ \ \};}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{comment}{//\ unsigned\ int}}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<unsigned\ int>\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ int)\ *\ CHAR\_BIT;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0u;\ \}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\textcolor{keyword}{>}(UINT\_MAX);\ \}}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00210\ \ \ \ \ \};}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{comment}{//\ int}}
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<int>\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(int)\ *\ CHAR\_BIT\ -\/\ 1;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ INT\_MIN;\ \}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ INT\_MAX;\ \}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00224\ \ \ \ \ \};}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{comment}{//\ unsigned\ long}}
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<unsigned\ long>\ \{}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ long)\ *\ CHAR\_BIT;}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0ul;\ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ ULONG\_MAX;\ \}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00238\ \ \ \ \ \};}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{//\ long}}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<long>\ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(long)\ *\ CHAR\_BIT\ -\/\ 1;}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ LONG\_MIN;\ \}}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ LONG\_MAX;\ \}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00252\ \ \ \ \ \};}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{comment}{//\ unsigned\ long\ long}}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<unsigned\ long\ long>\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ long)\ *\ CHAR\_BIT;}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0ull;\ \}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ ULLONG\_MAX;\ \}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00266\ \ \ \ \ \};}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{comment}{//\ long\ long}}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<long\ long>\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{long}\ long)\ *\ CHAR\_BIT\ -\/\ 1;}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ digits10\_from\_digits(digits);}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ 2;}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ LLONG\_MIN;\ \}}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ LLONG\_MAX;\ \}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ min();\ \}}
+\DoxyCodeLine{00280\ \ \ \ \ \};}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{comment}{//\ Floating\ point\ specializations\ (map\ to\ C\ macros\ in\ <cfloat>)}}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<float>\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ FLT\_MANT\_DIG;}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ FLT\_DIG;}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ FLT\_RADIX;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ FLT\_MIN;\ \}\ \textcolor{comment}{//\ smallest\ positive\ normalized}}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ FLT\_MAX;\ \}}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ -\/FLT\_MAX;\ \}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ epsilon()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ FLT\_EPSILON;\ \}}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ round\_error()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0.5f;\ \}}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent\ =\ FLT\_MIN\_EXP;}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent10\ =\ FLT\_MIN\_10\_EXP;}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent\ =\ FLT\_MAX\_EXP;}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent10\ =\ FLT\_MAX\_10\_EXP;}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_infinity\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_quiet\_NaN\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_signaling\_NaN\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\ =\ (SI\_FLT\_DENORM\_MIN\ !=\ 0.0f);}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\_loss\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ infinity()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_\_builtin\_inff();\ \}}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ quiet\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_\_builtin\_nanf(\textcolor{stringliteral}{"{}"{}}\ );\ \}}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ signaling\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ quiet\_NaN();\ \}}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ denorm\_min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ SI\_FLT\_DENORM\_MIN;\ \}}
+\DoxyCodeLine{00309\ \ \ \ \ \};}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<double>\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ DBL\_MANT\_DIG;}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ DBL\_DIG;}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ FLT\_RADIX;}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ DBL\_MIN;\ \}}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ DBL\_MAX;\ \}}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ -\/DBL\_MAX;\ \}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ epsilon()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ DBL\_EPSILON;\ \}}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ round\_error()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0.5;\ \}}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent\ =\ DBL\_MIN\_EXP;}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent10\ =\ DBL\_MIN\_10\_EXP;}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent\ =\ DBL\_MAX\_EXP;}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent10\ =\ DBL\_MAX\_10\_EXP;}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_infinity\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_quiet\_NaN\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_signaling\_NaN\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\ =\ (SI\_DBL\_DENORM\_MIN\ !=\ 0.0);}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\_loss\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ infinity()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_\_builtin\_inf();\ \}}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ quiet\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_\_builtin\_nan(\textcolor{stringliteral}{"{}"{}});\ \}}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ signaling\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ quiet\_NaN();\ \}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ denorm\_min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ SI\_DBL\_DENORM\_MIN;\ \}}
+\DoxyCodeLine{00337\ \ \ \ \ \};}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnumeric__limits}{numeric\_limits}}<long\ double>\ \{}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_specialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits\ =\ LDBL\_MANT\_DIG;}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ digits10\ =\ LDBL\_DIG;}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_signed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_integer\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ is\_exact\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ radix\ =\ FLT\_RADIX;}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ LDBL\_MIN;\ \}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ max()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ LDBL\_MAX;\ \}}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ lowest()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ -\/LDBL\_MAX;\ \}}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ epsilon()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ LDBL\_EPSILON;\ \}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ round\_error()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ 0.5L;\ \}}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent\ =\ LDBL\_MIN\_EXP;}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ min\_exponent10\ =\ LDBL\_MIN\_10\_EXP;}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent\ =\ LDBL\_MAX\_EXP;}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ max\_exponent10\ =\ LDBL\_MAX\_10\_EXP;}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_infinity\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_quiet\_NaN\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_signaling\_NaN\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\ =\ (SI\_LDBL\_DENORM\_MIN\ !=\ 0.0L);}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ has\_denorm\_loss\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ infinity()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_\_builtin\_infl();\ \}}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ quiet\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_\_builtin\_nanl(\textcolor{stringliteral}{"{}"{}});\ \}}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ signaling\_NaN()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ quiet\_NaN();\ \}}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ denorm\_min()\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ SI\_LDBL\_DENORM\_MIN;\ \}}
+\DoxyCodeLine{00365\ \ \ \ \ \};}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ SI\_NAMESPACE\_END}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SI\_LIB\_LIMITS\_NUMERIC\_LIMITS\_H}}
+\DoxyCodeLine{00370\ }
+
+\end{DoxyCode}

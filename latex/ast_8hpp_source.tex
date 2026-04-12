@@ -22,116 +22,124 @@
 \DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_decl_context}{DeclContext}};}
 \DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}};}
 \DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{class\ }IdentifierInfo\ \{}
-\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name;}
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ IdentifierInfo()\ :\ name(\textcolor{keyword}{nullptr})\ \{\}}
-\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ IdentifierInfo(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name)\ :\ name(name)\ \{\}}
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ get\_name()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name;\ \}}
-\DoxyCodeLine{00027\ \ \ \ \ \};}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<IdentifierInfo>);}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{class\ }Type\ \{}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ Kind\ \{}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ builtin,}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ user\_defined,}
-\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{00037\ }
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Type(\textcolor{keyword}{const}\ Kind\ K)\ :\ type\_kind(K)\ \{\}}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ [[nodiscard]]\ Kind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ type\_kind;\ \}}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_kind(\textcolor{keyword}{const}\ Kind\ K)\ \{\ type\_kind\ =\ K;\ \}}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ Kind\ type\_kind;}
-\DoxyCodeLine{00043\ \ \ \ \ \};}
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Type>);}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{class\ }DeclContext\ \{}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ first\_decl\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ last\_decl\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00050\ }
-\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ DeclContext()\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_decl(\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ decl);}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ get\_first\_decl()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ first\_decl;\ \}}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ get\_last\_decl()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ last\_decl;\ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{enum\ class}\ TypeKind\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ builtin,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ user\_defined,}
+\DoxyCodeLine{00024\ \ \ \ \ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{enum\ class}\ DeclKind\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ unresolved,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ translation\_unit,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ variable,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ function,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ struct\_,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ enum\_,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ module,}
+\DoxyCodeLine{00034\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{enum\ class}\ StmtKind\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ compound\_stmt,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ if\_stmt,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ while\_stmt,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ for\_stmt,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ return\_stmt,}
+\DoxyCodeLine{00042\ \ \ \ \ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{enum\ class}\ ExprKind\ :\ std::uint8\_t\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ typed\_expr,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ binary\_expr,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ unary\_expr,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ call\_expr,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ identifier\_expr,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ integer\_literal\_expr,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ float\_literal\_expr,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ string\_literal\_expr,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ member\_expr,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ array\_expr,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ struct\_expr,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ enum\_expr,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ cast\_expr,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ sizeof\_expr,}
 \DoxyCodeLine{00059\ \ \ \ \ \};}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<DeclContext>);}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{class\ }Decl\ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ DeclKind\ :\ std::uint8\_t\ \{}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ unresolved,}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ translation\_unit,}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ variable,}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ function,}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ struct\_,}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ enum\_,}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ module,}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ DeclKind\ decl\_kind;}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Decl(\textcolor{keyword}{const}\ DeclKind\ K)\ :\ decl\_kind(K)\ \{\}}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ [[nodiscard]]\ DeclKind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ decl\_kind;\ \}}
-\DoxyCodeLine{00084\ }
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ Decl*\ next\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00086\ }
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ aion::Source\_Range\ source\_range;}
-\DoxyCodeLine{00088\ \ \ \ \ \};}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Decl>);}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{class\ }Stmt\ \{}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ Kind\ :\ std::uint8\_t\ \{}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ compound\_stmt,}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ if\_stmt,}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ while\_stmt,}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ for\_stmt,}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ return\_stmt,}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{class\ }IdentifierInfo\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ IdentifierInfo()\ :\ name(\textcolor{keyword}{nullptr})\ \{\}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ IdentifierInfo(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name)\ :\ name(name)\ \{\}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ get\_name()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name;\ \}}
+\DoxyCodeLine{00067\ \ \ \ \ \};}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<IdentifierInfo>);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{class\ }Type\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Type(\textcolor{keyword}{const}\ TypeKind\ K)\ :\ type\_kind(K)\ \{\}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ [[nodiscard]]\ TypeKind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ type\_kind;\ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_kind(\textcolor{keyword}{const}\ TypeKind\ K)\ \{\ type\_kind\ =\ K;\ \}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ TypeKind\ type\_kind;}
+\DoxyCodeLine{00078\ \ \ \ \ \};}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Type>);}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{class\ }DeclContext\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ first\_decl\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ last\_decl\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ DeclContext()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ add\_decl(\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ decl);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ get\_first\_decl()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ first\_decl;\ \}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ [[nodiscard]]\ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ get\_last\_decl()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ last\_decl;\ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \};}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<DeclContext>);}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{class\ }Decl\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ DeclKind\ decl\_kind;}
 \DoxyCodeLine{00102\ }
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ Kind\ stmt\_kind;}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Decl(\textcolor{keyword}{const}\ DeclKind\ K)\ :\ decl\_kind(K)\ \{\}}
 \DoxyCodeLine{00105\ }
 \DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Stmt(\textcolor{keyword}{const}\ Kind\ K)\ :\ stmt\_kind(K)\ \{\}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ [[nodiscard]]\ DeclKind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ decl\_kind;\ \}}
 \DoxyCodeLine{00108\ }
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ [[nodiscard]]\ Kind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ stmt\_kind;\ \}}
-\DoxyCodeLine{00111\ \ \ \ \ \};}
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Stmt>);}
-\DoxyCodeLine{00113\ }
-\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{class\ }Expr\ \ \{}
-\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ ExprKind\ :\ std::uint8\_t\ \{}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ typed\_expr,}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Expr(\textcolor{keyword}{const}\ ExprKind\ k,\ \textcolor{keyword}{const}\ ValueCategory\ v)}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ :\ expr\_kind(k),\ category(v)\ \{\}}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ [[nodiscard]]\ ExprKind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ expr\_kind;\ \}}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ [[nodiscard]]\ ValueCategory\ get\_category()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ category;\ \}}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ ExprKind\ expr\_kind;}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ ValueCategory\ category;}
-\DoxyCodeLine{00129\ }
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ add\ bitmask\ for\ is\_comp,\ is\_const\ and\ other\ qualifiers\ if\ needed}}
-\DoxyCodeLine{00131\ \ \ \ \ \};}
-\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Expr>);}
-\DoxyCodeLine{00133\ \}}
-\DoxyCodeLine{00134\ }
-\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AST\_HPP}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ Decl*\ next\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ aion::Source\_Range\ source\_range;}
+\DoxyCodeLine{00112\ \ \ \ \ \};}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Decl>);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{class\ }Stmt\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }ASTContext;}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ StmtKind\ stmt\_kind;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Stmt(\textcolor{keyword}{const}\ StmtKind\ K)\ :\ stmt\_kind(K)\ \{\}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ [[nodiscard]]\ StmtKind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ stmt\_kind;\ \}}
+\DoxyCodeLine{00122\ \ \ \ \ \};}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Stmt>);}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{class\ }Expr\ \ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ Expr(\textcolor{keyword}{const}\ ExprKind\ k,\ \textcolor{keyword}{const}\ ValueCategory\ v)}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ :\ expr\_kind(k),\ category(v)\ \{\}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ [[nodiscard]]\ ExprKind\ get\_kind()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ expr\_kind;\ \}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ [[nodiscard]]\ ValueCategory\ get\_category()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ category;\ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ ExprKind\ expr\_kind;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ ValueCategory\ category;}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ add\ bitmask\ for\ is\_comp,\ is\_const\ and\ other\ qualifiers\ if\ needed}}
+\DoxyCodeLine{00139\ \ \ \ \ \};}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_trivially\_destructible\_v<Expr>);}
+\DoxyCodeLine{00141\ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AST\_HPP}}
 
 \end{DoxyCode}

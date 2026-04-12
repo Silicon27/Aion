@@ -116,6 +116,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad4472d6254f931867c72f04274e50c17" id="r_ad4472d6254f931867c72f04274e50c17"><td class="memItemLeft" align="right" valign="top"><a id="ad4472d6254f931867c72f04274e50c17" name="ad4472d6254f931867c72f04274e50c17"></a>
 <a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><b>diffuse_match</b> (const TokenType exp, const TokenType curr, const std::string &amp;sigabrt_message)</td></tr>
 <tr class="memdesc:ad4472d6254f931867c72f04274e50c17"><td class="mdescLeft">&#160;</td><td class="mdescRight">usage examples would be tokens that if not matched, would indicate memory corruption during program runtime <br /></td></tr>
+<tr class="memitem:afebef7714847ca269d755e042b1ad24a" id="r_afebef7714847ca269d755e042b1ad24a"><td class="memItemLeft" align="right" valign="top"><a id="afebef7714847ca269d755e042b1ad24a" name="afebef7714847ca269d755e042b1ad24a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>skip_newlines</b> ()</td></tr>
 <tr class="memitem:a969d5adb73b328db7245a8a2ade3b5fe" id="r_a969d5adb73b328db7245a8a2ade3b5fe"><td class="memItemLeft" align="right" valign="top"><a id="a969d5adb73b328db7245a8a2ade3b5fe" name="a969d5adb73b328db7245a8a2ade3b5fe"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>silent_probe</b> (TokenType exp, const <a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a> &amp;curr)</td></tr>
 <tr class="memdesc:a969d5adb73b328db7245a8a2ade3b5fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">would silently probe, this is, would return whether the curr == exp <br /></td></tr>
@@ -131,6 +133,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>silent_probe</b> (con
 <tr class="memitem:ac22dda0a8e93807d3ab6a34d510b8049" id="r_ac22dda0a8e93807d3ab6a34d510b8049"><td class="memItemLeft" align="right" valign="top"><a id="ac22dda0a8e93807d3ab6a34d510b8049" name="ac22dda0a8e93807d3ab6a34d510b8049"></a>
 <a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><b>attempt</b> (const <a class="el" href="structaion_1_1parse_1_1_match_token.html">MatchToken</a> &amp;token)</td></tr>
 <tr class="memdesc:ac22dda0a8e93807d3ab6a34d510b8049"><td class="mdescLeft">&#160;</td><td class="mdescRight">alias for <a class="el" href="#a11a474f2f36a97cefbf11fb9b6275a41" title="alias for silent_consume(TokenType, const Token&amp;)">silent_consume(const MatchToken&amp;)</a> <br /></td></tr>
+<tr class="memitem:ade0fa57d15870806a535f84cfb1f56f7" id="r_ade0fa57d15870806a535f84cfb1f56f7"><td class="memItemLeft" align="right" valign="top"><a id="ade0fa57d15870806a535f84cfb1f56f7" name="ade0fa57d15870806a535f84cfb1f56f7"></a>
+<a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><b>expect</b> (TokenType type)</td></tr>
+<tr class="memdesc:ade0fa57d15870806a535f84cfb1f56f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">expect a token of a certain type, if not matched, emit a diagnostic and return invalid_token <br /></td></tr>
+<tr class="memitem:a23432689a89ad5969ed350b252a42cb0" id="r_a23432689a89ad5969ed350b252a42cb0"><td class="memItemLeft" align="right" valign="top"><a id="a23432689a89ad5969ed350b252a42cb0" name="a23432689a89ad5969ed350b252a42cb0"></a>
+<a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><b>expect</b> (const <a class="el" href="structaion_1_1parse_1_1_match_token.html">MatchToken</a> &amp;token)</td></tr>
 <tr class="memitem:a216b401e05575e2989f866aa8c888d28" id="r_a216b401e05575e2989f866aa8c888d28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a216b401e05575e2989f866aa8c888d28">skip_until</a> (const std::string &amp;lexeme)</td></tr>
 <tr class="memitem:af0f95f1a683559ffc1fd2cfd30da680d" id="r_af0f95f1a683559ffc1fd2cfd30da680d"><td class="memItemLeft" align="right" valign="top"><a id="af0f95f1a683559ffc1fd2cfd30da680d" name="af0f95f1a683559ffc1fd2cfd30da680d"></a>
 <a class="el" href="structaion_1_1lexer_1_1_token.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><b>skip_until</b> (TokenType type)</td></tr>
@@ -142,12 +149,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>silent_probe</b> (con
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_at_end</b> () const</td></tr>
 <tr class="memitem:a2be63981aa34d7d234c514ebaea380ee" id="r_a2be63981aa34d7d234c514ebaea380ee"><td class="memItemLeft" align="right" valign="top"><a id="a2be63981aa34d7d234c514ebaea380ee" name="a2be63981aa34d7d234c514ebaea380ee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> ()</td></tr>
+<tr class="memdesc:a2be63981aa34d7d234c514ebaea380ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">primary entry point is <a class="el" href="#a2be63981aa34d7d234c514ebaea380ee" title="primary entry point is parse()">parse()</a> <br /></td></tr>
 <tr class="memitem:a4c159cfa37819b2e90c557c6d5b17677" id="r_a4c159cfa37819b2e90c557c6d5b17677"><td class="memItemLeft" align="right" valign="top"><a id="a4c159cfa37819b2e90c557c6d5b17677" name="a4c159cfa37819b2e90c557c6d5b17677"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>parse_top_level_decl</b> ()</td></tr>
-<tr class="memitem:a5d368ea02a6547ff849b1394341cb77d" id="r_a5d368ea02a6547ff849b1394341cb77d"><td class="memItemLeft" align="right" valign="top"><a id="a5d368ea02a6547ff849b1394341cb77d" name="a5d368ea02a6547ff849b1394341cb77d"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parse_first_top_level_decl</b> ()</td></tr>
-<tr class="memitem:ae23b8d54ec5688e70ee5bab05d21ab1c" id="r_ae23b8d54ec5688e70ee5bab05d21ab1c"><td class="memItemLeft" align="right" valign="top"><a id="ae23b8d54ec5688e70ee5bab05d21ab1c" name="ae23b8d54ec5688e70ee5bab05d21ab1c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>parse_variable_decl</b> ()</td></tr>
+<tr class="memdesc:a4c159cfa37819b2e90c557c6d5b17677"><td class="mdescLeft">&#160;</td><td class="mdescRight">will be called in a loop from <a class="el" href="#a2be63981aa34d7d234c514ebaea380ee" title="primary entry point is parse()">parse()</a> until we reach the end of the token stream. <br /></td></tr>
+<tr class="memitem:a5d368ea02a6547ff849b1394341cb77d" id="r_a5d368ea02a6547ff849b1394341cb77d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d368ea02a6547ff849b1394341cb77d">parse_first_top_level_decl</a> ()</td></tr>
+<tr class="memitem:a3be26c2e4481b201c5b9eec58e5a9daf" id="r_a3be26c2e4481b201c5b9eec58e5a9daf"><td class="memItemLeft" align="right" valign="top"><a id="a3be26c2e4481b201c5b9eec58e5a9daf" name="a3be26c2e4481b201c5b9eec58e5a9daf"></a>
+<a class="el" href="classaion_1_1ast_1_1_decl.html">Decl</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parse_variable_decl</b> ()</td></tr>
 <tr class="memitem:a0c2aa356ad527b394344b1428dacbd2c" id="r_a0c2aa356ad527b394344b1428dacbd2c"><td class="memItemLeft" align="right" valign="top"><a id="a0c2aa356ad527b394344b1428dacbd2c" name="a0c2aa356ad527b394344b1428dacbd2c"></a>
 <a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parse_expression</b> (int rbp, TokenType delim)</td></tr>
 <tr class="memdesc:a0c2aa356ad527b394344b1428dacbd2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">entry point for expression parsing <br /></td></tr>
@@ -201,6 +209,25 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>lbp</b> (const 
 </div><div class="memdoc">
 <p>we want to use an precedence level high than the additive lbp</p>
 <p>NOTE is_comp is set to false, as of currently we are unable to deduce the type of the operand, and therefore its computation model – that we leave to sema</p>
+
+</div>
+</div>
+<a id="a5d368ea02a6547ff849b1394341cb77d" name="a5d368ea02a6547ff849b1394341cb77d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d368ea02a6547ff849b1394341cb77d">&#9670;&#160;</a></span>parse_first_top_level_decl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool aion::parse::Parser::parse_first_top_level_decl </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>We also thereby create a specialized first top level declaration parser, which is responsible mainly for parsing module declarations and imports TODO </p>
+<p>TODO for module declaration</p>
 
 </div>
 </div>

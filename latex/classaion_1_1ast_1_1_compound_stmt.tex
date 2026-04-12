@@ -24,19 +24,6 @@ using {\bfseries iterator} = \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}}\
 \Hypertarget{classaion_1_1ast_1_1_compound_stmt_a06bda50cba86b7d1d52129fc1ede7f1e}\label{classaion_1_1ast_1_1_compound_stmt_a06bda50cba86b7d1d52129fc1ede7f1e} 
 using {\bfseries const\+\_\+iterator} = \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}}\texorpdfstring{$\ast$}{*} const\texorpdfstring{$\ast$}{*}
 \end{DoxyCompactItemize}
-\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{aion\+::ast\+::\+Stmt}}}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classaion_1_1ast_1_1_stmt_a5d7f6c265f7de6cb51f1cd160a23786a}\label{classaion_1_1ast_1_1_stmt_a5d7f6c265f7de6cb51f1cd160a23786a} 
-enum class {\bfseries Kind} \+: std\+::uint8\+\_\+t \{ \newline
-{\bfseries compound\+\_\+stmt}
-, {\bfseries if\+\_\+stmt}
-, {\bfseries while\+\_\+stmt}
-, {\bfseries for\+\_\+stmt}
-, \newline
-{\bfseries return\+\_\+stmt}
- \}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -64,14 +51,20 @@ const\+\_\+iterator {\bfseries end} () const
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{aion\+::ast\+::\+Stmt}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Stmt} (const Kind K)
+{\bfseries Stmt} (const Stmt\+Kind K)
 \item 
-Kind {\bfseries get\+\_\+kind} () const
+Stmt\+Kind {\bfseries get\+\_\+kind} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 static \mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt_aab0ca656624b9595ab7496ec9f5f06d0}{create}} (\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context}{ASTContext}} \&context, \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}stmts, std\+::uint32\+\_\+t num\+\_\+stmts)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{aion\+::ast\+::\+Stmt}}}
+\begin{DoxyCompactItemize}
+\item 
+Stmt\+Kind {\bfseries stmt\+\_\+kind}
 \end{DoxyCompactItemize}
 
 

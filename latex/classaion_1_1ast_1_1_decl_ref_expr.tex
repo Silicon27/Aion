@@ -13,15 +13,15 @@ Inheritance diagram for aion\+::ast\+::Decl\+Ref\+Expr\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_decl_ref_expr_a4fe81f5a7017bc308cc7723ad305b33c}\label{classaion_1_1ast_1_1_decl_ref_expr_a4fe81f5a7017bc308cc7723ad305b33c} 
-{\bfseries Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr_ae5f9aa8b75c53918bd998594020e1384}{loc}}=\{\})
+\Hypertarget{classaion_1_1ast_1_1_decl_ref_expr_adccab964a30eb4fe6894a0dff3f75d8c}\label{classaion_1_1ast_1_1_decl_ref_expr_adccab964a30eb4fe6894a0dff3f75d8c} 
+{\bfseries Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr_ae5f9aa8b75c53918bd998594020e1384}{loc}}=\{\}, const Expr\+Kind kind=Expr\+Kind\+::identifier\+\_\+expr)
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category)
+{\bfseries Typed\+Expr} (Typed\+Expr\+Type\+Kind tk, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Value\+Category category, const Expr\+Kind kind=Expr\+Kind\+::typed\+\_\+expr)
 \item 
-\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} {\bfseries get\+\_\+type\+\_\+kind} () const
+Typed\+Expr\+Type\+Kind {\bfseries get\+\_\+type\+\_\+kind} () const
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+type} () const
 \item 
@@ -44,20 +44,19 @@ Value\+Category {\bfseries get\+\_\+category} () const
 \item 
 \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr_ae5f9aa8b75c53918bd998594020e1384}{loc}}
 \end{DoxyCompactItemize}
-\doxysubsubsection*{Additional Inherited Members}
-\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{aion\+::ast\+::\+Typed\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0}{Type\+Kind}} \+: std\+::uint8\+\_\+t \{ \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd}{atom\+\_\+type}}
-, \mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr_a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc}{common\+\_\+type}}
- \}
+Typed\+Expr\+Type\+Kind {\bfseries tk}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries type}
 \end{DoxyCompactItemize}
-\doxysubsection*{Public Types inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{aion\+::ast\+::\+Expr}}}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8}\label{classaion_1_1ast_1_1_expr_a9ab5377e450d49d96cbcea83f1990bc8} 
-enum class {\bfseries Expr\+Kind} \+: std\+::uint8\+\_\+t \{ {\bfseries typed\+\_\+expr}
- \}
+Expr\+Kind {\bfseries expr\+\_\+kind}
+\item 
+Value\+Category {\bfseries category}
 \end{DoxyCompactItemize}
 
 

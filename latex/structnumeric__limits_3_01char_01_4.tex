@@ -1,0 +1,91 @@
+\doxysection{numeric\+\_\+limits\texorpdfstring{$<$}{<} char \texorpdfstring{$>$}{>} Struct Reference}
+\hypertarget{structnumeric__limits_3_01char_01_4}{}\label{structnumeric__limits_3_01char_01_4}\index{numeric\_limits$<$ char $>$@{numeric\_limits$<$ char $>$}}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_aa6a0d71696a78adb6907a910a00046aa}\label{structnumeric__limits_3_01char_01_4_aa6a0d71696a78adb6907a910a00046aa} 
+static constexpr char {\bfseries min} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_adfc1aeaa78eda0a985e562fc3ad1e4d8}\label{structnumeric__limits_3_01char_01_4_adfc1aeaa78eda0a985e562fc3ad1e4d8} 
+static constexpr char {\bfseries max} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_acc6e1c95b51d41e4933dc24f23b3414a}\label{structnumeric__limits_3_01char_01_4_acc6e1c95b51d41e4933dc24f23b3414a} 
+static constexpr char {\bfseries lowest} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a1d452cc2ff1f1f8b067796e118f54ab7}\label{structnumeric__limits_3_01char_01_4_a1d452cc2ff1f1f8b067796e118f54ab7} 
+static constexpr char {\bfseries epsilon} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a66d031614451ebd1bd7705087bf2f096}\label{structnumeric__limits_3_01char_01_4_a66d031614451ebd1bd7705087bf2f096} 
+static constexpr char {\bfseries round\+\_\+error} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a0439b21ea71e69947d9798345715489c}\label{structnumeric__limits_3_01char_01_4_a0439b21ea71e69947d9798345715489c} 
+static constexpr char {\bfseries infinity} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_aba422e7f216e74e355b940fffdbac6df}\label{structnumeric__limits_3_01char_01_4_aba422e7f216e74e355b940fffdbac6df} 
+static constexpr char {\bfseries quiet\+\_\+\+NaN} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a46d332d1d65e7346fc2dee210b9e6073}\label{structnumeric__limits_3_01char_01_4_a46d332d1d65e7346fc2dee210b9e6073} 
+static constexpr char {\bfseries signaling\+\_\+\+NaN} () noexcept
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a01e953764c949d5ead6ee253074f99d6}\label{structnumeric__limits_3_01char_01_4_a01e953764c949d5ead6ee253074f99d6} 
+static constexpr char {\bfseries denorm\+\_\+min} () noexcept
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a98a5e7cbf64f344188d0f55b46ed802c}\label{structnumeric__limits_3_01char_01_4_a98a5e7cbf64f344188d0f55b46ed802c} 
+static constexpr bool {\bfseries is\+\_\+specialized} = true
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_aebbca789f7743dcfe8a4d8aa53301d60}\label{structnumeric__limits_3_01char_01_4_aebbca789f7743dcfe8a4d8aa53301d60} 
+static constexpr bool {\bfseries char\+\_\+is\+\_\+signed} = (char(-\/1) $<$ 0)
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_ad82adc5bc741ffca72ba9c32dabef4b1}\label{structnumeric__limits_3_01char_01_4_ad82adc5bc741ffca72ba9c32dabef4b1} 
+static constexpr int {\bfseries digits} = char\+\_\+is\+\_\+signed ? (sizeof(char) \texorpdfstring{$\ast$}{*} CHAR\+\_\+\+BIT -\/ 1) \+: (sizeof(char) \texorpdfstring{$\ast$}{*} CHAR\+\_\+\+BIT)
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_aa18fff915cece74206ea19480fc1cb9e}\label{structnumeric__limits_3_01char_01_4_aa18fff915cece74206ea19480fc1cb9e} 
+static constexpr int {\bfseries digits10} = digits10\+\_\+from\+\_\+digits(digits)
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_ae578ebfe7560a71ee54ed738f1b0b64f}\label{structnumeric__limits_3_01char_01_4_ae578ebfe7560a71ee54ed738f1b0b64f} 
+static constexpr bool {\bfseries is\+\_\+signed} = char\+\_\+is\+\_\+signed
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a2c24d04a570ab3f8b68e8d98630fdbd4}\label{structnumeric__limits_3_01char_01_4_a2c24d04a570ab3f8b68e8d98630fdbd4} 
+static constexpr bool {\bfseries is\+\_\+integer} = true
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a984471d117e14b4feb5b5ca56c75ba01}\label{structnumeric__limits_3_01char_01_4_a984471d117e14b4feb5b5ca56c75ba01} 
+static constexpr bool {\bfseries is\+\_\+exact} = true
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_ac78f2fcaafae5e57eb83c8ca40130e13}\label{structnumeric__limits_3_01char_01_4_ac78f2fcaafae5e57eb83c8ca40130e13} 
+static constexpr int {\bfseries radix} = 2
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a550608726927da5c468c8f86797d5ec5}\label{structnumeric__limits_3_01char_01_4_a550608726927da5c468c8f86797d5ec5} 
+static constexpr int {\bfseries min\+\_\+exponent} = 0
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a1eef58c6c77693defc9e4fc852af069d}\label{structnumeric__limits_3_01char_01_4_a1eef58c6c77693defc9e4fc852af069d} 
+static constexpr int {\bfseries min\+\_\+exponent10} = 0
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_aed9c0e6c1782afb44e89e18cb295bc83}\label{structnumeric__limits_3_01char_01_4_aed9c0e6c1782afb44e89e18cb295bc83} 
+static constexpr int {\bfseries max\+\_\+exponent} = 0
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_ac0c24470a1d21c096c942625d02a450a}\label{structnumeric__limits_3_01char_01_4_ac0c24470a1d21c096c942625d02a450a} 
+static constexpr int {\bfseries max\+\_\+exponent10} = 0
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a9659a04a17922a3beadf296b54f87aa1}\label{structnumeric__limits_3_01char_01_4_a9659a04a17922a3beadf296b54f87aa1} 
+static constexpr bool {\bfseries has\+\_\+infinity} = false
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a577d0627825e65c8576ba53b466a2a67}\label{structnumeric__limits_3_01char_01_4_a577d0627825e65c8576ba53b466a2a67} 
+static constexpr bool {\bfseries has\+\_\+quiet\+\_\+\+NaN} = false
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a95b27c7a0ca2dba0789b70b03fa3b544}\label{structnumeric__limits_3_01char_01_4_a95b27c7a0ca2dba0789b70b03fa3b544} 
+static constexpr bool {\bfseries has\+\_\+signaling\+\_\+\+NaN} = false
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_ab88544ae9eb3082970789626e53bc7a3}\label{structnumeric__limits_3_01char_01_4_ab88544ae9eb3082970789626e53bc7a3} 
+static constexpr bool {\bfseries has\+\_\+denorm} = false
+\item 
+\Hypertarget{structnumeric__limits_3_01char_01_4_a8fd250e2eed38eef49d86fa90054d236}\label{structnumeric__limits_3_01char_01_4_a8fd250e2eed38eef49d86fa90054d236} 
+static constexpr bool {\bfseries has\+\_\+denorm\+\_\+loss} = false
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/support/si/include/impl/limits/numeric\+\_\+limits.\+h\end{DoxyCompactItemize}

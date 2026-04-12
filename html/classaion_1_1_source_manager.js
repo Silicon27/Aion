@@ -1,6 +1,6 @@
 var classaion_1_1_source_manager =
 [
-    [ "add_buffer", "classaion_1_1_source_manager.html#af11a6840c4175b2f1a5d65c3a8a4144a", null ],
+    [ "add_buffer", "classaion_1_1_source_manager.html#ac87951932516ba802e16dac0ab279119", null ],
     [ "add_file_from_disk", "classaion_1_1_source_manager.html#a6e6f85c9fd0cdd32fb1f61391a87d2c4", null ],
     [ "get_buffer", "classaion_1_1_source_manager.html#aae6413f31e2f4fe818a96bea7ab11b36", null ],
     [ "get_file_path", "classaion_1_1_source_manager.html#aa31c44d7bdb705d72fab1e2dc9e92272", null ],

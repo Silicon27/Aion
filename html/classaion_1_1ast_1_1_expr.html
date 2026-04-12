@@ -102,22 +102,18 @@ Inheritance diagram for aion::ast::Expr:</div>
  <div class="center">
   <img src="classaion_1_1ast_1_1_expr.png" usemap="#aion_3A_3Aast_3A_3AExpr_map" alt=""/>
   <map id="aion_3A_3Aast_3A_3AExpr_map" name="aion_3A_3Aast_3A_3AExpr_map">
-<area href="classaion_1_1ast_1_1_error_expr.html" alt="aion::ast::ErrorExpr" shape="rect" coords="0,56,169,80"/>
-<area href="classaion_1_1ast_1_1_typed_expr.html" alt="aion::ast::TypedExpr" shape="rect" coords="358,56,527,80"/>
-<area href="classaion_1_1ast_1_1_binary_expr.html" alt="aion::ast::BinaryExpr" shape="rect" coords="0,112,169,136"/>
-<area href="classaion_1_1ast_1_1_decl_ref_expr.html" alt="aion::ast::DeclRefExpr" shape="rect" coords="179,112,348,136"/>
-<area href="classaion_1_1ast_1_1_number_literal_expr.html" title="any number literal (integers, floats, doubles, etc.)" alt="aion::ast::NumberLiteralExpr" shape="rect" coords="358,112,527,136"/>
-<area href="classaion_1_1ast_1_1_string_literal_expr.html" title="any string literal (e. &quot;this string&quot;, f&quot;this{x}&quot;, etc.)" alt="aion::ast::StringLiteralExpr" shape="rect" coords="537,112,706,136"/>
-<area href="classaion_1_1ast_1_1_unary_expr.html" alt="aion::ast::UnaryExpr" shape="rect" coords="716,112,885,136"/>
-<area href="classaion_1_1ast_1_1_call_expr.html" alt="aion::ast::CallExpr" shape="rect" coords="179,168,348,192"/>
+<area href="classaion_1_1ast_1_1_error_expr.html" alt="aion::ast::ErrorExpr" shape="rect" coords="0,56,164,80"/>
+<area href="classaion_1_1ast_1_1_typed_expr.html" alt="aion::ast::TypedExpr" shape="rect" coords="435,56,599,80"/>
+<area href="classaion_1_1ast_1_1_binary_expr.html" alt="aion::ast::BinaryExpr" shape="rect" coords="0,112,164,136"/>
+<area href="classaion_1_1ast_1_1_decl_ref_expr.html" alt="aion::ast::DeclRefExpr" shape="rect" coords="174,112,338,136"/>
+<area href="classaion_1_1ast_1_1_float_literal_expr.html" alt="aion::ast::FloatLiteralExpr" shape="rect" coords="348,112,512,136"/>
+<area href="classaion_1_1ast_1_1_integer_literal_expr.html" title="any number literal (integers, floats, doubles, etc.)" alt="aion::ast::IntegerLiteralExpr" shape="rect" coords="522,112,686,136"/>
+<area href="classaion_1_1ast_1_1_string_literal_expr.html" title="any string literal (e. &quot;this string&quot;, f&quot;this{x}&quot;, etc.)" alt="aion::ast::StringLiteralExpr" shape="rect" coords="696,112,860,136"/>
+<area href="classaion_1_1ast_1_1_unary_expr.html" alt="aion::ast::UnaryExpr" shape="rect" coords="870,112,1034,136"/>
+<area href="classaion_1_1ast_1_1_call_expr.html" alt="aion::ast::CallExpr" shape="rect" coords="174,168,338,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a9ab5377e450d49d96cbcea83f1990bc8" id="r_a9ab5377e450d49d96cbcea83f1990bc8"><td class="memItemLeft" align="right" valign="top"><a id="a9ab5377e450d49d96cbcea83f1990bc8" name="a9ab5377e450d49d96cbcea83f1990bc8"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>ExprKind</b> : std::uint8_t { <b>typed_expr</b>
- }</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4367b8c05ef056eb7e12ce2bbdccad06" id="r_a4367b8c05ef056eb7e12ce2bbdccad06"><td class="memItemLeft" align="right" valign="top"><a id="a4367b8c05ef056eb7e12ce2bbdccad06" name="a4367b8c05ef056eb7e12ce2bbdccad06"></a>
@@ -126,6 +122,13 @@ Public Member Functions</h2></td></tr>
 ExprKind&#160;</td><td class="memItemRight" valign="bottom"><b>get_kind</b> () const</td></tr>
 <tr class="memitem:afdde0075e5053e469d747b0377919b3d" id="r_afdde0075e5053e469d747b0377919b3d"><td class="memItemLeft" align="right" valign="top"><a id="afdde0075e5053e469d747b0377919b3d" name="afdde0075e5053e469d747b0377919b3d"></a>
 ValueCategory&#160;</td><td class="memItemRight" valign="bottom"><b>get_category</b> () const</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a5d4ab7fcafdbd7bf50f37f2e14163d8b" id="r_a5d4ab7fcafdbd7bf50f37f2e14163d8b"><td class="memItemLeft" align="right" valign="top"><a id="a5d4ab7fcafdbd7bf50f37f2e14163d8b" name="a5d4ab7fcafdbd7bf50f37f2e14163d8b"></a>
+ExprKind&#160;</td><td class="memItemRight" valign="bottom"><b>expr_kind</b></td></tr>
+<tr class="memitem:a57786cf9f0a0f5510bea4eff461d4a27" id="r_a57786cf9f0a0f5510bea4eff461d4a27"><td class="memItemLeft" align="right" valign="top"><a id="a57786cf9f0a0f5510bea4eff461d4a27" name="a57786cf9f0a0f5510bea4eff461d4a27"></a>
+ValueCategory&#160;</td><td class="memItemRight" valign="bottom"><b>category</b></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for all expressions. </p>

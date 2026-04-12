@@ -97,31 +97,23 @@ Inheritance diagram for aion::ast::TypedExpr:</div>
  <div class="center">
   <img src="classaion_1_1ast_1_1_typed_expr.png" usemap="#aion_3A_3Aast_3A_3ATypedExpr_map" alt=""/>
   <map id="aion_3A_3Aast_3A_3ATypedExpr_map" name="aion_3A_3Aast_3A_3ATypedExpr_map">
-<area href="classaion_1_1ast_1_1_expr.html" title="Base class for all expressions." alt="aion::ast::Expr" shape="rect" coords="358,0,527,24"/>
-<area href="classaion_1_1ast_1_1_binary_expr.html" alt="aion::ast::BinaryExpr" shape="rect" coords="0,112,169,136"/>
-<area href="classaion_1_1ast_1_1_decl_ref_expr.html" alt="aion::ast::DeclRefExpr" shape="rect" coords="179,112,348,136"/>
-<area href="classaion_1_1ast_1_1_number_literal_expr.html" title="any number literal (integers, floats, doubles, etc.)" alt="aion::ast::NumberLiteralExpr" shape="rect" coords="358,112,527,136"/>
-<area href="classaion_1_1ast_1_1_string_literal_expr.html" title="any string literal (e. &quot;this string&quot;, f&quot;this{x}&quot;, etc.)" alt="aion::ast::StringLiteralExpr" shape="rect" coords="537,112,706,136"/>
-<area href="classaion_1_1ast_1_1_unary_expr.html" alt="aion::ast::UnaryExpr" shape="rect" coords="716,112,885,136"/>
-<area href="classaion_1_1ast_1_1_call_expr.html" alt="aion::ast::CallExpr" shape="rect" coords="179,168,348,192"/>
+<area href="classaion_1_1ast_1_1_expr.html" title="Base class for all expressions." alt="aion::ast::Expr" shape="rect" coords="435,0,599,24"/>
+<area href="classaion_1_1ast_1_1_binary_expr.html" alt="aion::ast::BinaryExpr" shape="rect" coords="0,112,164,136"/>
+<area href="classaion_1_1ast_1_1_decl_ref_expr.html" alt="aion::ast::DeclRefExpr" shape="rect" coords="174,112,338,136"/>
+<area href="classaion_1_1ast_1_1_float_literal_expr.html" alt="aion::ast::FloatLiteralExpr" shape="rect" coords="348,112,512,136"/>
+<area href="classaion_1_1ast_1_1_integer_literal_expr.html" title="any number literal (integers, floats, doubles, etc.)" alt="aion::ast::IntegerLiteralExpr" shape="rect" coords="522,112,686,136"/>
+<area href="classaion_1_1ast_1_1_string_literal_expr.html" title="any string literal (e. &quot;this string&quot;, f&quot;this{x}&quot;, etc.)" alt="aion::ast::StringLiteralExpr" shape="rect" coords="696,112,860,136"/>
+<area href="classaion_1_1ast_1_1_unary_expr.html" alt="aion::ast::UnaryExpr" shape="rect" coords="870,112,1034,136"/>
+<area href="classaion_1_1ast_1_1_call_expr.html" alt="aion::ast::CallExpr" shape="rect" coords="174,168,338,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a1d52b2aa71875d76625852bd056972b0" id="r_a1d52b2aa71875d76625852bd056972b0"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d52b2aa71875d76625852bd056972b0">TypeKind</a> : std::uint8_t { <a class="el" href="#a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd">atom_type</a>
-, <a class="el" href="#a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc">common_type</a>
- }</td></tr>
-<tr class="inherit_header pub_types_classaion_1_1ast_1_1_expr"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_classaion_1_1ast_1_1_expr')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Types inherited from <a class="el" href="classaion_1_1ast_1_1_expr.html">aion::ast::Expr</a></td></tr>
-<tr class="memitem:a9ab5377e450d49d96cbcea83f1990bc8 inherit pub_types_classaion_1_1ast_1_1_expr" id="r_a9ab5377e450d49d96cbcea83f1990bc8"><td class="memItemLeft" align="right" valign="top"><a id="a9ab5377e450d49d96cbcea83f1990bc8" name="a9ab5377e450d49d96cbcea83f1990bc8"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>ExprKind</b> : std::uint8_t { <b>typed_expr</b>
- }</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9827ed947ef33fefe3471211df1c4243" id="r_a9827ed947ef33fefe3471211df1c4243"><td class="memItemLeft" align="right" valign="top"><a id="a9827ed947ef33fefe3471211df1c4243" name="a9827ed947ef33fefe3471211df1c4243"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TypedExpr</b> (<a class="el" href="#a1d52b2aa71875d76625852bd056972b0">TypeKind</a> tk, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, const ValueCategory category)</td></tr>
-<tr class="memitem:a9be7c126529344bad30c79ef6ee85250" id="r_a9be7c126529344bad30c79ef6ee85250"><td class="memItemLeft" align="right" valign="top"><a id="a9be7c126529344bad30c79ef6ee85250" name="a9be7c126529344bad30c79ef6ee85250"></a>
-<a class="el" href="#a1d52b2aa71875d76625852bd056972b0">TypeKind</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_type_kind</b> () const</td></tr>
+<tr class="memitem:ae5aae14cec4900d0ebac9df4a105cc71" id="r_ae5aae14cec4900d0ebac9df4a105cc71"><td class="memItemLeft" align="right" valign="top"><a id="ae5aae14cec4900d0ebac9df4a105cc71" name="ae5aae14cec4900d0ebac9df4a105cc71"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TypedExpr</b> (TypedExprTypeKind tk, <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *type, const ValueCategory category, const ExprKind kind=ExprKind::typed_expr)</td></tr>
+<tr class="memitem:aa0e309ab351c43bd26a849d4f4ddf09c" id="r_aa0e309ab351c43bd26a849d4f4ddf09c"><td class="memItemLeft" align="right" valign="top"><a id="aa0e309ab351c43bd26a849d4f4ddf09c" name="aa0e309ab351c43bd26a849d4f4ddf09c"></a>
+TypedExprTypeKind&#160;</td><td class="memItemRight" valign="bottom"><b>get_type_kind</b> () const</td></tr>
 <tr class="memitem:a9581a9ab5183f64e4f45761a53ae1ec1" id="r_a9581a9ab5183f64e4f45761a53ae1ec1"><td class="memItemLeft" align="right" valign="top"><a id="a9581a9ab5183f64e4f45761a53ae1ec1" name="a9581a9ab5183f64e4f45761a53ae1ec1"></a>
 <a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_type</b> () const</td></tr>
 <tr class="memitem:a4af6e8ee98eea206843bfc75d28c5e8e" id="r_a4af6e8ee98eea206843bfc75d28c5e8e"><td class="memItemLeft" align="right" valign="top"><a id="a4af6e8ee98eea206843bfc75d28c5e8e" name="a4af6e8ee98eea206843bfc75d28c5e8e"></a>
@@ -133,36 +125,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_type</b> (<a clas
 ExprKind&#160;</td><td class="memItemRight" valign="bottom"><b>get_kind</b> () const</td></tr>
 <tr class="memitem:afdde0075e5053e469d747b0377919b3d inherit pub_methods_classaion_1_1ast_1_1_expr" id="r_afdde0075e5053e469d747b0377919b3d"><td class="memItemLeft" align="right" valign="top">
 ValueCategory&#160;</td><td class="memItemRight" valign="bottom"><b>get_category</b> () const</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a9ac01952b4540f196114674a31186cb9" id="r_a9ac01952b4540f196114674a31186cb9"><td class="memItemLeft" align="right" valign="top"><a id="a9ac01952b4540f196114674a31186cb9" name="a9ac01952b4540f196114674a31186cb9"></a>
+TypedExprTypeKind&#160;</td><td class="memItemRight" valign="bottom"><b>tk</b></td></tr>
+<tr class="memitem:a7e981e35f9143ba3f8517ca371416592" id="r_a7e981e35f9143ba3f8517ca371416592"><td class="memItemLeft" align="right" valign="top"><a id="a7e981e35f9143ba3f8517ca371416592" name="a7e981e35f9143ba3f8517ca371416592"></a>
+<a class="el" href="classaion_1_1ast_1_1_mutable_type.html">MutableType</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>type</b></td></tr>
+<tr class="inherit_header pub_attribs_classaion_1_1ast_1_1_expr"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_attribs_classaion_1_1ast_1_1_expr')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Attributes inherited from <a class="el" href="classaion_1_1ast_1_1_expr.html">aion::ast::Expr</a></td></tr>
+<tr class="memitem:a5d4ab7fcafdbd7bf50f37f2e14163d8b inherit pub_attribs_classaion_1_1ast_1_1_expr" id="r_a5d4ab7fcafdbd7bf50f37f2e14163d8b"><td class="memItemLeft" align="right" valign="top">
+ExprKind&#160;</td><td class="memItemRight" valign="bottom"><b>expr_kind</b></td></tr>
+<tr class="memitem:a57786cf9f0a0f5510bea4eff461d4a27 inherit pub_attribs_classaion_1_1ast_1_1_expr" id="r_a57786cf9f0a0f5510bea4eff461d4a27"><td class="memItemLeft" align="right" valign="top">
+ValueCategory&#160;</td><td class="memItemRight" valign="bottom"><b>category</b></td></tr>
 </table>
-<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Member Enumeration Documentation</h2>
-<a id="a1d52b2aa71875d76625852bd056972b0" name="a1d52b2aa71875d76625852bd056972b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d52b2aa71875d76625852bd056972b0">&#9670;&#160;</a></span>TypeKind</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum class <a class="el" href="#a1d52b2aa71875d76625852bd056972b0">aion::ast::TypedExpr::TypeKind</a> : std::uint8_t</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd" name="a1d52b2aa71875d76625852bd056972b0a1df0f9fbdc3e57ede6feb092e00890fd"></a>atom_type&#160;</td><td class="fielddoc"><p>any type that is not an inferred "common type" made from the combination of other types </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc" name="a1d52b2aa71875d76625852bd056972b0a84f614e47f49aad2597567c5859484bc"></a>common_type&#160;</td><td class="fielddoc"><p>any type that is inferred from the combination of other types (ex. binary expressions where the 2 types are related but not equal. you thereby infer a common type) </p>
-</td></tr>
-</table>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>core/include/ast/<a class="el" href="expr_8hpp_source.html">expr.hpp</a></li>
 </ul>

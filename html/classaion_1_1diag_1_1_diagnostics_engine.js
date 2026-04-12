@@ -12,5 +12,6 @@ var classaion_1_1diag_1_1_diagnostics_engine =
     [ "get_severity", "classaion_1_1diag_1_1_diagnostics_engine.html#af1b1f1e4632dbc809c05293c60859a0a", null ],
     [ "report", "classaion_1_1diag_1_1_diagnostics_engine.html#a62547d87f89753ebc219f4478e8d2e60", null ],
     [ "report", "classaion_1_1diag_1_1_diagnostics_engine.html#a8982be99bd257c546f9a94cba306882b", null ],
-    [ "set_severity", "classaion_1_1diag_1_1_diagnostics_engine.html#abf717554cb77262fdf34ec82e42c106f", null ]
+    [ "set_severity", "classaion_1_1diag_1_1_diagnostics_engine.html#abf717554cb77262fdf34ec82e42c106f", null ],
+    [ "token_range", "classaion_1_1diag_1_1_diagnostics_engine.html#aa430bb5a03f34a76e9bc1084b4299d3f", null ]
 ];

@@ -1,0 +1,46 @@
+// Bloated AST test file
+let a: i32 = 1;
+let b: i32 = 2;
+let c: i32 = 3;
+let d: i32 = 4;
+let e: i32 = 5;
+let f: i32 = 6;
+let g: i32 = 7;
+let h: i32 = 8;
+let i: i32 = 9;
+let j: i32 = 10;
+let k: i32 = 11;
+let l: i32 = 12;
+let m: i32 = 13;
+let n: i32 = 14;
+let o: i32 = 15;
+let p: i32 = 16;
+let q: i32 = 17;
+let r: i32 = 18;
+let s: i32 = 19;
+let t: i32 = 20;
+let u: i32 = 21;
+let v: i32 = 22;
+let w: i32 = 23;
+let x: i32 = 24;
+let y: i32 = 25;
+let z: i32 = 26;
+
+let a1: i32 = a + b;
+let a2: i32 = c + d;
+let a3: i32 = e + f;
+let a4: i32 = g + h;
+let a5: i32 = i + j;
+let a6: i32 = k + l;
+let a7: i32 = m + n;
+let a8: i32 = o + p;
+let a9: i32 = q + r;
+let a10: i32 = s + t;
+
+let b1: i32 = (a1 * a2) + (a3 * a4);
+let b2: i32 = (a5 * a6) + (a7 * a8);
+let b3: i32 = (a9 * a10) + (a1 * a2);
+
+let c1: i32 = b1 + b2 + b3;
+
+let d1: i32 = c1;

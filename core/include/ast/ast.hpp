@@ -58,7 +58,6 @@ namespace aion::ast {
         struct_expr,
         enum_expr,
         cast_expr,
-        sizeof_expr,
     };
 
     class IdentifierInfo {

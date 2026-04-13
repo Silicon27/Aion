@@ -4,3 +4,6 @@
 
 #include <ast/printer.hpp>
 
+namespace aion::ast {
+
+}

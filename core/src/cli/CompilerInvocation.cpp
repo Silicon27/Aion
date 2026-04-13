@@ -54,6 +54,7 @@ CompilerConfig parse(int argc, char *argv[]) {
     int  max_error_count = 20;
     bool show_fixits    = false;
     bool ast            = false;
+    bool force_ast      = false;
 
     // optimization flags
     bool opt_O0 = false;
@@ -175,6 +176,11 @@ CompilerConfig parse(int argc, char *argv[]) {
         .help("Print AST (compile only)")
         .flag()
         .store_into(ast);
+
+    program.add_argument("--force-ast")
+        .help("Force AST output even when parse errors are present")
+        .flag()
+        .store_into(force_ast);
 
     try {
         program.parse_args(argc, argv);
@@ -359,7 +365,8 @@ CompilerConfig parse(int argc, char *argv[]) {
     flags.verbose         = verbose;
     flags.max_error_count = max_error_count;
     flags.show_fixits     = show_fixits;
-    flags.ast             = ast;
+    flags.ast             = ast || force_ast;
+    flags.force_ast       = force_ast;
     flags.level           = opt_level;
     flags.output_format   = format;
     flags.output_file     = o_output;
@@ -492,7 +499,7 @@ int CompilerInvocation::run() {
         parser->parse();
         const bool has_parse_errors = diag_.get_num_errors() > errors_before_parse;
 
-        if (config.flags.ast && !has_parse_errors) {
+        if (config.flags.ast && (config.flags.force_ast || !has_parse_errors)) {
             aion::ast::AstPrinter ast_printer(&sm);
             ast_printer.enable_colors = diag_.get_show_colors();
             ast_printer.print(context.get_translation_unit_decl());

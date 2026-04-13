@@ -50,6 +50,7 @@ namespace aion::compiler_config {
         int max_error_count = 20;
         bool show_fixits = false;
         bool ast = false;
+        bool force_ast = false;
 
         // backend flags
         Opt_Level     level        = Opt_Level::O1;

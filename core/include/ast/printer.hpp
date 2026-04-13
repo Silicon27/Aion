@@ -12,7 +12,6 @@
 namespace aion::ast {
     class AstPrinter : public RecursiveAstVisitor<AstPrinter> {
     public:
-        int indent = 0;
         const SourceManager* sm = nullptr;
 
         static constexpr const char* kReset = "\x1b[0m";
@@ -28,39 +27,60 @@ namespace aion::ast {
 
         explicit AstPrinter(const SourceManager* sm = nullptr) : sm(sm) {}
 
+        void print_address(const void* ptr) const {
+            if (!ptr) return;
+            std::cout << ' ' << colorize(kYellow) << ptr << colorize(kReset);
+        }
+
+        void print_location(const SourceLocation& loc) const {
+            if (!sm || loc.is_invalid()) return;
+            auto lc = sm->get_line_column(loc);
+            std::cout << ' ' << colorize(kGray) << "<line:" << lc.first << ":" << lc.second << ">" << colorize(kReset);
+        }
+
+        void print_range(const SourceRange& range) const {
+            if (!sm || !range.is_valid()) return;
+            auto start = sm->get_line_column(range.begin);
+            auto end = sm->get_line_column(range.end);
+            std::cout << ' ' << colorize(kGray) << '<';
+            if (start.first == end.first) {
+                std::cout << "line:" << start.first << ":" << start.second << ", col:" << end.second;
+            } else {
+                std::cout << "line:" << start.first << ":" << start.second << ", line:" << end.first << ":" << end.second;
+            }
+            std::cout << '>' << colorize(kReset);
+        }
+
         static const char* decl_kind_name(const DeclKind kind) {
             switch (kind) {
-                case DeclKind::unresolved: return "unresolved";
-                case DeclKind::translation_unit: return "translation_unit";
-                case DeclKind::named: return "named";
-                case DeclKind::error: return "error";
-                case DeclKind::value: return "value";
-                case DeclKind::variable: return "variable";
-                case DeclKind::function: return "function";
-                case DeclKind::struct_: return "struct";
-                case DeclKind::enum_: return "enum";
-                case DeclKind::module: return "module";
+                case DeclKind::variable: return "VarDecl";
+                case DeclKind::translation_unit: return "TranslationUnitDecl";
+                case DeclKind::named: return "NamedDecl";
+                case DeclKind::error: return "ErrorDecl";
+                case DeclKind::value: return "ValueDecl";
+                case DeclKind::function: return "FunctionDecl";
+                case DeclKind::struct_: return "RecordDecl";
+                case DeclKind::enum_: return "EnumDecl";
+                case DeclKind::module: return "ModuleDecl";
+                default: return "Decl";
             }
-            return "unknown";
         }
 
         static const char* expr_kind_name(const ExprKind kind) {
             switch (kind) {
-                case ExprKind::typed_expr: return "typed_expr";
-                case ExprKind::binary_expr: return "binary_expr";
-                case ExprKind::unary_expr: return "unary_expr";
-                case ExprKind::call_expr: return "call_expr";
-                case ExprKind::identifier_expr: return "identifier_expr";
-                case ExprKind::integer_literal_expr: return "integer_literal_expr";
-                case ExprKind::float_literal_expr: return "float_literal_expr";
-                case ExprKind::string_literal_expr: return "string_literal_expr";
-                case ExprKind::member_expr: return "member_expr";
-                case ExprKind::array_expr: return "array_expr";
-                case ExprKind::struct_expr: return "struct_expr";
-                case ExprKind::enum_expr: return "enum_expr";
-                case ExprKind::cast_expr: return "cast_expr";
+                case ExprKind::binary_expr: return "BinaryOperator";
+                case ExprKind::unary_expr: return "UnaryOperator";
+                case ExprKind::call_expr: return "CallExpr";
+                case ExprKind::identifier_expr: return "DeclRefExpr";
+                case ExprKind::integer_literal_expr: return "IntegerLiteral";
+                case ExprKind::float_literal_expr: return "FloatingLiteral";
+                case ExprKind::string_literal_expr: return "StringLiteral";
+                case ExprKind::typed_expr: return "TypedExpr";
+                case ExprKind::member_expr: return "MemberExpr";
+                case ExprKind::array_expr: return "ArrayExpr";
+                case ExprKind::struct_expr: return "InitListExpr";
+                default: return "Expr";
             }
-            return "unknown";
         }
 
         static const char* binary_op_name(const BinaryOp op) {
@@ -195,252 +215,138 @@ namespace aion::ast {
                 return false;
             }
 
-            std::cout << colorize(kDeclColor) << "TranslationUnitDecl" << colorize(kReset) << '\n';
-            for (Decl* current = tu_decl->get_first_decl(); current != nullptr; current = current->next) {
-                ++indent;
-                print_decl(current);
-                --indent;
+            std::cout << colorize(kBoldGreen) << "TranslationUnitDecl" << colorize(kReset);
+            print_address(tu_decl);
+            print_range(tu_decl->source_range);
+            std::cout << '\n';
+
+            Decl* current = tu_decl->get_first_decl();
+            while (current) {
+                Decl* next = current->next;
+                print_decl(current, "", next == nullptr);
+                current = next;
             }
             return true;
         }
 
-        void print_indent() {
-            for (int i = 0; i < indent; i++) {
-                std::cout << "  ";
-            }
-        }
-
-        bool VisitBinaryExpr(BinaryExpr* expr) {
-            print_indent();
-
-            return true;
-        }
-
-    private:
-        void print_decl(Decl* decl) {
+        void print_decl(Decl* decl, const std::string& prefix, bool is_last) {
             if (decl == nullptr) {
-                print_indent();
-                std::cout << colorize(kErrorColor) << "<null decl>" << colorize(kReset) << '\n';
+                std::cout << prefix << (is_last ? "`- " : "|- ") << colorize(kErrorColor) << "<null decl>" << colorize(kReset) << '\n';
                 return;
             }
 
-            switch (decl->get_kind()) {
-                case DeclKind::translation_unit:
-                    print_indent();
-                    std::cout << colorize(kDeclColor) << "TranslationUnitDecl" << colorize(kReset) << '\n';
-                    break;
+            std::cout << prefix << (is_last ? "`- " : "|- ");
+            std::cout << colorize(kBoldGreen) << decl_kind_name(decl->get_kind()) << colorize(kReset);
+            print_address(decl);
+            print_range(decl->source_range);
 
+            switch (decl->get_kind()) {
                 case DeclKind::variable: {
                     auto* var = static_cast<VarDecl*>(decl);
-                    print_indent();
-                    std::cout << colorize(kDeclColor) << "VarDecl"
-                              << colorize(kReset) << ' ';
-                    print_member("name=", format_identifier(var->get_name()));
-                    print_member("storage=", storage_class_name(var->get_storage_class()));
-                    print_member("type=", format_type(var->get_type()));
-                    print_member("has_init=", (var->get_init() != nullptr ? "true" : "false"), false);
+                    std::cout << " " << colorize(kCyan) << var->get_identifier() << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " '" << format_type(var->get_type()) << "'" << colorize(kReset);
                     std::cout << '\n';
 
                     if (var->get_init() != nullptr) {
-                        ++indent;
-                        print_indent();
-                        std::cout << detail_color(kMemberLabelColor) << "init:" << colorize(kReset) << '\n';
-                        ++indent;
-                        print_expr(var->get_init());
-                        --indent;
-                        --indent;
+                        print_expr(var->get_init(), prefix + (is_last ? "  " : "| "), true);
                     }
                     break;
                 }
-
                 case DeclKind::error: {
                     auto* err = static_cast<ErrorDecl*>(decl);
-                    print_indent();
-                    std::cout << detail_color(kMutedNodeColor) << "ErrorDecl"
-                              << colorize(kReset) << ' ';
-                    print_member("name=", format_identifier(err->get_name()), false);
-                    std::cout << '\n';
+                    std::cout << " " << colorize(kCyan) << format_identifier(err->get_name()) << colorize(kReset) << '\n';
                     break;
                 }
-
                 case DeclKind::named: {
                     auto* named = static_cast<NamedDecl*>(decl);
-                    print_indent();
-                    std::cout << colorize(kDeclColor) << "NamedDecl"
-                              << colorize(kReset) << ' ';
-                    print_member("name=", format_identifier(named->get_name()), false);
-                    std::cout << '\n';
+                    std::cout << " " << colorize(kCyan) << format_identifier(named->get_name()) << colorize(kReset) << '\n';
                     break;
                 }
-
                 case DeclKind::value: {
                     auto* value = static_cast<ValueDecl*>(decl);
-                    print_indent();
-                    std::cout << colorize(kDeclColor) << "ValueDecl"
-                              << colorize(kReset) << ' ';
-                    print_member("name=", format_identifier(value->get_name()));
-                    print_member("type=", format_type(value->get_type()), false);
-                    std::cout << '\n';
+                    std::cout << " " << colorize(kCyan) << format_identifier(value->get_name()) << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " '" << format_type(value->get_type()) << "'" << colorize(kReset) << '\n';
                     break;
                 }
-
                 default:
-                    print_indent();
-                    std::cout << colorize(kDeclColor) << "Decl"
-                              << colorize(kReset) << ' ';
-                    print_member("kind=", decl_kind_name(decl->get_kind()), false);
                     std::cout << '\n';
                     break;
             }
         }
 
-        void print_expr(Expr* expr) {
+        void print_expr(Expr* expr, const std::string& prefix, bool is_last) {
             if (expr == nullptr) {
-                print_indent();
-                std::cout << colorize(kErrorColor) << "<null expr>" << colorize(kReset) << '\n';
+                std::cout << prefix << (is_last ? "`- " : "|- ") << colorize(kErrorColor) << "<null expr>" << colorize(kReset) << '\n';
                 return;
             }
+
+            std::cout << prefix << (is_last ? "`- " : "|- ");
+            std::cout << colorize(kBoldGreen) << expr_kind_name(expr->get_kind()) << colorize(kReset);
+            print_address(expr);
 
             switch (expr->get_kind()) {
                 case ExprKind::binary_expr: {
                     auto* bin = static_cast<BinaryExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "BinaryExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("op=", binary_op_name(bin->op));
-                    print_member("category=", value_category_name(bin->get_category()));
-                    print_member("comp=", (bin->is_comp ? "true" : "false"));
-                    print_member("type=", format_type(bin->get_type()), false);
-                    std::cout << '\n';
-
-                    ++indent;
-                    print_indent();
-                    std::cout << detail_color(kMemberLabelColor) << "lhs:" << colorize(kReset) << '\n';
-                    ++indent;
-                    print_expr(bin->lhs);
-                    --indent;
-
-                    print_indent();
-                    std::cout << detail_color(kMemberLabelColor) << "rhs:" << colorize(kReset) << '\n';
-                    ++indent;
-                    print_expr(bin->rhs);
-                    --indent;
-                    --indent;
+                    print_range(bin->range);
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(bin->get_type()) << "'" << colorize(kReset);
+                    std::cout << " " << colorize(kMagenta) << " '" << binary_op_name(bin->op) << "'" << colorize(kReset) << '\n';
+                    std::string next_prefix = prefix + (is_last ? "  " : "| ");
+                    print_expr(bin->lhs, next_prefix, false);
+                    print_expr(bin->rhs, next_prefix, true);
                     break;
                 }
-
                 case ExprKind::unary_expr: {
                     auto* unary = static_cast<UnaryExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "UnaryExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("op=", unary_op_name(unary->get_op()));
-                    print_member("category=", value_category_name(unary->get_category()));
-                    print_member("comp=", (unary->is_compile_time_computable() ? "true" : "false"));
-                    print_member("type=", format_type(unary->get_type()), false);
-                    std::cout << '\n';
-
-                    ++indent;
-                    print_indent();
-                    std::cout << detail_color(kMemberLabelColor) << "operand:" << colorize(kReset) << '\n';
-                    ++indent;
-                    print_expr(unary->get_operand());
-                    --indent;
-                    --indent;
+                    print_location(unary->loc);
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(unary->get_type()) << "'" << colorize(kReset);
+                    std::cout << " " << colorize(kMagenta) << " '" << unary_op_name(unary->get_op()) << "'" << colorize(kReset) << '\n';
+                    print_expr(unary->get_operand(), prefix + (is_last ? "  " : "| "), true);
                     break;
                 }
-
                 case ExprKind::identifier_expr: {
                     auto* ref = static_cast<DeclRefExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "DeclRefExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("name=", (ref->decl ? format_identifier(ref->decl->get_name()) : "<unbound>"));
-                    print_member("category=", value_category_name(ref->get_category()));
-                    print_member("type=", format_type(ref->get_type()), false);
-                    std::cout << '\n';
+                    print_location(ref->loc);
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(ref->get_type()) << "'" << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " " << (ref->decl ? format_identifier(ref->decl->get_name()) : "<unbound>") << colorize(kReset) << '\n';
                     break;
                 }
-
                 case ExprKind::call_expr: {
                     auto* call = static_cast<CallExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "CallExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("target=", (call->decl ? format_identifier(call->decl->get_name()) : "<unknown>"));
-                    print_member("args=", std::to_string(call->num_args));
-                    print_member("type=", format_type(call->get_type()), false);
-                    std::cout << '\n';
-
-                    ++indent;
-                    print_indent();
-                    std::cout << detail_color(kMemberLabelColor) << "callee:" << colorize(kReset) << '\n';
-                    ++indent;
-                    print_expr(call->callee);
-                    --indent;
-
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(call->get_type()) << "'" << colorize(kReset) << '\n';
+                    std::string next_prefix = prefix + (is_last ? "  " : "| ");
+                    print_expr(call->callee, next_prefix, call->num_args == 0);
                     for (unsigned i = 0; i < call->num_args; ++i) {
-                        print_indent();
-                        std::cout << detail_color(kMemberLabelColor) << "arg[" << i << "]:" << colorize(kReset) << '\n';
-                        ++indent;
-                        print_expr(call->args[i]);
-                        --indent;
+                        print_expr(call->args[i], next_prefix, i == call->num_args - 1);
                     }
-                    --indent;
                     break;
                 }
-
                 case ExprKind::integer_literal_expr: {
                     auto* lit = static_cast<IntegerLiteralExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "IntegerLiteralExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("value=", std::string(lit->value));
-                    print_member("type=", format_type(lit->get_type()), false);
-                    std::cout << '\n';
+                    print_location(lit->loc);
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(lit->get_type()) << "'" << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " " << lit->value << colorize(kReset) << '\n';
                     break;
                 }
-
                 case ExprKind::float_literal_expr: {
                     auto* lit = static_cast<FloatLiteralExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "FloatLiteralExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("value=", std::string(lit->value));
-                    print_member("type=", format_type(lit->get_type()), false);
-                    std::cout << '\n';
+                    print_location(lit->loc);
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(lit->get_type()) << "'" << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " " << lit->value << colorize(kReset) << '\n';
                     break;
                 }
-
                 case ExprKind::string_literal_expr: {
                     auto* lit = static_cast<StringLiteralExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "StringLiteralExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("value=", "\"" + std::string(lit->value) + "\"");
-                    print_member("flags=", std::to_string(static_cast<unsigned>(lit->prefix_flags)));
-                    print_member("type=", format_type(lit->get_type()), false);
-                    std::cout << '\n';
+                    print_location(lit->loc);
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(lit->get_type()) << "'" << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " \"" << lit->value << "\"" << colorize(kReset) << '\n';
                     break;
                 }
-
                 case ExprKind::typed_expr: {
                     auto* typed = static_cast<TypedExpr*>(expr);
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "TypedExpr"
-                              << colorize(kReset) << ' ';
-                    print_member("category=", value_category_name(typed->get_category()));
-                    print_member("type=", format_type(typed->get_type()), false);
-                    std::cout << '\n';
+                    std::cout << " " << colorize(kCyan) << "'" << format_type(typed->get_type()) << "'" << colorize(kReset) << '\n';
                     break;
                 }
-
                 default:
-                    print_indent();
-                    std::cout << colorize(kExprColor) << "Expr"
-                              << colorize(kReset) << ' ';
-                    print_member("kind=", expr_kind_name(expr->get_kind()));
-                    print_member("category=", value_category_name(expr->get_category()), false);
                     std::cout << '\n';
                     break;
             }

@@ -488,10 +488,12 @@ int CompilerInvocation::run() {
             std::get<0>(tokens),
             config.flags,});
         auto parser = parser_invoke.invoke();
+        const unsigned errors_before_parse = diag_.get_num_errors();
         parser->parse();
+        const bool has_parse_errors = diag_.get_num_errors() > errors_before_parse;
 
-        if (config.flags.ast) {
-            aion::ast::AstPrinter ast_printer;
+        if (config.flags.ast && !has_parse_errors) {
+            aion::ast::AstPrinter ast_printer(&sm);
             ast_printer.enable_colors = diag_.get_show_colors();
             ast_printer.print(context.get_translation_unit_decl());
         }

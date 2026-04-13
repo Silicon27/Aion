@@ -6,6 +6,8 @@
 #include <cli/argparse.hpp>
 #include <utility>
 
+#include "ast/printer.hpp"
+
 #define KAION_NAME    "kaion"
 #define KAION_VERSION "0.0.0"
 
@@ -51,6 +53,7 @@ CompilerConfig parse(int argc, char *argv[]) {
     bool verbose        = false;
     int  max_error_count = 20;
     bool show_fixits    = false;
+    bool ast            = false;
 
     // optimization flags
     bool opt_O0 = false;
@@ -167,6 +170,11 @@ CompilerConfig parse(int argc, char *argv[]) {
         .help("Specify a file to write logs to (instead of stderr)")
         .nargs(1, 1)
         .store_into(log_output);
+
+    program.add_argument("-A", "--ast")
+        .help("Print AST (compile only)")
+        .flag()
+        .store_into(ast);
 
     try {
         program.parse_args(argc, argv);
@@ -351,6 +359,7 @@ CompilerConfig parse(int argc, char *argv[]) {
     flags.verbose         = verbose;
     flags.max_error_count = max_error_count;
     flags.show_fixits     = show_fixits;
+    flags.ast             = ast;
     flags.level           = opt_level;
     flags.output_format   = format;
     flags.output_file     = o_output;
@@ -453,7 +462,7 @@ int CompilerInvocation::run() {
 
     SourceManager sm;
     diag_.set_source_manager(&sm);
-    auto *printer = new aion::diag::TextDiagnosticPrinter(std::cerr, &sm, diag_.get_show_colors());
+    auto *printer = new aion::diag::TextDiagnosticPrinter(std::cerr, &sm, diag_.get_show_colors()); // owned by diag, deallocation is unnecessary.
     printer->set_show_fixits_line(config.flags.show_fixits);
     diag_.set_client(printer, true);
 
@@ -480,6 +489,12 @@ int CompilerInvocation::run() {
             config.flags,});
         auto parser = parser_invoke.invoke();
         parser->parse();
+
+        if (config.flags.ast) {
+            aion::ast::AstPrinter ast_printer;
+            ast_printer.enable_colors = diag_.get_show_colors();
+            ast_printer.print(context.get_translation_unit_decl());
+        }
     }
 
     if (diag_.get_client()) {

@@ -22,11 +22,11 @@ namespace aion::ast {
         int indent_level = 0;
 
         static constexpr const char* kReset = "\x1b[0m";
-        static constexpr const char* kExprColor = "\x1b[38;5;39m";
-        static constexpr const char* kDeclColor = "\x1b[38;5;214m";
-        static constexpr const char* kStmtColor = "\x1b[38;5;81m";
-        static constexpr const char* kInfoColor = "\x1b[38;5;245m";
-        static constexpr const char* kErrorColor = "\x1b[38;5;196m";
+        static constexpr const char* kExprColor = "\x1b[38;5;110m";
+        static constexpr const char* kDeclColor = "\x1b[38;5;145m";
+        static constexpr const char* kStmtColor = "\x1b[38;5;109m";
+        static constexpr const char* kInfoColor = "\x1b[38;5;244m";
+        static constexpr const char* kErrorColor = "\x1b[38;5;174m";
 
         Derived& getDerived() { return *static_cast<Derived*>(this); }
 

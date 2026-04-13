@@ -21,8 +21,6 @@ namespace aion::ast {
         static constexpr const char* kMagenta = "\x1b[35m";
         static constexpr const char* kGray = "\x1b[38;5;244m";
 
-        static constexpr const char* kMemberLabelColor = "\x1b[38;5;246m";
-        static constexpr const char* kMemberValueColor = "\x1b[38;5;250m";
         static constexpr const char* kMutedNodeColor = "\x1b[38;5;181m";
 
         explicit AstPrinter(const SourceManager* sm = nullptr) : sm(sm) {}
@@ -197,17 +195,6 @@ namespace aion::ast {
             return ident->get_name();
         }
 
-        const char* detail_color(const char* color) const {
-            return enable_colors ? color : "";
-        }
-
-        void print_member(const std::string& key, const std::string& value, const bool trailing_space = true) const {
-            std::cout << detail_color(kMemberLabelColor) << key << detail_color(kReset)
-                      << detail_color(kMemberValueColor) << value << detail_color(kReset);
-            if (trailing_space) {
-                std::cout << ' ';
-            }
-        }
 
         bool print(TranslationUnitDecl* tu_decl) {
             if (tu_decl == nullptr) {

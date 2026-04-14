@@ -10,9 +10,11 @@
 #include <ast/StringMap.hpp>
 #include <ast/ShortVec.hpp>
 #include <ast/ASTContext.hpp>
+#include <ast/printer.hpp>
 #include <global_constants.hpp>
 #include <cstddef>
 #include <initializer_list>
+#include <sstream>
 #include <utility>
 
 namespace aion::test {
@@ -207,6 +209,32 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_NULL(source.begin());
     });
 
+    shortvec_suite->add_test("copy_self_assignment_preserves_contents", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context, {7, 8, 9});
+
+        vec = vec;
+
+        AION_ASSERT_EQ(vec.size(), std::size_t{3});
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{4});
+        assert_shortvec_contents(&vec, {7, 8, 9});
+    });
+
+    shortvec_suite->add_test("move_self_assignment_preserves_contents", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        ShortVec<int> vec(context, {4, 5});
+
+        vec = std::move(vec);
+
+        AION_ASSERT_EQ(vec.size(), std::size_t{2});
+        AION_ASSERT_EQ(vec.capacity(), std::size_t{2});
+        assert_shortvec_contents(&vec, {4, 5});
+    });
+
     runner.add_suite(std::move(shortvec_suite));
 
     // ========================================================================
@@ -215,9 +243,92 @@ void register_ast_tests(TestRunner& runner) {
 
     auto node_suite = std::make_unique<TestSuite>("AST::NodeCreation");
 
-    node_suite->add_test("placeholder_test", []() {
-        // TODO: Add actual AST tests
-        AION_ASSERT_TRUE(true);
+    node_suite->add_test("translation_unit_decl_starts_empty", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        auto* tu = context.get_translation_unit_decl();
+
+        AION_ASSERT_ENUM_EQ(tu->get_kind(), DeclKind::translation_unit);
+        AION_ASSERT_NULL(tu->get_first_decl());
+        AION_ASSERT_NULL(tu->get_last_decl());
+    });
+
+    node_suite->add_test("named_value_and_error_decls_report_their_kinds", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        auto* name = context.emplace_or_get_identifier("named");
+        auto* value_name = context.emplace_or_get_identifier("value");
+        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false);
+
+        auto* named = context.create<NamedDecl>(name);
+        auto* value = context.create<ValueDecl>(value_name, type);
+        auto* error = context.create<ErrorDecl>(context.emplace_or_get_identifier("error"));
+
+        AION_ASSERT_ENUM_EQ(named->get_kind(), DeclKind::named);
+        AION_ASSERT_ENUM_EQ(value->get_kind(), DeclKind::value);
+        AION_ASSERT_ENUM_EQ(error->get_kind(), DeclKind::error);
+        AION_ASSERT_EQ(named->get_identifier(), "named");
+        AION_ASSERT_EQ(value->get_identifier(), "value");
+    });
+
+    node_suite->add_test("expr_nodes_and_literals_store_their_metadata", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        auto* value_name = context.emplace_or_get_identifier("x");
+        auto* builtin = context.create<BuiltinType>(BuiltinTypeKind::i32);
+        auto* mutable_type = context.create<MutableType>(builtin, false);
+        auto* value_decl = context.create<ValueDecl>(value_name, mutable_type);
+
+        auto* decl_ref = context.create<DeclRefExpr>(value_decl, mutable_type, SourceLocation(1, 1));
+        auto* integer = context.create<IntegerLiteralExpr>(mutable_type, "12", SourceLocation(1, 4));
+        auto* floating = context.create<FloatLiteralExpr>(mutable_type, "3.5", SourceLocation(1, 8));
+        auto* string_lit = context.create<StringLiteralExpr>(mutable_type, "hello", 0x2u, SourceLocation(1, 12));
+
+        auto* binary = context.create<BinaryExpr>(integer, decl_ref, BinaryOp::add,
+            ValueCategory::unnamed, mutable_type, true, SourceRange(SourceLocation(1, 4), SourceLocation(1, 9)));
+
+        auto* unary = context.create<UnaryExpr>(decl_ref, UnaryOp::minus, ValueCategory::unnamed, mutable_type, false, SourceLocation(1, 1));
+        Expr* call_args[] = {integer, floating};
+        auto* call = context.create<CallExpr>(value_decl, mutable_type, decl_ref, call_args, 2, SourceLocation(1, 1));
+        auto* error_expr = context.create<ErrorExpr>(SourceLocation(1, 1), ValueCategory::invalid);
+
+        AION_ASSERT_ENUM_EQ(decl_ref->get_kind(), ExprKind::identifier_expr);
+        AION_ASSERT_ENUM_EQ(integer->get_kind(), ExprKind::integer_literal_expr);
+        AION_ASSERT_ENUM_EQ(floating->get_kind(), ExprKind::float_literal_expr);
+        AION_ASSERT_ENUM_EQ(string_lit->get_kind(), ExprKind::string_literal_expr);
+        AION_ASSERT_ENUM_EQ(binary->get_kind(), ExprKind::binary_expr);
+        AION_ASSERT_ENUM_EQ(unary->get_kind(), ExprKind::unary_expr);
+        AION_ASSERT_ENUM_EQ(call->get_kind(), ExprKind::call_expr);
+        AION_ASSERT_ENUM_EQ(error_expr->get_kind(), ExprKind::typed_expr);
+        AION_ASSERT_ENUM_EQ(error_expr->get_category(), ValueCategory::invalid);
+
+        AION_ASSERT_EQ(integer->value, "12");
+        AION_ASSERT_EQ(floating->value, "3.5");
+        AION_ASSERT_EQ(string_lit->value, "hello");
+        AION_ASSERT_EQ(string_lit->prefix_flags, 0x2u);
+        AION_ASSERT_ENUM_EQ(binary->op, BinaryOp::add);
+        AION_ASSERT_TRUE(binary->is_comp);
+        AION_ASSERT_ENUM_EQ(unary->get_op(), UnaryOp::minus);
+        AION_ASSERT_EQ(call->num_args, 2u);
+        AION_ASSERT_EQ(call->decl, value_decl);
+    });
+
+    node_suite->add_test("type_nodes_report_expected_kinds", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        auto* builtin = context.create<BuiltinType>(BuiltinTypeKind::i32);
+        auto* user_defined = context.create<UserDefinedType>("Thing");
+        auto* mutable_builtin = context.create<MutableType>(builtin, true);
+
+        AION_ASSERT_ENUM_EQ(BuiltinType::get_kind(lexer::TokenType::kw_i32), BuiltinTypeKind::i32);
+        AION_ASSERT_ENUM_EQ(user_defined->get_kind(), TypeKind::user_defined);
+        AION_ASSERT_EQ(user_defined->get_name(), "Thing");
+        AION_ASSERT_TRUE(mutable_builtin->is_mutable());
+        AION_ASSERT_EQ(mutable_builtin->get_base(), builtin);
     });
 
     node_suite->add_test("compound_stmt_trailing_objects", []() {
@@ -267,10 +378,10 @@ void register_ast_tests(TestRunner& runner) {
         FileId fid = 42;
         Offset offset = 1337;
         
-        BuiltinType* bt = context.create<BuiltinType>(BuiltinTypeKind::i32);
-        MutableType* type = context.create<MutableType>(bt, false);
+        auto bt = context.create<BuiltinType>(BuiltinTypeKind::i32);
+        auto type = context.create<MutableType>(bt, false);
         IdentifierInfo* ii = context.emplace_or_get_identifier("x");
-        VarDecl* vd = context.create<VarDecl>(ii, type,
+        auto vd = context.create<VarDecl>(ii, type,
             StorageClass::stack,
             SourceRange(SourceLocation(fid, offset), SourceLocation(fid, offset + 4)));
 
@@ -568,25 +679,34 @@ void register_ast_tests(TestRunner& runner) {
 
     auto traversal_suite = std::make_unique<TestSuite>("AST::Traversal");
 
-    traversal_suite->add_test("placeholder_test", []() {
-        // TODO: Add actual AST traversal tests
-        AION_ASSERT_TRUE(true);
+    traversal_suite->add_test("ast_printer_prints_translation_unit_and_decl_details", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        auto* id = context.emplace_or_get_identifier("value");
+        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false);
+        auto* init = context.create<IntegerLiteralExpr>(type, "7", SourceLocation(1, 10));
+        auto* decl = context.create<VarDecl>(id, type, StorageClass::stack,
+            SourceRange(SourceLocation(1, 1), SourceLocation(1, 12)), init);
+        context.get_translation_unit_decl()->add_decl(decl);
+
+        std::ostringstream capture;
+        auto* old = std::cout.rdbuf(capture.rdbuf());
+
+        AstPrinter printer;
+        printer.enable_colors = false;
+        AION_ASSERT_TRUE(printer.print(context.get_translation_unit_decl()));
+
+        std::cout.rdbuf(old);
+
+        const std::string output = capture.str();
+        AION_ASSERT_TRUE(output.find("TranslationUnitDecl") != std::string::npos);
+        AION_ASSERT_TRUE(output.find("VarDecl") != std::string::npos);
+        AION_ASSERT_TRUE(output.find("value") != std::string::npos);
     });
 
     runner.add_suite(std::move(traversal_suite));
 
-    // ========================================================================
-    // AST Visitor Tests
-    // ========================================================================
-
-    auto visitor_suite = std::make_unique<TestSuite>("AST::Visitor");
-
-    visitor_suite->add_test("placeholder_test", []() {
-        // TODO: Add actual visitor tests
-        AION_ASSERT_TRUE(true);
-    });
-
-    runner.add_suite(std::move(visitor_suite));
 }
 
 } // namespace aion::test

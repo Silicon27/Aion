@@ -44,6 +44,21 @@ set(PREPROCESSOR_TEST_SOURCES
     preprocessor/preprocessor_test.cpp
 )
 
+# CLI tests
+set(CLI_TEST_SOURCES
+    cli/cli_test.cpp
+)
+
+# Support tests
+set(SUPPORT_TEST_SOURCES
+    support/source_manager_test.cpp
+)
+
+# Codegen tests
+set(CODEGEN_TEST_SOURCES
+    codegen/codegen_test.cpp
+)
+
 # ============================================================================
 # Core source files needed for testing
 # ============================================================================
@@ -69,6 +84,8 @@ set(AST_CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/core/src/ast/printer.cpp
     ${CMAKE_SOURCE_DIR}/core/src/ast/RecursiveAstVisitor.cpp
     ${CMAKE_SOURCE_DIR}/core/src/ast/ASTContext.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/error/error.cpp
 )
 
 set(ERROR_CORE_SOURCES
@@ -78,6 +95,30 @@ set(ERROR_CORE_SOURCES
 
 set(PREPROCESSOR_CORE_SOURCES
     ${CMAKE_SOURCE_DIR}/core/src/preprocessor/preprocessor.cpp
+)
+
+set(CLI_CORE_SOURCES
+    ${CMAKE_SOURCE_DIR}/core/src/cli/CompilerInvocation.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/parser/parser.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/parser/parser_decl.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/parser/parser_expression.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/lexer/lexer.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/preprocessor/preprocessor.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/error/error.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/ast.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/printer.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/RecursiveAstVisitor.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/ast/ASTContext.cpp
+)
+
+set(SUPPORT_CORE_SOURCES
+    ${CMAKE_SOURCE_DIR}/core/src/support/source_manager.cpp
+    ${CMAKE_SOURCE_DIR}/core/src/error/error.cpp
+)
+
+set(CODEGEN_CORE_SOURCES
+    ${CMAKE_SOURCE_DIR}/core/src/codegen/codegenerator.cpp
 )
 
 set(ALL_CORE_SOURCES
@@ -101,7 +142,12 @@ add_executable(aion_tests
     ${AST_TEST_SOURCES}
     ${ERROR_TEST_SOURCES}
     ${PREPROCESSOR_TEST_SOURCES}
+    ${CLI_TEST_SOURCES}
+    ${SUPPORT_TEST_SOURCES}
+    ${CODEGEN_TEST_SOURCES}
     ${ALL_CORE_SOURCES}
+    ${CMAKE_SOURCE_DIR}/core/src/cli/CompilerInvocation.cpp
+    ${CODEGEN_CORE_SOURCES}
 )
 
 target_include_directories(aion_tests PRIVATE
@@ -169,6 +215,39 @@ target_include_directories(preprocessor_tests PRIVATE
 )
 target_compile_definitions(preprocessor_tests PRIVATE PREPROCESSOR_TEST_STANDALONE)
 
+# CLI test executable
+add_executable(cli_tests
+    ${CLI_TEST_SOURCES}
+    ${CLI_CORE_SOURCES}
+)
+target_include_directories(cli_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/core/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/suite
+)
+target_compile_definitions(cli_tests PRIVATE CLI_TEST_STANDALONE)
+
+# Support test executable
+add_executable(support_tests
+    ${SUPPORT_TEST_SOURCES}
+    ${SUPPORT_CORE_SOURCES}
+)
+target_include_directories(support_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/core/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/suite
+)
+target_compile_definitions(support_tests PRIVATE SUPPORT_TEST_STANDALONE)
+
+# Codegen test executable
+add_executable(codegen_tests
+    ${CODEGEN_TEST_SOURCES}
+    ${CODEGEN_CORE_SOURCES}
+)
+target_include_directories(codegen_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/core/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/suite
+)
+target_compile_definitions(codegen_tests PRIVATE CODEGEN_TEST_STANDALONE)
+
 # ============================================================================
 # CTest Integration
 # ============================================================================
@@ -179,13 +258,16 @@ add_test(NAME ParserTests COMMAND parser_tests)
 add_test(NAME ASTTests COMMAND ast_tests)
 add_test(NAME ErrorTests COMMAND error_tests)
 add_test(NAME PreprocessorTests COMMAND preprocessor_tests)
+add_test(NAME CLITests COMMAND cli_tests)
+add_test(NAME SupportTests COMMAND support_tests)
+add_test(NAME CodegenTests COMMAND codegen_tests)
 
 # ============================================================================
 # Custom target to run all tests with verbose output
 # ============================================================================
 add_custom_target(run_tests
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure --verbose
-    DEPENDS aion_tests lexer_tests parser_tests ast_tests error_tests preprocessor_tests
+    DEPENDS aion_tests lexer_tests parser_tests ast_tests error_tests preprocessor_tests cli_tests support_tests codegen_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Running all tests..."
 )
@@ -222,3 +304,22 @@ add_custom_target(run_preprocessor_tests
     DEPENDS preprocessor_tests
     COMMENT "Running preprocessor tests..."
 )
+
+add_custom_target(run_cli_tests
+    COMMAND cli_tests -v
+    DEPENDS cli_tests
+    COMMENT "Running CLI tests..."
+)
+
+add_custom_target(run_support_tests
+    COMMAND support_tests -v
+    DEPENDS support_tests
+    COMMENT "Running support tests..."
+)
+
+add_custom_target(run_codegen_tests
+    COMMAND codegen_tests -v
+    DEPENDS codegen_tests
+    COMMENT "Running codegen tests..."
+)
+

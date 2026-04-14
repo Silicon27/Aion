@@ -1,6 +1,6 @@
 // Bloated AST test file
-let a: i32 = 1;
-let b: i32 = 2;
+let comp a: i32 = 1;
+let mut b: i32 = 2;
 let c: i32 = 3;
 let d: i32 = 4;
 let e: i32 = 5;

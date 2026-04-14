@@ -11,6 +11,9 @@
 #include "ast/ast_test.hpp"
 #include "error/error_test.hpp"
 #include "preprocessor/preprocessor_test.hpp"
+#include "cli/cli_test.hpp"
+#include "support/source_manager_test.hpp"
+#include "codegen/codegen_test.hpp"
 
 int main(int argc, char* argv[]) {
     using namespace aion::test;
@@ -56,6 +59,9 @@ int main(int argc, char* argv[]) {
     register_ast_tests(runner);
     register_error_tests(runner);
     register_preprocessor_tests(runner);
+    register_cli_tests(runner);
+    register_support_tests(runner);
+    register_codegen_tests(runner);
 
     if (list_only) {
         runner.list_tests();

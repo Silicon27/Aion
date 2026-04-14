@@ -1,10 +1,13 @@
-//
 // Preprocessor Test Suite - Implementation
 // Created by David Yang on 2026-02-03.
 //
 
 #include "preprocessor_test.hpp"
 #include <preprocessor/preprocessor.hpp>
+
+#include <filesystem>
+#include <fstream>
+#include <string>
 
 namespace aion::test {
 
@@ -16,9 +19,20 @@ void register_preprocessor_tests(TestRunner& runner) {
 
     auto directive_suite = std::make_unique<TestSuite>("Preprocessor::Directives");
 
-    directive_suite->add_test("placeholder_test", []() {
-        // TODO: Add actual preprocessor directive tests
-        AION_ASSERT_TRUE(true);
+    directive_suite->add_test("reads_from_existing_file", []() {
+        const auto unique = std::to_string(static_cast<long long>(
+            std::filesystem::file_time_type::clock::now().time_since_epoch().count()));
+        const std::filesystem::path temp_path = std::filesystem::temp_directory_path() / ("aion_pp_" + unique + ".aion");
+
+        {
+            std::ofstream out(temp_path);
+            out << "@include foo\nsecond line\n";
+        }
+
+        Preprocessor preprocessor(temp_path.string());
+        AION_ASSERT_TRUE(preprocessor.get_next_line_with_preprocessing_directive().empty());
+
+        std::filesystem::remove(temp_path);
     });
 
     runner.add_suite(std::move(directive_suite));
@@ -29,9 +43,20 @@ void register_preprocessor_tests(TestRunner& runner) {
 
     auto include_suite = std::make_unique<TestSuite>("Preprocessor::Includes");
 
-    include_suite->add_test("placeholder_test", []() {
-        // TODO: Add actual include tests
-        AION_ASSERT_TRUE(true);
+    include_suite->add_test("preprocess_is_callable", []() {
+        const auto unique = std::to_string(static_cast<long long>(
+            std::filesystem::file_time_type::clock::now().time_since_epoch().count()));
+        const std::filesystem::path temp_path = std::filesystem::temp_directory_path() / ("aion_pp_" + unique + ".aion");
+
+        {
+            std::ofstream out(temp_path);
+            out << "content\n";
+        }
+
+        Preprocessor preprocessor(temp_path.string());
+        AION_ASSERT_NO_THROW(preprocessor.preprocess());
+
+        std::filesystem::remove(temp_path);
     });
 
     runner.add_suite(std::move(include_suite));
@@ -42,9 +67,19 @@ void register_preprocessor_tests(TestRunner& runner) {
 
     auto macro_suite = std::make_unique<TestSuite>("Preprocessor::Macros");
 
-    macro_suite->add_test("placeholder_test", []() {
-        // TODO: Add actual macro tests
-        AION_ASSERT_TRUE(true);
+    macro_suite->add_test("constructor_does_not_throw_for_existing_file", []() {
+        const auto unique = std::to_string(static_cast<long long>(
+            std::filesystem::file_time_type::clock::now().time_since_epoch().count()));
+        const std::filesystem::path temp_path = std::filesystem::temp_directory_path() / ("aion_pp_" + unique + ".aion");
+
+        {
+            std::ofstream out(temp_path);
+            out << "macro test\n";
+        }
+
+        AION_ASSERT_NO_THROW(Preprocessor(temp_path.string()));
+
+        std::filesystem::remove(temp_path);
     });
 
     runner.add_suite(std::move(macro_suite));

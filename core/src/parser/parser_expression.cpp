@@ -121,17 +121,69 @@ namespace aion::parse {
             case TokenType::plus:
             case TokenType::minus:
             case TokenType::star:
-            case TokenType::slash: {
+            case TokenType::slash:
+            case TokenType::percent:
+            case TokenType::equal_equal:
+            case TokenType::bang_equal:
+            case TokenType::less:
+            case TokenType::less_equal:
+            case TokenType::greater:
+            case TokenType::greater_equal:
+            case TokenType::logical_and:
+            case TokenType::logical_or:
+            case TokenType::ampersand:
+            case TokenType::pipe:
+            case TokenType::caret:
+            case TokenType::lshift:
+            case TokenType::rshift:
+            case TokenType::double_dot:
+            case TokenType::triple_dot:
+            case TokenType::plus_equal:
+            case TokenType::minus_equal:
+            case TokenType::star_equal:
+            case TokenType::slash_equal:
+            case TokenType::percent_equal:
+            case TokenType::amp_equal:
+            case TokenType::pipe_equal:
+            case TokenType::caret_equal:
+            case TokenType::lshift_equal:
+            case TokenType::rshift_equal: {
                 auto get_op = [&](TokenType type) -> BinaryOp {
                     switch (type) {
                         case TokenType::plus: return BinaryOp::add;
-                            case TokenType::minus: return BinaryOp::sub;
-                            case TokenType::star: return BinaryOp::mul;
-                            case TokenType::slash: return BinaryOp::div;
-                            default: {
-                                diagnostics.report(loc, diag::parse::err_unknown_operator);
-                                return BinaryOp::add;
-                            }
+                        case TokenType::minus: return BinaryOp::sub;
+                        case TokenType::star: return BinaryOp::mul;
+                        case TokenType::slash: return BinaryOp::div;
+                        case TokenType::percent: return BinaryOp::mod;
+                        case TokenType::equal_equal: return BinaryOp::equal;
+                        case TokenType::bang_equal: return BinaryOp::not_equal;
+                        case TokenType::less: return BinaryOp::less;
+                        case TokenType::less_equal: return BinaryOp::less_equal;
+                        case TokenType::greater: return BinaryOp::greater;
+                        case TokenType::greater_equal: return BinaryOp::greater_equal;
+                        case TokenType::logical_and: return BinaryOp::logical_and;
+                        case TokenType::logical_or: return BinaryOp::logical_or;
+                        case TokenType::ampersand: return BinaryOp::bit_and;
+                        case TokenType::pipe: return BinaryOp::bit_or;
+                        case TokenType::caret: return BinaryOp::bit_xor;
+                        case TokenType::lshift: return BinaryOp::lshift;
+                        case TokenType::rshift: return BinaryOp::rshift;
+                        case TokenType::double_dot: return BinaryOp::range;
+                        case TokenType::triple_dot: return BinaryOp::inclusive_range;
+                        case TokenType::plus_equal: return BinaryOp::add_assign;
+                        case TokenType::minus_equal: return BinaryOp::sub_assign;
+                        case TokenType::star_equal: return BinaryOp::mul_assign;
+                        case TokenType::slash_equal: return BinaryOp::div_assign;
+                        case TokenType::percent_equal: return BinaryOp::mod_assign;
+                        case TokenType::amp_equal: return BinaryOp::and_assign;
+                        case TokenType::pipe_equal: return BinaryOp::or_assign;
+                        case TokenType::caret_equal: return BinaryOp::xor_assign;
+                        case TokenType::lshift_equal: return BinaryOp::lshift_assign;
+                        case TokenType::rshift_equal: return BinaryOp::rshift_assign;
+                        default: {
+                            diagnostics.report(loc, diag::parse::err_unknown_operator);
+                            return BinaryOp::add;
+                        }
                     }
                 };
 

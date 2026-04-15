@@ -350,6 +350,74 @@ void register_parser_tests(TestRunner& runner) {
         AION_ASSERT_ENUM_EQ(parser.peek().type, TokenType::comma);
     });
 
+    expr_suite->add_test("comparison_binds_tighter_than_equality", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("1 < 2 == 3 < 4", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* eq = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(eq->op, BinaryOp::equal);
+        AION_ASSERT_ENUM_EQ(as_expr<BinaryExpr>(eq->lhs)->op, BinaryOp::less);
+        AION_ASSERT_ENUM_EQ(as_expr<BinaryExpr>(eq->rhs)->op, BinaryOp::less);
+    });
+
+    expr_suite->add_test("logical_and_binds_tighter_than_logical_or", []() {
+        ASTContext context;
+        [[maybe_unused]] IdentifierInfo* a = context.emplace_or_get_identifier("a");
+        [[maybe_unused]] IdentifierInfo* b = context.emplace_or_get_identifier("b");
+        [[maybe_unused]] IdentifierInfo* c = context.emplace_or_get_identifier("c");
+        [[maybe_unused]] IdentifierInfo* d = context.emplace_or_get_identifier("d");
+        [[maybe_unused]] IdentifierInfo* e = context.emplace_or_get_identifier("e");
+        [[maybe_unused]] IdentifierInfo* f = context.emplace_or_get_identifier("f");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("a < b && c < d || e < f", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* lor = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(lor->op, BinaryOp::logical_or);
+
+        auto* land = as_expr<BinaryExpr>(lor->lhs);
+        AION_ASSERT_ENUM_EQ(land->op, BinaryOp::logical_and);
+        AION_ASSERT_ENUM_EQ(as_expr<BinaryExpr>(land->lhs)->op, BinaryOp::less);
+        AION_ASSERT_ENUM_EQ(as_expr<BinaryExpr>(land->rhs)->op, BinaryOp::less);
+        AION_ASSERT_ENUM_EQ(as_expr<BinaryExpr>(lor->rhs)->op, BinaryOp::less);
+    });
+
+    expr_suite->add_test("shift_binds_weaker_than_additive", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("1 << 2 + 3", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* shift = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(shift->op, BinaryOp::lshift);
+        AION_ASSERT_ENUM_EQ(as_expr<BinaryExpr>(shift->rhs)->op, BinaryOp::add);
+    });
+
+    expr_suite->add_test("compound_assignment_is_recognized", []() {
+        ASTContext context;
+        [[maybe_unused]] IdentifierInfo* x = context.emplace_or_get_identifier("x");
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("x += 2", context, sm, diags);
+        Expr* expr = parser.parse_expression(0, TokenType::eof);
+
+        auto* add_assign = as_expr<BinaryExpr>(expr);
+        AION_ASSERT_ENUM_EQ(add_assign->op, BinaryOp::add_assign);
+    });
+
     runner.add_suite(std::move(expr_suite));
 }
 

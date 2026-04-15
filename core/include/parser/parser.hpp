@@ -137,7 +137,32 @@ namespace aion::parse {
         static int lbp(const TokenType token) {
             switch (token) {
                 case TokenType::equal:
+                case TokenType::plus_equal:
+                case TokenType::minus_equal:
+                case TokenType::star_equal:
+                case TokenType::slash_equal:
+                case TokenType::percent_equal:
+                case TokenType::amp_equal:
+                case TokenType::pipe_equal:
+                case TokenType::caret_equal:
+                case TokenType::lshift_equal:
+                case TokenType::rshift_equal:
                     return 10; // assignment
+
+                case TokenType::logical_or:
+                    return 15; // logical OR
+
+                case TokenType::logical_and:
+                    return 16; // logical AND
+
+                case TokenType::pipe:
+                    return 17; // bitwise OR
+
+                case TokenType::caret:
+                    return 18; // bitwise XOR
+
+                case TokenType::ampersand:
+                    return 19; // bitwise AND
 
                 case TokenType::double_dot:
                 case TokenType::triple_dot:
@@ -153,12 +178,17 @@ namespace aion::parse {
                 case TokenType::greater_equal:
                     return 40; // comparisons
 
+                case TokenType::lshift:
+                case TokenType::rshift:
+                    return 45; // shifts
+
                 case TokenType::plus:
                 case TokenType::minus:
                     return 50; // additive
 
                 case TokenType::star:
                 case TokenType::slash:
+                case TokenType::percent:
                     return 60; // multiplicative
 
                 case TokenType::lparen:

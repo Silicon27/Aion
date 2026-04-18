@@ -884,6 +884,7 @@ namespace aion::diag {
             case parse::err_expected_initialization: return "expected initialization";
             case parse::err_unrecognized_identifier: return "unrecognized identifier";
             case parse::err_unknown_operator: return "unexpected token in expression";
+            case parse::err_expected_top_level_decl: return "expected top-level declaration";
             case parse::warn_empty_statement: return "empty statement";
 
             default: return nullptr;

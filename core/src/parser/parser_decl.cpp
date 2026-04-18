@@ -24,6 +24,12 @@ namespace aion::parse {
                 blind_consume();
                 break;
             }
+            case TokenType::kw_if: {
+                diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token)
+                << diag::note("if statements cannot exist at top-level");
+                skip_until(TokenType::semicolon);
+                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr));
+            }
             default: {
                 diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token);
                 skip_until(TokenType::semicolon);

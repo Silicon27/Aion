@@ -110,7 +110,7 @@ namespace aion::parse {
         // EOF/token stream check
         bool is_at_end() const;
 
-        /// primary entry point is parse()
+        /// the primary entry point is parse()
         void parse();
 
         /// will be called in a loop from parse() until we reach the end of the token stream.
@@ -125,6 +125,7 @@ namespace aion::parse {
 
         // declaration parsers
         Decl* parse_variable_decl();
+        Decl* parse_function_decl();
 
         /// entry point for expression parsing
         Expr* parse_expression(int rbp, TokenType delim);

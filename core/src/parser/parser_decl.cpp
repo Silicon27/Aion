@@ -11,6 +11,11 @@ namespace aion::parse {
                 context.get_translation_unit_decl()->add_decl(parse_variable_decl());
                 break;
             }
+            case TokenType::identifier: {
+                // future grammar cases would need disambiguation, otherwise currently reserved for functions
+                context.get_translation_unit_decl()->add_decl(parse_function_decl());
+                break;
+            }
             case TokenType::comment:
             case TokenType::doc_comment: {
                 blind_consume();
@@ -189,5 +194,9 @@ namespace aion::parse {
         }
         silent_consume(TokenType::semicolon);
         return variable;
+    }
+
+    Decl* Parser::parse_function_decl() {
+        return nullptr;
     }
 }

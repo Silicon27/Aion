@@ -103,6 +103,10 @@ namespace aion::parse {
         // get the identifier
         if (silent_probe(variable_identifier)) {
             variable_id_token = blind_consume();
+            variable_identifier_info = context.get_identifier(variable_id_token.lexeme);
+            if (variable_identifier_info != nullptr) {
+                diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, variable_id_token), diag::parse::err_redefinition);
+            }
             variable_identifier_info = context.emplace_or_get_identifier(variable_id_token.lexeme);
         } else {
             SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
@@ -206,21 +210,21 @@ namespace aion::parse {
         auto semicolon = MatchToken(TokenType::semicolon);
 
         SourceLocation decl_start_location = diagnostics.get_source_manager()->get_location(file_id, peek());
-        IdentifierInfo* identifier_info = nullptr;
-        Token name_token;
+        IdentifierInfo* function_id_info = nullptr;
+        Token function_id_token;
         MutableType* return_type = nullptr;
         FuncDecl* function_decl = nullptr;
 
 
         diffuse_match(TokenType::kw_fn, peek().type, "expected 'fn' keyword");
 
-        // if (silent_probe(identifier)) {
-        //     name_token = blind_consume();
-        //     if (context.get_identifier(name_token.lexeme) != nullptr) {
-        //         diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, name_token), diag::parse::err_redefinition)
-        //         << diag::note("previously defined at "
-        //             << context.get_identifier(name_token.lexeme)->())
-        //     }
-        // }
+        if (silent_probe(identifier)) {
+            function_id_token = blind_consume();
+            if (context.get_identifier(function_id_token.lexeme) != nullptr) {
+                diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, function_id_token), diag::parse::err_redefinition);
+            }
+            function_id_info = context.emplace_or_get_identifier(function_id_token.lexeme);
+            // function_id_info being nullptr case handled here if that exists
+        }
     }
 }

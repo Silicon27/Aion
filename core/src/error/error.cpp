@@ -878,6 +878,7 @@ namespace aion::diag {
             case parse::err_expected_rbrace: return "expected '}'";
             case parse::err_expected_lbracket: return "expected '['";
             case parse::err_expected_rbracket: return "expected ']'";
+            case parse::err_redefinition: return "this name has been previously used to declare something else";
             case parse::err_unexpected_token: return "unexpected token";
             case parse::err_mismatched_brackets: return "mismatched brackets";
             case parse::err_untyped_uninitialized_variable_declaration: return "%0"; // Use passed message

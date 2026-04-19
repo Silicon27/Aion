@@ -44,6 +44,7 @@ static std::string token_type_to_string(TokenType type) {
         case TokenType::kw_as: return "kw_as";
         case TokenType::kw_if: return "kw_if";
         case TokenType::kw_else: return "kw_else";
+        case TokenType::kw_fn: return "kw_fn";
         case TokenType::kw_functor: return "kw_functor";
         case TokenType::kw_return: return "kw_return";
         case TokenType::kw_i4: return "kw_i4";
@@ -177,6 +178,7 @@ static bool is_keyword_type(TokenType type) {
         case TokenType::kw_as:
         case TokenType::kw_if:
         case TokenType::kw_else:
+        case TokenType::kw_fn:
         case TokenType::kw_functor:
         case TokenType::kw_return:
         case TokenType::kw_i4:
@@ -286,6 +288,13 @@ void register_lexer_tests(TestRunner& runner) {
         AION_ASSERT_EQ(tokens.size(), 1u);
         AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_functor));
         AION_ASSERT_STREQ(tokens[0].lexeme, "functor");
+    });
+
+    keyword_suite->add_test("fn_keyword", []() {
+        auto tokens = get_meaningful_tokens(tokenize_string("fn"));
+        AION_ASSERT_EQ(tokens.size(), 1u);
+        AION_ASSERT_EQ(static_cast<int>(tokens[0].type), static_cast<int>(TokenType::kw_fn));
+        AION_ASSERT_STREQ(tokens[0].lexeme, "fn");
     });
 
     keyword_suite->add_test("let_keyword", []() {

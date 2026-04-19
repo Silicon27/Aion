@@ -78,6 +78,14 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<VarDecl>);
 
+    class FuncDecl : public ValueDecl, public DeclContext {
+    public:
+        bool is_export = false;
+
+        FuncDecl(IdentifierInfo* name, MutableType* type, bool is_export)
+        : ValueDecl(name, type, DeclKind::function), is_export(is_export) {}
+    };
+
     class ErrorDecl : public NamedDecl {
     public:
         explicit ErrorDecl(IdentifierInfo* name)

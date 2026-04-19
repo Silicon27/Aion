@@ -11,14 +11,14 @@ namespace aion::parse {
                 context.get_translation_unit_decl()->add_decl(parse_variable_decl());
                 break;
             }
-            case TokenType::identifier: {
-                // future grammar cases would need disambiguation, otherwise currently reserved for functions
+            case TokenType::kw_fn: {
                 context.get_translation_unit_decl()->add_decl(parse_function_decl());
                 break;
             }
             case TokenType::comment:
             case TokenType::doc_comment: {
                 blind_consume();
+                break;
             }
             case TokenType::newline: {
                 blind_consume();
@@ -34,11 +34,13 @@ namespace aion::parse {
                 << diag::note("if statements cannot exist at top-level");
                 skip_until(TokenType::semicolon);
                 context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr));
+                break;
             }
             default: {
                 diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token);
                 skip_until(TokenType::semicolon);
                 context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr));
+                break;
             }
         }
     }
@@ -49,13 +51,13 @@ namespace aion::parse {
     }
 
     Decl* Parser::parse_variable_decl() {
-        static auto initial_let = MatchToken(TokenType::kw_let); // should not error if not matched, if error it could mean memory corruption during program runtime
-        static auto mut = MatchToken(TokenType::kw_mut);
-        static auto comp = MatchToken(TokenType::kw_comp);
-        static auto variable_identifier = MatchToken(TokenType::identifier);
-        static auto colon = MatchToken(TokenType::colon);
-        static auto equal = MatchToken(TokenType::equal);
-        static auto semicolon = MatchToken(TokenType::semicolon);
+        auto initial_let = MatchToken(TokenType::kw_let); // should not error if not matched, if error it could mean memory corruption during program runtime
+        auto mut = MatchToken(TokenType::kw_mut);
+        auto comp = MatchToken(TokenType::kw_comp);
+        auto variable_identifier = MatchToken(TokenType::identifier);
+        auto colon = MatchToken(TokenType::colon);
+        auto equal = MatchToken(TokenType::equal);
+        auto semicolon = MatchToken(TokenType::semicolon);
 
         SourceLocation decl_start_location = diagnostics.get_source_manager()->get_location(file_id, peek());
         Token variable_id_token;
@@ -197,6 +199,28 @@ namespace aion::parse {
     }
 
     Decl* Parser::parse_function_decl() {
-        return nullptr;
+        auto lparen = MatchToken(TokenType::lparen);
+        auto rparen = MatchToken(TokenType::rparen);
+        auto identifier = MatchToken(TokenType::identifier);
+        auto colon = MatchToken(TokenType::colon);
+        auto semicolon = MatchToken(TokenType::semicolon);
+
+        SourceLocation decl_start_location = diagnostics.get_source_manager()->get_location(file_id, peek());
+        IdentifierInfo* identifier_info = nullptr;
+        Token name_token;
+        MutableType* return_type = nullptr;
+        FuncDecl* function_decl = nullptr;
+
+
+        diffuse_match(TokenType::kw_fn, peek().type, "expected 'fn' keyword");
+
+        // if (silent_probe(identifier)) {
+        //     name_token = blind_consume();
+        //     if (context.get_identifier(name_token.lexeme) != nullptr) {
+        //         diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, name_token), diag::parse::err_redefinition)
+        //         << diag::note("previously defined at "
+        //             << context.get_identifier(name_token.lexeme)->())
+        //     }
+        // }
     }
 }

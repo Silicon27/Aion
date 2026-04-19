@@ -54,6 +54,7 @@ namespace aion::lexer {
         kw_as,
         kw_if,
         kw_else,
+        kw_fn,
         kw_functor,
         kw_return,
         kw_i4,
@@ -162,7 +163,7 @@ namespace aion::lexer {
     // Keyword set for fast lookup
     inline const std::unordered_set<std::string> keywords = {
         "let", "as", "if", "else",
-        "functor", "return", "i4",
+        "fn", "functor", "return", "i4",
         "i8", "i16", "i32", "i64", "i128",
         "f4", "f8", "f16", "f32", "f64", "f128",
         "char", "bool", "import", "mod", "export",
@@ -180,6 +181,7 @@ namespace aion::lexer {
         if (str == "as") return TokenType::kw_as;
         if (str == "if") return TokenType::kw_if;
         if (str == "else") return TokenType::kw_else;
+        if (str == "fn") return TokenType::kw_fn;
         if (str == "functor") return TokenType::kw_functor;
         if (str == "return") return TokenType::kw_return;
         if (str == "i4") return TokenType::kw_i4;

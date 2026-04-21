@@ -103,14 +103,16 @@ namespace aion::ast {
         DeclKind decl_kind;
 
     public:
-        explicit Decl(const DeclKind K) : decl_kind(K) {}
+        explicit Decl(const DeclKind K, const SourceLocation& location = SourceLocation())
+            : decl_kind(K), source_location(location) {}
 
     public:
         [[nodiscard]] DeclKind get_kind() const { return decl_kind; }
+        [[nodiscard]] SourceRange getSourceRange() const { return SourceRange(); }
 
         Decl* next = nullptr;
 
-        aion::Source_Range source_range;
+        SourceLocation source_location;
     };
     static_assert(std::is_trivially_destructible_v<Decl>);
 

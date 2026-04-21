@@ -33,13 +33,13 @@ namespace aion::parse {
                 diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token)
                 << diag::note("if statements cannot exist at top-level");
                 skip_until(TokenType::semicolon);
-                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr));
+                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr, SourceRange()));
                 break;
             }
             default: {
                 diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token);
                 skip_until(TokenType::semicolon);
-                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr));
+                context.get_translation_unit_decl()->add_decl(context.create<ErrorDecl>(nullptr, SourceRange()));
                 break;
             }
         }
@@ -117,7 +117,10 @@ namespace aion::parse {
                 << fixit_hint;
 
             skip_until(TokenType::semicolon); // TODO integrate more advanced recovery functions
-            return context.create<ErrorDecl>(context.emplace_or_get_identifier("<missing_identifier>"));
+            return context.create<ErrorDecl>(
+                context.emplace_or_get_identifier("<missing_identifier>"),
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
         }
 
         // check for early semicolons placed before types are specified
@@ -128,7 +131,10 @@ namespace aion::parse {
                 << "untyped, uninitialized variables are effectively non-existent, thereof not derivable of semantic value."
                 << fixit_hint;
             blind_consume(); // consume this semicolon as it effectively ends the declaration
-            return context.create<ErrorDecl>(variable_identifier_info);
+            return context.create<ErrorDecl>(
+                variable_identifier_info,
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
         }
 
         if (silent_probe(equal)) {
@@ -149,7 +155,10 @@ namespace aion::parse {
                     << "expected type for variable declaration, none provided."
                     << fixit_hint;
                 skip_until(TokenType::semicolon);
-                return context.create<ErrorDecl>(variable_identifier_info);
+                return context.create<ErrorDecl>(
+                    variable_identifier_info,
+                    SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+                );
             }
         }
 
@@ -162,7 +171,10 @@ namespace aion::parse {
                     << "expected initializer for variable attributed with comp, none provided."
                     << fixit_hint;
                 skip_until(TokenType::semicolon);
-                return context.create<ErrorDecl>(variable_identifier_info);
+                return context.create<ErrorDecl>(
+                    variable_identifier_info,
+                    SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+                );
             }
             goto ast_construction;
         }
@@ -181,7 +193,10 @@ namespace aion::parse {
                 << fixit_hint
                 << diag::fixit_message("insert an initializer expression before ';'");
             silent_consume(TokenType::semicolon);
-            return context.create<ErrorDecl>(variable_identifier_info);
+            return context.create<ErrorDecl>(
+                variable_identifier_info,
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
         }
         expression = parse_expression(0, TokenType::semicolon);
 
@@ -196,7 +211,10 @@ namespace aion::parse {
         if (!silent_probe(semicolon)) {
             diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_expected_semicolon);
             skip_until(TokenType::semicolon);
-            return context.create<ErrorDecl>(variable_identifier_info);
+            return context.create<ErrorDecl>(
+                variable_identifier_info,
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
         }
         silent_consume(TokenType::semicolon);
         return variable;
@@ -206,6 +224,7 @@ namespace aion::parse {
         auto lparen = MatchToken(TokenType::lparen);
         auto rparen = MatchToken(TokenType::rparen);
         auto identifier = MatchToken(TokenType::identifier);
+        auto comma = MatchToken(TokenType::comma);
         auto colon = MatchToken(TokenType::colon);
         auto semicolon = MatchToken(TokenType::semicolon);
 
@@ -225,6 +244,27 @@ namespace aion::parse {
             }
             function_id_info = context.emplace_or_get_identifier(function_id_token.lexeme);
             // function_id_info being nullptr case handled here if that exists
+        } else {
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            auto fixit_hint = diag::FixItHint::create_insertion(loc, "<identifier>");
+            diagnostics.report(loc, diag::parse::err_expected_identifier)
+                << "expected identifier for function declaration, none provided."
+                << fixit_hint;
+            skip_until(TokenType::semicolon);
+            return context.create<ErrorDecl>(
+                context.emplace_or_get_identifier("<missing_identifier>"),
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
         }
+
+        // Temporary stub until full function parsing lands.
+        diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token)
+            << "function declaration parsing is not implemented yet";
+        skip_until(TokenType::semicolon);
+        silent_consume(TokenType::semicolon);
+        return context.create<ErrorDecl>(
+            function_id_info,
+            SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+        );
     }
 }

@@ -195,6 +195,26 @@ namespace aion::ast {
             return ident->get_name();
         }
 
+        static SourceRange decl_range_for_print(const Decl* decl) {
+            if (decl == nullptr) return SourceRange();
+            switch (decl->get_kind()) {
+                case DeclKind::variable:
+                    return static_cast<const VarDecl*>(decl)->getSourceRange();
+                case DeclKind::error:
+                    return static_cast<const ErrorDecl*>(decl)->getSourceRange();
+                case DeclKind::named:
+                    return static_cast<const NamedDecl*>(decl)->getSourceRange();
+                case DeclKind::value:
+                    return static_cast<const ValueDecl*>(decl)->getSourceRange();
+                case DeclKind::function:
+                    return static_cast<const FuncDecl*>(decl)->getSourceRange();
+                case DeclKind::translation_unit:
+                    return static_cast<const TranslationUnitDecl*>(decl)->getSourceRange();
+                default:
+                    return decl->getSourceRange();
+            }
+        }
+
 
         bool print(TranslationUnitDecl* tu_decl) {
             if (tu_decl == nullptr) {
@@ -204,7 +224,7 @@ namespace aion::ast {
 
             std::cout << colorize(kBoldGreen) << "TranslationUnitDecl" << colorize(kReset);
             print_address(tu_decl);
-            print_range(tu_decl->source_range);
+            print_range(tu_decl->getSourceRange());
             std::cout << '\n';
 
             Decl* current = tu_decl->get_first_decl();
@@ -225,7 +245,7 @@ namespace aion::ast {
             std::cout << prefix << (is_last ? "`- " : "|- ");
             std::cout << colorize(kBoldGreen) << decl_kind_name(decl->get_kind()) << colorize(kReset);
             print_address(decl);
-            print_range(decl->source_range);
+            print_range(decl_range_for_print(decl));
 
             switch (decl->get_kind()) {
                 case DeclKind::variable: {

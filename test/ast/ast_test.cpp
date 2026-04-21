@@ -262,9 +262,12 @@ void register_ast_tests(TestRunner& runner) {
         auto* value_name = context.emplace_or_get_identifier("value");
         auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false);
 
-        auto* named = context.create<NamedDecl>(name);
-        auto* value = context.create<ValueDecl>(value_name, type);
-        auto* error = context.create<ErrorDecl>(context.emplace_or_get_identifier("error"));
+        auto* named = context.create<NamedDecl>(name, SourceRange(SourceLocation(1, 1), SourceLocation(1, 5)));
+        auto* value = context.create<ValueDecl>(value_name, type, SourceRange(SourceLocation(1, 1), SourceLocation(1, 5)));
+        auto* error = context.create<ErrorDecl>(
+            context.emplace_or_get_identifier("error"),
+            SourceRange(SourceLocation(1, 1), SourceLocation(1, 5))
+        );
 
         AION_ASSERT_ENUM_EQ(named->get_kind(), DeclKind::named);
         AION_ASSERT_ENUM_EQ(value->get_kind(), DeclKind::value);
@@ -280,7 +283,11 @@ void register_ast_tests(TestRunner& runner) {
         auto* value_name = context.emplace_or_get_identifier("x");
         auto* builtin = context.create<BuiltinType>(BuiltinTypeKind::i32);
         auto* mutable_type = context.create<MutableType>(builtin, false);
-        auto* value_decl = context.create<ValueDecl>(value_name, mutable_type);
+        auto* value_decl = context.create<ValueDecl>(
+            value_name,
+            mutable_type,
+            SourceRange(SourceLocation(1, 1), SourceLocation(1, 1))
+        );
 
         auto* decl_ref = context.create<DeclRefExpr>(value_decl, mutable_type, SourceLocation(1, 1));
         auto* integer = context.create<IntegerLiteralExpr>(mutable_type, "12", SourceLocation(1, 4));

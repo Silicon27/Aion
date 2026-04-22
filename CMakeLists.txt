@@ -28,76 +28,16 @@ add_executable(aion
 # LLVM
 # ============================================================================
 
-# Prefer LLVM_PATH (set by KyleMayes/install-llvm-action) then fall back to
-# whatever llvm-config is on PATH.
-if(DEFINED ENV{LLVM_PATH})
-    if(WIN32)
-        set(LLVM_CONFIG_EXE "$ENV{LLVM_PATH}/bin/llvm-config.exe")
-    else()
-        set(LLVM_CONFIG_EXE "$ENV{LLVM_PATH}/bin/llvm-config")
-    endif()
-else()
-    find_program(LLVM_CONFIG_EXE NAMES llvm-config llvm-config.exe REQUIRED)
-endif()
-
-message(STATUS "Using llvm-config: ${LLVM_CONFIG_EXE}")
-
-set(LLVM_COMPONENTS core support mc mcjit mcparser option bitwriter passes)
-
 execute_process(
-    COMMAND ${LLVM_CONFIG_EXE} --cxxflags
-    OUTPUT_VARIABLE LLVM_CXX_FLAGS
+    COMMAND "$ENV{LLVM_PATH}/bin/llvm-config.exe" --cxxflags --ldflags --libs core support mc mcjit mcparser option bitwriter passes
+    OUTPUT_VARIABLE LLVM_FLAGS
     OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY
 )
 
-execute_process(
-    COMMAND ${LLVM_CONFIG_EXE} --ldflags
-    OUTPUT_VARIABLE LLVM_LD_FLAGS
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY
-)
+separate_arguments(LLVM_FLAGS NATIVE_COMMAND "${LLVM_FLAGS}")
 
-execute_process(
-    COMMAND ${LLVM_CONFIG_EXE} --libs ${LLVM_COMPONENTS}
-    OUTPUT_VARIABLE LLVM_LIB_FLAGS
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY
-)
-
-execute_process(
-    COMMAND ${LLVM_CONFIG_EXE} --includedir
-    OUTPUT_VARIABLE LLVM_INCLUDE_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY
-)
-
-execute_process(
-    COMMAND ${LLVM_CONFIG_EXE} --libdir
-    OUTPUT_VARIABLE LLVM_LIB_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY
-)
-
-message(STATUS "LLVM include dir: ${LLVM_INCLUDE_DIR}")
-message(STATUS "LLVM lib dir:     ${LLVM_LIB_DIR}")
-
-separate_arguments(LLVM_CXX_FLAGS  NATIVE_COMMAND "${LLVM_CXX_FLAGS}")
-separate_arguments(LLVM_LD_FLAGS   NATIVE_COMMAND "${LLVM_LD_FLAGS}")
-separate_arguments(LLVM_LIB_FLAGS  NATIVE_COMMAND "${LLVM_LIB_FLAGS}")
-
-target_compile_options(aion PRIVATE ${LLVM_CXX_FLAGS})
-target_include_directories(aion PRIVATE ${LLVM_INCLUDE_DIR})
-target_link_options(aion PRIVATE ${LLVM_LD_FLAGS})
-target_link_libraries(aion PRIVATE ${LLVM_LIB_FLAGS})
-
-# LLD (optional — link directly from libdir if present)
-foreach(lld_lib lldCommon lldELF lldCOFF lldMachO lldWasm)
-    find_library(LLD_${lld_lib} NAMES ${lld_lib} HINTS ${LLVM_LIB_DIR})
-    if(LLD_${lld_lib})
-        target_link_libraries(aion PRIVATE ${LLD_${lld_lib}})
-    endif()
-endforeach()
+target_compile_options(aion PRIVATE ${LLVM_FLAGS})
+target_link_options(aion PRIVATE ${LLVM_FLAGS})
 
 include_directories(
         SYSTEM

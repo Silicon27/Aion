@@ -24,103 +24,80 @@ add_executable(aion
         test/suite/aion_test.hpp
 )
 
-option(AION_BUILD_LLVM "Build LLVM from source" OFF)
+# ============================================================================
+# LLVM
+# ============================================================================
 
-if(NOT AION_BUILD_LLVM)
-    # -------------------------------------------------------------------------
-    # Windows: consume LLVM_PATH set by KyleMayes/install-llvm-action, or
-    # fall back to whatever the user has in LLVM_DIR / CMAKE_PREFIX_PATH.
-    # -------------------------------------------------------------------------
-    if(WIN32 AND NOT DEFINED LLVM_DIR AND DEFINED ENV{LLVM_PATH})
-        file(TO_CMAKE_PATH "$ENV{LLVM_PATH}" _LLVM_PATH)
-
-        # KyleMayes action layout: <root>/lib/cmake/llvm/LLVMConfig.cmake
-        set(_llvm_cmake_hint "${_LLVM_PATH}/lib/cmake/llvm")
-        if(EXISTS "${_llvm_cmake_hint}/LLVMConfig.cmake")
-            set(LLVM_DIR "${_llvm_cmake_hint}" CACHE PATH "Path to LLVM CMake modules" FORCE)
-            message(STATUS "Windows: LLVM_DIR resolved from LLVM_PATH env: ${LLVM_DIR}")
-        else()
-            # Fallback: scan under LLVM_PATH for LLVMConfig.cmake
-            file(GLOB_RECURSE _found_config
-                 LIST_DIRECTORIES false
-                 "${_LLVM_PATH}/**/LLVMConfig.cmake")
-            if(_found_config)
-                list(GET _found_config 0 _first)
-                get_filename_component(_dir "${_first}" DIRECTORY)
-                set(LLVM_DIR "${_dir}" CACHE PATH "Path to LLVM CMake modules" FORCE)
-                message(STATUS "Windows: LLVM_DIR found via glob: ${LLVM_DIR}")
-            endif()
-        endif()
+# Prefer LLVM_PATH (set by KyleMayes/install-llvm-action) then fall back to
+# whatever llvm-config is on PATH.
+if(DEFINED ENV{LLVM_PATH})
+    if(WIN32)
+        set(LLVM_CONFIG_EXE "$ENV{LLVM_PATH}/bin/llvm-config.exe")
+    else()
+        set(LLVM_CONFIG_EXE "$ENV{LLVM_PATH}/bin/llvm-config")
     endif()
-
-    # -------------------------------------------------------------------------
-    # Standard find — works on all platforms; LLVM_DIR hint used if set above.
-    # -------------------------------------------------------------------------
-    find_package(LLVM CONFIG)
-
-    if(NOT LLVM_FOUND)
-        find_program(LLVM_CONFIG_EXE NAMES llvm-config llvm-config.exe)
-        if(LLVM_CONFIG_EXE)
-            execute_process(
-                COMMAND ${LLVM_CONFIG_EXE} --cmakedir
-                OUTPUT_VARIABLE LLVM_DIR_INTERNAL
-                OUTPUT_STRIP_TRAILING_WHITESPACE)
-            file(TO_CMAKE_PATH "${LLVM_DIR_INTERNAL}" LLVM_DIR_INTERNAL)
-            set(LLVM_DIR "${LLVM_DIR_INTERNAL}" CACHE PATH "Path to LLVM CMake modules" FORCE)
-            find_package(LLVM REQUIRED CONFIG)
-        else()
-            find_package(LLVM REQUIRED CONFIG)
-        endif()
-    endif()
-
-    message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION} at ${LLVM_DIR}")
 else()
-    message(STATUS "AION_BUILD_LLVM=ON, fetching/building LLVM from source...")
-
-    include(ExternalProject)
-    ExternalProject_Add(
-            llvm_project
-            GIT_REPOSITORY https://github.com/llvm/llvm-project.git
-            GIT_TAG llvmorg-16.0.0
-            PREFIX ${CMAKE_BINARY_DIR}/llvm
-            CMAKE_ARGS
-            -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/llvm/install
-            -DCMAKE_BUILD_TYPE=Release
-    )
-
-    add_dependencies(aion llvm_project)
-    set(LLVM_DIR ${CMAKE_BINARY_DIR}/llvm/install/lib/cmake/llvm)
+    find_program(LLVM_CONFIG_EXE NAMES llvm-config llvm-config.exe REQUIRED)
 endif()
 
-if(LLVM_FOUND)
-    llvm_map_components_to_libnames(llvm_libs
-            core
-            support
-            mc
-            mcjit
-            mcparser
-            option
-            bitwriter
-            passes
-    )
+message(STATUS "Using llvm-config: ${LLVM_CONFIG_EXE}")
 
-    find_library(LLD_COMMON lldCommon HINTS ${LLVM_LIBRARY_DIRS})
-    find_library(LLD_ELF    lldELF    HINTS ${LLVM_LIBRARY_DIRS})
-    find_library(LLD_COFF   lldCOFF   HINTS ${LLVM_LIBRARY_DIRS})
-    find_library(LLD_MACHO  lldMachO  HINTS ${LLVM_LIBRARY_DIRS})
-    find_library(LLD_WASM   lldWasm   HINTS ${LLVM_LIBRARY_DIRS})
+set(LLVM_COMPONENTS core support mc mcjit mcparser option bitwriter passes)
 
-    set(lld_libs "")
-    foreach(lib_var LLD_COMMON LLD_ELF LLD_COFF LLD_MACHO LLD_WASM)
-        if(${lib_var})
-            list(APPEND lld_libs ${${lib_var}})
-        endif()
-    endforeach()
+execute_process(
+    COMMAND ${LLVM_CONFIG_EXE} --cxxflags
+    OUTPUT_VARIABLE LLVM_CXX_FLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND_ERROR_IS_FATAL ANY
+)
 
-    target_link_libraries(aion PRIVATE ${llvm_libs} ${lld_libs})
-    target_include_directories(aion PRIVATE ${LLVM_INCLUDE_DIRS})
-    add_definitions(${LLVM_DEFINITIONS})
-endif()
+execute_process(
+    COMMAND ${LLVM_CONFIG_EXE} --ldflags
+    OUTPUT_VARIABLE LLVM_LD_FLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND_ERROR_IS_FATAL ANY
+)
+
+execute_process(
+    COMMAND ${LLVM_CONFIG_EXE} --libs ${LLVM_COMPONENTS}
+    OUTPUT_VARIABLE LLVM_LIB_FLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND_ERROR_IS_FATAL ANY
+)
+
+execute_process(
+    COMMAND ${LLVM_CONFIG_EXE} --includedir
+    OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND_ERROR_IS_FATAL ANY
+)
+
+execute_process(
+    COMMAND ${LLVM_CONFIG_EXE} --libdir
+    OUTPUT_VARIABLE LLVM_LIB_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND_ERROR_IS_FATAL ANY
+)
+
+message(STATUS "LLVM include dir: ${LLVM_INCLUDE_DIR}")
+message(STATUS "LLVM lib dir:     ${LLVM_LIB_DIR}")
+
+separate_arguments(LLVM_CXX_FLAGS  NATIVE_COMMAND "${LLVM_CXX_FLAGS}")
+separate_arguments(LLVM_LD_FLAGS   NATIVE_COMMAND "${LLVM_LD_FLAGS}")
+separate_arguments(LLVM_LIB_FLAGS  NATIVE_COMMAND "${LLVM_LIB_FLAGS}")
+
+target_compile_options(aion PRIVATE ${LLVM_CXX_FLAGS})
+target_include_directories(aion PRIVATE ${LLVM_INCLUDE_DIR})
+target_link_options(aion PRIVATE ${LLVM_LD_FLAGS})
+target_link_libraries(aion PRIVATE ${LLVM_LIB_FLAGS})
+
+# LLD (optional — link directly from libdir if present)
+foreach(lld_lib lldCommon lldELF lldCOFF lldMachO lldWasm)
+    find_library(LLD_${lld_lib} NAMES ${lld_lib} HINTS ${LLVM_LIB_DIR})
+    if(LLD_${lld_lib})
+        target_link_libraries(aion PRIVATE ${LLD_${lld_lib}})
+    endif()
+endforeach()
 
 include_directories(
         SYSTEM

@@ -20,13 +20,13 @@ namespace aion::ast {
 
     /// The top-level declaration that represents the entire translation unit.
     class TranslationUnitDecl : public Decl, public DeclContext {
-        SourceRange unit_range;
+        SourceLocation unit_end;
 
     public:
         explicit TranslationUnitDecl(const SourceRange& range = SourceRange())
-            : Decl(DeclKind::translation_unit, range.begin), unit_range(range) {}
+            : Decl(DeclKind::translation_unit, range.begin), unit_end(range.end) {}
 
-        [[nodiscard]] SourceRange getSourceRange() const { return unit_range; }
+        [[nodiscard]] SourceRange getSourceRange() const { return SourceRange(source_location, unit_end); }
     };
     static_assert(std::is_trivially_destructible_v<TranslationUnitDecl>);
 
@@ -100,17 +100,16 @@ namespace aion::ast {
     class ParamVarDecl : public ValueDecl {
     public:
         Expr* default_value;
-        SourceRange id_range;
 
         ParamVarDecl(IdentifierInfo* name, MutableType* type,
                      StorageClass storage_class, const SourceRange &range,
                      Expr* default_value = nullptr)
-            : ValueDecl(name, type, DeclKind::variable, range), default_value(default_value), id_range(range) {}
+            : ValueDecl(name, type, DeclKind::variable, range), default_value(default_value) {}
 
         Expr* get_default_value() const { return default_value; }
         void set_init(Expr* init) { this->default_value = init; }
 
-        SourceRange get_id_loc() const { return id_range; }
+        SourceRange get_id_loc() const { return getSourceRange(); }
     };
     static_assert(std::is_trivially_destructible_v<ParamVarDecl>);
 

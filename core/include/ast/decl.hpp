@@ -96,18 +96,16 @@ namespace aion::ast {
     };
     static_assert(std::is_trivially_destructible_v<FuncDecl>);
 
-    /// provisional, temporary VarDecl mirror
     class ParamVarDecl : public ValueDecl {
     public:
         Expr* default_value;
 
-        ParamVarDecl(IdentifierInfo* name, MutableType* type,
-                     StorageClass storage_class, const SourceRange &range,
+        ParamVarDecl(IdentifierInfo* name, MutableType* type, const SourceRange &range,
                      Expr* default_value = nullptr)
             : ValueDecl(name, type, DeclKind::variable, range), default_value(default_value) {}
 
         Expr* get_default_value() const { return default_value; }
-        void set_init(Expr* init) { this->default_value = init; }
+        void set_default_value(Expr* default_value) { this->default_value = default_value; }
 
         SourceRange get_id_loc() const { return getSourceRange(); }
     };

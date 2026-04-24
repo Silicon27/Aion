@@ -95,8 +95,8 @@ namespace aion::ast {
         ParamVarDecl* params = nullptr;
         std::size_t num_params = 0;
 
-        FuncDecl(IdentifierInfo* name, MutableType* type, bool is_export, const SourceRange& range)
-        : ValueDecl(name, type, DeclKind::function, range), is_export(is_export) {}
+        FuncDecl(IdentifierInfo* name, MutableType* type, bool is_export, std::size_t num_params, const SourceRange& range)
+        : ValueDecl(name, type, DeclKind::function, range), is_export(is_export), num_params(num_params) {}
     };
     static_assert(std::is_trivially_destructible_v<FuncDecl>);
 

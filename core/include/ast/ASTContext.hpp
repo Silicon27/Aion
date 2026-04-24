@@ -86,7 +86,7 @@ namespace aion::ast {
         };
 
         template<typename Value>
-        using StringMap = ::aion::ast::StringMap<Value>;
+        using StringMap = StringMap<Value>;
 
     private:
         BumpPtrAllocator<> allocator;
@@ -127,6 +127,13 @@ namespace aion::ast {
             void *storage = allocate(sizeof(T), alignof(T));
             return new(storage) T(std::forward<Args>(args)...);
         }
+
+        // ––––––––––––––––––––––––––––––––––––––––––
+        // custom allocation functions for non-trivially allocatable types
+        // (ex. types that may have a pointer as an array in their members)
+        // ––––––––––––––––––––––––––––––––––––––––––
+
+        FuncDecl *create_func_decl(const std::string_view name, const std::size_t num_args, const std::size_t num_ret_vals);
 
         char *allocate_string(std::string_view str) {
             if (str.empty()) return nullptr;
@@ -218,6 +225,26 @@ namespace aion::ast {
         }
         return total;
     }
+
+    // inline FuncDecl *ASTContext::create_func_decl(const std::string_view name, const std::size_t num_args, const std::size_t num_ret_vals) {
+    //     if (name.empty()) {
+    //         return nullptr;
+    //     }
+    //
+    //     IdentifierInfo *ident = emplace_or_get_identifier(name);
+    //
+    //     FuncDecl* fn = create<FuncDecl>(
+    //         ident,
+    //         nullptr,
+    //         false,
+    //         num_args,
+    //         SourceRange()
+    //     );
+    //
+    //     if (num_args == 0) {
+    //         fn->params = nullptr;
+    //     }
+    // }
 } // namespace aion::ast
 
 #endif //AION_AST_CONTEXT_HPP

@@ -9,6 +9,8 @@
 #include <ast/ast.hpp>
 #include <ast/type.hpp>
 
+#include <ast/ShortVec.hpp>
+
 namespace aion::ast {
     class TranslationUnitDecl;
     class NamedDecl;
@@ -90,6 +92,8 @@ namespace aion::ast {
     class FuncDecl : public ValueDecl, public DeclContext {
     public:
         bool is_export = false;
+        ParamVarDecl* params = nullptr;
+        std::size_t num_params = 0;
 
         FuncDecl(IdentifierInfo* name, MutableType* type, bool is_export, const SourceRange& range)
         : ValueDecl(name, type, DeclKind::function, range), is_export(is_export) {}

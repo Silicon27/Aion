@@ -98,9 +98,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ac2592d21f7d4ce14ca699c993fd276ea" id="r_ac2592d21f7d4ce14ca699c993fd276ea"><td class="memTemplParams" colspan="2"><a id="ac2592d21f7d4ce14ca699c993fd276ea" name="ac2592d21f7d4ce14ca699c993fd276ea"></a>
+<tr class="memitem:a9c7fc1227c16d73c68a39edd81fb109c" id="r_a9c7fc1227c16d73c68a39edd81fb109c"><td class="memTemplParams" colspan="2"><a id="a9c7fc1227c16d73c68a39edd81fb109c" name="a9c7fc1227c16d73c68a39edd81fb109c"></a>
 template&lt;typename Value&gt; </td></tr>
-<tr class="memitem:ac2592d21f7d4ce14ca699c993fd276ea template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><b>StringMap</b> = <a class="el" href="classaion_1_1ast_1_1_string_map.html">::aion::ast::StringMap</a>&lt;Value&gt;</td></tr>
+<tr class="memitem:a9c7fc1227c16d73c68a39edd81fb109c template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><b>StringMap</b> = StringMap&lt;Value&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -111,7 +111,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0636fd21eac3cee84ff36a78a185e377" id="r_a0636fd21eac3cee84ff36a78a185e377"><td class="memItemLeft" align="right" valign="top"><a id="a0636fd21eac3cee84ff36a78a185e377" name="a0636fd21eac3cee84ff36a78a185e377"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_translation_unit_decl</b> (<a class="el" href="classaion_1_1ast_1_1_translation_unit_decl.html">TranslationUnitDecl</a> *tu_decl)</td></tr>
 <tr class="memitem:a8d3918e7d133ff6217d86d4379da6bd3" id="r_a8d3918e7d133ff6217d86d4379da6bd3"><td class="memItemLeft" align="right" valign="top"><a id="a8d3918e7d133ff6217d86d4379da6bd3" name="a8d3918e7d133ff6217d86d4379da6bd3"></a>
-const <a class="el" href="classaion_1_1ast_1_1_string_map.html">StringMap</a>&lt; <a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_identifiers</b> () const</td></tr>
+const StringMap&lt; <a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_identifiers</b> () const</td></tr>
 <tr class="memitem:aa6f2930a8591c6c2e92fa8f21bd76147" id="r_aa6f2930a8591c6c2e92fa8f21bd76147"><td class="memItemLeft" align="right" valign="top"><a id="aa6f2930a8591c6c2e92fa8f21bd76147" name="aa6f2930a8591c6c2e92fa8f21bd76147"></a>
 <a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>emplace_or_get_identifier</b> (const std::string_view name)</td></tr>
 <tr class="memitem:a1d6d4dad14ed9d3da0517c38efe0f6c8" id="r_a1d6d4dad14ed9d3da0517c38efe0f6c8"><td class="memItemLeft" align="right" valign="top"><a id="a1d6d4dad14ed9d3da0517c38efe0f6c8" name="a1d6d4dad14ed9d3da0517c38efe0f6c8"></a>
@@ -122,6 +122,8 @@ void *&#160;</td><td class="memItemRight" valign="bottom"><b>allocate</b> (std::
 template&lt;typename T, typename... Args&gt; <br />
 requires (std::is_trivially_destructible_v&lt;T&gt; &amp;&amp; std::is_constructible_v&lt;T, Args...&gt;)</td></tr>
 <tr class="memitem:ae83f50b6e32304603f559a92eaac58d2 template"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:a35c6aa5c5c0004a046ece2df06f4f3fb" id="r_a35c6aa5c5c0004a046ece2df06f4f3fb"><td class="memItemLeft" align="right" valign="top"><a id="a35c6aa5c5c0004a046ece2df06f4f3fb" name="a35c6aa5c5c0004a046ece2df06f4f3fb"></a>
+<a class="el" href="classaion_1_1ast_1_1_func_decl.html">FuncDecl</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>create_func_decl</b> (const std::string_view name, const std::size_t num_args, const std::size_t num_ret_vals)</td></tr>
 <tr class="memitem:a177ff47e4eadc7eac331e8d64ec6e67c" id="r_a177ff47e4eadc7eac331e8d64ec6e67c"><td class="memItemLeft" align="right" valign="top"><a id="a177ff47e4eadc7eac331e8d64ec6e67c" name="a177ff47e4eadc7eac331e8d64ec6e67c"></a>
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>allocate_string</b> (std::string_view str)</td></tr>
 </table>

@@ -8,8 +8,8 @@ class \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator
 \doxysubsubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_ac2592d21f7d4ce14ca699c993fd276ea}\label{classaion_1_1ast_1_1_a_s_t_context_ac2592d21f7d4ce14ca699c993fd276ea} 
-{\footnotesize template$<$typename Value$>$ }\\using {\bfseries String\+Map} = \mbox{\hyperlink{classaion_1_1ast_1_1_string_map}{\+::aion\+::ast\+::\+String\+Map}}$<$Value$>$
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a9c7fc1227c16d73c68a39edd81fb109c}\label{classaion_1_1ast_1_1_a_s_t_context_a9c7fc1227c16d73c68a39edd81fb109c} 
+{\footnotesize template$<$typename Value$>$ }\\using {\bfseries String\+Map} = String\+Map$<$Value$>$
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -24,7 +24,7 @@ class \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator
 void {\bfseries set\+\_\+translation\+\_\+unit\+\_\+decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}tu\+\_\+decl)
 \item 
 \Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a8d3918e7d133ff6217d86d4379da6bd3}\label{classaion_1_1ast_1_1_a_s_t_context_a8d3918e7d133ff6217d86d4379da6bd3} 
-const \mbox{\hyperlink{classaion_1_1ast_1_1_string_map}{String\+Map}}$<$ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+\_\+identifiers} () const
+const String\+Map$<$ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+\_\+identifiers} () const
 \item 
 \Hypertarget{classaion_1_1ast_1_1_a_s_t_context_aa6f2930a8591c6c2e92fa8f21bd76147}\label{classaion_1_1ast_1_1_a_s_t_context_aa6f2930a8591c6c2e92fa8f21bd76147} 
 \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries emplace\+\_\+or\+\_\+get\+\_\+identifier} (const std\+::string\+\_\+view name)
@@ -38,6 +38,9 @@ void \texorpdfstring{$\ast$}{*} {\bfseries allocate} (std\+::size\+\_\+t size, s
 \Hypertarget{classaion_1_1ast_1_1_a_s_t_context_ae83f50b6e32304603f559a92eaac58d2}\label{classaion_1_1ast_1_1_a_s_t_context_ae83f50b6e32304603f559a92eaac58d2} 
 {\footnotesize template$<$typename T, typename... Args$>$ \newline
 requires (std\+::is\+\_\+trivially\+\_\+destructible\+\_\+v$<$T$>$ \&\& std\+::is\+\_\+constructible\+\_\+v$<$T, Args...$>$)}\\T \texorpdfstring{$\ast$}{*} {\bfseries create} (Args \&\&... args)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a35c6aa5c5c0004a046ece2df06f4f3fb}\label{classaion_1_1ast_1_1_a_s_t_context_a35c6aa5c5c0004a046ece2df06f4f3fb} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_func_decl}{Func\+Decl}} \texorpdfstring{$\ast$}{*} {\bfseries create\+\_\+func\+\_\+decl} (const std\+::string\+\_\+view name, const std\+::size\+\_\+t num\+\_\+args, const std\+::size\+\_\+t num\+\_\+ret\+\_\+vals)
 \item 
 \Hypertarget{classaion_1_1ast_1_1_a_s_t_context_a177ff47e4eadc7eac331e8d64ec6e67c}\label{classaion_1_1ast_1_1_a_s_t_context_a177ff47e4eadc7eac331e8d64ec6e67c} 
 char \texorpdfstring{$\ast$}{*} {\bfseries allocate\+\_\+string} (std\+::string\+\_\+view str)

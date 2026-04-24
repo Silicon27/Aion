@@ -1,5 +1,8 @@
 var NAVTREEINDEX1 =
 {
+"group___x_x_h3__family.html#gab12ec3ab7c9c681834b3bf5c60ebf4fc":[3,0,2,18],
+"group___x_x_h3__family.html#gab27693846a9d141fd8c7a134215d29d5":[3,0,2,29],
+"group___x_x_h3__family.html#gac3eb43e5a5fa48415ef6fbbdfc9e221d":[3,0,2,21],
 "group___x_x_h3__family.html#gac99b74047afbf5d887014e8bd8a4311e":[3,0,2,4],
 "group___x_x_h3__family.html#gacc725251c878dce69faa4e1b61dd8d70":[3,0,2,25],
 "group___x_x_h3__family.html#gacf85fb4be26ea21cfa925e846f81386a":[3,0,2,22],
@@ -246,8 +249,5 @@ var NAVTREEINDEX1 =
 "structis__integral_3_01long_01long_01_4.html":[5,0,63],
 "structis__integral_3_01short_01_4.html":[5,0,64],
 "structis__integral_3_01unsigned_01char_01_4.html":[5,0,65],
-"structis__integral_3_01unsigned_01int_01_4.html":[5,0,66],
-"structis__integral_3_01unsigned_01long_01_4.html":[5,0,67],
-"structis__integral_3_01unsigned_01long_01long_01_4.html":[5,0,68],
-"structis__integral_3_01unsigned_01short_01_4.html":[5,0,69]
+"structis__integral_3_01unsigned_01int_01_4.html":[5,0,66]
 };

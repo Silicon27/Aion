@@ -178,6 +178,8 @@ boxfont setfont
 (aion::ast::TranslationUnitDecl) cw
 (aion::ast::ErrorDecl) cw
 (aion::ast::ValueDecl) cw
+(aion::ast::FuncDecl) cw
+(aion::ast::ParamVarDecl) cw
 (aion::ast::VarDecl) cw
 /boxwidth boxwidth marginwidth 2 mul add def
 /xspacing boxwidth distx add def
@@ -195,7 +197,9 @@ boundx scalefactor div boundy scalefactor div scale
  (aion::ast::TranslationUnitDecl) 1.500000 2.000000 box
  (aion::ast::ErrorDecl) 0.000000 1.000000 box
  (aion::ast::ValueDecl) 1.000000 1.000000 box
- (aion::ast::VarDecl) 1.000000 0.000000 box
+ (aion::ast::FuncDecl) 0.000000 0.000000 box
+ (aion::ast::ParamVarDecl) 1.000000 0.000000 box
+ (aion::ast::VarDecl) 2.000000 0.000000 box
 
 % ----- relations -----
 
@@ -218,4 +222,10 @@ solid
 solid
 1 1.000000 0.250000 out
 solid
+0.000000 2.000000 1.000000 conn
+solid
+0 0.000000 0.750000 in
+solid
 0 1.000000 0.750000 in
+solid
+0 2.000000 0.750000 in

@@ -92,10 +92,142 @@ $(function(){initNavTree('classaion_1_1ast_1_1_recursive_ast_visitor.html','','c
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a9f8db9030791a8221fc08b874b757490" id="r_a9f8db9030791a8221fc08b874b757490"><td class="memItemLeft" align="right" valign="top"><a id="a9f8db9030791a8221fc08b874b757490" name="a9f8db9030791a8221fc08b874b757490"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>enable_colors</b> = true</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a3f97383f16830a0dd538f75ef6bbde8e" id="r_a3f97383f16830a0dd538f75ef6bbde8e"><td class="memItemLeft" align="right" valign="top"><a id="a3f97383f16830a0dd538f75ef6bbde8e" name="a3f97383f16830a0dd538f75ef6bbde8e"></a>
+Derived &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDerived</b> ()</td></tr>
+<tr class="memitem:af392972452ed567d916a6364dbe88f0d" id="r_af392972452ed567d916a6364dbe88f0d"><td class="memItemLeft" align="right" valign="top"><a id="af392972452ed567d916a6364dbe88f0d" name="af392972452ed567d916a6364dbe88f0d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>print_indent</b> () const</td></tr>
+<tr class="memitem:a52258ef3c9ef7d9506ca932ae0317ada" id="r_a52258ef3c9ef7d9506ca932ae0317ada"><td class="memItemLeft" align="right" valign="top"><a id="a52258ef3c9ef7d9506ca932ae0317ada" name="a52258ef3c9ef7d9506ca932ae0317ada"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><b>colorize</b> (const char *color) const</td></tr>
+<tr class="memitem:a9127984789a406ee8267fdc21e28543b" id="r_a9127984789a406ee8267fdc21e28543b"><td class="memItemLeft" align="right" valign="top"><a id="a9127984789a406ee8267fdc21e28543b" name="a9127984789a406ee8267fdc21e28543b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>print_enter</b> (const char *category_color, const char *node_name)</td></tr>
+<tr class="memitem:a0cc985f87ea73b90588acb00f0f80593" id="r_a0cc985f87ea73b90588acb00f0f80593"><td class="memItemLeft" align="right" valign="top"><a id="a0cc985f87ea73b90588acb00f0f80593" name="a0cc985f87ea73b90588acb00f0f80593"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>print_exit</b> (const char *category_color, const char *node_name, const bool ok)</td></tr>
+<tr class="memitem:a34dac847bd4169694152871a9ae68ac8" id="r_a34dac847bd4169694152871a9ae68ac8"><td class="memTemplParams" colspan="2"><a id="a34dac847bd4169694152871a9ae68ac8" name="a34dac847bd4169694152871a9ae68ac8"></a>
+template&lt;typename Node&gt; </td></tr>
+<tr class="memitem:a34dac847bd4169694152871a9ae68ac8 template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><b>run_traverse</b> (const char *category_color, const char *node_name, Node *node, bool(Derived::*visit)(Node *), bool(Derived::*walk)(Node *))</td></tr>
 <tr class="memitem:a5da8719399434e3ccc5cd0c4d3341402" id="r_a5da8719399434e3ccc5cd0c4d3341402"><td class="memItemLeft" align="right" valign="top"><a id="a5da8719399434e3ccc5cd0c4d3341402" name="a5da8719399434e3ccc5cd0c4d3341402"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseExpr</b> (<a class="el" href="classaion_1_1ast_1_1_expr.html">Expr</a> *expr)</td></tr>
+<tr class="memitem:a263b079a1f3d65b87cb827d21246cd7e" id="r_a263b079a1f3d65b87cb827d21246cd7e"><td class="memItemLeft" align="right" valign="top"><a id="a263b079a1f3d65b87cb827d21246cd7e" name="a263b079a1f3d65b87cb827d21246cd7e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseDecl</b> (<a class="el" href="classaion_1_1ast_1_1_decl.html">Decl</a> *decl)</td></tr>
+<tr class="memitem:ad126cccb434270d1050df65eb1e079b0" id="r_ad126cccb434270d1050df65eb1e079b0"><td class="memItemLeft" align="right" valign="top"><a id="ad126cccb434270d1050df65eb1e079b0" name="ad126cccb434270d1050df65eb1e079b0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseStmt</b> (<a class="el" href="classaion_1_1ast_1_1_stmt.html">Stmt</a> *stmt)</td></tr>
+<tr class="memitem:af840bc4e0ed69dfd4899242438d4dfd9" id="r_af840bc4e0ed69dfd4899242438d4dfd9"><td class="memItemLeft" align="right" valign="top"><a id="af840bc4e0ed69dfd4899242438d4dfd9" name="af840bc4e0ed69dfd4899242438d4dfd9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseErrorExpr</b> (<a class="el" href="classaion_1_1ast_1_1_error_expr.html">ErrorExpr</a> *expr)</td></tr>
+<tr class="memitem:a3394846446adae29715426d3dda7a2b0" id="r_a3394846446adae29715426d3dda7a2b0"><td class="memItemLeft" align="right" valign="top"><a id="a3394846446adae29715426d3dda7a2b0" name="a3394846446adae29715426d3dda7a2b0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseTypedExpr</b> (<a class="el" href="classaion_1_1ast_1_1_typed_expr.html">TypedExpr</a> *expr)</td></tr>
+<tr class="memitem:aef877a37a82f20160c799d1ee4d60fbb" id="r_aef877a37a82f20160c799d1ee4d60fbb"><td class="memItemLeft" align="right" valign="top"><a id="aef877a37a82f20160c799d1ee4d60fbb" name="aef877a37a82f20160c799d1ee4d60fbb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseDeclRefExpr</b> (<a class="el" href="classaion_1_1ast_1_1_decl_ref_expr.html">DeclRefExpr</a> *expr)</td></tr>
+<tr class="memitem:a157d2c765ac6fd4b376f1a3b02491022" id="r_a157d2c765ac6fd4b376f1a3b02491022"><td class="memItemLeft" align="right" valign="top"><a id="a157d2c765ac6fd4b376f1a3b02491022" name="a157d2c765ac6fd4b376f1a3b02491022"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseBinaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_binary_expr.html">BinaryExpr</a> *expr)</td></tr>
+<tr class="memitem:aaccd81858da0c6b3fb4ba29e2a72a69b" id="r_aaccd81858da0c6b3fb4ba29e2a72a69b"><td class="memItemLeft" align="right" valign="top"><a id="aaccd81858da0c6b3fb4ba29e2a72a69b" name="aaccd81858da0c6b3fb4ba29e2a72a69b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseUnaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_unary_expr.html">UnaryExpr</a> *expr)</td></tr>
+<tr class="memitem:a02a78d47413286f987f29915a75b337a" id="r_a02a78d47413286f987f29915a75b337a"><td class="memItemLeft" align="right" valign="top"><a id="a02a78d47413286f987f29915a75b337a" name="a02a78d47413286f987f29915a75b337a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseIntegerLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_integer_literal_expr.html">IntegerLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:ad35cea34435c61a6cbe30a4a8ab74c2c" id="r_ad35cea34435c61a6cbe30a4a8ab74c2c"><td class="memItemLeft" align="right" valign="top"><a id="ad35cea34435c61a6cbe30a4a8ab74c2c" name="ad35cea34435c61a6cbe30a4a8ab74c2c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseFloatLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_float_literal_expr.html">FloatLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:ad89d9193db40eed0021a01d6cd0864ea" id="r_ad89d9193db40eed0021a01d6cd0864ea"><td class="memItemLeft" align="right" valign="top"><a id="ad89d9193db40eed0021a01d6cd0864ea" name="ad89d9193db40eed0021a01d6cd0864ea"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseStringLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_string_literal_expr.html">StringLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:ae5256e54fa11a59afc3764d2e2963c2b" id="r_ae5256e54fa11a59afc3764d2e2963c2b"><td class="memItemLeft" align="right" valign="top"><a id="ae5256e54fa11a59afc3764d2e2963c2b" name="ae5256e54fa11a59afc3764d2e2963c2b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseCallExpr</b> (<a class="el" href="classaion_1_1ast_1_1_call_expr.html">CallExpr</a> *expr)</td></tr>
+<tr class="memitem:af51cb84427c5e9067e5d51cdce58f0bb" id="r_af51cb84427c5e9067e5d51cdce58f0bb"><td class="memItemLeft" align="right" valign="top"><a id="af51cb84427c5e9067e5d51cdce58f0bb" name="af51cb84427c5e9067e5d51cdce58f0bb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseTranslationUnitDecl</b> (<a class="el" href="classaion_1_1ast_1_1_translation_unit_decl.html">TranslationUnitDecl</a> *decl)</td></tr>
+<tr class="memitem:a3c3fb38f3df548e66fc0cafad65ffae9" id="r_a3c3fb38f3df548e66fc0cafad65ffae9"><td class="memItemLeft" align="right" valign="top"><a id="a3c3fb38f3df548e66fc0cafad65ffae9" name="a3c3fb38f3df548e66fc0cafad65ffae9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseNamedDecl</b> (<a class="el" href="classaion_1_1ast_1_1_named_decl.html">NamedDecl</a> *decl)</td></tr>
+<tr class="memitem:a4f092a2a2d7932295d6eddd1799cd609" id="r_a4f092a2a2d7932295d6eddd1799cd609"><td class="memItemLeft" align="right" valign="top"><a id="a4f092a2a2d7932295d6eddd1799cd609" name="a4f092a2a2d7932295d6eddd1799cd609"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseValueDecl</b> (<a class="el" href="classaion_1_1ast_1_1_value_decl.html">ValueDecl</a> *decl)</td></tr>
+<tr class="memitem:a36fe5631f71e7bf6e20f38811606ba0f" id="r_a36fe5631f71e7bf6e20f38811606ba0f"><td class="memItemLeft" align="right" valign="top"><a id="a36fe5631f71e7bf6e20f38811606ba0f" name="a36fe5631f71e7bf6e20f38811606ba0f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseVarDecl</b> (<a class="el" href="classaion_1_1ast_1_1_var_decl.html">VarDecl</a> *decl)</td></tr>
+<tr class="memitem:ae011c4bf6df1ddf806bc77d17fff0fa9" id="r_ae011c4bf6df1ddf806bc77d17fff0fa9"><td class="memItemLeft" align="right" valign="top"><a id="ae011c4bf6df1ddf806bc77d17fff0fa9" name="ae011c4bf6df1ddf806bc77d17fff0fa9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseErrorDecl</b> (<a class="el" href="classaion_1_1ast_1_1_error_decl.html">ErrorDecl</a> *decl)</td></tr>
+<tr class="memitem:a1d392813f01a11eb6aec0a2b4db5b087" id="r_a1d392813f01a11eb6aec0a2b4db5b087"><td class="memItemLeft" align="right" valign="top"><a id="a1d392813f01a11eb6aec0a2b4db5b087" name="a1d392813f01a11eb6aec0a2b4db5b087"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>TraverseCompoundStmt</b> (<a class="el" href="classaion_1_1ast_1_1_compound_stmt.html">CompoundStmt</a> *stmt)</td></tr>
+<tr class="memitem:a065313a8cc8eb98687a8a3d5c2c52d51" id="r_a065313a8cc8eb98687a8a3d5c2c52d51"><td class="memItemLeft" align="right" valign="top"><a id="a065313a8cc8eb98687a8a3d5c2c52d51" name="a065313a8cc8eb98687a8a3d5c2c52d51"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitErrorExpr</b> (<a class="el" href="classaion_1_1ast_1_1_error_expr.html">ErrorExpr</a> *expr)</td></tr>
+<tr class="memitem:aa6d3a2784c349c63fd56a332b181e304" id="r_aa6d3a2784c349c63fd56a332b181e304"><td class="memItemLeft" align="right" valign="top"><a id="aa6d3a2784c349c63fd56a332b181e304" name="aa6d3a2784c349c63fd56a332b181e304"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromErrorExpr</b> (<a class="el" href="classaion_1_1ast_1_1_error_expr.html">ErrorExpr</a> *expr)</td></tr>
+<tr class="memitem:a74b8c52d3a7afcd54461ae8548703dbd" id="r_a74b8c52d3a7afcd54461ae8548703dbd"><td class="memItemLeft" align="right" valign="top"><a id="a74b8c52d3a7afcd54461ae8548703dbd" name="a74b8c52d3a7afcd54461ae8548703dbd"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitTypedExpr</b> (<a class="el" href="classaion_1_1ast_1_1_typed_expr.html">TypedExpr</a> *expr)</td></tr>
+<tr class="memitem:a81051de467093fd202c01763299b2cad" id="r_a81051de467093fd202c01763299b2cad"><td class="memItemLeft" align="right" valign="top"><a id="a81051de467093fd202c01763299b2cad" name="a81051de467093fd202c01763299b2cad"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromTypedExpr</b> (<a class="el" href="classaion_1_1ast_1_1_typed_expr.html">TypedExpr</a> *expr)</td></tr>
+<tr class="memitem:a9d8439b8981d2942d7da887b8a00f1d6" id="r_a9d8439b8981d2942d7da887b8a00f1d6"><td class="memItemLeft" align="right" valign="top"><a id="a9d8439b8981d2942d7da887b8a00f1d6" name="a9d8439b8981d2942d7da887b8a00f1d6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitDeclRefExpr</b> (<a class="el" href="classaion_1_1ast_1_1_decl_ref_expr.html">DeclRefExpr</a> *expr)</td></tr>
+<tr class="memitem:a751eeecaa25c42ca47111dfedd6a3ced" id="r_a751eeecaa25c42ca47111dfedd6a3ced"><td class="memItemLeft" align="right" valign="top"><a id="a751eeecaa25c42ca47111dfedd6a3ced" name="a751eeecaa25c42ca47111dfedd6a3ced"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromDeclRefExpr</b> (<a class="el" href="classaion_1_1ast_1_1_decl_ref_expr.html">DeclRefExpr</a> *expr)</td></tr>
+<tr class="memitem:a96eafb99d5c243ad911977aa9fc86690" id="r_a96eafb99d5c243ad911977aa9fc86690"><td class="memItemLeft" align="right" valign="top"><a id="a96eafb99d5c243ad911977aa9fc86690" name="a96eafb99d5c243ad911977aa9fc86690"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitBinaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_binary_expr.html">BinaryExpr</a> *expr)</td></tr>
+<tr class="memitem:afa4a1582caac6c828444ef7989f692d5" id="r_afa4a1582caac6c828444ef7989f692d5"><td class="memItemLeft" align="right" valign="top"><a id="afa4a1582caac6c828444ef7989f692d5" name="afa4a1582caac6c828444ef7989f692d5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromBinaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_binary_expr.html">BinaryExpr</a> *expr)</td></tr>
+<tr class="memitem:a8f4df664e934d4f41befd3c40e4ba1a7" id="r_a8f4df664e934d4f41befd3c40e4ba1a7"><td class="memItemLeft" align="right" valign="top"><a id="a8f4df664e934d4f41befd3c40e4ba1a7" name="a8f4df664e934d4f41befd3c40e4ba1a7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitUnaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_unary_expr.html">UnaryExpr</a> *expr)</td></tr>
+<tr class="memitem:a7c151f4328a6c8aceb4342e8da506aee" id="r_a7c151f4328a6c8aceb4342e8da506aee"><td class="memItemLeft" align="right" valign="top"><a id="a7c151f4328a6c8aceb4342e8da506aee" name="a7c151f4328a6c8aceb4342e8da506aee"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromUnaryExpr</b> (<a class="el" href="classaion_1_1ast_1_1_unary_expr.html">UnaryExpr</a> *expr)</td></tr>
+<tr class="memitem:a5229f7499844dc6045e14c98e4aac97e" id="r_a5229f7499844dc6045e14c98e4aac97e"><td class="memItemLeft" align="right" valign="top"><a id="a5229f7499844dc6045e14c98e4aac97e" name="a5229f7499844dc6045e14c98e4aac97e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitIntegerLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_integer_literal_expr.html">IntegerLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:a98f3136f2af7fddf8238d5ecb3b13b61" id="r_a98f3136f2af7fddf8238d5ecb3b13b61"><td class="memItemLeft" align="right" valign="top"><a id="a98f3136f2af7fddf8238d5ecb3b13b61" name="a98f3136f2af7fddf8238d5ecb3b13b61"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromIntegerLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_integer_literal_expr.html">IntegerLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:a380352d82ce61cf32c94fa91a827c940" id="r_a380352d82ce61cf32c94fa91a827c940"><td class="memItemLeft" align="right" valign="top"><a id="a380352d82ce61cf32c94fa91a827c940" name="a380352d82ce61cf32c94fa91a827c940"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitFloatLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_float_literal_expr.html">FloatLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:a860bd1421285bd8d202c571d5fa0621f" id="r_a860bd1421285bd8d202c571d5fa0621f"><td class="memItemLeft" align="right" valign="top"><a id="a860bd1421285bd8d202c571d5fa0621f" name="a860bd1421285bd8d202c571d5fa0621f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromFloatLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_float_literal_expr.html">FloatLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:a3130ef1584f2663b29c946d0416424fa" id="r_a3130ef1584f2663b29c946d0416424fa"><td class="memItemLeft" align="right" valign="top"><a id="a3130ef1584f2663b29c946d0416424fa" name="a3130ef1584f2663b29c946d0416424fa"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitStringLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_string_literal_expr.html">StringLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:a65f1eab589203342af7afba2f9094c88" id="r_a65f1eab589203342af7afba2f9094c88"><td class="memItemLeft" align="right" valign="top"><a id="a65f1eab589203342af7afba2f9094c88" name="a65f1eab589203342af7afba2f9094c88"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromStringLiteralExpr</b> (<a class="el" href="classaion_1_1ast_1_1_string_literal_expr.html">StringLiteralExpr</a> *expr)</td></tr>
+<tr class="memitem:af0843a2a7ec98c355daaec9a2696dbd5" id="r_af0843a2a7ec98c355daaec9a2696dbd5"><td class="memItemLeft" align="right" valign="top"><a id="af0843a2a7ec98c355daaec9a2696dbd5" name="af0843a2a7ec98c355daaec9a2696dbd5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitCallExpr</b> (<a class="el" href="classaion_1_1ast_1_1_call_expr.html">CallExpr</a> *expr)</td></tr>
+<tr class="memitem:ae215c7e058b40ded9238f9fdedc2f67e" id="r_ae215c7e058b40ded9238f9fdedc2f67e"><td class="memItemLeft" align="right" valign="top"><a id="ae215c7e058b40ded9238f9fdedc2f67e" name="ae215c7e058b40ded9238f9fdedc2f67e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromCallExpr</b> (<a class="el" href="classaion_1_1ast_1_1_call_expr.html">CallExpr</a> *expr)</td></tr>
+<tr class="memitem:a9f445ee4b36414abf94621ed00d51df2" id="r_a9f445ee4b36414abf94621ed00d51df2"><td class="memItemLeft" align="right" valign="top"><a id="a9f445ee4b36414abf94621ed00d51df2" name="a9f445ee4b36414abf94621ed00d51df2"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitTranslationUnitDecl</b> (<a class="el" href="classaion_1_1ast_1_1_translation_unit_decl.html">TranslationUnitDecl</a> *decl)</td></tr>
+<tr class="memitem:a3e57b93ed480920482007f098a7118da" id="r_a3e57b93ed480920482007f098a7118da"><td class="memItemLeft" align="right" valign="top"><a id="a3e57b93ed480920482007f098a7118da" name="a3e57b93ed480920482007f098a7118da"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromTranslationUnitDecl</b> (<a class="el" href="classaion_1_1ast_1_1_translation_unit_decl.html">TranslationUnitDecl</a> *decl)</td></tr>
+<tr class="memitem:a622e268514c26bddc0343f2b8ccd22da" id="r_a622e268514c26bddc0343f2b8ccd22da"><td class="memItemLeft" align="right" valign="top"><a id="a622e268514c26bddc0343f2b8ccd22da" name="a622e268514c26bddc0343f2b8ccd22da"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitNamedDecl</b> (<a class="el" href="classaion_1_1ast_1_1_named_decl.html">NamedDecl</a> *decl)</td></tr>
+<tr class="memitem:a80ea95025c0b0c32f561bf8d44112959" id="r_a80ea95025c0b0c32f561bf8d44112959"><td class="memItemLeft" align="right" valign="top"><a id="a80ea95025c0b0c32f561bf8d44112959" name="a80ea95025c0b0c32f561bf8d44112959"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromNamedDecl</b> (<a class="el" href="classaion_1_1ast_1_1_named_decl.html">NamedDecl</a> *decl)</td></tr>
+<tr class="memitem:a9aa5b92a69a2e609cd71ffa5da485f9b" id="r_a9aa5b92a69a2e609cd71ffa5da485f9b"><td class="memItemLeft" align="right" valign="top"><a id="a9aa5b92a69a2e609cd71ffa5da485f9b" name="a9aa5b92a69a2e609cd71ffa5da485f9b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitValueDecl</b> (<a class="el" href="classaion_1_1ast_1_1_value_decl.html">ValueDecl</a> *decl)</td></tr>
+<tr class="memitem:a676a8dfb7d6261c38c1d11f0601f3843" id="r_a676a8dfb7d6261c38c1d11f0601f3843"><td class="memItemLeft" align="right" valign="top"><a id="a676a8dfb7d6261c38c1d11f0601f3843" name="a676a8dfb7d6261c38c1d11f0601f3843"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromValueDecl</b> (<a class="el" href="classaion_1_1ast_1_1_value_decl.html">ValueDecl</a> *decl)</td></tr>
+<tr class="memitem:acfa94873c88e185ac43517be0f4d3718" id="r_acfa94873c88e185ac43517be0f4d3718"><td class="memItemLeft" align="right" valign="top"><a id="acfa94873c88e185ac43517be0f4d3718" name="acfa94873c88e185ac43517be0f4d3718"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitVarDecl</b> (<a class="el" href="classaion_1_1ast_1_1_var_decl.html">VarDecl</a> *decl)</td></tr>
+<tr class="memitem:a29f7a4f3c6dc380e288602c87db6c53a" id="r_a29f7a4f3c6dc380e288602c87db6c53a"><td class="memItemLeft" align="right" valign="top"><a id="a29f7a4f3c6dc380e288602c87db6c53a" name="a29f7a4f3c6dc380e288602c87db6c53a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromVarDecl</b> (<a class="el" href="classaion_1_1ast_1_1_var_decl.html">VarDecl</a> *decl)</td></tr>
+<tr class="memitem:a583b1d03ae3a59d4eaa838c7e526e4a7" id="r_a583b1d03ae3a59d4eaa838c7e526e4a7"><td class="memItemLeft" align="right" valign="top"><a id="a583b1d03ae3a59d4eaa838c7e526e4a7" name="a583b1d03ae3a59d4eaa838c7e526e4a7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitErrorDecl</b> (<a class="el" href="classaion_1_1ast_1_1_error_decl.html">ErrorDecl</a> *decl)</td></tr>
+<tr class="memitem:a57fc7f5f02114f6bb74abef2e665c9c7" id="r_a57fc7f5f02114f6bb74abef2e665c9c7"><td class="memItemLeft" align="right" valign="top"><a id="a57fc7f5f02114f6bb74abef2e665c9c7" name="a57fc7f5f02114f6bb74abef2e665c9c7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromErrorDecl</b> (<a class="el" href="classaion_1_1ast_1_1_error_decl.html">ErrorDecl</a> *decl)</td></tr>
+<tr class="memitem:a0705d85c0bf5a0076b3226aa813f19e4" id="r_a0705d85c0bf5a0076b3226aa813f19e4"><td class="memItemLeft" align="right" valign="top"><a id="a0705d85c0bf5a0076b3226aa813f19e4" name="a0705d85c0bf5a0076b3226aa813f19e4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>VisitCompoundStmt</b> (<a class="el" href="classaion_1_1ast_1_1_compound_stmt.html">CompoundStmt</a> *stmt)</td></tr>
+<tr class="memitem:a7db3e3f0d6f0d5e2efd287568830e157" id="r_a7db3e3f0d6f0d5e2efd287568830e157"><td class="memItemLeft" align="right" valign="top"><a id="a7db3e3f0d6f0d5e2efd287568830e157" name="a7db3e3f0d6f0d5e2efd287568830e157"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WalkUpFromCompoundStmt</b> (<a class="el" href="classaion_1_1ast_1_1_compound_stmt.html">CompoundStmt</a> *stmt)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ad8fcdcf276a19bd2f7099e05f404aa05" id="r_ad8fcdcf276a19bd2f7099e05f404aa05"><td class="memItemLeft" align="right" valign="top"><a id="ad8fcdcf276a19bd2f7099e05f404aa05" name="ad8fcdcf276a19bd2f7099e05f404aa05"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>indent_level</b> = 0</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-static-attribs" class="groupheader"><a id="pro-static-attribs" name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:a924a4fd72eb3d60ec750e94f89fcc157" id="r_a924a4fd72eb3d60ec750e94f89fcc157"><td class="memItemLeft" align="right" valign="top"><a id="a924a4fd72eb3d60ec750e94f89fcc157" name="a924a4fd72eb3d60ec750e94f89fcc157"></a>
+static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>kReset</b> = &quot;\x1b[0m&quot;</td></tr>
+<tr class="memitem:a4f638074fd851419e6c40a97375add7b" id="r_a4f638074fd851419e6c40a97375add7b"><td class="memItemLeft" align="right" valign="top"><a id="a4f638074fd851419e6c40a97375add7b" name="a4f638074fd851419e6c40a97375add7b"></a>
+static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>kExprColor</b> = &quot;\x1b[38;5;110m&quot;</td></tr>
+<tr class="memitem:a5f1704b6203911e5249b21dc365746b0" id="r_a5f1704b6203911e5249b21dc365746b0"><td class="memItemLeft" align="right" valign="top"><a id="a5f1704b6203911e5249b21dc365746b0" name="a5f1704b6203911e5249b21dc365746b0"></a>
+static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>kDeclColor</b> = &quot;\x1b[38;5;145m&quot;</td></tr>
+<tr class="memitem:a2e4d90b2a7c765fe04f75930aff8d6ab" id="r_a2e4d90b2a7c765fe04f75930aff8d6ab"><td class="memItemLeft" align="right" valign="top"><a id="a2e4d90b2a7c765fe04f75930aff8d6ab" name="a2e4d90b2a7c765fe04f75930aff8d6ab"></a>
+static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>kStmtColor</b> = &quot;\x1b[38;5;109m&quot;</td></tr>
+<tr class="memitem:a999a037220d9c92804cc32ce8b6ec7c5" id="r_a999a037220d9c92804cc32ce8b6ec7c5"><td class="memItemLeft" align="right" valign="top"><a id="a999a037220d9c92804cc32ce8b6ec7c5" name="a999a037220d9c92804cc32ce8b6ec7c5"></a>
+static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>kInfoColor</b> = &quot;\x1b[38;5;244m&quot;</td></tr>
+<tr class="memitem:ad4339f45a12345d206a758d89fae70e4" id="r_ad4339f45a12345d206a758d89fae70e4"><td class="memItemLeft" align="right" valign="top"><a id="ad4339f45a12345d206a758d89fae70e4" name="ad4339f45a12345d206a758d89fae70e4"></a>
+static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>kErrorColor</b> = &quot;\x1b[38;5;174m&quot;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>core/include/ast/<a class="el" href="_recursive_ast_visitor_8hpp_source.html">RecursiveAstVisitor.hpp</a></li>

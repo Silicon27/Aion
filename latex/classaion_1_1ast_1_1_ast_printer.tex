@@ -1,0 +1,237 @@
+\doxysection{aion\+::ast\+::Ast\+Printer Class Reference}
+\hypertarget{classaion_1_1ast_1_1_ast_printer}{}\label{classaion_1_1ast_1_1_ast_printer}\index{aion::ast::AstPrinter@{aion::ast::AstPrinter}}
+Inheritance diagram for aion\+::ast\+::Ast\+Printer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classaion_1_1ast_1_1_ast_printer}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a12510a641059e75e970141d7f54e719e}\label{classaion_1_1ast_1_1_ast_printer_a12510a641059e75e970141d7f54e719e} 
+{\bfseries Ast\+Printer} (const \mbox{\hyperlink{classaion_1_1_source_manager}{Source\+Manager}} \texorpdfstring{$\ast$}{*}sm=nullptr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a5772a3b34eee35d2c6dc11c82feead0f}\label{classaion_1_1ast_1_1_ast_printer_a5772a3b34eee35d2c6dc11c82feead0f} 
+void {\bfseries print\+\_\+address} (const void \texorpdfstring{$\ast$}{*}ptr) const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a1bc9c6097fc666e0dc9d960c12263610}\label{classaion_1_1ast_1_1_ast_printer_a1bc9c6097fc666e0dc9d960c12263610} 
+void {\bfseries print\+\_\+location} (const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&loc) const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a0af8c39115b1c85c5a5e0ad6cc96e517}\label{classaion_1_1ast_1_1_ast_printer_a0af8c39115b1c85c5a5e0ad6cc96e517} 
+void {\bfseries print\+\_\+range} (const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range) const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a2e0becdd501ff322f09b63b633864f90}\label{classaion_1_1ast_1_1_ast_printer_a2e0becdd501ff322f09b63b633864f90} 
+std\+::string {\bfseries format\+\_\+type} (const \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type) const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a4fc2e2b267193ad4f88f47488014a3ad}\label{classaion_1_1ast_1_1_ast_printer_a4fc2e2b267193ad4f88f47488014a3ad} 
+bool {\bfseries print} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}tu\+\_\+decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_ad54584207c2370a66535ac8ee0c54df7}\label{classaion_1_1ast_1_1_ast_printer_ad54584207c2370a66535ac8ee0c54df7} 
+void {\bfseries print\+\_\+decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*}decl, const std\+::string \&prefix, bool is\+\_\+last)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a4f5dab19a3cb6f5e750d042c5eb77848}\label{classaion_1_1ast_1_1_ast_printer_a4f5dab19a3cb6f5e750d042c5eb77848} 
+void {\bfseries print\+\_\+expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}expr, const std\+::string \&prefix, bool is\+\_\+last)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_acf2edda87bd63be88872604515a45282}\label{classaion_1_1ast_1_1_ast_printer_acf2edda87bd63be88872604515a45282} 
+static const char \texorpdfstring{$\ast$}{*} {\bfseries decl\+\_\+kind\+\_\+name} (const Decl\+Kind kind)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a8e26efaf0d514f3b4685b97be8122249}\label{classaion_1_1ast_1_1_ast_printer_a8e26efaf0d514f3b4685b97be8122249} 
+static const char \texorpdfstring{$\ast$}{*} {\bfseries expr\+\_\+kind\+\_\+name} (const Expr\+Kind kind)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_ac572122229dd6b66215038189bd7db01}\label{classaion_1_1ast_1_1_ast_printer_ac572122229dd6b66215038189bd7db01} 
+static const char \texorpdfstring{$\ast$}{*} {\bfseries binary\+\_\+op\+\_\+name} (const Binary\+Op op)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_afe67d76e240880403171b227a7a2138e}\label{classaion_1_1ast_1_1_ast_printer_afe67d76e240880403171b227a7a2138e} 
+static const char \texorpdfstring{$\ast$}{*} {\bfseries unary\+\_\+op\+\_\+name} (const Unary\+Op op)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_aba355208b1545ddb2defa227665891e3}\label{classaion_1_1ast_1_1_ast_printer_aba355208b1545ddb2defa227665891e3} 
+static const char \texorpdfstring{$\ast$}{*} {\bfseries storage\+\_\+class\+\_\+name} (const Storage\+Class storage)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_ac1b92c7dfddd36692d6dda689b5251d8}\label{classaion_1_1ast_1_1_ast_printer_ac1b92c7dfddd36692d6dda689b5251d8} 
+static const char \texorpdfstring{$\ast$}{*} {\bfseries value\+\_\+category\+\_\+name} (const Value\+Category category)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_aa4ee4113f174e800f544a6e7b1093914}\label{classaion_1_1ast_1_1_ast_printer_aa4ee4113f174e800f544a6e7b1093914} 
+static const char \texorpdfstring{$\ast$}{*} {\bfseries type\+\_\+kind\+\_\+name} (const Type\+Kind kind)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_af973a52af2d4c6ff36806883b80d9aaf}\label{classaion_1_1ast_1_1_ast_printer_af973a52af2d4c6ff36806883b80d9aaf} 
+static std\+::string {\bfseries format\+\_\+identifier} (const \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}ident)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a066a707ee90b785d27a8e013b1eab4dd}\label{classaion_1_1ast_1_1_ast_printer_a066a707ee90b785d27a8e013b1eab4dd} 
+static \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries decl\+\_\+range\+\_\+for\+\_\+print} (const \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*}decl)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a4951b4894732a04ebca5c1faeadee73a}\label{classaion_1_1ast_1_1_ast_printer_a4951b4894732a04ebca5c1faeadee73a} 
+const \mbox{\hyperlink{classaion_1_1_source_manager}{Source\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries sm} = nullptr
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{aion\+::ast\+::\+Recursive\+Ast\+Visitor$<$ Ast\+Printer $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+bool {\bfseries enable\+\_\+colors}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a08212e8d545f8e76325298c23e9f8ea9}\label{classaion_1_1ast_1_1_ast_printer_a08212e8d545f8e76325298c23e9f8ea9} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Reset} = "{}\textbackslash{}x1b\mbox{[}0m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_ac4ea63847421446cdd3e83d90911ea15}\label{classaion_1_1ast_1_1_ast_printer_ac4ea63847421446cdd3e83d90911ea15} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Bold\+Green} = "{}\textbackslash{}x1b\mbox{[}1;32m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_ad070aff28152f743c47ea6d63e8b3ae2}\label{classaion_1_1ast_1_1_ast_printer_ad070aff28152f743c47ea6d63e8b3ae2} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Yellow} = "{}\textbackslash{}x1b\mbox{[}33m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_ab135943b5517bcf82063d828c99ebe4e}\label{classaion_1_1ast_1_1_ast_printer_ab135943b5517bcf82063d828c99ebe4e} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Cyan} = "{}\textbackslash{}x1b\mbox{[}36m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a93c1abb914b64d59fdfc3cc3916bc397}\label{classaion_1_1ast_1_1_ast_printer_a93c1abb914b64d59fdfc3cc3916bc397} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Magenta} = "{}\textbackslash{}x1b\mbox{[}35m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_a0fd8e8a5cb992aa08024e131105d1530}\label{classaion_1_1ast_1_1_ast_printer_a0fd8e8a5cb992aa08024e131105d1530} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Gray} = "{}\textbackslash{}x1b\mbox{[}38;5;244m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_ast_printer_af763493555e8ea5708564a2e00af1642}\label{classaion_1_1ast_1_1_ast_printer_af763493555e8ea5708564a2e00af1642} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Muted\+Node\+Color} = "{}\textbackslash{}x1b\mbox{[}38;5;181m"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{aion\+::ast\+::\+Recursive\+Ast\+Visitor$<$ Ast\+Printer $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_ast_printer}{Ast\+Printer}} \& {\bfseries get\+Derived} ()
+\item 
+void {\bfseries print\+\_\+indent} () const
+\item 
+const char \texorpdfstring{$\ast$}{*} {\bfseries colorize} (const char \texorpdfstring{$\ast$}{*}color) const
+\item 
+void {\bfseries print\+\_\+enter} (const char \texorpdfstring{$\ast$}{*}category\+\_\+color, const char \texorpdfstring{$\ast$}{*}node\+\_\+name)
+\item 
+void {\bfseries print\+\_\+exit} (const char \texorpdfstring{$\ast$}{*}category\+\_\+color, const char \texorpdfstring{$\ast$}{*}node\+\_\+name, const bool ok)
+\item 
+bool {\bfseries run\+\_\+traverse} (const char \texorpdfstring{$\ast$}{*}category\+\_\+color, const char \texorpdfstring{$\ast$}{*}node\+\_\+name, Node \texorpdfstring{$\ast$}{*}node, bool(Ast\+Printer\+::\texorpdfstring{$\ast$}{*}visit)(Node \texorpdfstring{$\ast$}{*}), bool(Ast\+Printer\+::\texorpdfstring{$\ast$}{*}walk)(Node \texorpdfstring{$\ast$}{*}))
+\item 
+bool {\bfseries Traverse\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Traverse\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\item 
+bool {\bfseries Traverse\+Error\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{Error\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{Typed\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{Decl\+Ref\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Binary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{Binary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{Unary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Integer\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{Integer\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Float\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{Float\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+String\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{String\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Call\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{Call\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Traverse\+Translation\+Unit\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Traverse\+Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{Named\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Traverse\+Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Traverse\+Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Traverse\+Error\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{Error\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Traverse\+Compound\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\item 
+bool {\bfseries Visit\+Error\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{Error\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Error\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{Error\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{Typed\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{Typed\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{Decl\+Ref\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{Decl\+Ref\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Binary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{Binary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Binary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{Binary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{Unary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{Unary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Integer\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{Integer\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Integer\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{Integer\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Float\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{Float\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Float\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{Float\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+String\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{String\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+String\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{String\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Call\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{Call\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Walk\+Up\+From\+Call\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{Call\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+bool {\bfseries Visit\+Translation\+Unit\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Walk\+Up\+From\+Translation\+Unit\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Visit\+Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{Named\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Walk\+Up\+From\+Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{Named\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Visit\+Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Walk\+Up\+From\+Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Visit\+Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Walk\+Up\+From\+Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Visit\+Error\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{Error\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Walk\+Up\+From\+Error\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{Error\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+bool {\bfseries Visit\+Compound\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\item 
+bool {\bfseries Walk\+Up\+From\+Compound\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{aion\+::ast\+::\+Recursive\+Ast\+Visitor$<$ Ast\+Printer $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+int {\bfseries indent\+\_\+level}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{aion\+::ast\+::\+Recursive\+Ast\+Visitor$<$ Ast\+Printer $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Reset}
+\item 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Expr\+Color}
+\item 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Decl\+Color}
+\item 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Stmt\+Color}
+\item 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Info\+Color}
+\item 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Error\+Color}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/printer.\+hpp\end{DoxyCompactItemize}

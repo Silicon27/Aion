@@ -3,6 +3,7 @@ var annotated_dup =
     [ "aion", null, [
       [ "ast", null, [
         [ "ASTContext", "classaion_1_1ast_1_1_a_s_t_context.html", "classaion_1_1ast_1_1_a_s_t_context" ],
+        [ "AstPrinter", "classaion_1_1ast_1_1_ast_printer.html", null ],
         [ "BinaryExpr", "classaion_1_1ast_1_1_binary_expr.html", null ],
         [ "BuiltinType", "classaion_1_1ast_1_1_builtin_type.html", null ],
         [ "CallExpr", "classaion_1_1ast_1_1_call_expr.html", "classaion_1_1ast_1_1_call_expr" ],
@@ -14,10 +15,12 @@ var annotated_dup =
         [ "ErrorExpr", "classaion_1_1ast_1_1_error_expr.html", "classaion_1_1ast_1_1_error_expr" ],
         [ "Expr", "classaion_1_1ast_1_1_expr.html", null ],
         [ "FloatLiteralExpr", "classaion_1_1ast_1_1_float_literal_expr.html", null ],
+        [ "FuncDecl", "classaion_1_1ast_1_1_func_decl.html", null ],
         [ "IdentifierInfo", "classaion_1_1ast_1_1_identifier_info.html", null ],
         [ "IntegerLiteralExpr", "classaion_1_1ast_1_1_integer_literal_expr.html", null ],
         [ "MutableType", "classaion_1_1ast_1_1_mutable_type.html", null ],
         [ "NamedDecl", "classaion_1_1ast_1_1_named_decl.html", null ],
+        [ "ParamVarDecl", "classaion_1_1ast_1_1_param_var_decl.html", null ],
         [ "RecursiveAstVisitor", "classaion_1_1ast_1_1_recursive_ast_visitor.html", null ],
         [ "ShortVec", "classaion_1_1ast_1_1_short_vec.html", "classaion_1_1ast_1_1_short_vec" ],
         [ "Stmt", "classaion_1_1ast_1_1_stmt.html", null ],

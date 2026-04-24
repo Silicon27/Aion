@@ -52,12 +52,15 @@ var hierarchy =
       [ "aion::ast::NamedDecl", "classaion_1_1ast_1_1_named_decl.html", [
         [ "aion::ast::ErrorDecl", "classaion_1_1ast_1_1_error_decl.html", null ],
         [ "aion::ast::ValueDecl", "classaion_1_1ast_1_1_value_decl.html", [
+          [ "aion::ast::FuncDecl", "classaion_1_1ast_1_1_func_decl.html", null ],
+          [ "aion::ast::ParamVarDecl", "classaion_1_1ast_1_1_param_var_decl.html", null ],
           [ "aion::ast::VarDecl", "classaion_1_1ast_1_1_var_decl.html", null ]
         ] ]
       ] ],
       [ "aion::ast::TranslationUnitDecl", "classaion_1_1ast_1_1_translation_unit_decl.html", null ]
     ] ],
     [ "aion::ast::DeclContext", "classaion_1_1ast_1_1_decl_context.html", [
+      [ "aion::ast::FuncDecl", "classaion_1_1ast_1_1_func_decl.html", null ],
       [ "aion::ast::TranslationUnitDecl", "classaion_1_1ast_1_1_translation_unit_decl.html", null ]
     ] ],
     [ "aion::diag::Diagnostic", "structaion_1_1diag_1_1_diagnostic.html", null ],
@@ -357,6 +360,9 @@ var hierarchy =
     [ "aion::diag::RangeDisplay", "structaion_1_1diag_1_1_range_display.html", null ],
     [ "allocator< T >::rebind< U >", "structallocator_1_1rebind.html", null ],
     [ "aion::ast::RecursiveAstVisitor< Derived >", "classaion_1_1ast_1_1_recursive_ast_visitor.html", null ],
+    [ "aion::ast::RecursiveAstVisitor< AstPrinter >", "classaion_1_1ast_1_1_recursive_ast_visitor.html", [
+      [ "aion::ast::AstPrinter", "classaion_1_1ast_1_1_ast_printer.html", null ]
+    ] ],
     [ "remove_const< T >", "structremove__const.html", null ],
     [ "remove_const< const T >", "structremove__const_3_01const_01_t_01_4.html", null ],
     [ "remove_cv< T >", "structremove__cv.html", null ],

@@ -15,13 +15,23 @@ Inheritance diagram for aion\+::ast\+::Translation\+Unit\+Decl\+:\begin{figure}[
 \includegraphics[height=2.000000cm]{classaion_1_1ast_1_1_translation_unit_decl}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Additional Inherited Members}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_translation_unit_decl_a658eb00a6d6e69bbd6cbeca8e70cc6a1}\label{classaion_1_1ast_1_1_translation_unit_decl_a658eb00a6d6e69bbd6cbeca8e70cc6a1} 
+{\bfseries Translation\+Unit\+Decl} (const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range=\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}}())
+\item 
+\Hypertarget{classaion_1_1ast_1_1_translation_unit_decl_af7e2f78617132547dc786bf0cb98483c}\label{classaion_1_1ast_1_1_translation_unit_decl_af7e2f78617132547dc786bf0cb98483c} 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+Source\+Range} () const
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Decl} (const Decl\+Kind K)
+{\bfseries Decl} (const Decl\+Kind K, const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&location=\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}}())
 \item 
 Decl\+Kind {\bfseries get\+\_\+kind} () const
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+Source\+Range} () const
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl_context}{aion\+::ast\+::\+Decl\+Context}}}
 \begin{DoxyCompactItemize}
@@ -32,12 +42,13 @@ void {\bfseries add\+\_\+decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+last\+\_\+decl} () const
 \end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries next} = nullptr
 \item 
-\mbox{\hyperlink{structaion_1_1_source_range}{aion\+::\+Source\+\_\+\+Range}} {\bfseries source\+\_\+range}
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries source\+\_\+location}
 \end{DoxyCompactItemize}
 
 

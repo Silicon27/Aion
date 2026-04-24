@@ -1,0 +1,90 @@
+\doxysection{aion\+::ast\+::Param\+Var\+Decl Class Reference}
+\hypertarget{classaion_1_1ast_1_1_param_var_decl}{}\label{classaion_1_1ast_1_1_param_var_decl}\index{aion::ast::ParamVarDecl@{aion::ast::ParamVarDecl}}
+Inheritance diagram for aion\+::ast\+::Param\+Var\+Decl\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classaion_1_1ast_1_1_param_var_decl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_param_var_decl_a57899d86b1f695f0a07ef4a87f2ea1f9}\label{classaion_1_1ast_1_1_param_var_decl_a57899d86b1f695f0a07ef4a87f2ea1f9} 
+{\bfseries Param\+Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range, \mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}default\+\_\+value=nullptr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_param_var_decl_a28db476fc0f4aaf9d35102bd6f5badf8}\label{classaion_1_1ast_1_1_param_var_decl_a28db476fc0f4aaf9d35102bd6f5badf8} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+default\+\_\+value} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_param_var_decl_ae4608a3f5eced11369608ea7fc412fef}\label{classaion_1_1ast_1_1_param_var_decl_ae4608a3f5eced11369608ea7fc412fef} 
+void {\bfseries set\+\_\+default\+\_\+value} (\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}default\+\_\+value)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_param_var_decl_a6ec275608322c48370977af1569b2ccd}\label{classaion_1_1ast_1_1_param_var_decl_a6ec275608322c48370977af1569b2ccd} 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+\_\+id\+\_\+loc} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{aion\+::ast\+::\+Value\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range)
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+type} () const
+\item 
+void {\bfseries set\+\_\+type} (\mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}new\+\_\+type)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{aion\+::ast\+::\+Named\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range=\{\})
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+name} () const
+\item 
+std\+::string\+\_\+view {\bfseries get\+\_\+identifier} () const
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+Source\+Range} () const
+\item 
+void {\bfseries set\+\_\+name} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}new\+\_\+name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Decl} (const Decl\+Kind K, const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&location=\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}}())
+\item 
+Decl\+Kind {\bfseries get\+\_\+kind} () const
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+Source\+Range} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_param_var_decl_a79bc06a740959eef7113ea21585e78bb}\label{classaion_1_1ast_1_1_param_var_decl_a79bc06a740959eef7113ea21585e78bb} 
+\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*} {\bfseries default\+\_\+value}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{aion\+::ast\+::\+Named\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries name}
+\item 
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries decl\+\_\+end}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries next} = nullptr
+\item 
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries source\+\_\+location}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{aion\+::ast\+::\+Value\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{Mutable\+Type}} \texorpdfstring{$\ast$}{*}type, const Decl\+Kind kind, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{aion\+::ast\+::\+Named\+Decl}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, const Decl\+Kind kind, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+core/include/ast/decl.\+hpp\end{DoxyCompactItemize}

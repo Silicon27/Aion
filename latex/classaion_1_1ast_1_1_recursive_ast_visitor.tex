@@ -1,10 +1,202 @@
 \doxysection{aion\+::ast\+::Recursive\+Ast\+Visitor\texorpdfstring{$<$}{<} Derived \texorpdfstring{$>$}{>} Class Template Reference}
 \hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor}{}\label{classaion_1_1ast_1_1_recursive_ast_visitor}\index{aion::ast::RecursiveAstVisitor$<$ Derived $>$@{aion::ast::RecursiveAstVisitor$<$ Derived $>$}}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a9f8db9030791a8221fc08b874b757490}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a9f8db9030791a8221fc08b874b757490} 
+bool {\bfseries enable\+\_\+colors} = true
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a3f97383f16830a0dd538f75ef6bbde8e}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a3f97383f16830a0dd538f75ef6bbde8e} 
+Derived \& {\bfseries get\+Derived} ()
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_af392972452ed567d916a6364dbe88f0d}\label{classaion_1_1ast_1_1_recursive_ast_visitor_af392972452ed567d916a6364dbe88f0d} 
+void {\bfseries print\+\_\+indent} () const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a52258ef3c9ef7d9506ca932ae0317ada}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a52258ef3c9ef7d9506ca932ae0317ada} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries colorize} (const char \texorpdfstring{$\ast$}{*}color) const
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a9127984789a406ee8267fdc21e28543b}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a9127984789a406ee8267fdc21e28543b} 
+void {\bfseries print\+\_\+enter} (const char \texorpdfstring{$\ast$}{*}category\+\_\+color, const char \texorpdfstring{$\ast$}{*}node\+\_\+name)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a0cc985f87ea73b90588acb00f0f80593}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a0cc985f87ea73b90588acb00f0f80593} 
+void {\bfseries print\+\_\+exit} (const char \texorpdfstring{$\ast$}{*}category\+\_\+color, const char \texorpdfstring{$\ast$}{*}node\+\_\+name, const bool ok)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a34dac847bd4169694152871a9ae68ac8}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a34dac847bd4169694152871a9ae68ac8} 
+{\footnotesize template$<$typename Node$>$ }\\bool {\bfseries run\+\_\+traverse} (const char \texorpdfstring{$\ast$}{*}category\+\_\+color, const char \texorpdfstring{$\ast$}{*}node\+\_\+name, Node \texorpdfstring{$\ast$}{*}node, bool(Derived\+::\texorpdfstring{$\ast$}{*}visit)(Node \texorpdfstring{$\ast$}{*}), bool(Derived\+::\texorpdfstring{$\ast$}{*}walk)(Node \texorpdfstring{$\ast$}{*}))
 \item 
 \Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a5da8719399434e3ccc5cd0c4d3341402}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a5da8719399434e3ccc5cd0c4d3341402} 
 bool {\bfseries Traverse\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a263b079a1f3d65b87cb827d21246cd7e}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a263b079a1f3d65b87cb827d21246cd7e} 
+bool {\bfseries Traverse\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ad126cccb434270d1050df65eb1e079b0}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ad126cccb434270d1050df65eb1e079b0} 
+bool {\bfseries Traverse\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_af840bc4e0ed69dfd4899242438d4dfd9}\label{classaion_1_1ast_1_1_recursive_ast_visitor_af840bc4e0ed69dfd4899242438d4dfd9} 
+bool {\bfseries Traverse\+Error\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{Error\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a3394846446adae29715426d3dda7a2b0}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a3394846446adae29715426d3dda7a2b0} 
+bool {\bfseries Traverse\+Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{Typed\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_aef877a37a82f20160c799d1ee4d60fbb}\label{classaion_1_1ast_1_1_recursive_ast_visitor_aef877a37a82f20160c799d1ee4d60fbb} 
+bool {\bfseries Traverse\+Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{Decl\+Ref\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a157d2c765ac6fd4b376f1a3b02491022}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a157d2c765ac6fd4b376f1a3b02491022} 
+bool {\bfseries Traverse\+Binary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{Binary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_aaccd81858da0c6b3fb4ba29e2a72a69b}\label{classaion_1_1ast_1_1_recursive_ast_visitor_aaccd81858da0c6b3fb4ba29e2a72a69b} 
+bool {\bfseries Traverse\+Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{Unary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a02a78d47413286f987f29915a75b337a}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a02a78d47413286f987f29915a75b337a} 
+bool {\bfseries Traverse\+Integer\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{Integer\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ad35cea34435c61a6cbe30a4a8ab74c2c}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ad35cea34435c61a6cbe30a4a8ab74c2c} 
+bool {\bfseries Traverse\+Float\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{Float\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ad89d9193db40eed0021a01d6cd0864ea}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ad89d9193db40eed0021a01d6cd0864ea} 
+bool {\bfseries Traverse\+String\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{String\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ae5256e54fa11a59afc3764d2e2963c2b}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ae5256e54fa11a59afc3764d2e2963c2b} 
+bool {\bfseries Traverse\+Call\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{Call\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_af51cb84427c5e9067e5d51cdce58f0bb}\label{classaion_1_1ast_1_1_recursive_ast_visitor_af51cb84427c5e9067e5d51cdce58f0bb} 
+bool {\bfseries Traverse\+Translation\+Unit\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a3c3fb38f3df548e66fc0cafad65ffae9}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a3c3fb38f3df548e66fc0cafad65ffae9} 
+bool {\bfseries Traverse\+Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{Named\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a4f092a2a2d7932295d6eddd1799cd609}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a4f092a2a2d7932295d6eddd1799cd609} 
+bool {\bfseries Traverse\+Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a36fe5631f71e7bf6e20f38811606ba0f}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a36fe5631f71e7bf6e20f38811606ba0f} 
+bool {\bfseries Traverse\+Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ae011c4bf6df1ddf806bc77d17fff0fa9}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ae011c4bf6df1ddf806bc77d17fff0fa9} 
+bool {\bfseries Traverse\+Error\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{Error\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a1d392813f01a11eb6aec0a2b4db5b087}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a1d392813f01a11eb6aec0a2b4db5b087} 
+bool {\bfseries Traverse\+Compound\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a065313a8cc8eb98687a8a3d5c2c52d51}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a065313a8cc8eb98687a8a3d5c2c52d51} 
+bool {\bfseries Visit\+Error\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{Error\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_aa6d3a2784c349c63fd56a332b181e304}\label{classaion_1_1ast_1_1_recursive_ast_visitor_aa6d3a2784c349c63fd56a332b181e304} 
+bool {\bfseries Walk\+Up\+From\+Error\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{Error\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a74b8c52d3a7afcd54461ae8548703dbd}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a74b8c52d3a7afcd54461ae8548703dbd} 
+bool {\bfseries Visit\+Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{Typed\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a81051de467093fd202c01763299b2cad}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a81051de467093fd202c01763299b2cad} 
+bool {\bfseries Walk\+Up\+From\+Typed\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{Typed\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a9d8439b8981d2942d7da887b8a00f1d6}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a9d8439b8981d2942d7da887b8a00f1d6} 
+bool {\bfseries Visit\+Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{Decl\+Ref\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a751eeecaa25c42ca47111dfedd6a3ced}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a751eeecaa25c42ca47111dfedd6a3ced} 
+bool {\bfseries Walk\+Up\+From\+Decl\+Ref\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{Decl\+Ref\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a96eafb99d5c243ad911977aa9fc86690}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a96eafb99d5c243ad911977aa9fc86690} 
+bool {\bfseries Visit\+Binary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{Binary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_afa4a1582caac6c828444ef7989f692d5}\label{classaion_1_1ast_1_1_recursive_ast_visitor_afa4a1582caac6c828444ef7989f692d5} 
+bool {\bfseries Walk\+Up\+From\+Binary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{Binary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a8f4df664e934d4f41befd3c40e4ba1a7}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a8f4df664e934d4f41befd3c40e4ba1a7} 
+bool {\bfseries Visit\+Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{Unary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a7c151f4328a6c8aceb4342e8da506aee}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a7c151f4328a6c8aceb4342e8da506aee} 
+bool {\bfseries Walk\+Up\+From\+Unary\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{Unary\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a5229f7499844dc6045e14c98e4aac97e}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a5229f7499844dc6045e14c98e4aac97e} 
+bool {\bfseries Visit\+Integer\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{Integer\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a98f3136f2af7fddf8238d5ecb3b13b61}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a98f3136f2af7fddf8238d5ecb3b13b61} 
+bool {\bfseries Walk\+Up\+From\+Integer\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{Integer\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a380352d82ce61cf32c94fa91a827c940}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a380352d82ce61cf32c94fa91a827c940} 
+bool {\bfseries Visit\+Float\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{Float\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a860bd1421285bd8d202c571d5fa0621f}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a860bd1421285bd8d202c571d5fa0621f} 
+bool {\bfseries Walk\+Up\+From\+Float\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{Float\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a3130ef1584f2663b29c946d0416424fa}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a3130ef1584f2663b29c946d0416424fa} 
+bool {\bfseries Visit\+String\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{String\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a65f1eab589203342af7afba2f9094c88}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a65f1eab589203342af7afba2f9094c88} 
+bool {\bfseries Walk\+Up\+From\+String\+Literal\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{String\+Literal\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_af0843a2a7ec98c355daaec9a2696dbd5}\label{classaion_1_1ast_1_1_recursive_ast_visitor_af0843a2a7ec98c355daaec9a2696dbd5} 
+bool {\bfseries Visit\+Call\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{Call\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ae215c7e058b40ded9238f9fdedc2f67e}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ae215c7e058b40ded9238f9fdedc2f67e} 
+bool {\bfseries Walk\+Up\+From\+Call\+Expr} (\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{Call\+Expr}} \texorpdfstring{$\ast$}{*}expr)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a9f445ee4b36414abf94621ed00d51df2}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a9f445ee4b36414abf94621ed00d51df2} 
+bool {\bfseries Visit\+Translation\+Unit\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a3e57b93ed480920482007f098a7118da}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a3e57b93ed480920482007f098a7118da} 
+bool {\bfseries Walk\+Up\+From\+Translation\+Unit\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{Translation\+Unit\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a622e268514c26bddc0343f2b8ccd22da}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a622e268514c26bddc0343f2b8ccd22da} 
+bool {\bfseries Visit\+Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{Named\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a80ea95025c0b0c32f561bf8d44112959}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a80ea95025c0b0c32f561bf8d44112959} 
+bool {\bfseries Walk\+Up\+From\+Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{Named\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a9aa5b92a69a2e609cd71ffa5da485f9b}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a9aa5b92a69a2e609cd71ffa5da485f9b} 
+bool {\bfseries Visit\+Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a676a8dfb7d6261c38c1d11f0601f3843}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a676a8dfb7d6261c38c1d11f0601f3843} 
+bool {\bfseries Walk\+Up\+From\+Value\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{Value\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_acfa94873c88e185ac43517be0f4d3718}\label{classaion_1_1ast_1_1_recursive_ast_visitor_acfa94873c88e185ac43517be0f4d3718} 
+bool {\bfseries Visit\+Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a29f7a4f3c6dc380e288602c87db6c53a}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a29f7a4f3c6dc380e288602c87db6c53a} 
+bool {\bfseries Walk\+Up\+From\+Var\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{Var\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a583b1d03ae3a59d4eaa838c7e526e4a7}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a583b1d03ae3a59d4eaa838c7e526e4a7} 
+bool {\bfseries Visit\+Error\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{Error\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a57fc7f5f02114f6bb74abef2e665c9c7}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a57fc7f5f02114f6bb74abef2e665c9c7} 
+bool {\bfseries Walk\+Up\+From\+Error\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{Error\+Decl}} \texorpdfstring{$\ast$}{*}decl)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a0705d85c0bf5a0076b3226aa813f19e4}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a0705d85c0bf5a0076b3226aa813f19e4} 
+bool {\bfseries Visit\+Compound\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a7db3e3f0d6f0d5e2efd287568830e157}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a7db3e3f0d6f0d5e2efd287568830e157} 
+bool {\bfseries Walk\+Up\+From\+Compound\+Stmt} (\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{Compound\+Stmt}} \texorpdfstring{$\ast$}{*}stmt)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ad8fcdcf276a19bd2f7099e05f404aa05}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ad8fcdcf276a19bd2f7099e05f404aa05} 
+int {\bfseries indent\+\_\+level} = 0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a924a4fd72eb3d60ec750e94f89fcc157}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a924a4fd72eb3d60ec750e94f89fcc157} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Reset} = "{}\textbackslash{}x1b\mbox{[}0m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a4f638074fd851419e6c40a97375add7b}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a4f638074fd851419e6c40a97375add7b} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Expr\+Color} = "{}\textbackslash{}x1b\mbox{[}38;5;110m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a5f1704b6203911e5249b21dc365746b0}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a5f1704b6203911e5249b21dc365746b0} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Decl\+Color} = "{}\textbackslash{}x1b\mbox{[}38;5;145m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a2e4d90b2a7c765fe04f75930aff8d6ab}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a2e4d90b2a7c765fe04f75930aff8d6ab} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Stmt\+Color} = "{}\textbackslash{}x1b\mbox{[}38;5;109m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_a999a037220d9c92804cc32ce8b6ec7c5}\label{classaion_1_1ast_1_1_recursive_ast_visitor_a999a037220d9c92804cc32ce8b6ec7c5} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Info\+Color} = "{}\textbackslash{}x1b\mbox{[}38;5;244m"{}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_recursive_ast_visitor_ad4339f45a12345d206a758d89fae70e4}\label{classaion_1_1ast_1_1_recursive_ast_visitor_ad4339f45a12345d206a758d89fae70e4} 
+static constexpr const char \texorpdfstring{$\ast$}{*} {\bfseries k\+Error\+Color} = "{}\textbackslash{}x1b\mbox{[}38;5;174m"{}
 \end{DoxyCompactItemize}
 
 

@@ -9,6 +9,362 @@
 \DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ AION\_PRINTER\_HPP}}
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ AION\_PRINTER\_HPP}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_PRINTER\_HPP}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <ast/RecursiveAstVisitor.hpp>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{class\ }AstPrinter\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{RecursiveAstVisitor}}<AstPrinter>\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classaion_1_1_source_manager}{SourceManager}}*\ sm\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kReset\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[0m"{}};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kBoldGreen\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[1;32m"{}};}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kYellow\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[33m"{}};}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kCyan\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[36m"{}};}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kMagenta\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[35m"{}};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kGray\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[38;5;244m"{}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kMutedNodeColor\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[38;5;181m"{}};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ AstPrinter(\textcolor{keyword}{const}\ \mbox{\hyperlink{classaion_1_1_source_manager}{SourceManager}}*\ sm\ =\ \textcolor{keyword}{nullptr})\ :\ sm(sm)\ \{\}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_address(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ ptr)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!ptr)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'\ '}\ <<\ colorize(kYellow)\ <<\ ptr\ <<\ colorize(kReset);}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_location(\textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_location}{SourceLocation}}\&\ loc)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!sm\ ||\ loc.is\_invalid())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ lc\ =\ sm-\/>get\_line\_column(loc);}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'\ '}\ <<\ colorize(kGray)\ <<\ \textcolor{stringliteral}{"{}<line:"{}}\ <<\ lc.first\ <<\ \textcolor{stringliteral}{"{}:"{}}\ <<\ lc.second\ <<\ \textcolor{stringliteral}{"{}>"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_range(\textcolor{keyword}{const}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\&\ range)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!sm\ ||\ !range.is\_valid())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ start\ =\ sm-\/>get\_line\_column(range.begin);}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ end\ =\ sm-\/>get\_line\_column(range.end);}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'\ '}\ <<\ colorize(kGray)\ <<\ \textcolor{charliteral}{'<'};}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (start.first\ ==\ end.first)\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}line:"{}}\ <<\ start.first\ <<\ \textcolor{stringliteral}{"{}:"{}}\ <<\ start.second\ <<\ \textcolor{stringliteral}{"{},\ col:"{}}\ <<\ end.second;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}line:"{}}\ <<\ start.first\ <<\ \textcolor{stringliteral}{"{}:"{}}\ <<\ start.second\ <<\ \textcolor{stringliteral}{"{},\ line:"{}}\ <<\ end.first\ <<\ \textcolor{stringliteral}{"{}:"{}}\ <<\ end.second;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'>'}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ decl\_kind\_name(\textcolor{keyword}{const}\ DeclKind\ kind)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (kind)\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::variable:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VarDecl"{}};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::translation\_unit:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}TranslationUnitDecl"{}};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::named:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}NamedDecl"{}};}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::error:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}ErrorDecl"{}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::value:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}ValueDecl"{}};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::function:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}FunctionDecl"{}};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::struct\_:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}RecordDecl"{}};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::enum\_:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}EnumDecl"{}};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::module:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}ModuleDecl"{}};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Decl"{}};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ expr\_kind\_name(\textcolor{keyword}{const}\ ExprKind\ kind)\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (kind)\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::binary\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}BinaryOperator"{}};}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::unary\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}UnaryOperator"{}};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::call\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}CallExpr"{}};}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::identifier\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}DeclRefExpr"{}};}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::integer\_literal\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}IntegerLiteral"{}};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::float\_literal\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}FloatingLiteral"{}};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::string\_literal\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}StringLiteral"{}};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::typed\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}TypedExpr"{}};}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::member\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}MemberExpr"{}};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::array\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}ArrayExpr"{}};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::struct\_expr:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}InitListExpr"{}};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Expr"{}};}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ binary\_op\_name(\textcolor{keyword}{const}\ BinaryOp\ op)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (op)\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::add:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}+"{}};}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::sub:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}-\/"{}};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::mul:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}*"{}};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::div:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}/"{}};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::mod:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\%"{}};}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::pow:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}**"{}};}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::equal:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}=="{}};}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::not\_equal:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}!="{}};}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::less:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<"{}};}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::less\_equal:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<="{}};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::greater:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}>"{}};}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::greater\_equal:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}>="{}};}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::logical\_and:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\&\&"{}};}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::logical\_or:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}||"{}};}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::bit\_and:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\&"{}};}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::bit\_or:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}|"{}};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::bit\_xor:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\string^"{}};}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::lshift:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<<"{}};}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::rshift:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}>>"{}};}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}="{}};}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::add\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}+="{}};}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::sub\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}-\/="{}};}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::mul\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}*="{}};}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::div\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}/="{}};}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::mod\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\%="{}};}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::and\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\&="{}};}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::or\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}|="{}};}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::xor\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\string^="{}};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::lshift\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<<="{}};}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::rshift\_assign:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}>>="{}};}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::dot:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}."{}};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::arrow:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}-\/>"{}};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::scope\_resolution:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}::"{}};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::range:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}.."{}};}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::inclusive\_range:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}..."{}};}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::fat\_arrow:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}=>"{}};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ BinaryOp::as:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}as"{}};}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}?"{}};}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ unary\_op\_name(\textcolor{keyword}{const}\ UnaryOp\ op)\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (op)\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::plus:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}+"{}};}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::minus:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}-\/"{}};}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::logical\_not:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}!"{}};}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::bit\_not:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\string~"{}};}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::address\_of:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}\&"{}};}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::deref:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}*"{}};}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::preincrement:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}++(pre)"{}};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::postincrement:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}++(post)"{}};}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::predecrement:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}-\/-\/(pre)"{}};}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ UnaryOp::postdecrement:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}-\/-\/(post)"{}};}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}?"{}};}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ storage\_class\_name(\textcolor{keyword}{const}\ StorageClass\ storage)\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (storage)\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StorageClass::stack:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}stack"{}};}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StorageClass::heap:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}heap"{}};}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StorageClass::persistent:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}persistent"{}};}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}unknown"{}};}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ value\_category\_name(\textcolor{keyword}{const}\ ValueCategory\ category)\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (category)\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ValueCategory::named:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}named"{}};}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ValueCategory::unnamed:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}unnamed"{}};}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ValueCategory::invalid:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}invalid"{}};}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}unknown"{}};}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ type\_kind\_name(\textcolor{keyword}{const}\ TypeKind\ kind)\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (kind)\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TypeKind::builtin:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}builtin"{}};}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TypeKind::user\_defined:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}user\_defined"{}};}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}unknown"{}};}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ std::string\ format\_type(\textcolor{keyword}{const}\ \mbox{\hyperlink{classaion_1_1ast_1_1_mutable_type}{MutableType}}*\ type)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (type\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<null\ type>"{}};}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ result\ =\ type-\/>is\_mutable()\ ?\ \textcolor{stringliteral}{"{}mut\ "{}}\ :\ \textcolor{stringliteral}{"{}imm\ "{}};}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classaion_1_1ast_1_1_type}{Type}}*\ base\ =\ type-\/>get\_base();}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (base\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ \textcolor{stringliteral}{"{}<null\ base>"{}};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (base-\/>get\_kind()\ ==\ TypeKind::user\_defined)\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ ud\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classaion_1_1ast_1_1_user_defined_type}{UserDefinedType}}*\textcolor{keyword}{>}(base);}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ std::string(ud-\/>get\_name());}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ type\_kind\_name(base-\/>get\_kind());}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::string\ format\_identifier(\textcolor{keyword}{const}\ \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{IdentifierInfo}}*\ ident)\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ident\ ==\ \textcolor{keyword}{nullptr}\ ||\ ident-\/>get\_name()\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<anonymous>"{}};}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ident-\/>get\_name();}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}\ decl\_range\_for\_print(\textcolor{keyword}{const}\ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ decl)\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (decl\ ==\ \textcolor{keyword}{nullptr})\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structaion_1_1_source_range}{SourceRange}}();}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (decl-\/>get\_kind())\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::variable:}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{VarDecl}}*\textcolor{keyword}{>}(decl)-\/>getSourceRange();}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::error:}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{ErrorDecl}}*\textcolor{keyword}{>}(decl)-\/>getSourceRange();}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::named:}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{NamedDecl}}*\textcolor{keyword}{>}(decl)-\/>getSourceRange();}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::value:}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{ValueDecl}}*\textcolor{keyword}{>}(decl)-\/>getSourceRange();}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::function:}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classaion_1_1ast_1_1_func_decl}{FuncDecl}}*\textcolor{keyword}{>}(decl)-\/>getSourceRange();}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::translation\_unit:}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{TranslationUnitDecl}}*\textcolor{keyword}{>}(decl)-\/>getSourceRange();}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ decl-\/>getSourceRange();}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ print(\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{TranslationUnitDecl}}*\ tu\_decl)\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tu\_decl\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}<null\ translation\ unit>"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kBoldGreen)\ <<\ \textcolor{stringliteral}{"{}TranslationUnitDecl"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ print\_address(tu\_decl);}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ print\_range(tu\_decl-\/>getSourceRange());}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ current\ =\ tu\_decl-\/>get\_first\_decl();}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current)\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ next\ =\ current-\/>next;}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_decl(current,\ \textcolor{stringliteral}{"{}"{}},\ next\ ==\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\ =\ next;}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_decl(\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ decl,\ \textcolor{keyword}{const}\ std::string\&\ prefix,\ \textcolor{keywordtype}{bool}\ is\_last)\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (decl\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ prefix\ <<\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\`{}-\/\ "{}}\ :\ \textcolor{stringliteral}{"{}|-\/\ "{}})\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}<null\ decl>"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ prefix\ <<\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\`{}-\/\ "{}}\ :\ \textcolor{stringliteral}{"{}|-\/\ "{}});}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kBoldGreen)\ <<\ decl\_kind\_name(decl-\/>get\_kind())\ <<\ colorize(kReset);}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ print\_address(decl);}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ print\_range(decl\_range\_for\_print(decl));}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (decl-\/>get\_kind())\ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::variable:\ \{}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ var\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{VarDecl}}*\textcolor{keyword}{>}(decl);}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ var-\/>get\_identifier()\ <<\ colorize(kReset);}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}\ '"{}}\ <<\ format\_type(var-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (var-\/>get\_init()\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_expr(var-\/>get\_init(),\ prefix\ +\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\ \ "{}}\ :\ \textcolor{stringliteral}{"{}|\ "{}}),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::error:\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ err\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{ErrorDecl}}*\textcolor{keyword}{>}(decl);}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ format\_identifier(err-\/>get\_name())\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::named:\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ named\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{NamedDecl}}*\textcolor{keyword}{>}(decl);}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ format\_identifier(named-\/>get\_name())\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::value:\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ value\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{ValueDecl}}*\textcolor{keyword}{>}(decl);}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ format\_identifier(value-\/>get\_name())\ <<\ colorize(kReset);}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}\ '"{}}\ <<\ format\_type(value-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_expr(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ expr,\ \textcolor{keyword}{const}\ std::string\&\ prefix,\ \textcolor{keywordtype}{bool}\ is\_last)\ \{}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (expr\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ prefix\ <<\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\`{}-\/\ "{}}\ :\ \textcolor{stringliteral}{"{}|-\/\ "{}})\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}<null\ expr>"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ prefix\ <<\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\`{}-\/\ "{}}\ :\ \textcolor{stringliteral}{"{}|-\/\ "{}});}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kBoldGreen)\ <<\ expr\_kind\_name(expr-\/>get\_kind())\ <<\ colorize(kReset);}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ print\_address(expr);}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (expr-\/>get\_kind())\ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::binary\_expr:\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ bin\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{BinaryExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_range(bin-\/>range);}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(bin-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kMagenta)\ <<\ \textcolor{stringliteral}{"{}\ '"{}}\ <<\ binary\_op\_name(bin-\/>op)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ next\_prefix\ =\ prefix\ +\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\ \ "{}}\ :\ \textcolor{stringliteral}{"{}|\ "{}});}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_expr(bin-\/>lhs,\ next\_prefix,\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_expr(bin-\/>rhs,\ next\_prefix,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::unary\_expr:\ \{}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ unary\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{UnaryExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_location(unary-\/>loc);}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(unary-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kMagenta)\ <<\ \textcolor{stringliteral}{"{}\ '"{}}\ <<\ unary\_op\_name(unary-\/>get\_op())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_expr(unary-\/>get\_operand(),\ prefix\ +\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\ \ "{}}\ :\ \textcolor{stringliteral}{"{}|\ "{}}),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::identifier\_expr:\ \{}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ ref\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{DeclRefExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_location(ref-\/>loc);}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(ref-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ (ref-\/>decl\ ?\ format\_identifier(ref-\/>decl-\/>get\_name())\ :\ \textcolor{stringliteral}{"{}<unbound>"{}})\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::call\_expr:\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ call\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{CallExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(call-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ next\_prefix\ =\ prefix\ +\ (is\_last\ ?\ \textcolor{stringliteral}{"{}\ \ "{}}\ :\ \textcolor{stringliteral}{"{}|\ "{}});}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_expr(call-\/>callee,\ next\_prefix,\ call-\/>num\_args\ ==\ 0);}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ i\ =\ 0;\ i\ <\ call-\/>num\_args;\ ++i)\ \{}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_expr(call-\/>args[i],\ next\_prefix,\ i\ ==\ call-\/>num\_args\ -\/\ 1);}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::integer\_literal\_expr:\ \{}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ lit\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{IntegerLiteralExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_location(lit-\/>loc);}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(lit-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ lit-\/>value\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::float\_literal\_expr:\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ lit\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{FloatLiteralExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_location(lit-\/>loc);}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(lit-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ lit-\/>value\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::string\_literal\_expr:\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ lit\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{StringLiteralExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_location(lit-\/>loc);}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(lit-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset);}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}\ \(\backslash\)"{}"{}}\ <<\ lit-\/>value\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::typed\_expr:\ \{}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ typed\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{TypedExpr}}*\textcolor{keyword}{>}(expr);}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ colorize(kCyan)\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ format\_type(typed-\/>get\_type())\ <<\ \textcolor{stringliteral}{"{}'"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00361\ \ \ \ \ \};}
+\DoxyCodeLine{00362\ \}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_PRINTER\_HPP}}
 
 \end{DoxyCode}

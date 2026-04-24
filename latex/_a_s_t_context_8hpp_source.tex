@@ -81,7 +81,7 @@
 \DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \};}
 \DoxyCodeLine{00087\ }
 \DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Value>}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StringMap\ =\ \mbox{\hyperlink{classaion_1_1ast_1_1_string_map}{::aion::ast::StringMap<Value>}};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StringMap\ =\ StringMap<Value>;}
 \DoxyCodeLine{00090\ }
 \DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{private}:}
 \DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator}{BumpPtrAllocator<>}}\ allocator;}
@@ -123,98 +123,125 @@
 \DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}(storage)\ T(std::forward<Args>(args)...);}
 \DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *allocate\_string(std::string\_view\ str)\ \{}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str.empty())\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *storage\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\ *\textcolor{keyword}{>}(allocate(str.size()\ +\ 1,\ 1));}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ std::ranges::copy(str,\ storage);}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ storage[str.size()]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage;}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00138\ \ \ \ \ \};}
-\DoxyCodeLine{00139\ \}\ \textcolor{comment}{//\ namespace\ aion::ast}}
-\DoxyCodeLine{00140\ }
-\DoxyCodeLine{00141\ \textcolor{comment}{//\ Template\ implementation\ for\ BumpPtrAllocator}}
-\DoxyCodeLine{00142\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
-\DoxyCodeLine{00144\ \ \ \ \ ASTContext::BumpPtrAllocator<VecAlloc>::BumpPtrAllocator(\textcolor{keyword}{const}\ std::size\_t\ initial\_slab\_size)}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ :\ slab\_size(initial\_slab\_size)\ \{}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ slabs.emplace\_back(slab\_size);}
-\DoxyCodeLine{00147\ \ \ \ \ \}}
-\DoxyCodeLine{00148\ }
-\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
-\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_add22f725a1e59d95da9d4f69e58e19cb}{ASTContext::BumpPtrAllocator<VecAlloc>::allocate}}(\textcolor{keyword}{const}\ std::size\_t\ size,\ \textcolor{keyword}{const}\ std::size\_t\ alignment,}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ size\_of\_new\_slab,}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ reuse\_free\_slab)\ \{}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (reuse\_free\_slab\ \&\&\ !partially\_used\_slabs.empty())\ \{}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ partially\_used\_slabs.begin();\ it\ !=\ partially\_used\_slabs.end();)\ \{}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Slab\ \&slab\ =\ slabs[*it];}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{void}\ *result\ =\ slab.allocate(size,\ alignment))\ \{}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (slab.get\_remaining\_capacity()\ ==\ 0)\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it\ =\ partially\_used\_slabs.erase(it);}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++it;}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{void}\ *result\ =\ slabs[current\_slab\_idx].\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_add22f725a1e59d95da9d4f69e58e19cb}{allocate}}(size,\ alignment))\ \{}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00169\ }
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (slabs[current\_slab\_idx].get\_remaining\_capacity()\ >\ 0)\ \{}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ partially\_used\_slabs.push\_back(current\_slab\_idx);}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00173\ }
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ large\ allocations\ by\ creating\ a\ dedicated\ slab.}}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (size\_of\_new\_slab\ ==\ 0\ \&\&\ size\ >=\ slab\_size)\ \{}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ slabs.emplace\_back(size\ +\ alignment);}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ slabs.back().allocate(size,\ alignment);}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00179\ }
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ new\_slab\_size\ =\ size\_of\_new\_slab\ >\ 0\ ?\ size\_of\_new\_slab\ :\ slab\_size;}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ slabs.emplace\_back(new\_slab\_size);}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ current\_slab\_idx\ =\ slabs.size()\ -\/\ 1;}
-\DoxyCodeLine{00183\ }
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Implement\ geometric\ growth:\ double\ the\ default\ slab\ size\ for\ future\ allocations,\ up\ to\ 128MB.}}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (size\_of\_new\_slab\ ==\ 0\ \&\&\ slab\_size\ <\ 128\ *\ 1024\ *\ 1024)\ \{}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ slab\_size\ *=\ 2;}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ slabs[current\_slab\_idx].allocate(size,\ alignment);}
-\DoxyCodeLine{00190\ \ \ \ \ \}}
-\DoxyCodeLine{00191\ }
-\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
-\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keywordtype}{void}\ ASTContext::BumpPtrAllocator<VecAlloc>::reset\_slab(std::size\_t\ idx)\ \{}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ Slab\ \&slab\ =\ slabs[idx];}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ slab.reset();}
-\DoxyCodeLine{00196\ }
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::ranges::find(partially\_used\_slabs,\ idx);}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ partially\_used\_slabs.end())\ \{}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ partially\_used\_slabs.erase(it);}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ partially\_used\_slabs.insert(partially\_used\_slabs.begin(),\ idx);}
-\DoxyCodeLine{00202\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ––––––––––––––––––––––––––––––––––––––––––}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ custom\ allocation\ functions\ for\ non-\/trivially\ allocatable\ types}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ (ex.\ types\ that\ may\ have\ a\ pointer\ as\ an\ array\ in\ their\ members)}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ––––––––––––––––––––––––––––––––––––––––––}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ FuncDecl\ *create\_func\_decl(\textcolor{keyword}{const}\ std::string\_view\ name,\ \textcolor{keyword}{const}\ std::size\_t\ num\_args,\ \textcolor{keyword}{const}\ std::size\_t\ num\_ret\_vals);}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *allocate\_string(std::string\_view\ str)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str.empty())\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *storage\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\ *\textcolor{keyword}{>}(allocate(str.size()\ +\ 1,\ 1));}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ std::ranges::copy(str,\ storage);}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ storage[str.size()]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ storage;}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ \ \ \ \ \};}
+\DoxyCodeLine{00146\ \}\ \textcolor{comment}{//\ namespace\ aion::ast}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{comment}{//\ Template\ implementation\ for\ BumpPtrAllocator}}
+\DoxyCodeLine{00149\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
+\DoxyCodeLine{00151\ \ \ \ \ ASTContext::BumpPtrAllocator<VecAlloc>::BumpPtrAllocator(\textcolor{keyword}{const}\ std::size\_t\ initial\_slab\_size)}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ :\ slab\_size(initial\_slab\_size)\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ slabs.emplace\_back(slab\_size);}
+\DoxyCodeLine{00154\ \ \ \ \ \}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_add22f725a1e59d95da9d4f69e58e19cb}{ASTContext::BumpPtrAllocator<VecAlloc>::allocate}}(\textcolor{keyword}{const}\ std::size\_t\ size,\ \textcolor{keyword}{const}\ std::size\_t\ alignment,}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ size\_of\_new\_slab,}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ reuse\_free\_slab)\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (reuse\_free\_slab\ \&\&\ !partially\_used\_slabs.empty())\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ partially\_used\_slabs.begin();\ it\ !=\ partially\_used\_slabs.end();)\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Slab\ \&slab\ =\ slabs[*it];}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{void}\ *result\ =\ slab.allocate(size,\ alignment))\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (slab.get\_remaining\_capacity()\ ==\ 0)\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it\ =\ partially\_used\_slabs.erase(it);}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++it;}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{void}\ *result\ =\ slabs[current\_slab\_idx].\mbox{\hyperlink{classaion_1_1ast_1_1_a_s_t_context_1_1_bump_ptr_allocator_add22f725a1e59d95da9d4f69e58e19cb}{allocate}}(size,\ alignment))\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (slabs[current\_slab\_idx].get\_remaining\_capacity()\ >\ 0)\ \{}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ partially\_used\_slabs.push\_back(current\_slab\_idx);}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ large\ allocations\ by\ creating\ a\ dedicated\ slab.}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (size\_of\_new\_slab\ ==\ 0\ \&\&\ size\ >=\ slab\_size)\ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ slabs.emplace\_back(size\ +\ alignment);}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ slabs.back().allocate(size,\ alignment);}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::size\_t\ new\_slab\_size\ =\ size\_of\_new\_slab\ >\ 0\ ?\ size\_of\_new\_slab\ :\ slab\_size;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ slabs.emplace\_back(new\_slab\_size);}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ current\_slab\_idx\ =\ slabs.size()\ -\/\ 1;}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Implement\ geometric\ growth:\ double\ the\ default\ slab\ size\ for\ future\ allocations,\ up\ to\ 128MB.}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (size\_of\_new\_slab\ ==\ 0\ \&\&\ slab\_size\ <\ 128\ *\ 1024\ *\ 1024)\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ slab\_size\ *=\ 2;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ slabs[current\_slab\_idx].allocate(size,\ alignment);}
+\DoxyCodeLine{00197\ \ \ \ \ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ ASTContext::BumpPtrAllocator<VecAlloc>::reset\_slab(std::size\_t\ idx)\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ Slab\ \&slab\ =\ slabs[idx];}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ slab.reset();}
 \DoxyCodeLine{00203\ }
-\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
-\DoxyCodeLine{00205\ \ \ \ \ std::size\_t\ ASTContext::BumpPtrAllocator<VecAlloc>::num\_allocated\_bytes()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ std::size\_t\ total\ =\ 0;}
-\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&slab:\ slabs)\ \{}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ total\ +=\ slab.capacity;}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
-\DoxyCodeLine{00211\ \ \ \ \ \}}
-\DoxyCodeLine{00212\ }
-\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
-\DoxyCodeLine{00214\ \ \ \ \ std::size\_t\ ASTContext::BumpPtrAllocator<VecAlloc>::num\_allocated\_bytes\_used()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ std::size\_t\ total\ =\ 0;}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&slab:\ slabs)\ \{}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ total\ +=\ slab.current\ -\/\ slab.buffer;}
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
-\DoxyCodeLine{00220\ \ \ \ \ \}}
-\DoxyCodeLine{00221\ \}\ \textcolor{comment}{//\ namespace\ aion::ast}}
-\DoxyCodeLine{00222\ }
-\DoxyCodeLine{00223\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_AST\_CONTEXT\_HPP}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ std::ranges::find(partially\_used\_slabs,\ idx);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ partially\_used\_slabs.end())\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ partially\_used\_slabs.erase(it);}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ partially\_used\_slabs.insert(partially\_used\_slabs.begin(),\ idx);}
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
+\DoxyCodeLine{00212\ \ \ \ \ std::size\_t\ ASTContext::BumpPtrAllocator<VecAlloc>::num\_allocated\_bytes()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ std::size\_t\ total\ =\ 0;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&slab:\ slabs)\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ total\ +=\ slab.capacity;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ VecAlloc>}
+\DoxyCodeLine{00221\ \ \ \ \ std::size\_t\ ASTContext::BumpPtrAllocator<VecAlloc>::num\_allocated\_bytes\_used()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ std::size\_t\ total\ =\ 0;}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&slab:\ slabs)\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ total\ +=\ slab.current\ -\/\ slab.buffer;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
+\DoxyCodeLine{00227\ \ \ \ \ \}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{//\ inline\ FuncDecl\ *ASTContext::create\_func\_decl(const\ std::string\_view\ name,\ const\ std::size\_t\ num\_args,\ const\ std::size\_t\ num\_ret\_vals)\ \{}}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ if\ (name.empty())\ \{}}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ return\ nullptr;}}
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ IdentifierInfo\ *ident\ =\ emplace\_or\_get\_identifier(name);}}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00236\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ FuncDecl*\ fn\ =\ create<FuncDecl>(}}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ ident,}}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ nullptr,}}
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ false,}}
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ num\_args,}}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ SourceRange()}}
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ );}}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ if\ (num\_args\ ==\ 0)\ \{}}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ fn-\/>params\ =\ nullptr;}}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00248\ \}\ \textcolor{comment}{//\ namespace\ aion::ast}}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_AST\_CONTEXT\_HPP}}
 
 \end{DoxyCode}

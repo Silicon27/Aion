@@ -97,38 +97,51 @@ Inheritance diagram for aion::ast::NamedDecl:</div>
  <div class="center">
   <img src="classaion_1_1ast_1_1_named_decl.png" usemap="#aion_3A_3Aast_3A_3ANamedDecl_map" alt=""/>
   <map id="aion_3A_3Aast_3A_3ANamedDecl_map" name="aion_3A_3Aast_3A_3ANamedDecl_map">
-<area href="classaion_1_1ast_1_1_decl.html" title="Base class for all declarations." alt="aion::ast::Decl" shape="rect" coords="69,0,198,24"/>
-<area href="classaion_1_1ast_1_1_error_decl.html" alt="aion::ast::ErrorDecl" shape="rect" coords="0,112,129,136"/>
-<area href="classaion_1_1ast_1_1_value_decl.html" alt="aion::ast::ValueDecl" shape="rect" coords="139,112,268,136"/>
-<area href="classaion_1_1ast_1_1_var_decl.html" alt="aion::ast::VarDecl" shape="rect" coords="139,168,268,192"/>
+<area href="classaion_1_1ast_1_1_decl.html" title="Base class for all declarations." alt="aion::ast::Decl" shape="rect" coords="78,0,225,24"/>
+<area href="classaion_1_1ast_1_1_error_decl.html" alt="aion::ast::ErrorDecl" shape="rect" coords="0,112,147,136"/>
+<area href="classaion_1_1ast_1_1_value_decl.html" alt="aion::ast::ValueDecl" shape="rect" coords="157,112,304,136"/>
+<area href="classaion_1_1ast_1_1_func_decl.html" alt="aion::ast::FuncDecl" shape="rect" coords="0,168,147,192"/>
+<area href="classaion_1_1ast_1_1_param_var_decl.html" alt="aion::ast::ParamVarDecl" shape="rect" coords="157,168,304,192"/>
+<area href="classaion_1_1ast_1_1_var_decl.html" alt="aion::ast::VarDecl" shape="rect" coords="314,168,461,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7f2f5d6f5b8d9463b1151b2ebbe78db2" id="r_a7f2f5d6f5b8d9463b1151b2ebbe78db2"><td class="memItemLeft" align="right" valign="top"><a id="a7f2f5d6f5b8d9463b1151b2ebbe78db2" name="a7f2f5d6f5b8d9463b1151b2ebbe78db2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NamedDecl</b> (DeclKind declaration_kind, <a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> *name)</td></tr>
+<tr class="memitem:a9f8835cc8667d83afb2271e5eb89ff02" id="r_a9f8835cc8667d83afb2271e5eb89ff02"><td class="memItemLeft" align="right" valign="top"><a id="a9f8835cc8667d83afb2271e5eb89ff02" name="a9f8835cc8667d83afb2271e5eb89ff02"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NamedDecl</b> (<a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> *name, const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> &amp;range={})</td></tr>
 <tr class="memitem:a011199745776597fcfbe6f361b20d2a4" id="r_a011199745776597fcfbe6f361b20d2a4"><td class="memItemLeft" align="right" valign="top"><a id="a011199745776597fcfbe6f361b20d2a4" name="a011199745776597fcfbe6f361b20d2a4"></a>
 <a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_name</b> () const</td></tr>
 <tr class="memitem:a052af121dac3304f0b090870e306cc81" id="r_a052af121dac3304f0b090870e306cc81"><td class="memItemLeft" align="right" valign="top"><a id="a052af121dac3304f0b090870e306cc81" name="a052af121dac3304f0b090870e306cc81"></a>
 std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>get_identifier</b> () const</td></tr>
+<tr class="memitem:addf75602027ca43679d65e27d309ac8d" id="r_addf75602027ca43679d65e27d309ac8d"><td class="memItemLeft" align="right" valign="top"><a id="addf75602027ca43679d65e27d309ac8d" name="addf75602027ca43679d65e27d309ac8d"></a>
+<a class="el" href="structaion_1_1_source_range.html">SourceRange</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getSourceRange</b> () const</td></tr>
 <tr class="memitem:abf1ec897dc5c7729b0d7cf48c0a4ae81" id="r_abf1ec897dc5c7729b0d7cf48c0a4ae81"><td class="memItemLeft" align="right" valign="top"><a id="abf1ec897dc5c7729b0d7cf48c0a4ae81" name="abf1ec897dc5c7729b0d7cf48c0a4ae81"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_name</b> (<a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> *new_name)</td></tr>
 <tr class="inherit_header pub_methods_classaion_1_1ast_1_1_decl"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classaion_1_1ast_1_1_decl')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classaion_1_1ast_1_1_decl.html">aion::ast::Decl</a></td></tr>
-<tr class="memitem:a7c069e94d72288880db50e5f177f31be inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_a7c069e94d72288880db50e5f177f31be"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>Decl</b> (const DeclKind K)</td></tr>
+<tr class="memitem:a61b0e925b35c6f805fa3e5ecb54f7747 inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_a61b0e925b35c6f805fa3e5ecb54f7747"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>Decl</b> (const DeclKind K, const <a class="el" href="structaion_1_1_source_location.html">SourceLocation</a> &amp;location=<a class="el" href="structaion_1_1_source_location.html">SourceLocation</a>())</td></tr>
 <tr class="memitem:abe748113daa5c4e81ac53786f564768b inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_abe748113daa5c4e81ac53786f564768b"><td class="memItemLeft" align="right" valign="top">
 DeclKind&#160;</td><td class="memItemRight" valign="bottom"><b>get_kind</b> () const</td></tr>
+<tr class="memitem:a427d28c492a14d546b71ceee9bf77bf8 inherit pub_methods_classaion_1_1ast_1_1_decl" id="r_a427d28c492a14d546b71ceee9bf77bf8"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="structaion_1_1_source_range.html">SourceRange</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getSourceRange</b> () const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae8fef8ab0635c9ece75fe2d126e4050a" id="r_ae8fef8ab0635c9ece75fe2d126e4050a"><td class="memItemLeft" align="right" valign="top"><a id="ae8fef8ab0635c9ece75fe2d126e4050a" name="ae8fef8ab0635c9ece75fe2d126e4050a"></a>
 <a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
+<tr class="memitem:afd25379563618eb341dc3de068b7605b" id="r_afd25379563618eb341dc3de068b7605b"><td class="memItemLeft" align="right" valign="top"><a id="afd25379563618eb341dc3de068b7605b" name="afd25379563618eb341dc3de068b7605b"></a>
+<a class="el" href="structaion_1_1_source_location.html">SourceLocation</a>&#160;</td><td class="memItemRight" valign="bottom"><b>decl_end</b></td></tr>
 <tr class="inherit_header pub_attribs_classaion_1_1ast_1_1_decl"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_attribs_classaion_1_1ast_1_1_decl')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Attributes inherited from <a class="el" href="classaion_1_1ast_1_1_decl.html">aion::ast::Decl</a></td></tr>
 <tr class="memitem:a89cb55b40ad339f63aa8eb3354df100e inherit pub_attribs_classaion_1_1ast_1_1_decl" id="r_a89cb55b40ad339f63aa8eb3354df100e"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classaion_1_1ast_1_1_decl.html">Decl</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>next</b> = nullptr</td></tr>
-<tr class="memitem:aee8dc19379890f2e7a0c78aae111dbd3 inherit pub_attribs_classaion_1_1ast_1_1_decl" id="r_aee8dc19379890f2e7a0c78aae111dbd3"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="structaion_1_1_source_range.html">aion::Source_Range</a>&#160;</td><td class="memItemRight" valign="bottom"><b>source_range</b></td></tr>
+<tr class="memitem:af662ada163102058ce587d8a0908ac9f inherit pub_attribs_classaion_1_1ast_1_1_decl" id="r_af662ada163102058ce587d8a0908ac9f"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="structaion_1_1_source_location.html">SourceLocation</a>&#160;</td><td class="memItemRight" valign="bottom"><b>source_location</b></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ae5f0f9f75b16e37c87559346991f73c2" id="r_ae5f0f9f75b16e37c87559346991f73c2"><td class="memItemLeft" align="right" valign="top"><a id="ae5f0f9f75b16e37c87559346991f73c2" name="ae5f0f9f75b16e37c87559346991f73c2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NamedDecl</b> (<a class="el" href="classaion_1_1ast_1_1_identifier_info.html">IdentifierInfo</a> *name, const DeclKind kind, const <a class="el" href="structaion_1_1_source_range.html">SourceRange</a> &amp;range)</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>core/include/ast/<a class="el" href="decl_8hpp_source.html">decl.hpp</a></li>

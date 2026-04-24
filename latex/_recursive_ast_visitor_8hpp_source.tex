@@ -10,21 +10,495 @@
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ AION\_RECURSIVE\_AST\_VISITOR\_HPP}}
 \DoxyCodeLine{00007\ }
 \DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <ast/ast.hpp>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <ast/expr.hpp>}}
-\DoxyCodeLine{00010\ }
-\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
-\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
-\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{RecursiveAstVisitor}};}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <ast/decl.hpp>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <ast/expr.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <ast/stmt.hpp>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <iostream>}}
 \DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
-\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{RecursiveAstVisitor}}\ \{}
-\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ expr)\ \{}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00021\ \ \ \ \ \};}
-\DoxyCodeLine{00022\ \}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }aion::ast\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classaion_1_1ast_1_1_recursive_ast_visitor}{RecursiveAstVisitor}}\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ enable\_colors\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ indent\_level\ =\ 0;}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_RECURSIVE\_AST\_VISITOR\_HPP}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kReset\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[0m"{}};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kExprColor\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[38;5;110m"{}};}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kDeclColor\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[38;5;145m"{}};}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kStmtColor\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[38;5;109m"{}};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kInfoColor\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[38;5;244m"{}};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ kErrorColor\ =\ \textcolor{stringliteral}{"{}\(\backslash\)x1b[38;5;174m"{}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ Derived\&\ getDerived()\ \{\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{static\_cast<}Derived*\textcolor{keyword}{>}(\textcolor{keyword}{this});\ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_indent()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ indent\_level;\ ++i)\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ \ "{}};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ colorize(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ color)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ enable\_colors\ ?\ color\ :\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_enter(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ category\_color,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_name)\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(category\_color)\ <<\ \textcolor{stringliteral}{"{}>\ "{}}\ <<\ node\_name\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ ++indent\_level;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ print\_exit(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ category\_color,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ ok)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ -\/-\/indent\_level;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(category\_color)\ <<\ \textcolor{stringliteral}{"{}<\ "{}}\ <<\ node\_name\ <<\ \textcolor{stringliteral}{"{}\ "{}}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ colorize(ok\ ?\ kInfoColor\ :\ kErrorColor)}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ (ok\ ?\ \textcolor{stringliteral}{"{}[ok]"{}}\ :\ \textcolor{stringliteral}{"{}[failed]"{}})}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Node>}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ run\_traverse(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ category\_color,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ node\_name,\ Node*\ node,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ (Derived::*visit)(Node*),\ \textcolor{keywordtype}{bool}\ (Derived::*walk)(Node*))\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}-\/\ null\ "{}}\ <<\ node\_name\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ print\_enter(category\_color,\ node\_name);}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ visited\ =\ (getDerived().*visit)(node);}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ walked\ =\ visited\ \&\&\ (getDerived().*walk)(node);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ print\_exit(category\_color,\ node\_name,\ walked);}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ walked;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ expr);}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ decl);}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseStmt(\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}}*\ stmt);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/Expr\ nodes}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseErrorExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{ErrorExpr}}*\ expr);}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseTypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{TypedExpr}}*\ expr);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseDeclRefExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{DeclRefExpr}}*\ expr);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseBinaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{BinaryExpr}}*\ expr);}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseUnaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{UnaryExpr}}*\ expr);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseIntegerLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{IntegerLiteralExpr}}*\ expr);}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseFloatLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{FloatLiteralExpr}}*\ expr);}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseStringLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{StringLiteralExpr}}*\ expr);}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseCallExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{CallExpr}}*\ expr);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/Decl\ nodes}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseTranslationUnitDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{TranslationUnitDecl}}*\ decl);}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseNamedDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{NamedDecl}}*\ decl);}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseValueDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{ValueDecl}}*\ decl);}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseVarDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{VarDecl}}*\ decl);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseErrorDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{ErrorDecl}}*\ decl);}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/Stmt\ nodes}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ TraverseCompoundStmt(\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{CompoundStmt}}*\ stmt);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ defaults}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/Expr\ node\ visitors}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitErrorExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{ErrorExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromErrorExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{ErrorExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitTypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{TypedExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromTypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{TypedExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitDeclRefExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{DeclRefExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromDeclRefExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{DeclRefExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromTypedExpr(expr);}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitBinaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{BinaryExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromBinaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{BinaryExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromTypedExpr(expr);}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitUnaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{UnaryExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromUnaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{UnaryExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromTypedExpr(expr);}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitIntegerLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{IntegerLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromIntegerLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{IntegerLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromTypedExpr(expr);}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitFloatLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{FloatLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromFloatLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{FloatLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromTypedExpr(expr);}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitStringLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{StringLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromStringLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{StringLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromTypedExpr(expr);}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitCallExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{CallExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromCallExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{CallExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromDeclRefExpr(expr);}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/Decl\ node\ visitors}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitTranslationUnitDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{TranslationUnitDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromTranslationUnitDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{TranslationUnitDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitNamedDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{NamedDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromNamedDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{NamedDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitValueDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{ValueDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromValueDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{ValueDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromNamedDecl(decl);}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitVarDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{VarDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromVarDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{VarDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromValueDecl(decl);}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitErrorDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{ErrorDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromErrorDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{ErrorDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().WalkUpFromNamedDecl(decl);}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/Stmt\ node\ visitors}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ VisitCompoundStmt(\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{CompoundStmt}}*\ stmt)\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ WalkUpFromCompoundStmt(\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{CompoundStmt}}*\ stmt)\ \{}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \};}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_expr}{Expr}}*\ expr)\ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (expr\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}-\/\ null\ Expr"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (expr-\/>get\_kind())\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::typed\_expr:}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseTypedExpr(\textcolor{keyword}{static\_cast<}TypedExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::binary\_expr:}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseBinaryExpr(\textcolor{keyword}{static\_cast<}BinaryExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::unary\_expr:}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseUnaryExpr(\textcolor{keyword}{static\_cast<}UnaryExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::call\_expr:}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseCallExpr(\textcolor{keyword}{static\_cast<}CallExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::identifier\_expr:}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseDeclRefExpr(\textcolor{keyword}{static\_cast<}DeclRefExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::integer\_literal\_expr:}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseIntegerLiteralExpr(\textcolor{keyword}{static\_cast<}IntegerLiteralExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::float\_literal\_expr:}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseFloatLiteralExpr(\textcolor{keyword}{static\_cast<}FloatLiteralExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::string\_literal\_expr:}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseStringLiteralExpr(\textcolor{keyword}{static\_cast<}StringLiteralExpr*\textcolor{keyword}{>}(expr));}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::member\_expr:}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::array\_expr:}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::struct\_expr:}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::enum\_expr:}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ExprKind::cast\_expr:}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}-\/\ unhandled\ ExprKind"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00285\ \ \ \ \ \}}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ decl)\ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (decl\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}-\/\ null\ Decl"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (decl-\/>get\_kind())\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::translation\_unit:}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseTranslationUnitDecl(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{TranslationUnitDecl}}*\textcolor{keyword}{>}(decl));}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::named:}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseNamedDecl(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{NamedDecl}}*\textcolor{keyword}{>}(decl));}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::value:}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseValueDecl(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{ValueDecl}}*\textcolor{keyword}{>}(decl));}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::variable:}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseVarDecl(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{VarDecl}}*\textcolor{keyword}{>}(decl));}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::error:}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseErrorDecl(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{ErrorDecl}}*\textcolor{keyword}{>}(decl));}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::unresolved:}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::function:}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::struct\_:}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::enum\_:}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DeclKind::module:}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}-\/\ unhandled\ DeclKind"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00317\ \ \ \ \ \}}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00320\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseStmt(\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}}*\ stmt)\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stmt\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}-\/\ null\ Stmt"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (stmt-\/>get\_kind())\ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StmtKind::compound\_stmt:}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseCompoundStmt(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{CompoundStmt}}*\textcolor{keyword}{>}(stmt));}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StmtKind::if\_stmt:}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StmtKind::while\_stmt:}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StmtKind::for\_stmt:}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StmtKind::return\_stmt:}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ print\_indent();}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ colorize(kErrorColor)\ <<\ \textcolor{stringliteral}{"{}-\/\ unhandled\ StmtKind"{}}\ <<\ colorize(kReset)\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00340\ \ \ \ \ \}}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00343\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseErrorExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_error_expr}{ErrorExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}ErrorExpr"{}},\ expr,}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitErrorExpr,}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromErrorExpr);}
+\DoxyCodeLine{00347\ \ \ \ \ \}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseTypedExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_typed_expr}{TypedExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}TypedExpr"{}},\ expr,}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitTypedExpr,}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromTypedExpr);}
+\DoxyCodeLine{00354\ \ \ \ \ \}}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseDeclRefExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_decl_ref_expr}{DeclRefExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}DeclRefExpr"{}},\ expr,}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitDeclRefExpr,}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromDeclRefExpr);}
+\DoxyCodeLine{00361\ \ \ \ \ \}}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseBinaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_binary_expr}{BinaryExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}BinaryExpr"{}},\ expr,}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitBinaryExpr,}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromBinaryExpr))\ \{}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!getDerived().TraverseExpr(expr-\/>lhs))\ \{}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseExpr(expr-\/>rhs);}
+\DoxyCodeLine{00376\ \ \ \ \ \}}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseUnaryExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_unary_expr}{UnaryExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}UnaryExpr"{}},\ expr,}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitUnaryExpr,}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromUnaryExpr))\ \{}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseExpr(expr-\/>operand);}
+\DoxyCodeLine{00387\ \ \ \ \ \}}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00390\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseIntegerLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_integer_literal_expr}{IntegerLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}IntegerLiteralExpr"{}},\ expr,}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitIntegerLiteralExpr,}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromIntegerLiteralExpr);}
+\DoxyCodeLine{00394\ \ \ \ \ \}}
+\DoxyCodeLine{00395\ }
+\DoxyCodeLine{00396\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseFloatLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_float_literal_expr}{FloatLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}FloatLiteralExpr"{}},\ expr,}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitFloatLiteralExpr,}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromFloatLiteralExpr);}
+\DoxyCodeLine{00401\ \ \ \ \ \}}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseStringLiteralExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_string_literal_expr}{StringLiteralExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}StringLiteralExpr"{}},\ expr,}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitStringLiteralExpr,}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromStringLiteralExpr);}
+\DoxyCodeLine{00408\ \ \ \ \ \}}
+\DoxyCodeLine{00409\ }
+\DoxyCodeLine{00410\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00411\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseCallExpr(\mbox{\hyperlink{classaion_1_1ast_1_1_call_expr}{CallExpr}}*\ expr)\ \{}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!run\_traverse(kExprColor,\ \textcolor{stringliteral}{"{}CallExpr"{}},\ expr,}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitCallExpr,}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromCallExpr))\ \{}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!getDerived().TraverseExpr(expr-\/>callee))\ \{}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ i\ =\ 0;\ i\ <\ expr-\/>num\_args;\ ++i)\ \{}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!getDerived().TraverseExpr(expr-\/>args[i]))\ \{}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00429\ \ \ \ \ \}}
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00432\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseTranslationUnitDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_translation_unit_decl}{TranslationUnitDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!run\_traverse(kDeclColor,\ \textcolor{stringliteral}{"{}TranslationUnitDecl"{}},\ decl,}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitTranslationUnitDecl,}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromTranslationUnitDecl))\ \{}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}}*\ current\ =\ decl-\/>get\_first\_decl();\ current\ !=\ \textcolor{keyword}{nullptr};\ current\ =\ current-\/>next)\ \{}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!getDerived().TraverseDecl(current))\ \{}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00446\ \ \ \ \ \}}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00449\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseNamedDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_named_decl}{NamedDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kDeclColor,\ \textcolor{stringliteral}{"{}NamedDecl"{}},\ decl,}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitNamedDecl,}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromNamedDecl);}
+\DoxyCodeLine{00453\ \ \ \ \ \}}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00456\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseValueDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_value_decl}{ValueDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kDeclColor,\ \textcolor{stringliteral}{"{}ValueDecl"{}},\ decl,}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitValueDecl,}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromValueDecl);}
+\DoxyCodeLine{00460\ \ \ \ \ \}}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00463\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseVarDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_var_decl}{VarDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!run\_traverse(kDeclColor,\ \textcolor{stringliteral}{"{}VarDecl"{}},\ decl,}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitVarDecl,}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromVarDecl))\ \{}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getDerived().TraverseExpr(decl-\/>get\_init());}
+\DoxyCodeLine{00471\ \ \ \ \ \}}
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00474\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseErrorDecl(\mbox{\hyperlink{classaion_1_1ast_1_1_error_decl}{ErrorDecl}}*\ decl)\ \{}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ run\_traverse(kDeclColor,\ \textcolor{stringliteral}{"{}ErrorDecl"{}},\ decl,}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitErrorDecl,}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromErrorDecl);}
+\DoxyCodeLine{00478\ \ \ \ \ \}}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Derived>}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{keywordtype}{bool}\ RecursiveAstVisitor<Derived>::TraverseCompoundStmt(\mbox{\hyperlink{classaion_1_1ast_1_1_compound_stmt}{CompoundStmt}}*\ stmt)\ \{}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!run\_traverse(kStmtColor,\ \textcolor{stringliteral}{"{}CompoundStmt"{}},\ stmt,}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::VisitCompoundStmt,}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \&Derived::WalkUpFromCompoundStmt))\ \{}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classaion_1_1ast_1_1_stmt}{Stmt}}*\ child\ :\ *stmt)\ \{}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!getDerived().TraverseStmt(child))\ \{}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00495\ \ \ \ \ \}}
+\DoxyCodeLine{00496\ \}}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//AION\_RECURSIVE\_AST\_VISITOR\_HPP}}
 
 \end{DoxyCode}

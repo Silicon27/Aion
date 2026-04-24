@@ -7,5 +7,6 @@ var searchData=
   ['fixits_4',['fixits',['../structaion_1_1diag_1_1_diagnostic.html#a76bed357bdab6192201ee2516f97983b',1,'aion::diag::Diagnostic']]],
   ['flags_5',['Flags',['../structaion_1_1compiler__config_1_1_flags.html',1,'aion::compiler_config']]],
   ['floatliteralexpr_6',['FloatLiteralExpr',['../classaion_1_1ast_1_1_float_literal_expr.html',1,'aion::ast']]],
-  ['for_20all_20my_20projects_7',['Template support library for all my projects',['..//Users/silicon/CLionProjects/aion/core/include/support/iris/README.md#autotoc_md1',1,'']]]
+  ['for_20all_20my_20projects_7',['Template support library for all my projects',['..//Users/silicon/CLionProjects/aion/core/include/support/iris/README.md#autotoc_md1',1,'']]],
+  ['funcdecl_8',['FuncDecl',['../classaion_1_1ast_1_1_func_decl.html',1,'aion::ast']]]
 ];

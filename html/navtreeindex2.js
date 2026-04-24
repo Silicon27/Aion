@@ -1,5 +1,8 @@
 var NAVTREEINDEX2 =
 {
+"structis__integral_3_01unsigned_01long_01_4.html":[5,0,67],
+"structis__integral_3_01unsigned_01long_01long_01_4.html":[5,0,68],
+"structis__integral_3_01unsigned_01short_01_4.html":[5,0,69],
 "structis__integral_3_01volatile_01_t_01_4.html":[5,0,70],
 "structis__integral_3_01wchar__t_01_4.html":[5,0,71],
 "structis__lvalue__reference.html":[5,0,72],

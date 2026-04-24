@@ -9,8 +9,8 @@ Inheritance diagram for aion\+::ast\+::Named\+Decl\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classaion_1_1ast_1_1_named_decl_a7f2f5d6f5b8d9463b1151b2ebbe78db2}\label{classaion_1_1ast_1_1_named_decl_a7f2f5d6f5b8d9463b1151b2ebbe78db2} 
-{\bfseries Named\+Decl} (Decl\+Kind declaration\+\_\+kind, \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name)
+\Hypertarget{classaion_1_1ast_1_1_named_decl_a9f8835cc8667d83afb2271e5eb89ff02}\label{classaion_1_1ast_1_1_named_decl_a9f8835cc8667d83afb2271e5eb89ff02} 
+{\bfseries Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range=\{\})
 \item 
 \Hypertarget{classaion_1_1ast_1_1_named_decl_a011199745776597fcfbe6f361b20d2a4}\label{classaion_1_1ast_1_1_named_decl_a011199745776597fcfbe6f361b20d2a4} 
 \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+name} () const
@@ -18,28 +18,42 @@ Inheritance diagram for aion\+::ast\+::Named\+Decl\+:\begin{figure}[H]
 \Hypertarget{classaion_1_1ast_1_1_named_decl_a052af121dac3304f0b090870e306cc81}\label{classaion_1_1ast_1_1_named_decl_a052af121dac3304f0b090870e306cc81} 
 std\+::string\+\_\+view {\bfseries get\+\_\+identifier} () const
 \item 
+\Hypertarget{classaion_1_1ast_1_1_named_decl_addf75602027ca43679d65e27d309ac8d}\label{classaion_1_1ast_1_1_named_decl_addf75602027ca43679d65e27d309ac8d} 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+Source\+Range} () const
+\item 
 \Hypertarget{classaion_1_1ast_1_1_named_decl_abf1ec897dc5c7729b0d7cf48c0a4ae81}\label{classaion_1_1ast_1_1_named_decl_abf1ec897dc5c7729b0d7cf48c0a4ae81} 
 void {\bfseries set\+\_\+name} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}new\+\_\+name)
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries Decl} (const Decl\+Kind K)
+{\bfseries Decl} (const Decl\+Kind K, const \mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} \&location=\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}}())
 \item 
 Decl\+Kind {\bfseries get\+\_\+kind} () const
+\item 
+\mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} {\bfseries get\+Source\+Range} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classaion_1_1ast_1_1_named_decl_ae8fef8ab0635c9ece75fe2d126e4050a}\label{classaion_1_1ast_1_1_named_decl_ae8fef8ab0635c9ece75fe2d126e4050a} 
 \mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*} {\bfseries name}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_named_decl_afd25379563618eb341dc3de068b7605b}\label{classaion_1_1ast_1_1_named_decl_afd25379563618eb341dc3de068b7605b} 
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries decl\+\_\+end}
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{aion\+::ast\+::\+Decl}}}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classaion_1_1ast_1_1_decl}{Decl}} \texorpdfstring{$\ast$}{*} {\bfseries next} = nullptr
 \item 
-\mbox{\hyperlink{structaion_1_1_source_range}{aion\+::\+Source\+\_\+\+Range}} {\bfseries source\+\_\+range}
+\mbox{\hyperlink{structaion_1_1_source_location}{Source\+Location}} {\bfseries source\+\_\+location}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classaion_1_1ast_1_1_named_decl_ae5f0f9f75b16e37c87559346991f73c2}\label{classaion_1_1ast_1_1_named_decl_ae5f0f9f75b16e37c87559346991f73c2} 
+{\bfseries Named\+Decl} (\mbox{\hyperlink{classaion_1_1ast_1_1_identifier_info}{Identifier\+Info}} \texorpdfstring{$\ast$}{*}name, const Decl\+Kind kind, const \mbox{\hyperlink{structaion_1_1_source_range}{Source\+Range}} \&range)
 \end{DoxyCompactItemize}
 
 

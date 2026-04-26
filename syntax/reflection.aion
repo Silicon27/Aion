@@ -1,0 +1,6 @@
+reflect(my_func)@name          // string → "my_func"
+reflect(my_func)@full_name     // string → "my_module::my_func"
+reflect(my_func)@parameters    // tuple of mirrors
+reflect(my_func)@return_type   // mirror of return type
+reflect(i32)@size              // 4 (for example)
+reflect(some_var)@type         // mirror of the variable’s type

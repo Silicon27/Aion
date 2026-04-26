@@ -1,0 +1,54 @@
+ex SimpleException => f"Simple Exception was thrown"
+
+fn SimpleExceptionThrower() -> i32 or SimpleException {
+    throw SimpleException;
+    // uncaught exception: SimpleException at throw site SimpleExceptionThrower (line:col)
+    //                 => "Simple Exception was thrown"
+}
+
+ex NoPayload;
+
+fn NoPayloadThrower() -> i32 or SimpleException {
+   throw SimpleException;
+   // uncaught exception: NoPayload at throw site NoPayloadThrower (line:col)
+}
+
+ex DebugException {
+    details: string;
+    caller:  mirror = thrower;  // capture at throw time
+};
+
+fn process() -> void or DebugException {
+    throw DebugException { details: "oops" };
+    // The field "caller" automatically receives the mirror of "process"
+}
+
+// example catch block
+catch (e: DebugException) {
+    print(e.caller@full_name);   // uses @ to access the mirror's property
+}
+
+// No payload, default message (the exception name)
+ex MySignal;
+
+// Payload only, default message
+ex HttpError {
+    status: i32;
+    body:   string;
+};
+
+// Payload + custom message (arrow "=>")
+ex Timeout {
+    after_seconds: f32;
+} => f"Timeout after {after_seconds}s";
+
+// Custom message without any fields (just the arrow)
+ex PermissionDenied => f"Permission denied in {$thrower@name}";
+
+fn risky() -> i32 or HttpError {
+    throw HttpError { status: 404, body: "Not Found" };
+}
+
+fn easy() -> i32 or MySignal {
+    throw MySignal;
+}

@@ -1,0 +1,13 @@
+// (conv)ention
+conv [T]
+fn my_fun(generic_arg: T) -> i32 {
+
+}
+
+// restrictions on generic types TODO
+
+// ex. you want to restrict T to being just an i32 or f32, and U to be of any integer type
+conv [T#<i32, f32>, U#<IntRuleset>]
+fn my_fun(my_i32: T, my_int: U) {
+
+} 

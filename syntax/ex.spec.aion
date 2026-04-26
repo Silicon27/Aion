@@ -1,0 +1,3 @@
+ex E { ... } => expression ;   // unambiguous: after closing } of fields, if => then message
+ex E => expression ;           // unambiguous: after name, if => then message
+ex E;                          // no message

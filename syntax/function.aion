@@ -1,20 +1,7 @@
 fn my_fun() -> i32 {
-
+    
 }
 
-// exported function
 export fn my_fun() -> i32 {
 
-}
-
-// in the case the function throws, you can specify a return with the error
-
-ex SomeErr<string> => f"my_fun returned with error"
-
-fn my_fun() -> i32 or SomeErr {
-    if 1 {
-        return SomeErr;
-    } else {
-        return 2;
-    }
 }

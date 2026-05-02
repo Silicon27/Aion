@@ -678,6 +678,50 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_EQ(map["rehash"], 123);
     });
 
+    context_suite->add_test("create_func_decl_test", [] {
+        using namespace aion::ast;
+        ASTContext context;
+
+        const std::size_t num_params = 3;
+        const std::size_t num_ret_vals = 2;
+        FuncDecl* fn = context.create_func_decl("my_func", num_params, num_ret_vals);
+
+        AION_ASSERT_NOT_NULL(fn);
+        AION_ASSERT_EQ(fn->get_identifier(), "my_func");
+        AION_ASSERT_EQ(fn->num_params, num_params);
+        AION_ASSERT_EQ(fn->num_ret_vals, num_ret_vals);
+
+        ParamVarDecl** params = fn->get_params();
+        AION_ASSERT_NOT_NULL(params);
+
+        MutableType** ret_types = fn->get_return_types();
+        AION_ASSERT_NOT_NULL(ret_types);
+
+        // Verify that parameters and return types are initialized to nullptr
+        for (std::size_t i = 0; i < num_params; ++i) {
+            AION_ASSERT_NULL(params[i]);
+        }
+        for (std::size_t i = 0; i < num_ret_vals; ++i) {
+            AION_ASSERT_NULL(ret_types[i]);
+        }
+
+        // Set parameters
+        ParamVarDecl* p1 = context.create<ParamVarDecl>(context.emplace_or_get_identifier("p1"), nullptr, SourceRange());
+        params[0] = p1;
+
+        // Set return types
+        auto* bt = context.create<BuiltinType>(BuiltinTypeKind::i32);
+        auto* mt = context.create<MutableType>(bt, false);
+        ret_types[0] = mt;
+
+        // Verify access
+        AION_ASSERT_EQ(fn->get_param(0), p1);
+        AION_ASSERT_EQ(fn->get_return_types()[0], mt);
+
+        // Verify that they don't overlap
+        AION_ASSERT_EQ(reinterpret_cast<void*>(ret_types), reinterpret_cast<void*>(params + num_params));
+    });
+
     runner.add_suite(std::move(context_suite));
 
     // ========================================================================
@@ -710,6 +754,37 @@ void register_ast_tests(TestRunner& runner) {
         AION_ASSERT_TRUE(output.find("TranslationUnitDecl") != std::string::npos);
         AION_ASSERT_TRUE(output.find("VarDecl") != std::string::npos);
         AION_ASSERT_TRUE(output.find("value") != std::string::npos);
+    });
+
+    traversal_suite->add_test("ast_printer_prints_function_and_params", []() {
+        using namespace aion::ast;
+
+        ASTContext context;
+        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false);
+
+        FuncDecl* fn = context.create_func_decl("test_func", 1, 0);
+        fn->set_type(type);
+
+        auto* p1_name = context.emplace_or_get_identifier("p1");
+        ParamVarDecl* p1 = context.create<ParamVarDecl>(p1_name, type, SourceRange());
+        fn->get_params()[0] = p1;
+
+        context.get_translation_unit_decl()->add_decl(fn);
+
+        std::ostringstream capture;
+        auto* old = std::cout.rdbuf(capture.rdbuf());
+
+        AstPrinter printer;
+        printer.enable_colors = false;
+        AION_ASSERT_TRUE(printer.print(context.get_translation_unit_decl()));
+
+        std::cout.rdbuf(old);
+
+        const std::string output = capture.str();
+        AION_ASSERT_TRUE(output.find("FunctionDecl") != std::string::npos);
+        AION_ASSERT_TRUE(output.find("test_func") != std::string::npos);
+        AION_ASSERT_TRUE(output.find("ParmVarDecl") != std::string::npos);
+        AION_ASSERT_TRUE(output.find("p1") != std::string::npos);
     });
 
     runner.add_suite(std::move(traversal_suite));

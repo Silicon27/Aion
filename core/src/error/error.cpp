@@ -706,6 +706,11 @@ namespace aion::diag {
         return *this;
     }
 
+    DiagnosticBuilder& DiagnosticBuilder::operator<<(const ButGot& got) {
+        string_args_.push_back(got.text);
+        return *this;
+    }
+
     DiagnosticBuilder& DiagnosticBuilder::operator<<(const DiagnosticNote& note_text) {
         notes_.push_back(note_text);
         return *this;

@@ -115,6 +115,7 @@ enum : DiagID {
     err_expected_lbracket,
     err_expected_rbracket,
     err_unexpected_token,
+    err_unexpected_eof,
     err_redefinition,
     err_mismatched_brackets,
     err_untyped_uninitialized_variable_declaration,

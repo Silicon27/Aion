@@ -57,6 +57,7 @@ namespace aion::ast {
                 case DeclKind::error: return "ErrorDecl";
                 case DeclKind::value: return "ValueDecl";
                 case DeclKind::function: return "FunctionDecl";
+                case DeclKind::function_parameter: return "ParmVarDecl";
                 case DeclKind::struct_: return "RecordDecl";
                 case DeclKind::enum_: return "EnumDecl";
                 case DeclKind::module: return "ModuleDecl";
@@ -192,7 +193,7 @@ namespace aion::ast {
             if (ident == nullptr || ident->get_name() == nullptr) {
                 return "<anonymous>";
             }
-            return ident->get_name();
+            return std::string(ident->get_name(), ident->get_length());
         }
 
         static SourceRange decl_range_for_print(const Decl* decl) {
@@ -248,6 +249,38 @@ namespace aion::ast {
             print_range(decl_range_for_print(decl));
 
             switch (decl->get_kind()) {
+                case DeclKind::function: {
+                    auto* fn = static_cast<FuncDecl*>(decl);
+                    if (fn->is_export) std::cout << " " << colorize(kMagenta) << "export" << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << fn->get_identifier() << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " '" << format_type(fn->get_type()) << "'" << colorize(kReset) << '\n';
+
+                    std::string next_prefix = prefix + (is_last ? "  " : "| ");
+                    for (std::size_t i = 0; i < fn->num_params; ++i) {
+                        print_decl(fn->get_param(i), next_prefix, (i == fn->num_params - 1) && (fn->get_first_decl() == nullptr));
+                    }
+
+                    Decl* current = fn->get_first_decl();
+                    while (current) {
+                        Decl* next = current->next;
+                        print_decl(current, next_prefix, next == nullptr);
+                        current = next;
+                    }
+                    break;
+                }
+                case DeclKind::function_parameter: {
+                    auto* param = static_cast<ParamVarDecl*>(decl);
+                    std::cout << " " << colorize(kCyan) << param->get_identifier() << colorize(kReset);
+                    std::cout << " " << colorize(kCyan) << " '" << format_type(param->get_type()) << "'" << colorize(kReset);
+                    if (param->is_default_argument()) {
+                        std::cout << " " << colorize(kYellow) << "default" << colorize(kReset);
+                    }
+                    std::cout << '\n';
+                    if (param->default_value) {
+                        print_expr(param->default_value, prefix + (is_last ? "  " : "| "), true);
+                    }
+                    break;
+                }
                 case DeclKind::variable: {
                     auto* var = static_cast<VarDecl*>(decl);
                     std::cout << " " << colorize(kCyan) << var->get_identifier() << colorize(kReset);

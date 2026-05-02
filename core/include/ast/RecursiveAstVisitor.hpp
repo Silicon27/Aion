@@ -97,6 +97,8 @@ namespace aion::ast {
         bool TraverseNamedDecl(NamedDecl* decl);
         bool TraverseValueDecl(ValueDecl* decl);
         bool TraverseVarDecl(VarDecl* decl);
+        bool TraverseFuncDecl(FuncDecl* decl);
+        bool TraverseParamVarDecl(ParamVarDecl* decl);
         bool TraverseErrorDecl(ErrorDecl* decl);
 
         // -------------------------------------------------
@@ -223,6 +225,22 @@ namespace aion::ast {
             return getDerived().WalkUpFromValueDecl(decl);
         }
 
+        bool VisitFuncDecl(FuncDecl* decl) {
+            return true;
+        }
+
+        bool WalkUpFromFuncDecl(FuncDecl* decl) {
+            return getDerived().WalkUpFromValueDecl(decl);
+        }
+
+        bool VisitParamVarDecl(ParamVarDecl* decl) {
+            return true;
+        }
+
+        bool WalkUpFromParamVarDecl(ParamVarDecl* decl) {
+            return getDerived().WalkUpFromValueDecl(decl);
+        }
+
         bool VisitErrorDecl(ErrorDecl* decl) {
             return true;
         }
@@ -303,8 +321,11 @@ namespace aion::ast {
                 return getDerived().TraverseVarDecl(static_cast<VarDecl*>(decl));
             case DeclKind::error:
                 return getDerived().TraverseErrorDecl(static_cast<ErrorDecl*>(decl));
-            case DeclKind::unresolved:
             case DeclKind::function:
+                return getDerived().TraverseFuncDecl(static_cast<FuncDecl*>(decl));
+            case DeclKind::function_parameter:
+                return getDerived().TraverseParamVarDecl(static_cast<ParamVarDecl*>(decl));
+            case DeclKind::unresolved:
             case DeclKind::struct_:
             case DeclKind::enum_:
             case DeclKind::module:
@@ -468,6 +489,44 @@ namespace aion::ast {
         }
 
         return getDerived().TraverseExpr(decl->get_init());
+    }
+
+    template <typename Derived>
+    bool RecursiveAstVisitor<Derived>::TraverseFuncDecl(FuncDecl* decl) {
+        if (!run_traverse(kDeclColor, "FuncDecl", decl,
+            &Derived::VisitFuncDecl,
+            &Derived::WalkUpFromFuncDecl)) {
+            return false;
+        }
+
+        for (std::size_t i = 0; i < decl->num_params; ++i) {
+            if (!getDerived().TraverseParamVarDecl(decl->get_param(i))) {
+                return false;
+            }
+        }
+
+        for (Decl* current = decl->get_first_decl(); current != nullptr; current = current->next) {
+            if (!getDerived().TraverseDecl(current)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    template <typename Derived>
+    bool RecursiveAstVisitor<Derived>::TraverseParamVarDecl(ParamVarDecl* decl) {
+        if (!run_traverse(kDeclColor, "ParamVarDecl", decl,
+            &Derived::VisitParamVarDecl,
+            &Derived::WalkUpFromParamVarDecl)) {
+            return false;
+        }
+
+        if (decl->default_value) {
+            return getDerived().TraverseExpr(decl->default_value);
+        }
+
+        return true;
     }
 
     template <typename Derived>

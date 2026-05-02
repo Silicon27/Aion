@@ -185,6 +185,16 @@ inline FixItMessage fixit_message(const std::string& text) {
     return FixItMessage{text};
 }
 
+/// Stream token for "but got" clause in diagnostics.
+/// Used for "expected X but got Y" style messages.
+struct ButGot {
+    std::string text;
+};
+
+inline ButGot but_got(const std::string& text) {
+    return ButGot{text};
+}
+
 // ============================================================================
 // Diagnostic
 // ============================================================================
@@ -369,6 +379,9 @@ public:
 
     /// Attach text to the most recently added fix-it hint.
     DiagnosticBuilder& operator<<(const FixItMessage& message);
+
+    /// Add a "but got" clause to the diagnostic message.
+    DiagnosticBuilder& operator<<(const ButGot& got);
 
     /// Emit the diagnostic.
     void emit();

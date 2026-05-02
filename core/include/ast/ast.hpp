@@ -30,6 +30,7 @@ namespace aion::ast {
         error,
         value,
         variable,
+        function_parameter,
         function,
         struct_,
         enum_,
@@ -62,10 +63,12 @@ namespace aion::ast {
 
     class IdentifierInfo {
         const char* name;
+        std::size_t length;
     public:
-        IdentifierInfo() : name(nullptr) {}
-        explicit IdentifierInfo(const char* name) : name(name) {}
+        IdentifierInfo() : name(nullptr), length(0) {}
+        explicit IdentifierInfo(const char* name, std::size_t length = 0) : name(name), length(length) {}
         const char* get_name() const { return name; }
+        std::size_t get_length() const { return length; }
     };
     static_assert(std::is_trivially_destructible_v<IdentifierInfo>);
 

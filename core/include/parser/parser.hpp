@@ -19,6 +19,32 @@
 namespace aion::parse {
     using namespace aion::compiler_config;
 
+    struct AnyOf {
+        uint64_t bits[4] = {0};
+
+        constexpr AnyOf(lexer::TokenType t) { add(t); }
+
+        template <typename... Args>
+        requires (std::is_same_v<Args, lexer::TokenType> && ...)
+        constexpr AnyOf(lexer::TokenType first, Args... rest) {
+            add(first);
+            (add(rest), ...);
+        }
+
+        constexpr void add(lexer::TokenType t) {
+            auto v = static_cast<uint16_t>(t);
+            bits[v >> 6] |= (1ULL << (v & 63));
+        }
+
+        constexpr bool contains(lexer::TokenType t) const {
+            auto v = static_cast<uint16_t>(t);
+            return (bits[v >> 6] & (1ULL << (v & 63))) != 0;
+        }
+
+        friend bool operator==(lexer::TokenType t, const AnyOf& a) { return a.contains(t); }
+        friend bool operator!=(lexer::TokenType t, const AnyOf& a) { return !a.contains(t); }
+    };
+
     struct ParserSnapshot;
     struct MatchToken;
     class Parse;
@@ -100,6 +126,8 @@ namespace aion::parse {
         /// aka previous(), after `pos` increment
         Token skip_until(const std::string& lexeme);
         Token skip_until(TokenType type);
+        template <typename... Tt>
+        requires (std::is_same_v<Tt, TokenType> && ...) Token skip_until_any_of(Tt... tt);
         /// skip_until overload that skips until it either finds a matching lexeme or type
         Token skip_until(TokenType type, const std::string& lexeme);
         /// the error would have to be first emitted before we attempt to end the parsing function (the caller to this function);
@@ -128,11 +156,25 @@ namespace aion::parse {
         Decl* parse_function_decl();
 
         /// entry point for expression parsing
-        Expr* parse_expression(int rbp, TokenType delim);
+        template <typename... Args>
+        requires (std::is_same_v<Args, lexer::TokenType> && ...)
+        ast::Expr* parse_expression(int rbp, Args... args) {
+            return parse_expression_impl(rbp, AnyOf{args...});
+        }
+
         // null denotation: what to do when this token appears with no left context (prefix position)
-        Expr* nud(Token tok, TokenType delim);
+        template <typename... Args>
+        requires (std::is_same_v<Args, lexer::TokenType> && ...)
+        ast::Expr* nud(lexer::Token tok, Args... args) {
+            return nud_impl(tok, AnyOf{args...});
+        }
+
         // left denotation: what to do when this token appears with the left expression already parsed (infix/suffix position)
-        Expr* led(Token op, Expr* left, TokenType delim);
+        template <typename... Args>
+        requires (std::is_same_v<Args, lexer::TokenType> && ...)
+        ast::Expr* led(lexer::Token op, ast::Expr* left, Args... args) {
+            return led_impl(op, left, AnyOf{args...});
+        }
 
         // left binding power: how strongly this token binds to whatever is to its left.
         static int lbp(const TokenType token) {
@@ -206,6 +248,12 @@ namespace aion::parse {
             }
         }
 
+    private:
+        ast::Expr* parse_expression_impl(int rbp, AnyOf delim);
+        ast::Expr* nud_impl(lexer::Token tok, AnyOf delim);
+        ast::Expr* led_impl(lexer::Token op, ast::Expr* left, AnyOf delim);
+
+    public:
         explicit Parser(FileId file_id, const std::vector<Token> &tokens, Flags flag, ASTContext &context, diag::DiagnosticsEngine& diag);
         ~Parser() = default;
     };

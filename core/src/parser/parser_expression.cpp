@@ -7,10 +7,10 @@
 #include <ast/ShortVec.hpp>
 
 namespace aion::parse {
-    Expr* Parser::parse_expression(const int rbp, const TokenType delim) {
+    Expr* Parser::parse_expression_impl(const int rbp, const AnyOf delim) {
         skip_newlines();
         Token tok = blind_consume();
-        Expr* left = nud(tok, delim);
+        Expr* left = nud_impl(tok, delim);
 
         while (true) {
             skip_newlines();
@@ -19,13 +19,13 @@ namespace aion::parse {
             }
 
             Token op = blind_consume();
-            left = led(op, left, delim);
+            left = led_impl(op, left, delim);
         }
 
         return left;
     }
 
-    Expr* Parser::nud(Token tok, const TokenType delim) {
+    Expr* Parser::nud_impl(Token tok, const AnyOf delim) {
         const SourceLocation loc = diagnostics.get_token_location(file_id, tok);
 
         switch (tok.get_type()) {
@@ -77,7 +77,7 @@ namespace aion::parse {
             // unary cases
             case TokenType::minus: {
                 /// we want to use an precedence level high than the additive lbp
-                Expr* operand = parse_expression(55, delim);
+                Expr* operand = parse_expression_impl(55, delim);
 
                 /// NOTE is_comp is set to false, as of currently we are unable to deduce the type of the operand,
                 /// and therefore its computation model – that we leave to sema
@@ -85,18 +85,18 @@ namespace aion::parse {
                     nullptr, false, loc);
             }
             case TokenType::plus: {
-                Expr* operand = parse_expression(55, delim);
+                Expr* operand = parse_expression_impl(55, delim);
                 return context.create<UnaryExpr>(operand, UnaryOp::plus, ValueCategory::unnamed,
                     nullptr, false, loc);
 
             }
             case TokenType::bang: {
-                Expr* operand = parse_expression(55, delim);
+                Expr* operand = parse_expression_impl(55, delim);
                 return context.create<UnaryExpr>(operand, UnaryOp::logical_not, ValueCategory::unnamed,
                     nullptr, false, loc);
             }
             case TokenType::lparen: {
-                Expr* inner = parse_expression(0, TokenType::rparen);
+                Expr* inner = parse_expression_impl(0, TokenType::rparen);
                 if (peek().type != TokenType::rparen) {
                     diagnostics.report(diagnostics.get_token_location(file_id, peek()), diag::parse::err_expected_rparen)
                         << diag::CharSourceRange::get_token_range(loc, diagnostics.get_token_location(file_id, peek()));
@@ -113,7 +113,7 @@ namespace aion::parse {
         }
     }
 
-    Expr* Parser::led(Token op, Expr* left, const TokenType delim) {
+    Expr* Parser::led_impl(Token op, Expr* left, const AnyOf delim) {
         const SourceLocation loc = diagnostics.get_token_location(file_id, op);
 
         switch (op.type) {
@@ -187,14 +187,14 @@ namespace aion::parse {
                     }
                 };
 
-                Expr* right = parse_expression(lbp(op.type), delim);
+                Expr* right = parse_expression_impl(lbp(op.type), delim);
                 return context.create<BinaryExpr>(left, right,
                     get_op(op.type), ValueCategory::unnamed,
                     nullptr, false,
                     SourceRange(loc, diagnostics.get_token_location(file_id, peek())));
             }
             case TokenType::equal: {
-                Expr* right = parse_expression(lbp(op.type), delim);
+                Expr* right = parse_expression_impl(lbp(op.type), delim);
                 return context.create<BinaryExpr>(left, right,
                     BinaryOp::assign, ValueCategory::unnamed,
                     nullptr, false,
@@ -226,7 +226,7 @@ namespace aion::parse {
                     if (peek().type == TokenType::rparen) break;
 
                     // each arg is its own expression - delimiter is , (stops prior to consuming it)
-                    args.emplace_back(parse_expression(0, TokenType::comma));
+                    args.emplace_back(parse_expression_impl(0, TokenType::comma));
                 }
                 if (peek().type != TokenType::rparen) {
                     diagnostics.report(diagnostics.get_token_location(file_id, peek()), diag::parse::err_expected_rparen)

@@ -105,6 +105,20 @@ Semantics
 - Capture: `capture call()` evaluates the call and returns an `Outcome<R>` that is always a normal value (no propagation). If the call throws, the `Outcome` holds the `ex` and no `R` value.
 - Try-propagate: `let v = try call()` is equivalent to calling `call()` and allowing exceptions to bubble upward. The caller must be declared to `throws` the same set or a superset.
 
+**Expression-level exception semantics (critical for arithmetic/binary ops):**
+- When a function call that can throw appears in an expression (e.g., `f() + 1`), the type of the entire expression **accumulates** the exception set from all called functions in that expression.
+- Example:
+  ```aion
+  fn f() -> i32 throws (E1) { ... }
+  fn g() -> i32 throws (E2) { ... }
+  let x = f() + g();  // expr type: i32 throws {E1, E2}
+  ```
+- The expression type becomes `T throws {E1 ∪ E2 ∪ ...}` (union of all throws in the expr).
+- At the point of assignment or use:
+  - If assigning to a non-ex-wrapped type `T`, the compiler verifies the caller declares a compatible `throws` set (implicit propagation).
+  - If assigning to an ex-wrapped type `T ! {E...}`, the call is implicitly wrapped in `capture` semantics and stored.
+  - If the expression is a standalone statement (e.g., `f()`), the compiler requires the caller to declare the throws or it's a compile error.
+
 Data model: `ex` and `Outcome<T>`
 ---------------------------------
 - ex: an opaque, first-class handle to an exception value. Internally it contains a runtime tag indicating the concrete exception type and a pointer/reference to its payload. `ex` is small (pointer-sized) and copyable.
@@ -124,6 +138,58 @@ struct Outcome<T> {
   - value(): T (UB unless is_ok())
   - exception(): ex (UB unless is_err())
   - into_result(): Result<T, ex>  // convenience
+
+Expression typing and propagation
+----------------------------------
+This section addresses the critical case of exceptions in composite expressions.
+
+**Principle**: Every expression that contains a call to a throwing function has a computed exception set. This set is the union of all exception sets from all function calls in that expression.
+
+**Examples**:
+```aion
+fn f() -> i32 throws (A) { ... }
+fn g() -> i32 throws (B) { ... }
+fn h(x: i32) -> i32 throws (C) { ... }
+
+// Example 1: arithmetic expression with two throwing calls
+let x = f() + g();
+// Type of (f() + g()): i32 throws {A, B}
+// Assignment to x: i32 requires implicit propagation
+// Caller must declare throws {A, B} or superset
+
+// Example 2: nested/chained calls
+let y = f() + h(g());
+// Type: i32 throws {A, B, C}
+// All three exception sets are unioned
+
+// Example 3: assignment to ex-wrapped var (capture semantics)
+let z: i32 ! {A, B} = f() + g();
+// Implicitly wraps: capture (f() + g())
+// z is an Outcome-like value; no implicit propagation
+```
+
+**Binary and unary operators**: When operands are expressions with throws, the operator result inherits the throws set. For example:
+- `(f() throws {A}) + (g() throws {B})` yielding `i32` has type `i32 throws {A, B}`.
+- `-(f() throws {A})` yielding `i32` has type `i32 throws {A}`.
+
+**Function arguments**: When a throwing expression is passed as an argument, the caller must handle the union of throws:
+```aion
+fn process(val: i32) -> string throws (ParseError) { ... }
+
+let result = process(f() + g());  // f() throws {A}, g() throws {B}
+// combined type of process(...): string throws {A, B, ParseError}
+```
+
+**Standalone statements**: A standalone call or expression `f();` where `f()` throws {A} is a compile error unless the caller declares `throws {A}` (or superset).
+
+**Try and catch at expression level**: To avoid propagation in an expression context, wrap explicitly:
+```aion
+let x = try (f() + g());  // try applies to the whole expression
+// If any throw occurs, it propagates (caller must handle)
+
+let out = capture (f() + g());  // out: Outcome<i32>
+// Captures value and exceptions together
+```
 
 AST changes
 -----------
@@ -145,11 +211,16 @@ Parser changes
 Typechecker changes
 -------------------
 - Track the current function's declared `throws` set during typechecking. When seeing `throw` ensure the thrown type is allowed.
+- **Expression typing**: Compute the exception set for each expression by collecting all `throws` sets from all function calls within that expression. The expression type becomes `T throws {E1 ∪ E2 ∪ ...}`.
+- When typechecking assignments and uses:
+  - Assignment to non-ex-wrapped type `T`: verify the caller's `throws` set is a superset of the expression's throws set, or emit a compile error (unhandled exception).
+  - Assignment to ex-wrapped type `T ! {E...}` or call to `capture(expr)`: the throws are implicitly captured; no propagation check needed.
+  - Standalone statements like `f();`: verify caller declares compatible throws or error.
 - When typechecking calls:
   - `call()` in a body that does not `capture` or `try` must either be in a function that declares the callee's throws or be an error.
   - `try call()` does not change the type of `call()` (it yields `R`), but the typechecker must ensure the caller's `throws` covers the callee's `throws`.
   - `capture call()` yields `Outcome<R>`.
-- `catch` arms narrow the `ex` type inside the arm as appropriate.
+- `catch` arms narrow the `ex` type inside the arm as appropriate. Optionally enforce exhaustiveness: if all throws in the function are covered by catch arms, the remaining expression type is non-throwing.
 
 Lowering / Codegen considerations
 --------------------------------
@@ -204,6 +275,29 @@ try {
 }
 ```
 
+- Expressions with multiple throws (arithmetic):
+
+```aion
+fn read_x() -> i32 throws (IoError) { ... }
+fn read_y() -> i32 throws (IoError) { ... }
+
+fn compute_sum() throws (IoError) {
+    let sum = read_x() + read_y();  // expr: i32 throws {IoError}
+    // at assignment, implicit propagation check
+    // caller must declare throws (IoError)
+    return sum;
+}
+
+fn compute_safe() {
+    let result = capture (read_x() + read_y());  // result: Outcome<i32>
+    if result.is_err() {
+        // handle IoError
+    } else {
+        let sum = result.value();
+    }
+}
+```
+
 Migration and interoperability
 ------------------------------
 - Existing `Result<T,E>`-style APIs remain usable. Libraries can provide conversion helpers between `Outcome<T>`/`ex` and `Result<T, E>`.
@@ -246,4 +340,8 @@ try_stmt      : 'try' block ('catch' '(' pattern ')' block )*
 Conclusion
 ----------
 This design separates exceptions into an explicit, statically-typed channel that integrates with the type system without contaminating function return types. It is ergonomically flexible (propagate with `try`, capture with `capture`, or declare propagation at the caller), statically checkable, and maps to multiple runtime implementation strategies. It keeps the language's multi-return/multiple-value features intact while providing a clean mechanism for multiple error kinds.
+
+
+
+
 

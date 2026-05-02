@@ -52,20 +52,20 @@ An ex-wrapped value of type `T ! {E...}` is a compiler-managed sum type.
 - **Memory Layout**: `[Discriminant (u32)] [Payload (Max(sizeof(T), max(sizeof(E...))))]`.
 
 ### 3.2 Implicit Bubbling (The Happy Path)
-When a fallible function is called:
-1. If the result is assigned to a non-ex-wrapped type `T`, the compiler inserts an implicit "bubble" check.
-2. If the call returns an exception, the current function immediately returns that exception.
+When a fallible function is called or an ex-wrapped value is used:
+1. If the value is coerced to a non-ex-wrapped type `T` (e.g., assignment to a non-ex variable, passed as a non-ex function argument, or used in a non-propagating context), the compiler inserts an implicit "bubble" check.
+2. If the value contains an exception, the current function immediately returns (bubbles) that exception.
 3. This requires the calling function to include the exception in its own `!` set.
 
 ```aion
 fn outer() ! MyError {
-    let x: i32 = inner(); // inner() throws MyError
-    // If inner() returns MyError, outer() returns MyError here.
+    let x: i32 = inner(); // inner() returns i32 ! {MyError}
+    // Coercion to i32 triggers implicit bubbling.
 }
 ```
 
 ### 3.3 Explicit Capture
-If the result is assigned to an ex-wrapped variable, no bubbling occurs. The variable captures the state.
+If the result is assigned to an ex-wrapped variable or the expression remains in an ex-wrapped state, no bubbling occurs. The variable or expression result captures the state.
 
 ```aion
 fn outer() {
@@ -75,6 +75,19 @@ fn outer() {
     }
 }
 ```
+
+### 3.4 Propagation and Short-circuiting
+Exceptions propagate upward through the expression tree. An expression containing one or more fallible sub-expressions evaluates to an ex-wrapped type.
+
+- **Short-circuiting**: Evaluation follows a strict left-to-right order. If a sub-expression evaluates to an exception, all subsequent parts of the larger expression are skipped.
+- **Type Union**: The exception set of an expression is the union of the exception sets of all its sub-expressions.
+
+**Example: `f() + 1`**
+If `f()` returns `i32 ! {Error}`, the expression `f() + 1` has type `i32 ! {Error}`.
+1. `f()` is evaluated.
+2. If `f()` returns an exception, the `+ 1` operation is never performed.
+3. The exception is returned as the result of the entire expression.
+4. If this result is then assigned to an `i32`, it bubbles (see 3.2).
 
 ## 4. Operators and Built-ins
 
@@ -112,10 +125,26 @@ let res = risky() catch e {
 
 ## 5. Edge Cases and Advanced Semantics
 
-### 5.1 Nested Fallible Calls
-In an expression like `f(g())`, where both `g` and `f` can throw:
-- If `g()` throws `E1`, the expression `f(...)` is never entered; `E1` is bubbled or captured.
-- The resulting type of the whole expression becomes `ReturnOfF ! {E_g \cup E_f}`.
+### 5.1 Nested and Compound Expressions
+The system handles nesting by lifting the exceptional state to the outermost level of the expression that is not explicitly handled or captured.
+
+**Nested Calls:**
+In `f(g())`, where both `g` and `f` can throw:
+- If `g()` throws `E1`, `f` is never called.
+- If `g()` succeeds but `f()` throws `E2`, the result is `E2`.
+- Result type: `ReturnOfF ! {E_g \cup E_f}`.
+
+**Arithmetic/Logic Expressions:**
+In `a() + b() * c()`:
+- If `a()` throws, `b()` and `c()` are not called.
+- If `a()` succeeds, `b()` is called. If `b()` throws, `c()` is not called.
+- Exceptions are "first-come, first-propagated".
+
+**function evaluation order:**
+- The order of function evaluation (value substitution) is from left to right, with each succeeding function call enabling the next to be evaluated. 
+If any function call throws, the later calls are skipped and the exception is propagated.
+- that is, given an expression as `let x = a() + b() * c()`, if `a()` throws, `b()` and `c()` are not evaluated, and the type of x is `i32 ! {E_a}`.
+- this evaluation order and type deduction is also true for when `b()` or `c()`
 
 ### 5.2 Void Functions
 Functions returning nothing (`void` or `unit`) can still throw.
@@ -137,6 +166,13 @@ The generic `E` represents the union of all exceptions thrown by the closure.
 
 ### 5.5 Recursive Functions
 Recursive functions must declare the union of all exceptions thrown in any branch. Since the set of exceptions is finite and defined at compile-time, the exception set does not "grow" infinitely during recursion; it simply converges to the set of all `throw` statements reachable in the call graph.
+
+### 5.6 Control Flow Integration
+Control flow structures that require a specific base type (e.g., `bool` for `if`, `iterable` for `for`) trigger implicit bubbling if provided with an ex-wrapped value.
+
+- **`if` statements**: `if (fallible_bool())` bubbles if an exception occurs.
+- **`for` loops**: `for (x in fallible_list())` bubbles if the list retrieval fails.
+- **`match` expressions**: `match fallible_val()` bubbles before entering any branch if `fallible_val()` is an exception. To handle the exception within the match context, the value must be explicitly caught or assigned to an ex-wrapped variable first.
 
 ## 6. Comparison with Existing Models
 

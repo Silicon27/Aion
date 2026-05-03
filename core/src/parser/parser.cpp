@@ -158,13 +158,6 @@ namespace aion::parse {
         return previous();
     }
 
-    template<typename... Tt> requires (std::is_same_v<Tt, TokenType> && ...)
-    Token Parser::skip_until_any_of(Tt... tt) {
-        while (peek().type != TokenType::eof && !((peek().type == tt) || ...)) {
-            blind_consume();
-        }
-        return previous();
-    }
 
     bool Parser::is_at_end() const { return pos >= tokens.size() || tokens[pos].type == TokenType::eof; }
 

@@ -127,7 +127,13 @@ namespace aion::parse {
         Token skip_until(const std::string& lexeme);
         Token skip_until(TokenType type);
         template <typename... Tt>
-        requires (std::is_same_v<Tt, TokenType> && ...) Token skip_until_any_of(Tt... tt);
+        requires (std::is_same_v<Tt, TokenType> && ...)
+        Token skip_until_any_of(Tt... tt) {
+            while (peek().type != TokenType::eof && !((peek().type == tt) || ...)) {
+                blind_consume();
+            }
+            return previous();
+        }
         /// skip_until overload that skips until it either finds a matching lexeme or type
         Token skip_until(TokenType type, const std::string& lexeme);
         /// the error would have to be first emitted before we attempt to end the parsing function (the caller to this function);

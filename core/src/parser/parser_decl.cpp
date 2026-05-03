@@ -6,13 +6,27 @@
 
 namespace aion::parse {
     void Parser::parse_top_level_decl() {
+        bool is_export = false;
+        if (silent_probe(TokenType::kw_export)) {
+            is_export = true;
+            blind_consume();
+        }
+
         switch (peek().get_type()) {
             case TokenType::kw_let: {
-                context.get_translation_unit_decl()->add_decl(parse_variable_decl());
+                Decl* decl = parse_variable_decl();
+                if (is_export) {
+                    // TODO: VarDecl might need is_export too if it's allowed
+                }
+                context.get_translation_unit_decl()->add_decl(decl);
                 break;
             }
             case TokenType::kw_fn: {
-                context.get_translation_unit_decl()->add_decl(parse_function_decl());
+                Decl* decl = parse_function_decl();
+                if (is_export && decl->get_kind() == DeclKind::function) {
+                    static_cast<FuncDecl*>(decl)->is_export = true;
+                }
+                context.get_translation_unit_decl()->add_decl(decl);
                 break;
             }
             case TokenType::comment:

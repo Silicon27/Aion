@@ -529,6 +529,32 @@ void register_parser_tests(TestRunner& runner) {
 
     runner.add_suite(std::move(basic_suite));
     runner.add_suite(std::move(var_suite));
+    func_suite->add_test("exported_function_declaration", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("export fn exported() -> void;", context, sm, diags);
+        parser.parse();
+        
+        TranslationUnitDecl* tu = context.get_translation_unit_decl();
+        AION_ASSERT_NOT_NULL(tu);
+        
+        // Find the function decl
+        FuncDecl* func = nullptr;
+        for (auto* decl = tu->get_first_decl(); decl; decl = decl->next) {
+            if (decl->get_kind() == DeclKind::function) {
+                func = static_cast<FuncDecl*>(decl);
+                break;
+            }
+        }
+        
+        AION_ASSERT_NOT_NULL(func);
+        AION_ASSERT_TRUE(func->get_identifier() == "exported");
+        AION_ASSERT_TRUE(func->is_export);
+    });
+
     runner.add_suite(std::move(func_suite));
     runner.add_suite(std::move(expr_suite));
 }

@@ -225,6 +225,7 @@ namespace aion::parse {
         auto rparen = MatchToken(TokenType::rparen);
         auto identifier = MatchToken(TokenType::identifier);
         auto comma = MatchToken(TokenType::comma);
+        auto arrow = MatchToken(TokenType::arrow);
         auto colon = MatchToken(TokenType::colon);
         auto semicolon = MatchToken(TokenType::semicolon);
 
@@ -238,7 +239,7 @@ namespace aion::parse {
         // helper variables
         bool has_default_argument = false;
         std::vector<ParamVarDecl*> params;
-        auto parse_argument = [&] -> Decl* {
+        auto parse_argument = [&]() -> Decl* {
             bool is_mut = false;
             Token id;
             MutableType* type = nullptr;
@@ -351,8 +352,40 @@ namespace aion::parse {
                     );
                 }
 
+                Decl* argument = parse_argument();
+
+                if (argument->get_kind() == DeclKind::error) {
+                    return argument;
+                }
             }
+        } else {
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            diagnostics.report(loc, diag::parse::err_expected_lparen)
+                << "expected '(' for function argument list"
+                << diag::FixItHint::create_insertion(loc, "<lparen>");
+            skip_until(TokenType::semicolon);
+            return context.create<ErrorDecl>(
+                function_id_info,
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
         }
+
+        if (silent_probe(arrow)) {
+            blind_consume();
+
+        } else {
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            diagnostics.report(loc, diag::parse::err_expected_arrow_operator)
+                << "expected '->' for function return type"
+                << diag::FixItHint::create_insertion(loc, "<arrow>");
+            skip_until(TokenType::semicolon);
+            return context.create<ErrorDecl>(
+                function_id_info,
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
+        }
+
+        
 
         // Temporary stub until full function parsing lands.
         diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token)

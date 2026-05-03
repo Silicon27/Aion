@@ -150,9 +150,6 @@ namespace aion::ast {
 
     template<typename EleT, typename Context>
     typename ShortVec<EleT, Context>::reference ShortVec<EleT, Context>::at(size_type index) {
-        if (index >= size_) {
-            return end();
-        }
         return data_[index];
     }
 

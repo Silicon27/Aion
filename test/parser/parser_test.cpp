@@ -38,6 +38,11 @@ static T* as_expr(Expr* expr) {
     return static_cast<T*>(expr); // NOLINT(cppcoreguidelines-pro-type-static-cast-downcast)
 }
 
+template <typename T>
+static T* as_decl(Decl* decl) {
+    return static_cast<T*>(decl); // NOLINT(cppcoreguidelines-pro-type-static-cast-downcast)
+}
+
 void register_parser_tests(TestRunner& runner) {
 
     // ========================================================================
@@ -109,8 +114,45 @@ void register_parser_tests(TestRunner& runner) {
     auto func_suite = std::make_unique<TestSuite>("Parser::FunctionDeclarations");
 
     func_suite->add_test("simple_function_declaration", []() {
-        // TODO: Add actual test when parser is ready
-        AION_ASSERT_TRUE(true);
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("fn add(a: i32, b: i32) -> i32;", context, sm, diags);
+        Decl* decl = parser.parse_function_decl();
+
+        AION_ASSERT_NOT_NULL(decl);
+        if (decl->get_kind() == DeclKind::error) {
+            AION_ASSERT_TRUE(false); // Fail if error decl
+        }
+        AION_ASSERT_ENUM_EQ(decl->get_kind(), DeclKind::function);
+
+        auto* func = as_decl<FuncDecl>(decl);
+        AION_ASSERT_TRUE(func->get_identifier() == "add");
+        AION_ASSERT_EQ(func->num_params, 2u);
+        AION_ASSERT_NOT_NULL(func->get_param(0));
+        AION_ASSERT_TRUE(func->get_param(0)->get_identifier() == "a");
+        AION_ASSERT_NOT_NULL(func->get_param(1));
+        AION_ASSERT_TRUE(func->get_param(1)->get_identifier() == "b");
+        AION_ASSERT_EQ(func->num_ret_vals, 1u);
+    });
+
+    func_suite->add_test("function_with_no_params", []() {
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("fn foo() -> void;", context, sm, diags);
+        Decl* decl = parser.parse_function_decl();
+
+        AION_ASSERT_NOT_NULL(decl);
+        AION_ASSERT_ENUM_EQ(decl->get_kind(), DeclKind::function);
+
+        auto* func = as_decl<FuncDecl>(decl);
+        AION_ASSERT_EQ(func->num_params, 0u);
+        AION_ASSERT_EQ(func->num_ret_vals, 1u);
     });
 
     runner.add_suite(std::move(func_suite));

@@ -21,6 +21,7 @@ namespace aion::ast {
     enum class TypeKind {
         builtin,
         user_defined,
+        function,
     };
 
     enum class DeclKind : std::uint8_t {

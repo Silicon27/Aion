@@ -97,10 +97,9 @@ namespace aion::ast {
     public:
         bool is_export = false;
         std::size_t num_params = 0;
-        std::size_t num_ret_vals = 0;
 
-        FuncDecl(IdentifierInfo* name, MutableType* type, bool is_export, std::size_t num_params, std::size_t num_ret_vals, const SourceRange& range)
-        : ValueDecl(name, type, DeclKind::function, range), is_export(is_export), num_params(num_params), num_ret_vals(num_ret_vals) {}
+        FuncDecl(IdentifierInfo* name, MutableType* type, bool is_export, std::size_t num_params, const SourceRange& range)
+        : ValueDecl(name, type, DeclKind::function, range), is_export(is_export), num_params(num_params) {}
 
         [[nodiscard]] ParamVarDecl** get_params() {
             return num_params == 0 ? nullptr : reinterpret_cast<ParamVarDecl**>(this + 1);
@@ -116,28 +115,6 @@ namespace aion::ast {
         ParamVarDecl* operator[](const std::size_t index) {
             return get_param(index);
         }
-
-        [[nodiscard]] MutableType** get_return_types() {
-            if (num_ret_vals == 0) return nullptr;
-            return reinterpret_cast<MutableType**>(reinterpret_cast<ParamVarDecl**>(this + 1) + num_params);
-        }
-
-        // std::size_t param_curr_end() {
-        //     ParamVarDecl** params = get_params();
-        //
-        //     // Safety check for functions with zero parameters
-        //     if (!params) {
-        //         return 0;
-        //     }
-        //
-        //     std::size_t c = 0;
-        //     // Stop if we reach capacity OR we find an uninitialized (null) slot
-        //     while (c < num_params && params[c] != nullptr) {
-        //         c++;
-        //     }
-        //
-        //     return c;
-        // }
     };
     static_assert(std::is_trivially_destructible_v<FuncDecl>);
 

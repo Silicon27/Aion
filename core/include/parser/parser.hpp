@@ -93,7 +93,7 @@ namespace aion::parse {
         Token blind_consume(int n = 1);
 
         // ------------ Reporting --------------
-        MutableType* match_type(bool is_mut);
+        MutableType* match_type(bool is_mut, bool is_comp = false);
 
         // NOTE most non-tolerating function, it would instantly terminate the program if the match fails
         /// usage examples would be tokens that if not matched, would indicate memory corruption during program runtime

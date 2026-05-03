@@ -75,7 +75,9 @@ namespace aion::ast {
         // (ex. types that may have a pointer as an array in their members)
         // ––––––––––––––––––––––––––––––––––––––––––
 
-        FuncDecl *create_func_decl(const std::string_view name, const std::size_t num_args, const std::size_t num_ret_vals);
+        FuncDecl *create_func_decl(IdentifierInfo* name, MutableType* type, bool is_export, std::size_t num_params, const SourceRange& range);
+        FunctionType* create_function_type(MutableType* return_type, const std::vector<MutableType*>& param_types);
+        FunctionType* create_function_type(MutableType* return_type, const ShortVec<MutableType*>& param_types);
 
         char *allocate_string(std::string_view str) {
             if (str.empty()) return nullptr;

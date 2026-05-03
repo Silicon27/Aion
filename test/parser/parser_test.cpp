@@ -52,6 +52,7 @@ void register_parser_tests(TestRunner& runner) {
     auto basic_suite = std::make_unique<TestSuite>("Parser::BasicParsing");
 
     basic_suite->add_test("match_builtin_type", []() {
+        std::cout << "Running match_builtin_type..." << std::endl;
         ASTContext context;
         Source_Manager sm;
         diag::TextDiagnosticPrinter printer(std::cerr, &sm);
@@ -92,7 +93,8 @@ void register_parser_tests(TestRunner& runner) {
         AION_ASSERT_TRUE(true);
     });
 
-    runner.add_suite(std::move(basic_suite));
+    // basic_suite will be added at the end
+    // runner.add_suite(std::move(basic_suite));
 
     // ========================================================================
     // Variable Declaration Tests
@@ -105,7 +107,8 @@ void register_parser_tests(TestRunner& runner) {
         AION_ASSERT_TRUE(true);
     });
 
-    runner.add_suite(std::move(var_suite));
+    // var_suite will be added at the end
+    // runner.add_suite(std::move(var_suite));
 
     // ========================================================================
     // Function Declaration Tests
@@ -114,6 +117,7 @@ void register_parser_tests(TestRunner& runner) {
     auto func_suite = std::make_unique<TestSuite>("Parser::FunctionDeclarations");
 
     func_suite->add_test("simple_function_declaration", []() {
+        std::cout << "Running simple_function_declaration..." << std::endl;
         ASTContext context;
         Source_Manager sm;
         diag::TextDiagnosticPrinter printer(std::cerr, &sm);
@@ -135,10 +139,16 @@ void register_parser_tests(TestRunner& runner) {
         AION_ASSERT_TRUE(func->get_param(0)->get_identifier() == "a");
         AION_ASSERT_NOT_NULL(func->get_param(1));
         AION_ASSERT_TRUE(func->get_param(1)->get_identifier() == "b");
-        AION_ASSERT_EQ(func->num_ret_vals, 1u);
+
+        auto* qt = func->get_type();
+        AION_ASSERT_NOT_NULL(qt);
+        auto* ft = static_cast<FunctionType*>(qt->get_base());
+        AION_ASSERT_EQ(ft->get_num_params(), 2u);
+        AION_ASSERT_NOT_NULL(ft->get_return_type());
     });
 
     func_suite->add_test("function_with_no_params", []() {
+        std::cout << "Running function_with_no_params..." << std::endl;
         ASTContext context;
         Source_Manager sm;
         diag::TextDiagnosticPrinter printer(std::cerr, &sm);
@@ -152,10 +162,67 @@ void register_parser_tests(TestRunner& runner) {
 
         auto* func = as_decl<FuncDecl>(decl);
         AION_ASSERT_EQ(func->num_params, 0u);
-        AION_ASSERT_EQ(func->num_ret_vals, 1u);
+        auto* ft = static_cast<FunctionType*>(func->get_type()->get_base());
+        AION_ASSERT_NOT_NULL(ft->get_return_type());
     });
 
-    runner.add_suite(std::move(func_suite));
+    func_suite->add_test("function_with_qualifiers", []() {
+        std::cout << "Running function_with_qualifiers..." << std::endl;
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("fn mut comp bar() -> i32;", context, sm, diags);
+        Decl* decl = parser.parse_function_decl();
+
+        AION_ASSERT_NOT_NULL(decl);
+        AION_ASSERT_ENUM_EQ(decl->get_kind(), DeclKind::function);
+
+        auto* func = as_decl<FuncDecl>(decl);
+        auto* qt = func->get_type();
+        AION_ASSERT_TRUE(qt->is_mutable());
+        AION_ASSERT_TRUE(qt->is_compile_time());
+    });
+
+    var_suite->add_test("variable_with_comp_qualifier", []() {
+        std::cout << "Running variable_with_comp_qualifier..." << std::endl;
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("let comp x: i32 = 42;", context, sm, diags);
+        Decl* decl = parser.parse_variable_decl();
+
+        AION_ASSERT_NOT_NULL(decl);
+        AION_ASSERT_ENUM_EQ(decl->get_kind(), DeclKind::variable);
+
+        auto* var = as_decl<VarDecl>(decl);
+        auto* qt = var->get_type();
+        AION_ASSERT_TRUE(qt->is_compile_time());
+        AION_ASSERT_FALSE(qt->is_mutable());
+    });
+
+    var_suite->add_test("variable_with_mut_comp_qualifiers", []() {
+        std::cout << "Running variable_with_mut_comp_qualifiers..." << std::endl;
+        ASTContext context;
+        Source_Manager sm;
+        diag::TextDiagnosticPrinter printer(std::cerr, &sm);
+        diag::DiagnosticsEngine diags(&sm, &printer);
+
+        Parser parser = make_expr_parser("let mut comp x: i32 = 42;", context, sm, diags);
+        Decl* decl = parser.parse_variable_decl();
+
+        AION_ASSERT_NOT_NULL(decl);
+        auto* var = as_decl<VarDecl>(decl);
+        auto* qt = var->get_type();
+        AION_ASSERT_TRUE(qt->is_mutable());
+        AION_ASSERT_TRUE(qt->is_compile_time());
+    });
+
+    // func_suite will be added at the end
+    // runner.add_suite(std::move(func_suite));
 
     // ========================================================================
     // Expression Tests
@@ -460,6 +527,9 @@ void register_parser_tests(TestRunner& runner) {
         AION_ASSERT_ENUM_EQ(add_assign->op, BinaryOp::add_assign);
     });
 
+    runner.add_suite(std::move(basic_suite));
+    runner.add_suite(std::move(var_suite));
+    runner.add_suite(std::move(func_suite));
     runner.add_suite(std::move(expr_suite));
 }
 

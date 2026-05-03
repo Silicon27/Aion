@@ -50,7 +50,7 @@ namespace aion::parse {
                 auto type_creator = [&](TokenType type) -> MutableType* {
                     return context.create<MutableType>(
                         context.create<BuiltinType>(BuiltinType::get_kind(type)),
-                        false
+                        false, false
                         );
                 };
 
@@ -60,7 +60,7 @@ namespace aion::parse {
                 auto type_creator = [&](TokenType type) -> MutableType* {
                     return context.create<MutableType>(
                         context.create<BuiltinType>(BuiltinType::get_kind(type)),
-                        false
+                        false, false
                         );
                 };
 
@@ -68,7 +68,7 @@ namespace aion::parse {
             }
             case TokenType::string_literal: {
                 return context.create<StringLiteralExpr>(
-                    context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::string_literal), false),
+                    context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::string_literal), false, false),
                     context.allocate_string(tok.lexeme),
                     tok.flags,
                     loc

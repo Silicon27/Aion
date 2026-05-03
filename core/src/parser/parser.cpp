@@ -42,6 +42,7 @@ namespace aion::parse {
                 case TokenType::kw_f128:
                 case TokenType::kw_char:
                 case TokenType::kw_bool:
+                case TokenType::kw_void:
                     return true;
                 default:
                     return false;
@@ -121,17 +122,17 @@ namespace aion::parse {
         return expect(token.token);
     }
 
-    MutableType* Parser::match_type(const bool is_mut) {
+    MutableType* Parser::match_type(const bool is_mut, const bool is_comp) {
         if (is_builtin_type_token(peek().type)) {
             Token type_token = blind_consume();
             auto* t = context.create<BuiltinType>(BuiltinType::get_kind(type_token.type));
-            return context.create<MutableType>(t, is_mut);
+            return context.create<MutableType>(t, is_mut, is_comp);
         }
         if (peek().type == TokenType::identifier) {
             Token type_token = blind_consume();
             std::string_view name(context.allocate_string(type_token.lexeme), type_token.lexeme.size());
             auto* t = context.create<UserDefinedType>(name);
-            return context.create<MutableType>(t, is_mut);
+            return context.create<MutableType>(t, is_mut, is_comp);
         }
 
         return nullptr;

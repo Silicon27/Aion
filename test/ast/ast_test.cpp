@@ -260,7 +260,7 @@ void register_ast_tests(TestRunner& runner) {
         ASTContext context;
         auto* name = context.emplace_or_get_identifier("named");
         auto* value_name = context.emplace_or_get_identifier("value");
-        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false);
+        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false, false);
 
         auto* named = context.create<NamedDecl>(name, SourceRange(SourceLocation(1, 1), SourceLocation(1, 5)));
         auto* value = context.create<ValueDecl>(value_name, type, SourceRange(SourceLocation(1, 1), SourceLocation(1, 5)));
@@ -282,7 +282,7 @@ void register_ast_tests(TestRunner& runner) {
         ASTContext context;
         auto* value_name = context.emplace_or_get_identifier("x");
         auto* builtin = context.create<BuiltinType>(BuiltinTypeKind::i32);
-        auto* mutable_type = context.create<MutableType>(builtin, false);
+        auto* mutable_type = context.create<MutableType>(builtin, false, false);
         auto* value_decl = context.create<ValueDecl>(
             value_name,
             mutable_type,
@@ -329,7 +329,7 @@ void register_ast_tests(TestRunner& runner) {
         ASTContext context;
         auto* builtin = context.create<BuiltinType>(BuiltinTypeKind::i32);
         auto* user_defined = context.create<UserDefinedType>("Thing");
-        auto* mutable_builtin = context.create<MutableType>(builtin, true);
+        auto* mutable_builtin = context.create<MutableType>(builtin, true, false);
 
         AION_ASSERT_ENUM_EQ(BuiltinType::get_kind(lexer::TokenType::kw_i32), BuiltinTypeKind::i32);
         AION_ASSERT_ENUM_EQ(user_defined->get_kind(), TypeKind::user_defined);
@@ -386,7 +386,7 @@ void register_ast_tests(TestRunner& runner) {
         Offset offset = 1337;
         
         auto bt = context.create<BuiltinType>(BuiltinTypeKind::i32);
-        auto type = context.create<MutableType>(bt, false);
+        auto type = context.create<MutableType>(bt, false, false);
         IdentifierInfo* ii = context.emplace_or_get_identifier("x");
         auto vd = context.create<VarDecl>(ii, type,
             StorageClass::stack,
@@ -683,43 +683,36 @@ void register_ast_tests(TestRunner& runner) {
         ASTContext context;
 
         const std::size_t num_params = 3;
-        const std::size_t num_ret_vals = 2;
-        FuncDecl* fn = context.create_func_decl("my_func", num_params, num_ret_vals);
+        auto* bt = context.create<BuiltinType>(BuiltinTypeKind::i32);
+        auto* mt = context.create<MutableType>(bt, false, false);
+
+        ShortVec<MutableType*> param_types(context);
+        for (std::size_t i = 0; i < num_params; ++i) param_types.push_back(mt);
+
+        auto* ft = context.create_function_type(mt, param_types);
+        auto* qt = context.create<MutableType>(ft, false, false);
+
+        IdentifierInfo* name = context.emplace_or_get_identifier("my_func");
+        FuncDecl* fn = context.create_func_decl(name, qt, false, num_params, SourceRange());
 
         AION_ASSERT_NOT_NULL(fn);
         AION_ASSERT_EQ(fn->get_identifier(), "my_func");
         AION_ASSERT_EQ(fn->num_params, num_params);
-        AION_ASSERT_EQ(fn->num_ret_vals, num_ret_vals);
 
         ParamVarDecl** params = fn->get_params();
         AION_ASSERT_NOT_NULL(params);
 
-        MutableType** ret_types = fn->get_return_types();
-        AION_ASSERT_NOT_NULL(ret_types);
-
-        // Verify that parameters and return types are initialized to nullptr
+        // Verify that parameters are initialized to nullptr
         for (std::size_t i = 0; i < num_params; ++i) {
             AION_ASSERT_NULL(params[i]);
         }
-        for (std::size_t i = 0; i < num_ret_vals; ++i) {
-            AION_ASSERT_NULL(ret_types[i]);
-        }
 
         // Set parameters
-        ParamVarDecl* p1 = context.create<ParamVarDecl>(context.emplace_or_get_identifier("p1"), nullptr, SourceRange());
+        ParamVarDecl* p1 = context.create<ParamVarDecl>(context.emplace_or_get_identifier("p1"), mt, SourceRange());
         params[0] = p1;
-
-        // Set return types
-        auto* bt = context.create<BuiltinType>(BuiltinTypeKind::i32);
-        auto* mt = context.create<MutableType>(bt, false);
-        ret_types[0] = mt;
 
         // Verify access
         AION_ASSERT_EQ(fn->get_param(0), p1);
-        AION_ASSERT_EQ(fn->get_return_types()[0], mt);
-
-        // Verify that they don't overlap
-        AION_ASSERT_EQ(reinterpret_cast<void*>(ret_types), reinterpret_cast<void*>(params + num_params));
     });
 
     runner.add_suite(std::move(context_suite));
@@ -735,7 +728,7 @@ void register_ast_tests(TestRunner& runner) {
 
         ASTContext context;
         auto* id = context.emplace_or_get_identifier("value");
-        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false);
+        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false, false);
         auto* init = context.create<IntegerLiteralExpr>(type, "7", SourceLocation(1, 10));
         auto* decl = context.create<VarDecl>(id, type, StorageClass::stack,
             SourceRange(SourceLocation(1, 1), SourceLocation(1, 12)), init);
@@ -760,10 +753,17 @@ void register_ast_tests(TestRunner& runner) {
         using namespace aion::ast;
 
         ASTContext context;
-        auto* type = context.create<MutableType>(context.create<BuiltinType>(BuiltinTypeKind::i32), false);
+        auto* bt = context.create<BuiltinType>(BuiltinTypeKind::i32);
+        auto* type = context.create<MutableType>(bt, false, false);
 
-        FuncDecl* fn = context.create_func_decl("test_func", 1, 0);
-        fn->set_type(type);
+        ShortVec<MutableType*> param_types(context);
+        param_types.push_back(type);
+        auto* ft = context.create_function_type(type, param_types);
+        auto* qt = context.create<MutableType>(ft, false, false);
+
+        IdentifierInfo* name = context.emplace_or_get_identifier("test_func");
+        FuncDecl* fn = context.create_func_decl(name, qt, false, 1, SourceRange());
+        fn->set_type(qt);
 
         auto* p1_name = context.emplace_or_get_identifier("p1");
         ParamVarDecl* p1 = context.create<ParamVarDecl>(p1_name, type, SourceRange());

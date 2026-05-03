@@ -76,26 +76,16 @@ namespace aion::parse {
         // check for attributes
         if (silent_probe(mut)) {
             is_mut = true;
-            auto mut_tok = blind_consume();
+            blind_consume();
             if (silent_probe(comp)) {
-                auto comp_tok = peek();
-                SourceLocation mut_loc = diagnostics.get_token_location(file_id, mut_tok);
-                SourceLocation comp_loc = diagnostics.get_token_location(file_id, comp_tok);
-                diagnostics.report(mut_loc, diag::parse::err_unexpected_attribute)
-                    << "compile time variables cannot be attributed with mut"
-                    << diag::FixItHint::create_removal(diagnostics.token_range(mut_tok));
+                is_comp = true;
                 blind_consume();
             }
         } else if (silent_probe(comp)) {
             is_comp = true;
-            auto comp_tok = blind_consume();
+            blind_consume();
             if (silent_probe(mut)) {
-                auto mut_tok = peek();
-                SourceLocation mut_loc = diagnostics.get_token_location(file_id, mut_tok);
-                SourceLocation comp_loc = diagnostics.get_token_location(file_id, comp_tok);
-                diagnostics.report(mut_loc, diag::parse::err_unexpected_attribute)
-                    << "compile time variables cannot be attributed with mut"
-                    << diag::FixItHint::create_removal(diagnostics.token_range(mut_tok));
+                is_mut = true;
                 blind_consume();
             }
         }
@@ -146,7 +136,7 @@ namespace aion::parse {
         // type matching
         if (silent_probe(colon)) {
             blind_consume();
-            type_annotation = match_type(is_mut);
+            type_annotation = match_type(is_mut, is_comp);
 
             if (!type_annotation) {
                 SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
@@ -224,22 +214,57 @@ namespace aion::parse {
         auto lparen = MatchToken(TokenType::lparen);
         auto rparen = MatchToken(TokenType::rparen);
         auto identifier = MatchToken(TokenType::identifier);
-        auto comma = MatchToken(TokenType::comma);
         auto arrow = MatchToken(TokenType::arrow);
-        auto colon = MatchToken(TokenType::colon);
         auto semicolon = MatchToken(TokenType::semicolon);
 
         SourceLocation decl_start_location = diagnostics.get_source_manager()->get_location(file_id, peek());
+        
+        diffuse_match(TokenType::kw_fn, peek().type, "expected 'fn' keyword");
+
+        bool fn_is_mut = false;
+        bool fn_is_comp = false;
+
+        if (silent_probe(TokenType::kw_mut)) {
+            fn_is_mut = true;
+            blind_consume();
+            if (silent_probe(TokenType::kw_comp)) {
+                fn_is_comp = true;
+                blind_consume();
+            }
+        } else if (silent_probe(TokenType::kw_comp)) {
+            fn_is_comp = true;
+            blind_consume();
+            if (silent_probe(TokenType::kw_mut)) {
+                fn_is_mut = true;
+                blind_consume();
+            }
+        }
+
         IdentifierInfo* function_id_info = nullptr;
         Token function_id_token;
+        if (silent_probe(identifier)) {
+            function_id_token = blind_consume();
+            function_id_info = context.emplace_or_get_identifier(function_id_token.lexeme);
+        } else {
+            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+            auto fixit_hint = diag::FixItHint::create_insertion(loc, "<identifier>");
+            diagnostics.report(loc, diag::parse::err_expected_identifier)
+                << "expected identifier for function declaration, none provided."
+                << fixit_hint;
+            skip_until(TokenType::semicolon);
+            return context.create<ErrorDecl>(
+                context.emplace_or_get_identifier("<missing_identifier>"),
+                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
+            );
+        }
 
         ast::ShortVec<ParamVarDecl*> collected_params(context);
-        ast::ShortVec<MutableType*> collected_return_types(context);
+        ast::ShortVec<MutableType*> param_types(context);
 
         auto parse_argument = [&]() -> Decl* {
-            bool is_mut = false;
+            bool arg_is_mut = false;
             Token id;
-            MutableType* type = nullptr;
+            MutableType* arg_type = nullptr;
             Expr* default_value = nullptr;
             if (peek().type == TokenType::identifier) {
                 id = blind_consume();
@@ -254,7 +279,6 @@ namespace aion::parse {
             }
 
             if (peek().type == TokenType::colon) {
-                // type parsing branch
                 blind_consume(); // consume colon
             } else {
                 SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
@@ -264,98 +288,42 @@ namespace aion::parse {
             }
 
             if (silent_probe(TokenType::kw_mut)) {
-                is_mut = true;
-                auto mut_tok = blind_consume();
-                if (silent_probe(TokenType::kw_comp)) {
-                    auto comp_tok = peek();
-                    SourceLocation mut_loc = diagnostics.get_token_location(file_id, mut_tok);
-                    SourceLocation comp_loc = diagnostics.get_token_location(file_id, comp_tok);
-                    diagnostics.report(mut_loc, diag::parse::err_unexpected_attribute)
-                        << "parameters cannot be declared as comp; if you meant to declare a compile time function use fn comp"
-                        << diag::FixItHint::create_removal(diagnostics.token_range(mut_tok));
-                    blind_consume();
-                }
+                arg_is_mut = true;
+                blind_consume();
+            }
+            if (silent_probe(TokenType::kw_comp)) {
+                diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_attribute)
+                    << "parameters cannot be declared as comp; if you meant to declare a compile time function use fn comp";
+                blind_consume();
             }
 
-            type = match_type(is_mut);
+            arg_type = match_type(arg_is_mut);
 
             if (silent_probe(TokenType::equal)) {
                 blind_consume();
-
-                // perform possible erroneous token checks
-                if (silent_probe(TokenType::rparen)) {
-                    SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
-                    diagnostics.report(diagnostics.get_token_location(file_id, peek()), diag::parse::err_unexpected_token)
-                        << "expected expression after '='"
-                        << diag::but_got("expected <expr> but got %1");
-                    skip_until_any_of(TokenType::comma, TokenType::rparen, TokenType::semicolon);
-                    return context.create<ErrorDecl>(nullptr, SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek())));
-                } else if (silent_probe(TokenType::comma)) {
-                    SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
-                    diagnostics.report(diagnostics.get_token_location(file_id, peek()), diag::parse::err_unexpected_token)
-                        << "expected expression after ','"
-                        << diag::but_got("expected <expr> but got %1");
-                    skip_until_any_of(TokenType::comma, TokenType::rparen, TokenType::semicolon);
-                    return context.create<ErrorDecl>(nullptr, SourceRange(decl_start_location, loc));
-                }
-
                 default_value = parse_expression(0, TokenType::comma, TokenType::rparen);
             }
 
             return context.create<ParamVarDecl>(
                 context.emplace_or_get_identifier(id.lexeme),
-                type,
+                arg_type,
                 SourceRange(diagnostics.get_source_manager()->get_location(file_id, id), diagnostics.get_source_manager()->get_location(file_id, peek())),
                 default_value
             );
         };
 
-
-        diffuse_match(TokenType::kw_fn, peek().type, "expected 'fn' keyword");
-
-        if (silent_probe(identifier)) {
-            function_id_token = blind_consume();
-            if (context.get_identifier(function_id_token.lexeme) != nullptr) {
-                diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, function_id_token), diag::parse::err_redefinition);
-            }
-            function_id_info = context.emplace_or_get_identifier(function_id_token.lexeme);
-            // function_id_info being nullptr case handled here if that exists
-        } else {
-            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
-            auto fixit_hint = diag::FixItHint::create_insertion(loc, "<identifier>");
-            diagnostics.report(loc, diag::parse::err_expected_identifier)
-                << "expected identifier for function declaration, none provided."
-                << fixit_hint;
-            skip_until(TokenType::semicolon);
-            return context.create<ErrorDecl>(
-                context.emplace_or_get_identifier("<missing_identifier>"),
-                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
-            );
-        }
-
         if (silent_consume(lparen).type != TokenType::invalid_token) {
-            // argument parsing branch
             while (true) {
                 skip_newlines();
-                if (peek().type == TokenType::rparen) {
-                    break;
-                }
-                if (peek().type == TokenType::eof) {
-                    diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_eof)
-                        << "unexpected end of file while parsing function arguments";
-                    return context.create<ErrorDecl>(
-                        function_id_info,
-                        SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
-                    );
-                }
+                if (peek().type == TokenType::rparen) break;
+                if (peek().type == TokenType::eof) break;
 
                 Decl* argument = parse_argument();
+                if (argument->get_kind() == DeclKind::error) return argument;
 
-                if (argument->get_kind() == DeclKind::error) {
-                    return argument;
-                }
-
-                collected_params.push_back(static_cast<ParamVarDecl*>(argument));
+                auto* param = static_cast<ParamVarDecl*>(argument);
+                collected_params.push_back(param);
+                param_types.push_back(param->get_type());
 
                 skip_newlines();
                 if (peek().type == TokenType::comma) {
@@ -365,9 +333,7 @@ namespace aion::parse {
                     diagnostics.report(loc, diag::parse::err_expected_rparen)
                         << "expected ',' or ')' after function argument";
                     skip_until_any_of(TokenType::comma, TokenType::rparen, TokenType::semicolon);
-                    if (peek().type == TokenType::semicolon) {
-                        break;
-                    }
+                    if (peek().type == TokenType::semicolon) break;
                 }
             }
             expect(rparen);
@@ -383,70 +349,40 @@ namespace aion::parse {
             );
         }
 
-        if (silent_probe(arrow)) {
-            blind_consume();
-            while (true) {
-                skip_newlines();
-                MutableType* ret_type = match_type(false);
-                if (ret_type) {
-                    collected_return_types.push_back(ret_type);
-                } else {
-                    SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
-                    diagnostics.report(loc, diag::parse::err_expected_type)
-                        << "expected return type after '->'";
-                    break;
-                }
-
-                skip_newlines();
-                if (peek().type == TokenType::comma) {
-                    blind_consume();
-                } else {
-                    break;
-                }
+        MutableType* return_type = nullptr;
+        if (silent_consume(arrow).type != TokenType::invalid_token) {
+            return_type = match_type(false, false);
+            if (!return_type) {
+                SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
+                diagnostics.report(loc, diag::parse::err_expected_type)
+                    << "expected return type after '->'";
             }
         } else {
-            SourceLocation loc = diagnostics.get_source_manager()->get_location(file_id, peek());
-            diagnostics.report(loc, diag::parse::err_expected_arrow_operator)
-                << "expected '->' for function return type"
-                << diag::FixItHint::create_insertion(loc, "<arrow>");
-            skip_until(TokenType::semicolon);
-            return context.create<ErrorDecl>(
-                function_id_info,
-                SourceRange(decl_start_location, diagnostics.get_source_manager()->get_location(file_id, peek()))
-            );
+            auto* void_type = context.create<BuiltinType>(BuiltinTypeKind::void_);
+            return_type = context.create<MutableType>(void_type, false, false);
         }
 
-        
+        FunctionType* ft = context.create_function_type(return_type, param_types);
+        MutableType* qt = context.create<MutableType>(ft, fn_is_mut, fn_is_comp);
 
         SourceLocation decl_end_location = diagnostics.get_source_manager()->get_location(file_id, peek());
-        SourceRange full_range(decl_start_location, decl_end_location);
-
         FuncDecl* function = context.create_func_decl(
-            function_id_info ? function_id_info->get_name() : "<error>",
+            function_id_info,
+            qt,
+            false,
             collected_params.size(),
-            collected_return_types.size()
+            SourceRange(decl_start_location, decl_end_location)
         );
-
-        function->source_location = decl_start_location;
-        function->decl_end = decl_end_location;
 
         ParamVarDecl** params_ptr = function->get_params();
         for (std::size_t i = 0; i < collected_params.size(); ++i) {
             params_ptr[i] = collected_params[i];
         }
 
-        MutableType** rets_ptr = function->get_return_types();
-        for (std::size_t i = 0; i < collected_return_types.size(); ++i) {
-            rets_ptr[i] = collected_return_types[i];
-        }
-
         if (silent_probe(TokenType::lbrace)) {
-            // TODO: Parse function body. For now, we just skip it if we find it.
-            // But we should probably report that it's not implemented if we want to be honest.
+            // TODO: Parse function body.
             diagnostics.report(diagnostics.get_source_manager()->get_location(file_id, peek()), diag::parse::err_unexpected_token)
                 << "function body parsing is not implemented yet; skipping block";
-            // Simple brace skipping logic could go here, but let's just stick to semicolon for now
-            // as the grammar suggested block.
         }
 
         expect(semicolon);

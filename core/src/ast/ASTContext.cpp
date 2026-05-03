@@ -14,30 +14,39 @@ ASTContext::ASTContext(std::size_t initial_slab_size)
     tu_decl = create<TranslationUnitDecl>();
 }
 
-FuncDecl *ASTContext::create_func_decl(const std::string_view name, const std::size_t num_args, const std::size_t num_ret_vals) {
-    if (name.empty()) {
-        return nullptr;
-    }
-
-    IdentifierInfo *ident = emplace_or_get_identifier(name);
-
-    std::size_t total_size = sizeof(FuncDecl) +
-                             (num_args * sizeof(ParamVarDecl*)) +
-                             (num_ret_vals * sizeof(MutableType*));
+FuncDecl *ASTContext::create_func_decl(IdentifierInfo* name, MutableType* type, bool is_export, std::size_t num_params, const SourceRange& range) {
+    std::size_t total_size = sizeof(FuncDecl) + (num_params * sizeof(ParamVarDecl*));
 
     void* storage = allocate(total_size, alignof(FuncDecl));
-    FuncDecl* fn = new(storage) FuncDecl(ident, nullptr, false, num_args, num_ret_vals, SourceRange());
+    FuncDecl* fn = new(storage) FuncDecl(name, type, is_export, num_params, range);
 
-
-    if (num_args > 0) {
-        std::memset(fn->get_params(), 0, num_args * sizeof(ParamVarDecl*));
-    }
-
-    if (num_ret_vals > 0) {
-        std::memset(fn->get_return_types(), 0, num_ret_vals * sizeof(MutableType*));
+    if (num_params > 0) {
+        std::memset(fn->get_params(), 0, num_params * sizeof(ParamVarDecl*));
     }
 
     return fn;
+}
+
+FunctionType* ASTContext::create_function_type(MutableType* return_type, const std::vector<MutableType*>& param_types) {
+    std::size_t num_params = param_types.size();
+    std::size_t total_size = sizeof(FunctionType) + (num_params * sizeof(MutableType*));
+    void* storage = allocate(total_size, alignof(FunctionType));
+    FunctionType* ft = new(storage) FunctionType(return_type, num_params);
+    if (num_params > 0) {
+        std::memcpy(ft->get_param_types(), param_types.data(), num_params * sizeof(MutableType*));
+    }
+    return ft;
+}
+
+FunctionType* ASTContext::create_function_type(MutableType* return_type, const ShortVec<MutableType*>& param_types) {
+    std::size_t num_params = param_types.size();
+    std::size_t total_size = sizeof(FunctionType) + (num_params * sizeof(MutableType*));
+    void* storage = allocate(total_size, alignof(FunctionType));
+    FunctionType* ft = new(storage) FunctionType(return_type, num_params);
+    for (std::size_t i = 0; i < num_params; ++i) {
+        ft->get_param_types()[i] = param_types[i];
+    }
+    return ft;
 }
 
 } // namespace aion::ast

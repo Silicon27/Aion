@@ -106,14 +106,19 @@ namespace aion::ast {
         void emplace_back(Args... args);
 
         reference operator[](size_type index);
+        const_reference operator[](size_type index) const;
         reference at(size_type index);
+        const_reference at(size_type index) const;
 
         pointer begin() noexcept { return data_; }
+        const_pointer begin() const noexcept { return data_; }
         pointer end() noexcept { return data_ + size_; }
+        const_pointer end() const noexcept { return data_ + size_; }
 
         [[nodiscard]] size_type size() const { return size_; }
         [[nodiscard]] size_type capacity() const { return capacity_; }
         [[nodiscard]] pointer data() noexcept { return data_; }
+        [[nodiscard]] const_pointer data() const noexcept { return data_; }
     };
 
     template<typename EleT, typename Context>
@@ -154,7 +159,17 @@ namespace aion::ast {
     }
 
     template<typename EleT, typename Context>
+    typename ShortVec<EleT, Context>::const_reference ShortVec<EleT, Context>::at(size_type index) const {
+        return data_[index];
+    }
+
+    template<typename EleT, typename Context>
     typename ShortVec<EleT, Context>::reference ShortVec<EleT, Context>::operator[](size_type index) {
+        return at(index);
+    }
+
+    template<typename EleT, typename Context>
+    typename ShortVec<EleT, Context>::const_reference ShortVec<EleT, Context>::operator[](size_type index) const {
         return at(index);
     }
 

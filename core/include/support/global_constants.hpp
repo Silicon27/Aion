@@ -77,6 +77,7 @@ namespace aion::lexer {
         kw_bind,
         kw_mut,
         kw_comp,
+        kw_void,
 
         // Identifiers and Literals
         identifier,
@@ -167,7 +168,7 @@ namespace aion::lexer {
         "i8", "i16", "i32", "i64", "i128",
         "f4", "f8", "f16", "f32", "f64", "f128",
         "char", "bool", "import", "mod", "export",
-        "bind", "mut", "comp",
+        "bind", "mut", "comp", "void",
     };
 
     // Check if a string is a keyword
@@ -204,6 +205,7 @@ namespace aion::lexer {
         if (str == "bind") return TokenType::kw_bind;
         if (str == "mut") return TokenType::kw_mut;
         if (str == "comp") return TokenType::kw_comp;
+        if (str == "void") return TokenType::kw_void;
         return TokenType::identifier; // fallback
     }
 
